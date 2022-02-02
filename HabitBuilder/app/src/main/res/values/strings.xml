@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Habit Builder</string>
+    <string name="habit_name">Name</string>
+    <string name="habit_notes">Notes</string>
+    <string name="habit_year">year</string>
+    <string name="habit_month">months</string>
+    <string name="habit_day">days</string>
+    <string name="habit_hour">hours</string>
 </resources>

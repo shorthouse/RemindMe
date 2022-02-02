@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/short/Documents/Files/Coding/Git repos/Habit-Builder/HabitBuilder/app/src/main/res/layout/activity_main.xml" value="0.34479166666666666" />
+        <entry key="..\:/Users/short/Documents/Files/Coding/Git repos/Habit-Builder/HabitBuilder/app/src/main/res/layout/add_habit_fragment.xml" value="0.33" />
       </map>
     </option>
   </component>
@@ -12,5 +13,12 @@
   </component>
   <component name="ProjectType">
     <option name="id" value="Android" />
+  </component>
+  <component name="VisualizationToolProject">
+    <option name="state">
+      <ProjectState>
+        <option name="scale" value="0.29907407407407405" />
+      </ProjectState>
+    </option>
   </component>
 </project>
