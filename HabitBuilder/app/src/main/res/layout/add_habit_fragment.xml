@@ -9,6 +9,7 @@
     android:padding="16dp"
     tools:context=".ui.AddHabitFragment">
 
+    <!-- Habit name -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/name_label"
         android:layout_width="match_parent"
@@ -27,6 +28,7 @@
             android:singleLine="true" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <!-- Occurrence header -->
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/occurrence_label"
         android:layout_width="wrap_content"
@@ -38,6 +40,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/name_label" />
 
+    <!-- Year occurrence -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/years_label"
         android:layout_width="50dp"
@@ -58,6 +61,7 @@
             android:inputType="number" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <!-- Month occurrence -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/months_label"
         android:layout_width="50dp"
@@ -77,6 +81,7 @@
             android:inputType="number" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <!-- Day occurrence -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/days_label"
         android:layout_width="50dp"
@@ -96,6 +101,7 @@
             android:inputType="number" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <!-- Hour occurrence -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/hours_label"
         android:layout_width="50dp"
@@ -115,19 +121,20 @@
             android:inputType="number" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <!-- Date -->
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:startIconDrawable="@drawable/ic_calendar"
         app:layout_constraintTop_toBottomOf="@+id/years_label">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="start date"
-            android:inputType="datetime" />
+            android:inputType="" />
     </com.google.android.material.textfield.TextInputLayout>
 
 
