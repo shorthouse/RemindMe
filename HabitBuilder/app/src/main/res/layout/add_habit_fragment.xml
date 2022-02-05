@@ -5,6 +5,8 @@
     android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_margin="16dp"
+    android:padding="16dp"
     tools:context=".ui.AddHabitFragment">
 
     <com.google.android.material.textfield.TextInputLayout
@@ -21,8 +23,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textAutoComplete"
+            tools:text="Brush teeth"
             android:singleLine="true" />
     </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/occurrence_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/habit_occurrence"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/name_label" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/years_label"
@@ -32,13 +46,15 @@
         android:hint="@string/habit_year"
         app:layout_constraintEnd_toStartOf="@+id/months_label"
         app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="spread"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/name_label">
+        app:layout_constraintTop_toBottomOf="@+id/occurrence_label">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/years_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            tools:text="0"
             android:inputType="number" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -51,11 +67,12 @@
         app:layout_constraintEnd_toStartOf="@+id/days_label"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/years_label"
-        app:layout_constraintTop_toBottomOf="@+id/name_label">
+        app:layout_constraintTop_toBottomOf="@+id/occurrence_label">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/months_input"
             android:layout_width="match_parent"
+            tools:text="0"
             android:layout_height="wrap_content"
             android:inputType="number" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -69,12 +86,13 @@
         app:layout_constraintEnd_toStartOf="@+id/hours_label"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/months_label"
-        app:layout_constraintTop_toBottomOf="@+id/name_label">
+        app:layout_constraintTop_toBottomOf="@+id/occurrence_label">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/days_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            tools:text="4"
             android:inputType="number" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -87,30 +105,30 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/days_label"
-        app:layout_constraintTop_toBottomOf="@+id/name_label">
+        app:layout_constraintTop_toBottomOf="@+id/occurrence_label">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/hours_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            tools:text="0"
             android:inputType="number" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/notes_label"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:hint="@string/habit_notes"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/years_label">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/notes_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textAutoComplete" />
+            android:hint="start date"
+            android:inputType="datetime" />
     </com.google.android.material.textfield.TextInputLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

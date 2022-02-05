@@ -2,8 +2,9 @@
     <string name="app_name">Habit Builder</string>
     <string name="habit_name">Name</string>
     <string name="habit_notes">Notes</string>
-    <string name="habit_year">year</string>
-    <string name="habit_month">months</string>
-    <string name="habit_day">days</string>
-    <string name="habit_hour">hours</string>
+    <string name="habit_year">Y</string>
+    <string name="habit_month">M</string>
+    <string name="habit_day">D</string>
+    <string name="habit_hour">H</string>
+    <string name="habit_occurrence">Habit Occurrence</string>
 </resources>
