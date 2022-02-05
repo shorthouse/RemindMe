@@ -6,16 +6,19 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
+import dev.shorthouse.habitbuilder.BaseApplication
 import dev.shorthouse.habitbuilder.R
 import dev.shorthouse.habitbuilder.ui.viewmodel.HabitViewModel
+import dev.shorthouse.habitbuilder.ui.viewmodel.HabitViewModelFactory
 
 class AddHabitFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = AddHabitFragment()
+    private val viewModel: HabitViewModel by activityViewModels {
+        HabitViewModelFactory(
+            (activity?.application as BaseApplication).database.habitDao()
+        )
     }
-
-    private lateinit var viewModel: HabitViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -23,11 +26,4 @@ class AddHabitFragment : Fragment() {
     ): View? {
         return inflater.inflate(R.layout.add_habit_fragment, container, false)
     }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(HabitViewModel::class.java)
-        // TODO: Use the ViewModel
-    }
-
 }
