@@ -8,7 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.timepicker.MaterialTimePicker
+import com.google.android.material.timepicker.TimeFormat
 import dev.shorthouse.habitbuilder.BaseApplication
+import dev.shorthouse.habitbuilder.R
 import dev.shorthouse.habitbuilder.databinding.AddHabitFragmentBinding
 import dev.shorthouse.habitbuilder.ui.viewmodel.HabitViewModel
 import dev.shorthouse.habitbuilder.ui.viewmodel.HabitViewModelFactory
@@ -39,6 +42,15 @@ class AddHabitFragment : Fragment() {
         binding.startDateInput.setOnClickListener {
             displayDatePicker()
         }
+
+        binding.startTimeInput.setOnClickListener {
+            displayTimePicker()
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun displayDatePicker() {
@@ -55,8 +67,21 @@ class AddHabitFragment : Fragment() {
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+    private fun displayTimePicker() {
+        val timePicker =
+            MaterialTimePicker.Builder()
+                .setTimeFormat(TimeFormat.CLOCK_24H)
+                .setTitleText("Select habit start time")
+                .build()
+
+        timePicker.show(parentFragmentManager, "HABIT_TIME_PICKER")
+
+        timePicker.addOnPositiveButtonClickListener {
+            binding.startTimeInput.setText(getString(
+                R.string.habit_time,
+                timePicker.hour.toString().padStart(2, '0'),
+                timePicker.minute.toString().padStart(2, '0'),
+            ))
+        }
     }
 }

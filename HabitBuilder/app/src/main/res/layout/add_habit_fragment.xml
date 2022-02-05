@@ -128,7 +128,7 @@
                 android:inputType="number" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Date -->
+        <!-- Habit start date -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/start_date_label"
             android:layout_width="0dp"
@@ -147,9 +147,32 @@
                 android:cursorVisible="false"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
-                android:hint="@string/habit_date"
+                android:hint="@string/habit_date_hint"
                 tools:text="Fri 17 Jun 2024"
-                android:inputType="number" />
+                android:inputType="none" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/start_time_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/start_date_label"
+            app:startIconDrawable="@drawable/ic_clock">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/start_time_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:cursorVisible="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:hint="@string/habit_time_hint"
+                android:inputType="none"
+                tools:text="16:37 PM" />
         </com.google.android.material.textfield.TextInputLayout>
 
 
