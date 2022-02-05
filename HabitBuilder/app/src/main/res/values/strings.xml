@@ -7,4 +7,5 @@
     <string name="habit_day">D</string>
     <string name="habit_hour">H</string>
     <string name="habit_occurrence">Habit Occurrence</string>
+    <string name="habit_date">Date</string>
 </resources>
