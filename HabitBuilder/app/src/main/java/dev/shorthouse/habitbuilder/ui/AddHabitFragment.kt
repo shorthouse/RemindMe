@@ -6,7 +6,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
@@ -45,6 +47,12 @@ class AddHabitFragment : Fragment() {
 
         binding.startTimeInput.setOnClickListener {
             displayTimePicker()
+        }
+
+        binding.saveHabit.setOnClickListener{
+            Toast.makeText(context, "Habit saved!", Toast.LENGTH_SHORT).show()
+            findNavController().navigateUp()
+
         }
     }
 

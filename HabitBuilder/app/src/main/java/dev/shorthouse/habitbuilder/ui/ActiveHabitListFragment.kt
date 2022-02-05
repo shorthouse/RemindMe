@@ -6,27 +6,46 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
+import dev.shorthouse.habitbuilder.BaseApplication
 import dev.shorthouse.habitbuilder.R
+import dev.shorthouse.habitbuilder.databinding.ActiveHabitListFragmentBinding
+import dev.shorthouse.habitbuilder.databinding.AddHabitFragmentBinding
+import dev.shorthouse.habitbuilder.ui.viewmodel.ActiveHabitListViewModel
+import dev.shorthouse.habitbuilder.ui.viewmodel.HabitViewModel
+import dev.shorthouse.habitbuilder.ui.viewmodel.HabitViewModelFactory
 
 class ActiveHabitListFragment : Fragment() {
+    private var _binding: ActiveHabitListFragmentBinding? = null
+    private val binding get() = _binding!!
 
-    companion object {
-        fun newInstance() = ActiveHabitListFragment()
+    private val viewModel: HabitViewModel by activityViewModels {
+        HabitViewModelFactory(
+            (activity?.application as BaseApplication).database.habitDao()
+        )
     }
-
-    private lateinit var viewModel: ActiveHabitListViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.active_habit_list_fragment, container, false)
+        _binding = ActiveHabitListFragmentBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(ActiveHabitListViewModel::class.java)
-        // TODO: Use the ViewModel
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.addHabitFab.setOnClickListener {
+            findNavController().navigate(R.id.action_activeHabitListFragment_to_addHabitFragment)
+        }
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
 
 }

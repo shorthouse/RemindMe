@@ -1,4 +1,4 @@
-package dev.shorthouse.habitbuilder.ui
+package dev.shorthouse.habitbuilder.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 

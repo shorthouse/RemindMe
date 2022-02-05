@@ -328,6 +328,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/save_habit"
             style="@style/ShapeAppearanceOverlay.Material3.Button"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
