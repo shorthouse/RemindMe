@@ -51,6 +51,10 @@ class AddHabitFragment : Fragment() {
 
         binding.saveHabit.setOnClickListener{
             Toast.makeText(context, "Habit saved!", Toast.LENGTH_SHORT).show()
+            viewModel.addHabit(
+                binding.nameInput.text.toString(),
+                binding.startDateInput.text.toString(),
+            )
             findNavController().navigateUp()
 
         }

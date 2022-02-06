@@ -12,6 +12,7 @@ import dev.shorthouse.habitbuilder.BaseApplication
 import dev.shorthouse.habitbuilder.R
 import dev.shorthouse.habitbuilder.databinding.ActiveHabitListFragmentBinding
 import dev.shorthouse.habitbuilder.databinding.AddHabitFragmentBinding
+import dev.shorthouse.habitbuilder.ui.adapter.HabitListAdapter
 import dev.shorthouse.habitbuilder.ui.viewmodel.ActiveHabitListViewModel
 import dev.shorthouse.habitbuilder.ui.viewmodel.HabitViewModel
 import dev.shorthouse.habitbuilder.ui.viewmodel.HabitViewModelFactory
@@ -37,8 +38,24 @@ class ActiveHabitListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.addHabitFab.setOnClickListener {
-            findNavController().navigate(R.id.action_activeHabitListFragment_to_addHabitFragment)
+        val adapter = HabitListAdapter { habit ->
+            /*
+            val action = ForageableListFragmentDirections
+                .actionForageableListFragmentToForageableDetailFragment(forageable.id)
+
+            findNavController().navigate(action)
+             */
+        }
+
+        viewModel.habits.observe(this.viewLifecycleOwner) {habits ->
+            adapter.submitList(habits)
+        }
+
+        binding.apply {
+            activeHabitRecycler.adapter = adapter
+            addHabitFab.setOnClickListener {
+                findNavController().navigate(R.id.action_activeHabitListFragment_to_addHabitFragment)
+            }
         }
     }
 
