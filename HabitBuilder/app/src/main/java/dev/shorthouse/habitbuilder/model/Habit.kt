@@ -10,5 +10,7 @@ data class Habit (
 
     val name: String,
 
+    val timestamp: Long,
+
     val notes: String?,
 )
