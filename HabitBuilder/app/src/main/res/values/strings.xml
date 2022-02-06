@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">Habit Builder</string>
+    <string name="habit_name">Name</string>
+    <string name="habit_notes">Notes</string>
+    <string name="habit_year">Y</string>
+    <string name="habit_month">M</string>
+    <string name="habit_day">D</string>
+    <string name="habit_hour">H</string>
+    <string name="habit_minute">M</string>
+    <string name="habit_occurrence">Habit occurrence</string>
+    <string name="habit_date_hint">Habit start date</string>
+    <string name="habit_time_hint">Habit start time</string>
+    <string name="habit_time">%1$s:%2$s</string>
+    <string name="time_before_text">Reminder appears before</string>
+    <string name="habit_save">Save</string>
+    <string name="add_habit_fab_description">Add habit action button</string>
+
 </resources>
