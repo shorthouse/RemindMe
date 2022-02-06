@@ -306,6 +306,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Minute time before -->
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/minutes_before_label"
             android:layout_width="0dp"
