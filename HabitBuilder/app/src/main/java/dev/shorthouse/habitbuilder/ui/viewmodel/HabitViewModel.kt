@@ -16,10 +16,12 @@ class HabitViewModel(private val habitDao: HabitDao
 
     fun addHabit(
         name: String,
+        timestamp: Long,
         notes: String,
     ) {
         val habit = Habit(
             name = name,
+            timestamp = timestamp,
             notes = notes,
         )
 
@@ -31,11 +33,13 @@ class HabitViewModel(private val habitDao: HabitDao
     fun updateHabit(
         id: Long,
         name: String,
+        timestamp: Long,
         notes: String,
     ) {
         val habit = Habit(
             id = id,
             name = name,
+            timestamp = timestamp,
             notes = notes,
         )
 

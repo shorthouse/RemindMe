@@ -50,13 +50,17 @@ class AddHabitFragment : Fragment() {
         }
 
         binding.saveHabit.setOnClickListener{
+            val dateFormatter = SimpleDateFormat("EEE dd MMM yyyy", Locale.getDefault())
+            val selectedDate = dateFormatter.parse(binding.startDateInput.text.toString())
+            val dateInMs = selectedDate.time
+
             Toast.makeText(context, "Habit saved!", Toast.LENGTH_SHORT).show()
             viewModel.addHabit(
                 binding.nameInput.text.toString(),
-                binding.startDateInput.text.toString(),
+                dateInMs,
+                ""
             )
             findNavController().navigateUp()
-
         }
     }
 

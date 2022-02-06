@@ -13,7 +13,6 @@ import dev.shorthouse.habitbuilder.R
 import dev.shorthouse.habitbuilder.databinding.ActiveHabitListFragmentBinding
 import dev.shorthouse.habitbuilder.databinding.AddHabitFragmentBinding
 import dev.shorthouse.habitbuilder.ui.adapter.HabitListAdapter
-import dev.shorthouse.habitbuilder.ui.viewmodel.ActiveHabitListViewModel
 import dev.shorthouse.habitbuilder.ui.viewmodel.HabitViewModel
 import dev.shorthouse.habitbuilder.ui.viewmodel.HabitViewModelFactory
 
