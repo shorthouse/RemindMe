@@ -17,7 +17,7 @@ class ReminderListAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(reminder: Reminder) {
-            binding.habit = reminder
+            binding.reminder = reminder
             binding.executePendingBindings()
         }
     }
@@ -41,10 +41,10 @@ class ReminderListAdapter(
     }
 
     override fun onBindViewHolder(holder: ReminderViewHolder, position: Int) {
-        val habit = getItem(position)
+        val reminder = getItem(position)
         holder.itemView.setOnClickListener {
-            clickListener(habit)
+            clickListener(reminder)
         }
-        holder.bind(habit)
+        holder.bind(reminder)
     }
 }
