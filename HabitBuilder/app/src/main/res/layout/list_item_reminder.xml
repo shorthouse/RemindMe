@@ -7,7 +7,7 @@
     <data>
         <variable
             name="habit"
-            type="dev.shorthouse.habitbuilder.model.Habit" />
+            type="dev.shorthouse.habitbuilder.model.Reminder" />
     </data>
     
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -33,7 +33,7 @@
             android:id="@+id/habit_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{Long.toString(habit.timestamp)}"
+            android:text="@{Long.toString(habit.dateTimestamp)}"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
             app:layout_constraintTop_toBottomOf="@id/habit_name"
             app:layout_constraintStart_toStartOf="parent"

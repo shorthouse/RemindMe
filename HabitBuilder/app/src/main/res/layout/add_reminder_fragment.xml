@@ -13,7 +13,7 @@
         android:layout_height="match_parent"
         android:layout_margin="16dp"
         android:padding="16dp"
-        tools:context=".ui.AddHabitFragment">
+        tools:context=".ui.AddReminderFragment">
 
         <!-- Habit name -->
         <com.google.android.material.textfield.TextInputLayout

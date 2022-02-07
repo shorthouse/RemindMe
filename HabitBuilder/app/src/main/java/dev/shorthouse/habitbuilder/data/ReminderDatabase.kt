@@ -4,22 +4,22 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import dev.shorthouse.habitbuilder.model.Habit
+import dev.shorthouse.habitbuilder.model.Reminder
 
-@Database(version = 1, exportSchema = false, entities = arrayOf(Habit::class))
-abstract class HabitDatabase : RoomDatabase() {
-    abstract fun habitDao(): HabitDao
+@Database(version = 1, exportSchema = false, entities = arrayOf(Reminder::class))
+abstract class ReminderDatabase : RoomDatabase() {
+    abstract fun habitDao(): ReminderDao
 
     companion object {
         @Volatile
-        private var INSTANCE: HabitDatabase? = null
+        private var INSTANCE: ReminderDatabase? = null
 
-        fun getDatabase(context: Context): HabitDatabase {
+        fun getDatabase(context: Context): ReminderDatabase {
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
                     context,
-                    HabitDatabase::class.java,
-                    "habit_database")
+                    ReminderDatabase::class.java,
+                    "reminder_database")
                     .build()
                 INSTANCE = instance
 

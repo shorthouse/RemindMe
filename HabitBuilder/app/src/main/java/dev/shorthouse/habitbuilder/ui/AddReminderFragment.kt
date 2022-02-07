@@ -1,12 +1,11 @@
 package dev.shorthouse.habitbuilder.ui
 
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -14,18 +13,21 @@ import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import dev.shorthouse.habitbuilder.BaseApplication
 import dev.shorthouse.habitbuilder.R
-import dev.shorthouse.habitbuilder.databinding.AddHabitFragmentBinding
-import dev.shorthouse.habitbuilder.ui.viewmodel.HabitViewModel
-import dev.shorthouse.habitbuilder.ui.viewmodel.HabitViewModelFactory
+import dev.shorthouse.habitbuilder.databinding.AddReminderFragmentBinding
+import dev.shorthouse.reminderbuilder.ui.viewmodel.ReminderViewModel
+import dev.shorthouse.reminderbuilder.ui.viewmodel.ReminderViewModelFactory
 import java.text.SimpleDateFormat
+import java.time.*
+import java.time.format.DateTimeFormatter
 import java.util.*
 
-class AddHabitFragment : Fragment() {
-    private var _binding: AddHabitFragmentBinding? = null
+
+class AddReminderFragment : Fragment() {
+    private var _binding: AddReminderFragmentBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: HabitViewModel by activityViewModels {
-        HabitViewModelFactory(
+    private val viewModel: ReminderViewModel by activityViewModels {
+        ReminderViewModelFactory(
             (activity?.application as BaseApplication).database.habitDao()
         )
     }
@@ -34,7 +36,7 @@ class AddHabitFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = AddHabitFragmentBinding.inflate(inflater, container, false)
+        _binding = AddReminderFragmentBinding.inflate(inflater, container, false)
         return binding.root
     }
 
