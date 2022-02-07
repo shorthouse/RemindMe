@@ -44,24 +44,16 @@ class AddReminderFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.startDateInput.setOnClickListener {
-            displayDatePicker()
+            displayDatePicker(getDatePicker())
         }
 
         binding.startTimeInput.setOnClickListener {
-            displayTimePicker()
+            displayTimePicker(getTimePicker())
         }
 
         binding.saveHabit.setOnClickListener{
-            val dateFormatter = SimpleDateFormat("EEE dd MMM yyyy", Locale.getDefault())
-            val selectedDate = dateFormatter.parse(binding.startDateInput.text.toString())
-            val dateInMs = selectedDate.time
-
+            addHabit()
             Toast.makeText(context, "Habit saved!", Toast.LENGTH_SHORT).show()
-            viewModel.addHabit(
-                binding.nameInput.text.toString(),
-                dateInMs,
-                ""
-            )
             findNavController().navigateUp()
         }
     }
@@ -71,35 +63,62 @@ class AddReminderFragment : Fragment() {
         _binding = null
     }
 
-    private fun displayDatePicker() {
-        val datePicker =
-            MaterialDatePicker.Builder.datePicker()
-                .setTitleText("Select date")
-                .build()
-
-        datePicker.show(parentFragmentManager, "HABIT_DATE_PICKER")
-
-        val dateFormatter = SimpleDateFormat("EEE dd MMM yyyy", Locale.getDefault())
-        datePicker.addOnPositiveButtonClickListener { selection ->
-            binding.startDateInput.setText(dateFormatter.format(selection))
-        }
+    private fun getDatePicker(): MaterialDatePicker<Long> {
+        return MaterialDatePicker.Builder.datePicker()
+            .setTitleText("Select date")
+            .build()
     }
 
-    private fun displayTimePicker() {
-        val timePicker =
-            MaterialTimePicker.Builder()
-                .setTimeFormat(TimeFormat.CLOCK_24H)
-                .setTitleText("Select habit start time")
-                .build()
+    private fun displayDatePicker(datePicker: MaterialDatePicker<Long>) {
+        val dateFormatter = SimpleDateFormat("EEE dd MMM yyyy", Locale.getDefault())
 
-        timePicker.show(parentFragmentManager, "HABIT_TIME_PICKER")
+        datePicker.addOnPositiveButtonClickListener { dateTimestamp ->
+            binding.startDateInput.setText(dateFormatter.format(dateTimestamp))
+        }
 
+        datePicker.show(parentFragmentManager, "HABIT_DATE_PICKER")
+    }
+
+    private fun getTimePicker(): MaterialTimePicker {
+        return MaterialTimePicker.Builder()
+            .setTimeFormat(TimeFormat.CLOCK_24H)
+            .setTitleText("Select habit start time")
+            .build()
+    }
+
+    private fun displayTimePicker(timePicker: MaterialTimePicker) {
         timePicker.addOnPositiveButtonClickListener {
-            binding.startTimeInput.setText(getString(
-                R.string.habit_time,
-                timePicker.hour.toString().padStart(2, '0'),
-                timePicker.minute.toString().padStart(2, '0'),
+            binding.startTimeInput.setText(
+                getString(
+                    R.string.habit_time,
+                    timePicker.hour.toString().padStart(2, '0'),
+                    timePicker.minute.toString().padStart(2, '0'),
             ))
         }
+
+        timePicker.show(parentFragmentManager, "HABIT_TIME_PICKER")
+    }
+
+    private fun getReminderEpoch(): Long {
+        val reminderDate = binding.startDateInput.text.toString()
+        val reminderTime = binding.startTimeInput.text.toString()
+        val reminderDateTime = "$reminderDate $reminderTime"
+
+        val formatter = DateTimeFormatter.ofPattern("EEE dd MMM yyyy HH:mm")
+        val localDateTime = LocalDateTime.parse(reminderDateTime, formatter)
+
+        val zoneId = ZoneId.systemDefault()
+        return localDateTime.atZone(zoneId).toEpochSecond()
+    }
+
+    private fun addHabit() {
+        val reminderEpoch = getReminderEpoch()
+        val nowEpoch = Instant.now().epochSecond
+        val secondsUntilReminder = reminderEpoch - nowEpoch
+
+        viewModel.addReminder(
+            binding.nameInput.text.toString(),
+            ""
+        )
     }
 }
