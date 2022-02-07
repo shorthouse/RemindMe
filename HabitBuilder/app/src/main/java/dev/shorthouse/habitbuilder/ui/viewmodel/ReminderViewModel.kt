@@ -16,10 +16,12 @@ class ReminderViewModel(private val reminderDao: ReminderDao
 
     fun addReminder(
         name: String,
+        reminderEpoch: Long,
         notes: String,
     ) {
         val reminder = Reminder(
             name = name,
+            reminderEpoch = reminderEpoch,
             notes = notes,
         )
 
@@ -31,11 +33,13 @@ class ReminderViewModel(private val reminderDao: ReminderDao
     fun updateReminder(
         id: Long,
         name: String,
+        reminderEpoch: Long,
         notes: String,
     ) {
         val reminder = Reminder(
             id = id,
             name = name,
+            reminderEpoch = reminderEpoch,
             notes = notes,
         )
 

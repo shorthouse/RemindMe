@@ -118,6 +118,7 @@ class AddReminderFragment : Fragment() {
 
         viewModel.addReminder(
             binding.nameInput.text.toString(),
+            secondsUntilReminder,
             ""
         )
     }
