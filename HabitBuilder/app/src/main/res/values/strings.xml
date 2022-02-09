@@ -16,4 +16,7 @@
     <string name="add_reminder_fab_description">Add habit action button</string>
     <string name="date_picker_title">Select date</string>
     <string name="reminder_date_picker_tag">reminder_date_picker</string>
+    <string name="reminder_time_picker_tag">reminder_time_picker</string>
+    <string name="toast_reminder_saved">Reminder saved!</string>
+    <string name="time_picker_title">Select habit start time</string>
 </resources>
