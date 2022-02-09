@@ -15,22 +15,21 @@ import com.google.android.material.timepicker.TimeFormat
 import dev.shorthouse.habitbuilder.BaseApplication
 import dev.shorthouse.habitbuilder.R
 import dev.shorthouse.habitbuilder.databinding.AddReminderFragmentBinding
-import dev.shorthouse.habitbuilder.ui.viewmodel.ReminderViewModel
+import dev.shorthouse.habitbuilder.ui.viewmodel.AddReminderViewModel
 import dev.shorthouse.habitbuilder.ui.viewmodel.ReminderViewModelFactory
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
-import java.time.format.DateTimeFormatter
 
 
 class AddReminderFragment : Fragment() {
     private var _binding: AddReminderFragmentBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: ReminderViewModel by activityViewModels {
+    private val viewModel: AddReminderViewModel by activityViewModels {
         ReminderViewModelFactory(
-            (activity?.application as BaseApplication).database.habitDao()
+            (activity?.application as BaseApplication).database.reminderDao()
         )
     }
 
@@ -118,7 +117,7 @@ class AddReminderFragment : Fragment() {
             viewModel.addReminder(
                 binding.nameInput.text.toString(),
                 reminderEpoch,
-                ""
+                "",
             )
 
             Toast.makeText(context, getString(R.string.toast_reminder_saved), Toast.LENGTH_SHORT).show()
@@ -138,30 +137,30 @@ class AddReminderFragment : Fragment() {
     }
 
     private fun getReminderEpoch() : Long {
-        return getReminderDateTime().atZone(ZoneId.systemDefault()).toEpochSecond()
+        return viewModel.getReminderEpoch(getReminderDateTime())
     }
 
     private fun isValidEntry(): Boolean {
         when {
             binding.nameInput.text.toString().isBlank() -> {
-                binding.nameLabel.error = "Enter a name"
-                return false;
+                binding.nameLabel.error = getString(R.string.reminder_name_blank_error)
+                return false
             }
             binding.startDateInput.text.toString().isBlank() -> {
-                binding.startDateLabel.error = "Enter a date"
-                return false;
+                binding.startDateLabel.error = getString(R.string.reminder_date_blank_error)
+                return false
             }
             getReminderDate().isBefore(LocalDate.now()) -> {
-                binding.startDateLabel.error = "Enter a current or future date"
-                return false;
+                binding.startDateLabel.error = getString(R.string.reminder_date_invalid_error)
+                return false
             }
             binding.startTimeInput.text.toString().isBlank() -> {
-                binding.startTimeLabel.error = "Enter a time"
-                return false;
+                binding.startTimeLabel.error = getString(R.string.reminder_time_blank_error)
+                return false
             }
             getReminderDateTime().isBefore(LocalDateTime.now()) -> {
-                binding.startTimeLabel.error = "Enter a current or future time"
-                return false;
+                binding.startTimeLabel.error = getString(R.string.reminder_time_invalid_error)
+                return false
             }
             else -> return true
         }
