@@ -14,5 +14,6 @@
     <string name="time_before_text">Reminder appears before</string>
     <string name="habit_save">Save</string>
     <string name="add_habit_fab_description">Add habit action button</string>
+    <string name="date_picker_title">Select date</string>
 
 </resources>
