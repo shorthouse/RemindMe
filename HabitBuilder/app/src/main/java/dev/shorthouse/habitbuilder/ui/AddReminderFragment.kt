@@ -17,13 +17,11 @@ import dev.shorthouse.habitbuilder.R
 import dev.shorthouse.habitbuilder.databinding.AddReminderFragmentBinding
 import dev.shorthouse.habitbuilder.ui.viewmodel.ReminderViewModel
 import dev.shorthouse.habitbuilder.ui.viewmodel.ReminderViewModelFactory
-import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import java.util.*
 
 
 class AddReminderFragment : Fragment() {
@@ -49,12 +47,12 @@ class AddReminderFragment : Fragment() {
 
         binding.apply {
             startTimeInput.setOnClickListener {
-                displayTimePicker(getTimePicker())
+                displayTimePicker()
                 startTimeLabel.error = null
             }
 
             startDateInput.setOnClickListener {
-                displayDatePicker(getDatePicker())
+                displayDatePicker()
                 startDateLabel.error = null
             }
 
@@ -73,38 +71,42 @@ class AddReminderFragment : Fragment() {
         _binding = null
     }
 
+    private fun displayDatePicker() {
+        val datePicker = getDatePicker()
+
+        datePicker.addOnPositiveButtonClickListener { dateTimestamp ->
+            binding.startDateInput.setText(viewModel.getFormattedDate(dateTimestamp))
+        }
+
+        datePicker.show(parentFragmentManager, getString(R.string.reminder_date_picker_tag))
+    }
+
     private fun getDatePicker(): MaterialDatePicker<Long> {
         return MaterialDatePicker.Builder.datePicker()
             .setTitleText(getString(R.string.date_picker_title))
             .build()
     }
 
-    private fun displayDatePicker(datePicker: MaterialDatePicker<Long>) {
-        datePicker.addOnPositiveButtonClickListener { dateTimestamp ->
-            binding.startDateInput.setText(viewModel.dateFormatter.format(dateTimestamp))
+    private fun displayTimePicker() {
+        val timePicker = getTimePicker()
+
+        timePicker.addOnPositiveButtonClickListener {
+            binding.startTimeInput.setText(
+                getString(
+                    R.string.reminder_time,
+                    timePicker.hour.toString().padStart(2, '0'),
+                    timePicker.minute.toString().padStart(2, '0'),
+                ))
         }
 
-        datePicker.show(parentFragmentManager, "HABIT_DATE_PICKER")
+        timePicker.show(parentFragmentManager, getString(R.string.reminder_time_picker_tag))
     }
 
     private fun getTimePicker(): MaterialTimePicker {
         return MaterialTimePicker.Builder()
             .setTimeFormat(TimeFormat.CLOCK_24H)
-            .setTitleText("Select habit start time")
+            .setTitleText(getString(R.string.time_picker_title))
             .build()
-    }
-
-    private fun displayTimePicker(timePicker: MaterialTimePicker) {
-        timePicker.addOnPositiveButtonClickListener {
-            binding.startTimeInput.setText(
-                getString(
-                    R.string.habit_time,
-                    timePicker.hour.toString().padStart(2, '0'),
-                    timePicker.minute.toString().padStart(2, '0'),
-            ))
-        }
-
-        timePicker.show(parentFragmentManager, "HABIT_TIME_PICKER")
     }
 
     private fun addHabit() {
@@ -119,25 +121,20 @@ class AddReminderFragment : Fragment() {
                 ""
             )
 
-            Toast.makeText(context, "Habit saved!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, getString(R.string.toast_reminder_saved), Toast.LENGTH_SHORT).show()
             findNavController().navigateUp()
         }
     }
 
     private fun getReminderDate(): LocalDate {
-        val reminderDate = binding.startDateInput.text.toString()
-        val formatter = DateTimeFormatter.ofPattern("EEE dd MMM yyyy")
-
-        return LocalDate.parse(reminderDate, formatter)
+        val reminderDateText = binding.startDateInput.text.toString()
+        return viewModel.getReminderDate(reminderDateText)
     }
 
     private fun getReminderDateTime(): LocalDateTime {
-        val reminderDate = binding.startDateInput.text.toString()
-        val reminderTime = binding.startTimeInput.text.toString()
-        val reminderDateTime = "$reminderDate $reminderTime"
-
-        val formatter = DateTimeFormatter.ofPattern("EEE dd MMM yyyy HH:mm")
-        return  LocalDateTime.parse(reminderDateTime, formatter)
+        val reminderDateText = binding.startDateInput.text.toString()
+        val reminderTimeText = binding.startTimeInput.text.toString()
+        return viewModel.getReminderDateTime(reminderDateText, reminderTimeText)
     }
 
     private fun getReminderEpoch() : Long {

@@ -6,11 +6,15 @@ import dev.shorthouse.habitbuilder.model.Reminder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 class ReminderViewModel(private val reminderDao: ReminderDao
 ) : ViewModel() {
-    val dateFormatter = SimpleDateFormat("EEE dd MMM yyyy", Locale.getDefault())
+
 
     fun addReminder(
         name: String,
@@ -27,6 +31,23 @@ class ReminderViewModel(private val reminderDao: ReminderDao
             reminderDao.insert(reminder)
         }
     }
+
+    fun getFormattedDate(dateTimestamp: Long): String {
+        val dateFormatter = SimpleDateFormat("EEE dd MMM yyyy", Locale.getDefault())
+        return dateFormatter.format(dateTimestamp)
+    }
+
+    fun getReminderDate(reminderDateText: String): LocalDate {
+        val formatter = DateTimeFormatter.ofPattern("EEE dd MMM yyyy")
+        return LocalDate.parse(reminderDateText, formatter)
+    }
+
+    fun getReminderDateTime(reminderDateText: String, reminderTimeText: String): LocalDateTime {
+        val reminderDateTime = "$reminderDateText $reminderTimeText"
+        val formatter = DateTimeFormatter.ofPattern("EEE dd MMM yyyy HH:mm")
+        return  LocalDateTime.parse(reminderDateTime, formatter)
+    }
+
 }
 
 class ReminderViewModelFactory(
