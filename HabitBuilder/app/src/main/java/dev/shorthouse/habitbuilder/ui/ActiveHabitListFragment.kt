@@ -11,8 +11,8 @@ import dev.shorthouse.habitbuilder.BaseApplication
 import dev.shorthouse.habitbuilder.R
 import dev.shorthouse.habitbuilder.databinding.ActiveHabitListFragmentBinding
 import dev.shorthouse.habitbuilder.ui.adapter.ReminderListAdapter
-import dev.shorthouse.reminderbuilder.ui.viewmodel.ReminderViewModel
-import dev.shorthouse.reminderbuilder.ui.viewmodel.ReminderViewModelFactory
+import dev.shorthouse.habitbuilder.ui.viewmodel.ReminderViewModel
+import dev.shorthouse.habitbuilder.ui.viewmodel.ReminderViewModelFactory
 
 class ActiveHabitListFragment : Fragment() {
     private var _binding: ActiveHabitListFragmentBinding? = null
