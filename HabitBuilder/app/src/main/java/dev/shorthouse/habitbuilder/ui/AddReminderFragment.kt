@@ -1,10 +1,13 @@
 package dev.shorthouse.habitbuilder.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -99,18 +102,6 @@ class AddReminderFragment : Fragment() {
         timePicker.show(parentFragmentManager, "HABIT_TIME_PICKER")
     }
 
-    private fun getReminderEpoch(): Long {
-        val reminderDate = binding.startDateInput.text.toString()
-        val reminderTime = binding.startTimeInput.text.toString()
-        val reminderDateTime = "$reminderDate $reminderTime"
-
-        val formatter = DateTimeFormatter.ofPattern("EEE dd MMM yyyy HH:mm")
-        val localDateTime = LocalDateTime.parse(reminderDateTime, formatter)
-
-        val zoneId = ZoneId.systemDefault()
-        return localDateTime.atZone(zoneId).toEpochSecond()
-    }
-
     private fun addHabit() {
         val reminderEpoch = getReminderEpoch()
         val nowEpoch = Instant.now().epochSecond
@@ -121,5 +112,42 @@ class AddReminderFragment : Fragment() {
             reminderEpoch,
             ""
         )
+    }
+
+    private fun getReminderDate(): LocalDate {
+        val reminderDate = binding.startDateInput.text.toString()
+        val formatter = DateTimeFormatter.ofPattern("EEE dd MMM yyyy")
+
+        return LocalDate.parse(reminderDate, formatter)
+    }
+
+    private fun getReminderDateTime(): LocalDateTime {
+        val reminderDate = binding.startDateInput.text.toString()
+        val reminderTime = binding.startTimeInput.text.toString()
+        val reminderDateTime = "$reminderDate $reminderTime"
+
+        val formatter = DateTimeFormatter.ofPattern("EEE dd MMM yyyy HH:mm")
+        return  LocalDateTime.parse(reminderDateTime, formatter)
+    }
+
+    private fun getReminderEpoch() : Long {
+        return getReminderDateTime().atZone(ZoneId.systemDefault()).toEpochSecond()
+    }
+
+    private fun isValidEntry(): Boolean {
+        if (binding.nameInput.text.toString().isBlank()) {
+            binding.nameInput.setError("Enter a name", AppCompatResources.getDrawable(requireContext(), R.drawable.ic_error))
+            return false;
+        }
+        if (getReminderDate().isBefore(LocalDate.now())) {
+            binding.startDateInput.setError("Enter a current or future date", AppCompatResources.getDrawable(requireContext(), R.drawable.ic_error))
+            return false;
+        }
+        if (getReminderDateTime().isBefore(LocalDateTime.now())) {
+            binding.startTimeInput.setError("Enter a current or future time", AppCompatResources.getDrawable(requireContext(), R.drawable.ic_error))
+            return false;
+        }
+
+        return true;
     }
 }
