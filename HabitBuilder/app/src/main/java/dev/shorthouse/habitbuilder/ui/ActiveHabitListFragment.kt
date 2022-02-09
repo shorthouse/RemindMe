@@ -1,26 +1,26 @@
 package dev.shorthouse.habitbuilder.ui
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import dev.shorthouse.habitbuilder.BaseApplication
 import dev.shorthouse.habitbuilder.R
 import dev.shorthouse.habitbuilder.databinding.ActiveHabitListFragmentBinding
 import dev.shorthouse.habitbuilder.ui.adapter.ReminderListAdapter
-import dev.shorthouse.habitbuilder.ui.viewmodel.ReminderViewModel
-import dev.shorthouse.habitbuilder.ui.viewmodel.ReminderViewModelFactory
+import dev.shorthouse.habitbuilder.ui.viewmodel.ActiveReminderListViewModel
+import dev.shorthouse.habitbuilder.ui.viewmodel.ActiveReminderListViewModelFactory
 
 class ActiveHabitListFragment : Fragment() {
     private var _binding: ActiveHabitListFragmentBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: ReminderViewModel by activityViewModels {
-        ReminderViewModelFactory(
-            (activity?.application as BaseApplication).database.habitDao()
+    private val viewModel: ActiveReminderListViewModel by activityViewModels {
+        ActiveReminderListViewModelFactory(
+            (activity?.application as BaseApplication).database.reminderDao()
         )
     }
 
