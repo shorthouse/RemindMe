@@ -1,18 +1,16 @@
-package dev.shorthouse.reminderbuilder.ui.viewmodel
+package dev.shorthouse.habitbuilder.ui.viewmodel
 
 import androidx.lifecycle.*
 import dev.shorthouse.habitbuilder.data.ReminderDao
 import dev.shorthouse.habitbuilder.model.Reminder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.*
 
 class ReminderViewModel(private val reminderDao: ReminderDao
 ) : ViewModel() {
-    val reminders = reminderDao.getReminders().asLiveData()
-
-    fun getReminder(id: Long): LiveData<Reminder> {
-        return reminderDao.getReminder(id).asLiveData()
-    }
+    val dateFormatter = SimpleDateFormat("EEE dd MMM yyyy", Locale.getDefault())
 
     fun addReminder(
         name: String,
@@ -27,30 +25,6 @@ class ReminderViewModel(private val reminderDao: ReminderDao
 
         viewModelScope.launch(Dispatchers.IO) {
             reminderDao.insert(reminder)
-        }
-    }
-
-    fun updateReminder(
-        id: Long,
-        name: String,
-        reminderEpoch: Long,
-        notes: String,
-    ) {
-        val reminder = Reminder(
-            id = id,
-            name = name,
-            reminderEpoch = reminderEpoch,
-            notes = notes,
-        )
-
-        viewModelScope.launch(Dispatchers.IO) {
-            reminderDao.update(reminder)
-        }
-    }
-
-    fun deleteReminder(reminder: Reminder) {
-        viewModelScope.launch(Dispatchers.IO) {
-            reminderDao.delete(reminder)
         }
     }
 }
