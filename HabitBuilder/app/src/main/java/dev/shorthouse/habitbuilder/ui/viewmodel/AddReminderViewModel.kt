@@ -6,6 +6,7 @@ import dev.shorthouse.habitbuilder.model.Reminder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
+import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -49,6 +50,11 @@ class AddReminderViewModel(private val reminderDao: ReminderDao
 
     fun getReminderEpoch(reminderDateTime: LocalDateTime): Long {
         return reminderDateTime.atZone(ZoneId.systemDefault()).toEpochSecond()
+    }
+
+    fun getSecondsUntilReminder(reminderEpoch: Long): Long {
+        val nowEpoch = Instant.now().epochSecond
+        return reminderEpoch - nowEpoch
     }
 
 }

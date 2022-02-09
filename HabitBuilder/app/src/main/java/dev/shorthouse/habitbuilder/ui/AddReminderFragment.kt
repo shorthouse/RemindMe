@@ -17,10 +17,8 @@ import dev.shorthouse.habitbuilder.R
 import dev.shorthouse.habitbuilder.databinding.AddReminderFragmentBinding
 import dev.shorthouse.habitbuilder.ui.viewmodel.AddReminderViewModel
 import dev.shorthouse.habitbuilder.ui.viewmodel.ReminderViewModelFactory
-import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
-import java.time.ZoneId
 
 
 class AddReminderFragment : Fragment() {
@@ -111,8 +109,7 @@ class AddReminderFragment : Fragment() {
     private fun addHabit() {
         if(isValidEntry()) {
             val reminderEpoch = getReminderEpoch()
-            val nowEpoch = Instant.now().epochSecond
-            val secondsUntilReminder = reminderEpoch - nowEpoch
+            val secondsUntilReminder = viewModel.getSecondsUntilReminder(reminderEpoch)
 
             viewModel.addReminder(
                 binding.nameInput.text.toString(),
