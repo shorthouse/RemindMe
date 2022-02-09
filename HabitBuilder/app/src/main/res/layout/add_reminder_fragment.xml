@@ -22,6 +22,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/habit_name"
+            app:errorEnabled="true"
+            app:errorIconDrawable="@drawable/ic_add"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -32,6 +34,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="textAutoComplete"
                 android:singleLine="true"
+
                 tools:text="Brush teeth" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -163,6 +166,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            app:errorEnabled="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/name_label"
@@ -181,11 +185,13 @@
                 tools:text="Fri 17 Jun 2024" />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <!-- Habit start time -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/start_time_label"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            app:errorEnabled="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/start_date_label"
@@ -204,18 +210,7 @@
                 tools:text="16:37 PM" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Time before header -->
-
-        <!-- Year time before -->
-
-        <!-- Month time before -->
-
-        <!-- Day time before -->
-
-        <!-- Hour time before -->
-
-        <!-- Minute time before -->
-
+        <!-- Send button -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/save_habit"
             style="@style/ShapeAppearanceOverlay.Material3.Button"
@@ -228,7 +223,5 @@
             app:layout_constraintTop_toBottomOf="@+id/years_label">
 
         </com.google.android.material.button.MaterialButton>
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
