@@ -19,4 +19,9 @@
     <string name="reminder_time_picker_tag">reminder_time_picker</string>
     <string name="toast_reminder_saved">Reminder saved!</string>
     <string name="time_picker_title">Select habit start time</string>
+    <string name="reminder_name_blank_error">Enter a name</string>
+    <string name="reminder_date_blank_error">Enter a date</string>
+    <string name="reminder_date_invalid_error">Enter a current or future date</string>
+    <string name="reminder_time_blank_error">Enter a time</string>
+    <string name="reminder_time_invalid_error">Enter a current or future time</string>
 </resources>
