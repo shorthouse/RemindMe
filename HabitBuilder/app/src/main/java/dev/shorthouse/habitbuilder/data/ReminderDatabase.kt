@@ -8,7 +8,7 @@ import dev.shorthouse.habitbuilder.model.Reminder
 
 @Database(version = 1, exportSchema = false, entities = arrayOf(Reminder::class))
 abstract class ReminderDatabase : RoomDatabase() {
-    abstract fun habitDao(): ReminderDao
+    abstract fun reminderDao(): ReminderDao
 
     companion object {
         @Volatile
