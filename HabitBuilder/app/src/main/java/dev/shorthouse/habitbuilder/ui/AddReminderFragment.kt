@@ -1,13 +1,11 @@
 package dev.shorthouse.habitbuilder.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.content.res.AppCompatResources
-import androidx.core.content.ContextCompat
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -17,10 +15,13 @@ import com.google.android.material.timepicker.TimeFormat
 import dev.shorthouse.habitbuilder.BaseApplication
 import dev.shorthouse.habitbuilder.R
 import dev.shorthouse.habitbuilder.databinding.AddReminderFragmentBinding
-import dev.shorthouse.reminderbuilder.ui.viewmodel.ReminderViewModel
-import dev.shorthouse.reminderbuilder.ui.viewmodel.ReminderViewModelFactory
+import dev.shorthouse.habitbuilder.ui.viewmodel.ReminderViewModel
+import dev.shorthouse.habitbuilder.ui.viewmodel.ReminderViewModelFactory
 import java.text.SimpleDateFormat
-import java.time.*
+import java.time.Instant
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.*
 
@@ -46,18 +47,24 @@ class AddReminderFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.startDateInput.setOnClickListener {
-            displayDatePicker(getDatePicker())
-        }
+        binding.apply {
+            startTimeInput.setOnClickListener {
+                displayTimePicker(getTimePicker())
+                startTimeLabel.error = null
+            }
 
-        binding.startTimeInput.setOnClickListener {
-            displayTimePicker(getTimePicker())
-        }
+            startDateInput.setOnClickListener {
+                displayDatePicker(getDatePicker())
+                startDateLabel.error = null
+            }
 
-        binding.saveHabit.setOnClickListener{
-            addHabit()
-            Toast.makeText(context, "Habit saved!", Toast.LENGTH_SHORT).show()
-            findNavController().navigateUp()
+            nameInput.addTextChangedListener {
+                nameLabel.error = null
+            }
+
+            saveHabit.setOnClickListener {
+                addHabit()
+            }
         }
     }
 
@@ -68,15 +75,13 @@ class AddReminderFragment : Fragment() {
 
     private fun getDatePicker(): MaterialDatePicker<Long> {
         return MaterialDatePicker.Builder.datePicker()
-            .setTitleText("Select date")
+            .setTitleText(getString(R.string.date_picker_title))
             .build()
     }
 
     private fun displayDatePicker(datePicker: MaterialDatePicker<Long>) {
-        val dateFormatter = SimpleDateFormat("EEE dd MMM yyyy", Locale.getDefault())
-
         datePicker.addOnPositiveButtonClickListener { dateTimestamp ->
-            binding.startDateInput.setText(dateFormatter.format(dateTimestamp))
+            binding.startDateInput.setText(viewModel.dateFormatter.format(dateTimestamp))
         }
 
         datePicker.show(parentFragmentManager, "HABIT_DATE_PICKER")
@@ -103,15 +108,20 @@ class AddReminderFragment : Fragment() {
     }
 
     private fun addHabit() {
-        val reminderEpoch = getReminderEpoch()
-        val nowEpoch = Instant.now().epochSecond
-        val secondsUntilReminder = reminderEpoch - nowEpoch
+        if(isValidEntry()) {
+            val reminderEpoch = getReminderEpoch()
+            val nowEpoch = Instant.now().epochSecond
+            val secondsUntilReminder = reminderEpoch - nowEpoch
 
-        viewModel.addReminder(
-            binding.nameInput.text.toString(),
-            reminderEpoch,
-            ""
-        )
+            viewModel.addReminder(
+                binding.nameInput.text.toString(),
+                reminderEpoch,
+                ""
+            )
+
+            Toast.makeText(context, "Habit saved!", Toast.LENGTH_SHORT).show()
+            findNavController().navigateUp()
+        }
     }
 
     private fun getReminderDate(): LocalDate {
@@ -135,19 +145,29 @@ class AddReminderFragment : Fragment() {
     }
 
     private fun isValidEntry(): Boolean {
-        if (binding.nameInput.text.toString().isBlank()) {
-            binding.nameInput.setError("Enter a name", AppCompatResources.getDrawable(requireContext(), R.drawable.ic_error))
-            return false;
-        }
-        if (getReminderDate().isBefore(LocalDate.now())) {
-            binding.startDateInput.setError("Enter a current or future date", AppCompatResources.getDrawable(requireContext(), R.drawable.ic_error))
-            return false;
-        }
-        if (getReminderDateTime().isBefore(LocalDateTime.now())) {
-            binding.startTimeInput.setError("Enter a current or future time", AppCompatResources.getDrawable(requireContext(), R.drawable.ic_error))
-            return false;
+        when {
+            binding.nameInput.text.toString().isBlank() -> {
+                binding.nameLabel.error = "Enter a name"
+                return false;
+            }
+            binding.startDateInput.text.toString().isBlank() -> {
+                binding.startDateLabel.error = "Enter a date"
+                return false;
+            }
+            getReminderDate().isBefore(LocalDate.now()) -> {
+                binding.startDateLabel.error = "Enter a current or future date"
+                return false;
+            }
+            binding.startTimeInput.text.toString().isBlank() -> {
+                binding.startTimeLabel.error = "Enter a time"
+                return false;
+            }
+            getReminderDateTime().isBefore(LocalDateTime.now()) -> {
+                binding.startTimeLabel.error = "Enter a current or future time"
+                return false;
+            }
+            else -> return true
         }
 
-        return true;
     }
 }
