@@ -12,9 +12,8 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.*
 
-class ReminderViewModel(private val reminderDao: ReminderDao
+class AddReminderViewModel(private val reminderDao: ReminderDao
 ) : ViewModel() {
-
 
     fun addReminder(
         name: String,
@@ -38,8 +37,8 @@ class ReminderViewModel(private val reminderDao: ReminderDao
     }
 
     fun getReminderDate(reminderDateText: String): LocalDate {
-        val formatter = DateTimeFormatter.ofPattern("EEE dd MMM yyyy")
-        return LocalDate.parse(reminderDateText, formatter)
+        val dateFormatter = DateTimeFormatter.ofPattern("EEE dd MMM yyyy")
+        return LocalDate.parse(reminderDateText, dateFormatter)
     }
 
     fun getReminderDateTime(reminderDateText: String, reminderTimeText: String): LocalDateTime {
@@ -48,15 +47,19 @@ class ReminderViewModel(private val reminderDao: ReminderDao
         return  LocalDateTime.parse(reminderDateTime, formatter)
     }
 
+    fun getReminderEpoch(reminderDateTime: LocalDateTime): Long {
+        return reminderDateTime.atZone(ZoneId.systemDefault()).toEpochSecond()
+    }
+
 }
 
 class ReminderViewModelFactory(
     private val reminderDao: ReminderDao
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(ReminderViewModel::class.java)) {
+        if (modelClass.isAssignableFrom(AddReminderViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return ReminderViewModel(reminderDao) as T
+            return AddReminderViewModel(reminderDao) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
