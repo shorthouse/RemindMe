@@ -114,7 +114,7 @@ class AddReminderFragment : Fragment() {
             viewModel.addReminder(
                 binding.nameInput.text.toString(),
                 reminderEpoch,
-                "",
+                binding.notesInput.text.toString(),
             )
 
             Toast.makeText(context, getString(R.string.toast_reminder_saved), Toast.LENGTH_SHORT).show()
