@@ -16,7 +16,7 @@ import dev.shorthouse.habitbuilder.BaseApplication
 import dev.shorthouse.habitbuilder.R
 import dev.shorthouse.habitbuilder.databinding.AddReminderFragmentBinding
 import dev.shorthouse.habitbuilder.ui.viewmodel.AddReminderViewModel
-import dev.shorthouse.habitbuilder.ui.viewmodel.ReminderViewModelFactory
+import dev.shorthouse.habitbuilder.ui.viewmodel.AddReminderViewModelFactory
 import java.time.LocalDate
 import java.time.LocalDateTime
 
@@ -26,7 +26,7 @@ class AddReminderFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: AddReminderViewModel by activityViewModels {
-        ReminderViewModelFactory(
+        AddReminderViewModelFactory(
             (activity?.application as BaseApplication).database.reminderDao()
         )
     }
