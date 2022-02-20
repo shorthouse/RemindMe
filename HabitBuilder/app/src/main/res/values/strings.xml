@@ -24,4 +24,6 @@
     <string name="reminder_date_invalid_error">Enter a current or future date</string>
     <string name="reminder_time_blank_error">Enter a time</string>
     <string name="reminder_time_invalid_error">Enter a current or future time</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

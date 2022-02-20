@@ -59,7 +59,7 @@ class AddReminderViewModel(private val reminderDao: ReminderDao
 
 }
 
-class ReminderViewModelFactory(
+class AddReminderViewModelFactory(
     private val reminderDao: ReminderDao
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
