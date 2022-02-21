@@ -51,7 +51,7 @@ class ActiveHabitListFragment : Fragment() {
         binding.apply {
             activeHabitRecycler.adapter = adapter
             addHabitFab.setOnClickListener {
-                findNavController().navigate(R.id.action_activeHabitListFragment_to_addHabitFragment)
+                findNavController().navigate(R.id.action_activeReminderListFragment_to_addReminderFragment)
             }
         }
     }
