@@ -3,20 +3,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/activeHabitListFragment">
+    app:startDestination="@id/activeReminderListFragment">
 
     <fragment
-        android:id="@+id/addHabitFragment"
+        android:id="@+id/activeReminderListFragment"
+        android:name="dev.shorthouse.habitbuilder.ui.ActiveReminderFragment"
+        android:label="Active Reminders" >
+        <action
+            android:id="@+id/action_activeReminderListFragment_to_addReminderFragment"
+            app:destination="@id/addReminderFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/addReminderFragment"
         android:name="dev.shorthouse.habitbuilder.ui.AddReminderFragment"
         android:label="add_habit_fragment"
         tools:layout="@layout/add_reminder_fragment" />
 
-    <fragment
-        android:id="@+id/activeHabitListFragment"
-        android:name="dev.shorthouse.habitbuilder.ui.ActiveReminderFragment"
-        android:label="ActiveHabitListFragment" >
-        <action
-            android:id="@+id/action_activeHabitListFragment_to_addHabitFragment"
-            app:destination="@id/addHabitFragment" />
-    </fragment>
+
 </navigation>

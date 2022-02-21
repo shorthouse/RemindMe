@@ -9,13 +9,13 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import dev.shorthouse.habitbuilder.BaseApplication
 import dev.shorthouse.habitbuilder.R
-import dev.shorthouse.habitbuilder.databinding.ActiveHabitListFragmentBinding
+import dev.shorthouse.habitbuilder.databinding.ActiveReminderListFragmentBinding
 import dev.shorthouse.habitbuilder.ui.adapter.ReminderListAdapter
 import dev.shorthouse.habitbuilder.ui.viewmodel.ActiveReminderListViewModel
 import dev.shorthouse.habitbuilder.ui.viewmodel.ActiveReminderListViewModelFactory
 
 class ActiveReminderFragment : Fragment() {
-    private var _binding: ActiveHabitListFragmentBinding? = null
+    private var _binding: ActiveReminderListFragmentBinding? = null
     private val binding get() = _binding!!
 
     private val viewModel: ActiveReminderListViewModel by activityViewModels {
@@ -29,7 +29,7 @@ class ActiveReminderFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = ActiveHabitListFragmentBinding.inflate(inflater, container, false)
+        _binding = ActiveReminderListFragmentBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -52,7 +52,7 @@ class ActiveReminderFragment : Fragment() {
         binding.apply {
             activeHabitRecycler.adapter = adapter
             addHabitFab.setOnClickListener {
-                findNavController().navigate(R.id.action_activeHabitListFragment_to_addHabitFragment)
+                findNavController().navigate(R.id.action_activeReminderListFragment_to_addReminderFragment)
             }
         }
     }
