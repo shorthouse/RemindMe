@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import dev.shorthouse.habitbuilder.databinding.ActivityMainBinding
 
-// Hosts all fragments
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
