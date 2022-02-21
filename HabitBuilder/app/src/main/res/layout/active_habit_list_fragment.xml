@@ -19,7 +19,7 @@
             android:layout_gravity="bottom|end"
             android:layout_margin="16dp"
             android:src="@drawable/ic_add"
-            android:contentDescription="@string/add_habit_fab_description"
+            android:contentDescription="@string/add_reminder_fab_description"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 

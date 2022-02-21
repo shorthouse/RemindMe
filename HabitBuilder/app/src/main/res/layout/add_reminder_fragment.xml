@@ -13,7 +13,7 @@
         android:layout_height="match_parent"
         android:layout_margin="16dp"
         android:padding="16dp"
-        tools:context=".ui.AddHabitFragment">
+        tools:context=".ui.AddReminderFragment">
 
         <!-- Habit name -->
         <com.google.android.material.textfield.TextInputLayout
@@ -21,7 +21,8 @@
             style="@style/ThemeOverlay.Material3.AutoCompleteTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/habit_name"
+            android:hint="@string/reminder_name"
+            app:errorEnabled="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -32,6 +33,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="textAutoComplete"
                 android:singleLine="true"
+
                 tools:text="Brush teeth" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -41,11 +43,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="@string/habit_occurrence"
+            android:text="@string/reminder_occurrence"
+            android:textColor="@android:color/black"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/start_time_label" />
+            app:layout_constraintTop_toBottomOf="@+id/notes_label" />
 
         <!-- Year occurrence -->
         <com.google.android.material.textfield.TextInputLayout
@@ -54,7 +57,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginTop="16dp"
-            android:hint="@string/habit_year"
+            android:hint="@string/reminder_year"
             app:layout_constraintEnd_toStartOf="@+id/months_label"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
@@ -77,7 +80,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginTop="16dp"
-            android:hint="@string/habit_month"
+            android:hint="@string/reminder_month"
             app:layout_constraintEnd_toStartOf="@+id/days_label"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/years_label"
@@ -99,7 +102,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginTop="16dp"
-            android:hint="@string/habit_day"
+            android:hint="@string/reminder_day"
             app:layout_constraintEnd_toStartOf="@+id/hours_label"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/months_label"
@@ -121,7 +124,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginTop="16dp"
-            android:hint="@string/habit_hour"
+            android:hint="@string/reminder_hour"
             app:layout_constraintEnd_toStartOf="@id/minutes_label"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/days_label"
@@ -141,7 +144,7 @@
             android:id="@+id/minutes_label"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:hint="@string/habit_minute"
+            android:hint="@string/reminder_minute"
             android:layout_marginTop="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -163,6 +166,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            app:errorEnabled="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/name_label"
@@ -176,16 +180,18 @@
                 android:cursorVisible="false"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
-                android:hint="@string/habit_date_hint"
+                android:hint="@string/reminder_date_hint"
                 android:inputType="none"
                 tools:text="Fri 17 Jun 2024" />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <!-- Habit start time -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/start_time_label"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            app:errorEnabled="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/start_date_label"
@@ -199,36 +205,43 @@
                 android:cursorVisible="false"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
-                android:hint="@string/habit_time_hint"
+                android:hint="@string/reminder_time_hint"
                 android:inputType="none"
                 tools:text="16:37 PM" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Time before header -->
+        <!-- Notes -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/notes_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:errorEnabled="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/start_time_label"
+            app:startIconDrawable="@drawable/ic_clock">
 
-        <!-- Year time before -->
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/notes_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/reminder_time_hint"
+                tools:text="Make sure scrubbed" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Month time before -->
-
-        <!-- Day time before -->
-
-        <!-- Hour time before -->
-
-        <!-- Minute time before -->
-
+        <!-- Send button -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/save_habit"
             style="@style/ShapeAppearanceOverlay.Material3.Button"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:text="@string/habit_save"
+            android:text="@string/reminder_save"
             android:layout_marginTop="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/years_label">
 
         </com.google.android.material.button.MaterialButton>
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

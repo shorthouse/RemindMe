@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/addHabitFragment"
-        android:name="dev.shorthouse.habitbuilder.ui.AddHabitFragment"
+        android:name="dev.shorthouse.habitbuilder.ui.AddReminderFragment"
         android:label="add_habit_fragment"
-        tools:layout="@layout/add_habit_fragment" />
+        tools:layout="@layout/add_reminder_fragment" />
     <fragment
         android:id="@+id/activeHabitListFragment"
         android:name="dev.shorthouse.habitbuilder.ui.ActiveHabitListFragment"
