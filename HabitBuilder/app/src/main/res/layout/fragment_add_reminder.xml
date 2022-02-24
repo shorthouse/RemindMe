@@ -170,7 +170,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/name_label"
-            app:startIconDrawable="@drawable/ic_calendar">
+            app:startIconDrawable="@drawable/ic_calendar_today">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/start_date_input"
@@ -216,17 +216,16 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            app:errorEnabled="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/start_time_label"
-            app:startIconDrawable="@drawable/ic_clock">
+            app:layout_constraintTop_toBottomOf="@+id/start_time_label" >
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/notes_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/reminder_time_hint"
+                android:hint="@string/reminder_notes_hint"
+                android:lines="3"
                 tools:text="Make sure scrubbed" />
         </com.google.android.material.textfield.TextInputLayout>
 

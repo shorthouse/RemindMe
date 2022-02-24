@@ -45,7 +45,7 @@ class AddReminderViewModel(private val reminderDao: ReminderDao
     fun getReminderDateTime(reminderDateText: String, reminderTimeText: String): LocalDateTime {
         val reminderDateTime = "$reminderDateText $reminderTimeText"
         val formatter = DateTimeFormatter.ofPattern("EEE dd MMM yyyy HH:mm")
-        return  LocalDateTime.parse(reminderDateTime, formatter)
+        return LocalDateTime.parse(reminderDateTime, formatter)
     }
 
     fun getReminderEpoch(reminderDateTime: LocalDateTime): Long {

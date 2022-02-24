@@ -3,13 +3,23 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/short/Documents/Files/Coding/Git repos/Habit-Builder/HabitBuilder/app/src/main/res/drawable/ic_calendar.xml" value="0.312" />
+        <entry key="..\:/Users/short/Documents/Files/Coding/Git repos/Habit-Builder/HabitBuilder/app/src/main/res/drawable/ic_calendar_range.xml" value="0.312" />
+        <entry key="..\:/Users/short/Documents/Files/Coding/Git repos/Habit-Builder/HabitBuilder/app/src/main/res/drawable/ic_calendar_today.xml" value="0.312" />
         <entry key="..\:/Users/short/Documents/Files/Coding/Git repos/Habit-Builder/HabitBuilder/app/src/main/res/drawable/ic_error.xml" value="0.1765" />
         <entry key="..\:/Users/short/Documents/Files/Coding/Git repos/Habit-Builder/HabitBuilder/app/src/main/res/layout/active_habit_list_fragment.xml" value="0.34479166666666666" />
-        <entry key="..\:/Users/short/Documents/Files/Coding/Git repos/Habit-Builder/HabitBuilder/app/src/main/res/layout/activity_main.xml" value="0.34479166666666666" />
+        <entry key="..\:/Users/short/Documents/Files/Coding/Git repos/Habit-Builder/HabitBuilder/app/src/main/res/layout/active_reminder_list_fragment.xml" value="0.25" />
+        <entry key="..\:/Users/short/Documents/Files/Coding/Git repos/Habit-Builder/HabitBuilder/app/src/main/res/layout/activity_main.xml" value="0.29907407407407405" />
         <entry key="..\:/Users/short/Documents/Files/Coding/Git repos/Habit-Builder/HabitBuilder/app/src/main/res/layout/add_habit_fragment.xml" value="0.29907407407407405" />
         <entry key="..\:/Users/short/Documents/Files/Coding/Git repos/Habit-Builder/HabitBuilder/app/src/main/res/layout/add_reminder_fragment.xml" value="0.34479166666666666" />
+        <entry key="..\:/Users/short/Documents/Files/Coding/Git repos/Habit-Builder/HabitBuilder/app/src/main/res/layout/fragment_active_reminder_list.xml" value="0.1" />
+        <entry key="..\:/Users/short/Documents/Files/Coding/Git repos/Habit-Builder/HabitBuilder/app/src/main/res/layout/fragment_add_reminder.xml" value="0.33" />
+        <entry key="..\:/Users/short/Documents/Files/Coding/Git repos/Habit-Builder/HabitBuilder/app/src/main/res/layout/fragment_all_reminders.xml" value="0.2830269345874305" />
+        <entry key="..\:/Users/short/Documents/Files/Coding/Git repos/Habit-Builder/HabitBuilder/app/src/main/res/layout/fragment_reminder_details.xml" value="0.34479166666666666" />
         <entry key="..\:/Users/short/Documents/Files/Coding/Git repos/Habit-Builder/HabitBuilder/app/src/main/res/layout/list_item_habit.xml" value="0.34479166666666666" />
-        <entry key="..\:/Users/short/Documents/Files/Coding/Git repos/Habit-Builder/HabitBuilder/app/src/main/res/layout/list_item_reminder.xml" value="0.16822916666666668" />
+        <entry key="..\:/Users/short/Documents/Files/Coding/Git repos/Habit-Builder/HabitBuilder/app/src/main/res/layout/list_item_reminder.xml" value="0.33" />
+        <entry key="..\:/Users/short/Documents/Files/Coding/Git repos/Habit-Builder/HabitBuilder/app/src/main/res/menu/bottom_nav.xml" value="0.16822916666666668" />
+        <entry key="..\:/Users/short/Documents/Files/Coding/Git repos/Habit-Builder/HabitBuilder/app/src/main/res/menu/bottom_nav_menu.xml" value="0.1" />
       </map>
     </option>
   </component>

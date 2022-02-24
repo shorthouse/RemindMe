@@ -24,6 +24,11 @@
     <string name="reminder_date_invalid_error">Enter a current or future date</string>
     <string name="reminder_time_blank_error">Enter a time</string>
     <string name="reminder_time_invalid_error">Enter a current or future time</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_active_reminders">Active Reminders</string>
+    <string name="cd_active_reminders">Active Reminders</string>
+    <string name="cd_all_reminders">All Reminders</string>
+    <string name="title_all_reminders">All Reminders</string>
+    <string name="reminder_notes_hint">Notes</string>
+    <string name="cd_add_reminder">Add Reminder</string>
+    <string name="title_add_reminder">Add Reminder</string>
 </resources>
