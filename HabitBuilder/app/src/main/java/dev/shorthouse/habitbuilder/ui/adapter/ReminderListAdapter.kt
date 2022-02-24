@@ -30,7 +30,6 @@ class ReminderListAdapter(
         override fun areContentsTheSame(oldItem: Reminder, newItem: Reminder): Boolean {
             return oldItem == newItem
         }
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReminderViewHolder {

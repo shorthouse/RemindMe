@@ -8,6 +8,9 @@
         <variable
             name="reminder"
             type="dev.shorthouse.habitbuilder.model.Reminder" />
+        <import type="java.time.LocalDateTime" />
+        <import type="java.time.Instant" />
+        <import type="java.time.ZoneId" />
     </data>
     
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -15,37 +18,46 @@
         android:layout_height="wrap_content"
         android:paddingStart="16dp"
         android:paddingEnd="16dp">
-        
-        
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/habit_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@{reminder.name}"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-            android:layout_marginTop="16dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:text="Brush teeth">
-        </com.google.android.material.textview.MaterialTextView>
+
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/habit_time"
+            android:id="@+id/reminder_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{Long.toString(reminder.reminderEpoch)}"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
-            app:layout_constraintTop_toBottomOf="@id/habit_name"
+            android:layout_marginTop="16dp"
+            android:text="@{reminder.name}"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
             app:layout_constraintStart_toStartOf="parent"
-            tools:text="21:49">
-        </com.google.android.material.textview.MaterialTextView>
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Brush teeth" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/reminder_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{LocalDateTime.ofInstant(Instant.ofEpochSecond(reminder.reminderEpoch), ZoneId.systemDefault()).toLocalTime().toString()}"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+            app:layout_constraintTop_toBottomOf="@id/reminder_name"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="21:49" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/reminder_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@{LocalDateTime.ofInstant(Instant.ofEpochSecond(reminder.reminderEpoch), ZoneId.systemDefault()).toLocalDate().toString()}"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+            app:layout_constraintStart_toEndOf="@+id/reminder_time"
+            app:layout_constraintTop_toBottomOf="@+id/reminder_name"
+            tools:text="2022-02-07" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="?attr/dividerHorizontal"
             android:layout_marginTop="16dp"
-            app:layout_constraintTop_toBottomOf="@id/habit_time"
+            app:layout_constraintTop_toBottomOf="@id/reminder_time"
             app:layout_constraintStart_toStartOf="parent" />
         
         

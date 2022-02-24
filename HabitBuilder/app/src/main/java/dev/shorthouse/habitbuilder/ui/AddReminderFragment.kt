@@ -9,12 +9,15 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.bottomappbar.BottomAppBar
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import dev.shorthouse.habitbuilder.BaseApplication
 import dev.shorthouse.habitbuilder.R
-import dev.shorthouse.habitbuilder.databinding.AddReminderFragmentBinding
+import dev.shorthouse.habitbuilder.databinding.FragmentAddReminderBinding
 import dev.shorthouse.habitbuilder.ui.viewmodel.AddReminderViewModel
 import dev.shorthouse.habitbuilder.ui.viewmodel.AddReminderViewModelFactory
 import java.time.LocalDate
@@ -22,7 +25,7 @@ import java.time.LocalDateTime
 
 
 class AddReminderFragment : Fragment() {
-    private var _binding: AddReminderFragmentBinding? = null
+    private var _binding: FragmentAddReminderBinding? = null
     private val binding get() = _binding!!
 
     private val viewModel: AddReminderViewModel by activityViewModels {
@@ -32,10 +35,12 @@ class AddReminderFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = AddReminderFragmentBinding.inflate(inflater, container, false)
+        _binding = FragmentAddReminderBinding.inflate(inflater, container, false)
+        disableBottomNav()
         return binding.root
     }
 
@@ -65,6 +70,7 @@ class AddReminderFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        enableBottomNav()
         _binding = null
     }
 
@@ -104,6 +110,20 @@ class AddReminderFragment : Fragment() {
             .setTimeFormat(TimeFormat.CLOCK_24H)
             .setTitleText(getString(R.string.time_picker_title))
             .build()
+    }
+
+    private fun enableBottomNav() {
+        val appBar: BottomAppBar = requireActivity().findViewById(R.id.bottom_app_bar)
+        val reminderFab: FloatingActionButton = requireActivity().findViewById(R.id.add_reminder_fab)
+        appBar.performShow()
+        reminderFab.show()
+    }
+
+    private fun disableBottomNav() {
+        val appBar: BottomAppBar = requireActivity().findViewById(R.id.bottom_app_bar)
+        val reminderFab: FloatingActionButton = requireActivity().findViewById(R.id.add_reminder_fab)
+        appBar.performHide()
+        reminderFab.hide()
     }
 
     private fun addHabit() {
