@@ -6,28 +6,32 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
+import dev.shorthouse.habitbuilder.BaseApplication
 import dev.shorthouse.habitbuilder.R
+import dev.shorthouse.habitbuilder.databinding.FragmentAddReminderBinding
+import dev.shorthouse.habitbuilder.databinding.FragmentReminderDetailsBinding
+import dev.shorthouse.habitbuilder.ui.viewmodel.AddReminderViewModel
+import dev.shorthouse.habitbuilder.ui.viewmodel.AddReminderViewModelFactory
 import dev.shorthouse.habitbuilder.ui.viewmodel.ReminderDetailsViewModel
+import dev.shorthouse.habitbuilder.ui.viewmodel.ReminderDetailsViewModelFactory
 
 class ReminderDetailsFragment : Fragment() {
+    private var _binding: FragmentReminderDetailsBinding? = null
+    private val binding get() = _binding!!
 
-    companion object {
-        fun newInstance() = ReminderDetailsFragment()
+    private val viewModel: ReminderDetailsViewModel by activityViewModels {
+        ReminderDetailsViewModelFactory(
+            (activity?.application as BaseApplication).database.reminderDao()
+        )
     }
-
-    private lateinit var viewModel: ReminderDetailsViewModel
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_reminder_details, container, false)
+        _binding = FragmentReminderDetailsBinding.inflate(inflater, container, false)
+        return binding.root
     }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(ReminderDetailsViewModel::class.java)
-        // TODO: Use the ViewModel
-    }
-
 }
