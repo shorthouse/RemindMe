@@ -42,13 +42,12 @@
             android:id="@+id/occurrence_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:text="@string/reminder_occurrence"
             android:textColor="@android:color/black"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/notes_label" />
+            app:layout_constraintTop_toBottomOf="@+id/start_time_label" />
 
         <!-- Year occurrence -->
         <com.google.android.material.textfield.TextInputLayout
@@ -215,10 +214,10 @@
             android:id="@+id/notes_label"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="16dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/start_time_label" >
+            app:layout_constraintTop_toBottomOf="@+id/years_label">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/notes_input"
@@ -239,7 +238,7 @@
             android:layout_marginTop="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/years_label">
+            app:layout_constraintTop_toBottomOf="@+id/notes_label">
 
         </com.google.android.material.button.MaterialButton>
     </androidx.constraintlayout.widget.ConstraintLayout>
