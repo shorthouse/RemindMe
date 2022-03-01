@@ -17,6 +17,9 @@ import dev.shorthouse.habitbuilder.ui.viewmodel.AddReminderViewModel
 import dev.shorthouse.habitbuilder.ui.viewmodel.AddReminderViewModelFactory
 import dev.shorthouse.habitbuilder.ui.viewmodel.ReminderDetailsViewModel
 import dev.shorthouse.habitbuilder.ui.viewmodel.ReminderDetailsViewModelFactory
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
 
 class ReminderDetailsFragment : Fragment() {
     private var _binding: FragmentReminderDetailsBinding? = null
@@ -44,7 +47,6 @@ class ReminderDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val id = navigationArgs.id
-
         viewModel.getReminder(id).observe(this.viewLifecycleOwner) {
             reminder = it
             bindReminder()
@@ -54,8 +56,8 @@ class ReminderDetailsFragment : Fragment() {
     private fun bindReminder() {
         binding.apply {
             name.text = reminder.name
-            startDate.text = reminder.reminderEpoch.toString()
-            startTime.text = reminder.reminderEpoch.toString()
+            startDate.text = LocalDateTime.ofInstant(Instant.ofEpochSecond(reminder.reminderEpoch), ZoneId.systemDefault()).toLocalDate().toString()
+            startTime.text = LocalDateTime.ofInstant(Instant.ofEpochSecond(reminder.reminderEpoch), ZoneId.systemDefault()).toLocalTime().toString()
             notes.text = reminder.notes
         }
     }
