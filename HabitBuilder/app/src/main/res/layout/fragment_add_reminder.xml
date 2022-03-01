@@ -54,12 +54,12 @@
             android:id="@+id/years_label"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
             android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
             android:hint="@string/reminder_year"
-            app:layout_constraintEnd_toStartOf="@+id/months_label"
+            app:layout_constraintEnd_toStartOf="@+id/days_label"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/occurrence_label">
 
@@ -73,26 +73,6 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Month occurrence -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/months_label"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginTop="16dp"
-            android:hint="@string/reminder_month"
-            app:layout_constraintEnd_toStartOf="@+id/days_label"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/years_label"
-            app:layout_constraintTop_toBottomOf="@+id/occurrence_label">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/months_input"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:inputType="number"
-                tools:text="0" />
-        </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Day occurrence -->
         <com.google.android.material.textfield.TextInputLayout
@@ -100,12 +80,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
-            android:layout_marginTop="16dp"
             android:hint="@string/reminder_day"
+            app:layout_constraintBottom_toBottomOf="@+id/years_label"
             app:layout_constraintEnd_toStartOf="@+id/hours_label"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/months_label"
-            app:layout_constraintTop_toBottomOf="@+id/occurrence_label">
+            app:layout_constraintStart_toEndOf="@+id/years_label"
+            app:layout_constraintTop_toTopOf="@+id/years_label">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/days_input"
@@ -122,12 +102,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
-            android:layout_marginTop="16dp"
             android:hint="@string/reminder_hour"
-            app:layout_constraintEnd_toStartOf="@id/minutes_label"
+            app:layout_constraintBottom_toBottomOf="@+id/days_label"
+            app:layout_constraintEnd_toStartOf="@+id/minutes_label"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/days_label"
-            app:layout_constraintTop_toBottomOf="@+id/occurrence_label">
+            app:layout_constraintTop_toTopOf="@+id/days_label">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/hours_input"
@@ -144,11 +124,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="@string/reminder_minute"
-            android:layout_marginTop="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/hours_label"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/hours_label"
-            app:layout_constraintTop_toBottomOf="@+id/occurrence_label">
+            app:layout_constraintTop_toTopOf="@+id/hours_label">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/minutes_input"
@@ -214,8 +194,8 @@
             android:id="@+id/notes_label"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/years_label">
 
@@ -234,8 +214,8 @@
             style="@style/ShapeAppearanceOverlay.Material3.Button"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:text="@string/reminder_save"
             android:layout_marginTop="16dp"
+            android:text="@string/reminder_save"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/notes_label">
