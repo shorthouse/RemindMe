@@ -93,7 +93,7 @@
             app:layout_constraintTop_toBottomOf="@+id/divider_start_time" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/occurrence"
+            android:id="@+id/repeat_interval"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -101,7 +101,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/ic_repeat"
             app:layout_constraintStart_toEndOf="@+id/ic_repeat"
             app:layout_constraintTop_toTopOf="@+id/ic_repeat"
-            tools:text="Occurrence" />
+            tools:text="Repeat Interval" />
 
         <View
             android:id="@+id/divider_occurrence"
