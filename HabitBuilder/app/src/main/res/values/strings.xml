@@ -31,4 +31,9 @@
     <string name="reminder_notes_hint">Notes</string>
     <string name="cd_add_reminder">Add Reminder</string>
     <string name="title_add_reminder">Add Reminder</string>
+    <string name="calendar_icon">Calendar icon</string>
+    <string name="clock_icon">Clock icon</string>
+    <string name="repeat_icon">Repeat icon</string>
+    <string name="notes_icon">Notes icon</string>
+    <string name="edit_reminder_button">Edit reminder</string>
 </resources>
