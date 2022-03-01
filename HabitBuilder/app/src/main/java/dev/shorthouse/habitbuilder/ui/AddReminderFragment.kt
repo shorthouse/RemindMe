@@ -1,6 +1,7 @@
 package dev.shorthouse.habitbuilder.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -129,10 +130,19 @@ class AddReminderFragment : Fragment() {
         if(isValidEntry()) {
             val reminderEpoch = getReminderEpoch()
             val secondsUntilReminder = viewModel.getSecondsUntilReminder(reminderEpoch)
+            val reminderInterval = viewModel.getReminderInterval(
+                binding.yearsInput.text.toString().toLong(),
+                binding.daysInput.text.toString().toLong(),
+                binding.hoursInput.text.toString().toLong(),
+                binding.minutesInput.text.toString().toLong(),
+            )
+
+            Log.d("HDS", reminderInterval.toString())
 
             viewModel.addReminder(
                 binding.nameInput.text.toString(),
                 reminderEpoch,
+                reminderInterval,
                 binding.notesInput.text.toString(),
             )
 

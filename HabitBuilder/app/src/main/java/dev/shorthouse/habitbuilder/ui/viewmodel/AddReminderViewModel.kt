@@ -6,10 +6,7 @@ import dev.shorthouse.habitbuilder.model.Reminder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
-import java.time.Instant
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.ZoneId
+import java.time.*
 import java.time.format.DateTimeFormatter
 import java.util.*
 
@@ -19,11 +16,13 @@ class AddReminderViewModel(private val reminderDao: ReminderDao
     fun addReminder(
         name: String,
         reminderEpoch: Long,
+        reminderInterval: Long,
         notes: String,
     ) {
         val reminder = Reminder(
             name = name,
-            reminderEpoch = reminderEpoch,
+            startEpoch = reminderEpoch,
+            repeatInterval = reminderInterval,
             notes = notes,
         )
 
