@@ -6,10 +6,7 @@ import dev.shorthouse.habitbuilder.model.Reminder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
-import java.time.Instant
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.ZoneId
+import java.time.*
 import java.time.format.DateTimeFormatter
 import java.util.*
 
@@ -18,12 +15,14 @@ class AddReminderViewModel(private val reminderDao: ReminderDao
 
     fun addReminder(
         name: String,
-        reminderEpoch: Long,
+        startEpoch: Long,
+        reminderInterval: Long,
         notes: String,
     ) {
         val reminder = Reminder(
             name = name,
-            reminderEpoch = reminderEpoch,
+            startEpoch = startEpoch,
+            repeatInterval = reminderInterval,
             notes = notes,
         )
 
@@ -48,13 +47,20 @@ class AddReminderViewModel(private val reminderDao: ReminderDao
         return LocalDateTime.parse(reminderDateTime, formatter)
     }
 
-    fun getReminderEpoch(reminderDateTime: LocalDateTime): Long {
+    fun getReminderStartEpoch(reminderDateTime: LocalDateTime): Long {
         return reminderDateTime.atZone(ZoneId.systemDefault()).toEpochSecond()
     }
 
-    fun getSecondsUntilReminder(reminderEpoch: Long): Long {
+    fun getSecondsUntilReminder(startEpoch: Long): Long {
         val nowEpoch = Instant.now().epochSecond
-        return reminderEpoch - nowEpoch
+        return startEpoch - nowEpoch
+    }
+
+    fun getReminderInterval(years: Long, days: Long, hours: Long): Long {
+        val daysInYear = 365;
+        return Duration.ofDays(years * daysInYear).seconds +
+                Duration.ofDays(days).seconds +
+                Duration.ofHours(hours).seconds
     }
 
 }

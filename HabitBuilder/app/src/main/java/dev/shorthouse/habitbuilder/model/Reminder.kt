@@ -10,7 +10,9 @@ data class Reminder (
 
     val name: String,
 
-    val reminderEpoch: Long,
+    val startEpoch: Long,
+
+    val repeatInterval: Long,
 
     val notes: String?,
 )
