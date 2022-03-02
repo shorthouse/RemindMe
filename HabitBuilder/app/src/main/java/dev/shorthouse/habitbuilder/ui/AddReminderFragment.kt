@@ -62,6 +62,18 @@ class AddReminderFragment : Fragment() {
                 nameLabel.error = null
             }
 
+            yearsInput.addTextChangedListener {
+                yearsLabel.error = null
+            }
+
+            daysInput.addTextChangedListener {
+                daysLabel.error = null
+            }
+
+            hoursInput.addTextChangedListener {
+                hoursLabel.error = null
+            }
+
             saveReminder.setOnClickListener {
                 addHabit()
             }
@@ -164,43 +176,77 @@ class AddReminderFragment : Fragment() {
     }
 
     private fun isValidEntry(): Boolean {
-        val maxYears = 10
-        val maxDays = 364
-        val maxHours = 23
+        return isDetailValid() && isIntervalValid()
+    }
 
+    private fun isDetailValid(): Boolean {
         when {
-//            binding.nameInput.text.toString().isBlank() -> {
-//                Toast.makeText(context, "The name cannot be empty.", Toast.LENGTH_SHORT).show()
-//                binding.nameLabel.error = " "
-//                return false
-//            }
-//            binding.startDateInput.text.toString().isBlank() -> {
-//                Toast.makeText(context, "The start date cannot be empty.", Toast.LENGTH_SHORT).show()
-//                binding.startDateLabel.error = " "
-//                return false
-//            }
-//            getReminderDate().isBefore(LocalDate.now()) -> {
-//                Toast.makeText(context, "The start date cannot be in the past.", Toast.LENGTH_SHORT).show()
-//                binding.startDateLabel.error = " "
-//                return false
-//            }
-//            binding.startTimeInput.text.toString().isBlank() -> {
-//                Toast.makeText(context, "The start time cannot be empty.", Toast.LENGTH_SHORT).show()
-//                binding.startTimeLabel.error = " "
-//                return false
-//            }
-//            getReminderDateTime().isBefore(LocalDateTime.now()) -> {
-//                Toast.makeText(context, "The start time cannot be in the past.", Toast.LENGTH_SHORT).show()
-//                binding.startTimeLabel.error = " "
-//                return false
-//            }
-            binding.yearsInput.text.toString().toLong() > maxYears -> {
-                Toast.makeText(context, "The maximum interval years is 10.", Toast.LENGTH_SHORT).show()
-                binding.yearsLabel.error = " "
+            binding.nameInput.text.toString().isBlank() -> {
+                Toast.makeText(context, "The name cannot be empty.", Toast.LENGTH_SHORT).show()
+                binding.nameLabel.error = ""
+                return false
+            }
+            binding.startDateInput.text.toString().isBlank() -> {
+                Toast.makeText(context, "The start date cannot be empty.", Toast.LENGTH_SHORT)
+                    .show()
+                binding.startDateLabel.error = " "
+                return false
+            }
+            getReminderDate().isBefore(LocalDate.now()) -> {
+                Toast.makeText(context, "The start date cannot be in the past.", Toast.LENGTH_SHORT)
+                    .show()
+                binding.startDateLabel.error = " "
+                return false
+            }
+            binding.startTimeInput.text.toString().isBlank() -> {
+                Toast.makeText(context, "The start time cannot be empty.", Toast.LENGTH_SHORT)
+                    .show()
+                binding.startTimeLabel.error = " "
+                return false
+            }
+            getReminderDateTime().isBefore(LocalDateTime.now()) -> {
+                Toast.makeText(context, "The start time cannot be in the past.", Toast.LENGTH_SHORT)
+                    .show()
+                binding.startTimeLabel.error = " "
                 return false
             }
             else -> return true
         }
+    }
 
+    private fun isIntervalValid(): Boolean {
+        val MAX_YEARS = 10
+        val MAX_DAYS = 364
+        val MAX_HOURS = 23
+
+        val years = binding.yearsInput.text.toString().toInt()
+        val days = binding.daysInput.text.toString().toInt()
+        val hours = binding.hoursInput.text.toString().toInt()
+
+        when {
+            years > MAX_YEARS -> {
+                Toast.makeText(context, "The maximum years interval is 10.", Toast.LENGTH_SHORT).show()
+                binding.yearsLabel.error = " "
+                binding.yearsLabel.errorIconDrawable = null
+                return false
+            }
+            days > MAX_DAYS -> {
+                Toast.makeText(context, "The maximum days interval is 364.", Toast.LENGTH_SHORT).show()
+                binding.daysLabel.error = " "
+                binding.daysLabel.errorIconDrawable = null
+                return false
+            }
+            hours > MAX_HOURS -> {
+                Toast.makeText(context, "The maximum hours interval is 23.", Toast.LENGTH_SHORT).show()
+                binding.hoursLabel.error = " "
+                binding.hoursLabel.errorIconDrawable = null
+                return false
+            }
+            years == 0 && days == 0 && hours == 0 -> {
+                Toast.makeText(context, "The interval must have a time period.", Toast.LENGTH_SHORT).show()
+                return false
+            }
+            else -> return true
+        }
     }
 }
