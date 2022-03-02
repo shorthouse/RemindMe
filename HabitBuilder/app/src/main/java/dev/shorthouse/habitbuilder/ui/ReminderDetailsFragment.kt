@@ -1,6 +1,5 @@
 package dev.shorthouse.habitbuilder.ui
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -9,17 +8,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.navArgs
 import dev.shorthouse.habitbuilder.BaseApplication
-import dev.shorthouse.habitbuilder.R
-import dev.shorthouse.habitbuilder.databinding.FragmentAddReminderBinding
 import dev.shorthouse.habitbuilder.databinding.FragmentReminderDetailsBinding
 import dev.shorthouse.habitbuilder.model.Reminder
-import dev.shorthouse.habitbuilder.ui.viewmodel.AddReminderViewModel
-import dev.shorthouse.habitbuilder.ui.viewmodel.AddReminderViewModelFactory
 import dev.shorthouse.habitbuilder.ui.viewmodel.ReminderDetailsViewModel
 import dev.shorthouse.habitbuilder.ui.viewmodel.ReminderDetailsViewModelFactory
-import java.time.Instant
-import java.time.LocalDateTime
-import java.time.ZoneId
 
 class ReminderDetailsFragment : Fragment() {
     private var _binding: FragmentReminderDetailsBinding? = null
@@ -56,8 +48,9 @@ class ReminderDetailsFragment : Fragment() {
     private fun bindReminder() {
         binding.apply {
             name.text = reminder.name
-            startDate.text = LocalDateTime.ofInstant(Instant.ofEpochSecond(reminder.reminderEpoch), ZoneId.systemDefault()).toLocalDate().toString()
-            startTime.text = LocalDateTime.ofInstant(Instant.ofEpochSecond(reminder.reminderEpoch), ZoneId.systemDefault()).toLocalTime().toString()
+            startDate.text = viewModel.convertEpochToDate(reminder.startEpoch)
+            startTime.text = viewModel.convertEpochToTime(reminder.startEpoch)
+            repeatInterval.text = viewModel.convertRepeatInterval(reminder.repeatInterval)
             notes.text = reminder.notes
         }
     }
