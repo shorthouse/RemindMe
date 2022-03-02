@@ -36,10 +36,6 @@ class AddReminderFragment : Fragment() {
         setHasOptionsMenu(true)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.add_reminder_app_bar, menu)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -79,10 +75,20 @@ class AddReminderFragment : Fragment() {
             hoursInput.addTextChangedListener {
                 hoursLabel.error = null
             }
+        }
+    }
 
-            saveReminder.setOnClickListener {
-                addHabit()
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.add_reminder_app_bar, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_done -> {
+                addReminder()
+                return true
             }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 
@@ -144,7 +150,7 @@ class AddReminderFragment : Fragment() {
         reminderFab.hide()
     }
 
-    private fun addHabit() {
+    private fun addReminder() {
         if(isValidEntry()) {
             val reminderStartEpoch = getReminderStartEpoch()
             val secondsUntilReminder = viewModel.getSecondsUntilReminder(reminderStartEpoch)
@@ -189,7 +195,7 @@ class AddReminderFragment : Fragment() {
         when {
             binding.nameInput.text.toString().isBlank() -> {
                 Toast.makeText(context, "The name cannot be empty.", Toast.LENGTH_SHORT).show()
-                binding.nameLabel.error = ""
+                binding.nameLabel.error = " "
                 return false
             }
             binding.startDateInput.text.toString().isBlank() -> {
