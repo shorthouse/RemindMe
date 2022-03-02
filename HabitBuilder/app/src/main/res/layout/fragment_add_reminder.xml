@@ -112,28 +112,6 @@
                 tools:text="0" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Minute occurrence -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/minutes_label"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:hint="@string/reminder_minute"
-            app:layout_constraintBottom_toBottomOf="@+id/hours_label"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/hours_label"
-            app:layout_constraintTop_toTopOf="@+id/hours_label">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/minutes_input"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:inputType="number"
-                tools:text="30" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- Habit start date -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/start_date_label"
             android:layout_width="0dp"

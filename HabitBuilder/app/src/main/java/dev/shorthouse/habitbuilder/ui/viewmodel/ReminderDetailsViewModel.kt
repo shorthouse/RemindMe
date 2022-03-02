@@ -42,19 +42,15 @@ class ReminderDetailsViewModel(private val reminderDao: ReminderDao
         period = period.minusDays(totalDays)
         val hours = period.toHours()
 
-        period = period.minusHours(hours)
-        val minutes = period.toMinutes()
-
-        return formatRepeatInterval(years, days, hours, minutes)
+        return formatRepeatInterval(years, days, hours)
     }
 
-    private fun formatRepeatInterval(years: Long, days: Long, hours: Long, minutes: Long): String {
+    private fun formatRepeatInterval(years: Long, days: Long, hours: Long): String {
         val repeatInterval = StringJoiner(", ")
 
         if (years > 0) repeatInterval.add("$years years")
         if (days > 0) repeatInterval.add("$days days")
         if (hours > 0) repeatInterval.add("$hours hours")
-        if (minutes > 0) repeatInterval.add("$minutes minutes")
 
         return repeatInterval.toString()
     }

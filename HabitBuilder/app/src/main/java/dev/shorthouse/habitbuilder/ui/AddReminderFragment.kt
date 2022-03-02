@@ -23,10 +23,10 @@ import dev.shorthouse.habitbuilder.ui.viewmodel.AddReminderViewModelFactory
 import java.time.LocalDate
 import java.time.LocalDateTime
 
-
 class AddReminderFragment : Fragment() {
     private var _binding: FragmentAddReminderBinding? = null
     private val binding get() = _binding!!
+
 
     private val viewModel: AddReminderViewModel by activityViewModels {
         AddReminderViewModelFactory(
@@ -134,10 +134,7 @@ class AddReminderFragment : Fragment() {
                 binding.yearsInput.text.toString().toLong(),
                 binding.daysInput.text.toString().toLong(),
                 binding.hoursInput.text.toString().toLong(),
-                binding.minutesInput.text.toString().toLong(),
             )
-
-            Log.d("HDS", reminderInterval.toString())
 
             viewModel.addReminder(
                 binding.nameInput.text.toString(),
@@ -167,25 +164,39 @@ class AddReminderFragment : Fragment() {
     }
 
     private fun isValidEntry(): Boolean {
+        val maxYears = 10
+        val maxDays = 364
+        val maxHours = 23
+
         when {
-            binding.nameInput.text.toString().isBlank() -> {
-                binding.nameLabel.error = getString(R.string.reminder_name_blank_error)
-                return false
-            }
-            binding.startDateInput.text.toString().isBlank() -> {
-                binding.startDateLabel.error = getString(R.string.reminder_date_blank_error)
-                return false
-            }
-            getReminderDate().isBefore(LocalDate.now()) -> {
-                binding.startDateLabel.error = getString(R.string.reminder_date_invalid_error)
-                return false
-            }
-            binding.startTimeInput.text.toString().isBlank() -> {
-                binding.startTimeLabel.error = getString(R.string.reminder_time_blank_error)
-                return false
-            }
-            getReminderDateTime().isBefore(LocalDateTime.now()) -> {
-                binding.startTimeLabel.error = getString(R.string.reminder_time_invalid_error)
+//            binding.nameInput.text.toString().isBlank() -> {
+//                Toast.makeText(context, "The name cannot be empty.", Toast.LENGTH_SHORT).show()
+//                binding.nameLabel.error = " "
+//                return false
+//            }
+//            binding.startDateInput.text.toString().isBlank() -> {
+//                Toast.makeText(context, "The start date cannot be empty.", Toast.LENGTH_SHORT).show()
+//                binding.startDateLabel.error = " "
+//                return false
+//            }
+//            getReminderDate().isBefore(LocalDate.now()) -> {
+//                Toast.makeText(context, "The start date cannot be in the past.", Toast.LENGTH_SHORT).show()
+//                binding.startDateLabel.error = " "
+//                return false
+//            }
+//            binding.startTimeInput.text.toString().isBlank() -> {
+//                Toast.makeText(context, "The start time cannot be empty.", Toast.LENGTH_SHORT).show()
+//                binding.startTimeLabel.error = " "
+//                return false
+//            }
+//            getReminderDateTime().isBefore(LocalDateTime.now()) -> {
+//                Toast.makeText(context, "The start time cannot be in the past.", Toast.LENGTH_SHORT).show()
+//                binding.startTimeLabel.error = " "
+//                return false
+//            }
+            binding.yearsInput.text.toString().toLong() > maxYears -> {
+                Toast.makeText(context, "The maximum interval years is 10.", Toast.LENGTH_SHORT).show()
+                binding.yearsLabel.error = " "
                 return false
             }
             else -> return true
