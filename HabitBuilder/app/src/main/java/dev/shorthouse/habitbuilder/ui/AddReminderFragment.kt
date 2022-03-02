@@ -62,7 +62,7 @@ class AddReminderFragment : Fragment() {
                 nameLabel.error = null
             }
 
-            saveHabit.setOnClickListener {
+            saveReminder.setOnClickListener {
                 addHabit()
             }
         }
@@ -128,8 +128,8 @@ class AddReminderFragment : Fragment() {
 
     private fun addHabit() {
         if(isValidEntry()) {
-            val reminderEpoch = getReminderEpoch()
-            val secondsUntilReminder = viewModel.getSecondsUntilReminder(reminderEpoch)
+            val reminderStartEpoch = getReminderStartEpoch()
+            val secondsUntilReminder = viewModel.getSecondsUntilReminder(reminderStartEpoch)
             val reminderInterval = viewModel.getReminderInterval(
                 binding.yearsInput.text.toString().toLong(),
                 binding.daysInput.text.toString().toLong(),
@@ -141,7 +141,7 @@ class AddReminderFragment : Fragment() {
 
             viewModel.addReminder(
                 binding.nameInput.text.toString(),
-                reminderEpoch,
+                reminderStartEpoch,
                 reminderInterval,
                 binding.notesInput.text.toString(),
             )
@@ -162,8 +162,8 @@ class AddReminderFragment : Fragment() {
         return viewModel.getReminderDateTime(reminderDateText, reminderTimeText)
     }
 
-    private fun getReminderEpoch() : Long {
-        return viewModel.getReminderEpoch(getReminderDateTime())
+    private fun getReminderStartEpoch() : Long {
+        return viewModel.getReminderStartEpoch(getReminderDateTime())
     }
 
     private fun isValidEntry(): Boolean {
