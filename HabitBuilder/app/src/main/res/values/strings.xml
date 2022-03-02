@@ -5,7 +5,7 @@
     <string name="reminder_year">Years</string>
     <string name="reminder_day">Days</string>
     <string name="reminder_hour">Hours</string>
-    <string name="reminder_interval">Reminder interval</string>
+    <string name="reminder_interval">Reminder Interval</string>
     <string name="reminder_date_hint">Reminder start date</string>
     <string name="reminder_time_hint">Reminder start time</string>
     <string name="reminder_time">%1$s:%2$s</string>
