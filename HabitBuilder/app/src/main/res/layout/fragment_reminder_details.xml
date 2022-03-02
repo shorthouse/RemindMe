@@ -104,7 +104,7 @@
             tools:text="Repeat Interval" />
 
         <View
-            android:id="@+id/divider_occurrence"
+            android:id="@+id/divider_interval"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_margin="16dp"
@@ -120,7 +120,7 @@
             android:contentDescription="@string/notes_icon"
             android:src="@drawable/ic_notes"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/divider_occurrence" />
+            app:layout_constraintTop_toBottomOf="@+id/divider_interval" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/notes"

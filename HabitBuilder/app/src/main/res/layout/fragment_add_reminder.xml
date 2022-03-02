@@ -15,7 +15,6 @@
         android:padding="16dp"
         tools:context=".ui.AddReminderFragment">
 
-        <!-- Habit name -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/name_label"
             style="@style/ThemeOverlay.Material3.AutoCompleteTextView"
@@ -33,35 +32,32 @@
                 android:layout_height="wrap_content"
                 android:inputType="textAutoComplete"
                 android:singleLine="true"
-
                 tools:text="Brush teeth" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Occurrence header -->
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/occurrence_label"
+            android:id="@+id/interval_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/reminder_occurrence"
+            android:text="@string/reminder_interval"
             android:textColor="@android:color/black"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/start_time_label" />
 
-        <!-- Year occurrence -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/years_label"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginEnd="4dp"
             android:hint="@string/reminder_year"
             app:layout_constraintEnd_toStartOf="@+id/days_label"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/occurrence_label">
+            app:layout_constraintTop_toBottomOf="@+id/interval_label">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/years_input"
@@ -72,14 +68,12 @@
                 tools:text="0" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Month occurrence -->
-
-        <!-- Day occurrence -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/days_label"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
             android:hint="@string/reminder_day"
             app:layout_constraintBottom_toBottomOf="@+id/years_label"
             app:layout_constraintEnd_toStartOf="@+id/hours_label"
@@ -96,16 +90,16 @@
                 tools:text="4" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Hour occurrence -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/hours_label"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
+            android:layout_marginStart="4dp"
             android:hint="@string/reminder_hour"
             app:layout_constraintBottom_toBottomOf="@+id/days_label"
-            app:layout_constraintEnd_toStartOf="@+id/minutes_label"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintStart_toEndOf="@+id/days_label"
             app:layout_constraintTop_toTopOf="@+id/days_label">
 
@@ -164,7 +158,6 @@
                 tools:text="Fri 17 Jun 2024" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Habit start time -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/start_time_label"
             android:layout_width="0dp"
@@ -189,7 +182,6 @@
                 tools:text="16:37 PM" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Notes -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/notes_label"
             android:layout_width="0dp"
@@ -208,7 +200,6 @@
                 tools:text="Make sure scrubbed" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Send button -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/save_reminder"
             style="@style/ShapeAppearanceOverlay.Material3.Button"
