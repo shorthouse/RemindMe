@@ -24,16 +24,6 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
-
-        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/nav_host_container"
-            android:name="androidx.navigation.fragment.NavHostFragment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:defaultNavHost="true"
-            android:clipToPadding="false"
-            app:navGraph="@navigation/nav_graph" />
-
         <com.google.android.material.bottomappbar.BottomAppBar
             android:id="@+id/bottom_app_bar"
             android:layout_width="match_parent"
@@ -66,6 +56,7 @@
             app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
             app:layout_anchor="@id/bottom_app_bar" />
 
+        <include layout="@layout/content_main" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
