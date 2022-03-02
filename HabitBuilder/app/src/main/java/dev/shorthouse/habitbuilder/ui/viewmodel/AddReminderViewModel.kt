@@ -56,12 +56,11 @@ class AddReminderViewModel(private val reminderDao: ReminderDao
         return startEpoch - nowEpoch
     }
 
-    fun getReminderInterval(years: Long, days: Long, hours: Long, minutes: Long): Long {
+    fun getReminderInterval(years: Long, days: Long, hours: Long): Long {
         val daysInYear = 365;
         return Duration.ofDays(years * daysInYear).seconds +
                 Duration.ofDays(days).seconds +
-                Duration.ofHours(hours).seconds +
-                Duration.ofMinutes(minutes).seconds
+                Duration.ofHours(hours).seconds
     }
 
 }
