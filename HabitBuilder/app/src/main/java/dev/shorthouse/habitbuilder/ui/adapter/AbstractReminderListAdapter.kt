@@ -1,6 +1,5 @@
 package dev.shorthouse.habitbuilder.ui.adapter
 
-import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -8,9 +7,9 @@ import androidx.recyclerview.widget.RecyclerView
 import dev.shorthouse.habitbuilder.databinding.ListItemReminderBinding
 import dev.shorthouse.habitbuilder.model.Reminder
 
-class ReminderListAdapter(
+abstract class AbstractReminderListAdapter(
     private val clickListener: (Reminder) -> Unit
-) : ListAdapter<Reminder, ReminderListAdapter.ReminderViewHolder>(DiffCallback) {
+) : ListAdapter<Reminder, AbstractReminderListAdapter.ReminderViewHolder>(DiffCallback) {
 
     class ReminderViewHolder(
         private var binding: ListItemReminderBinding
@@ -32,13 +31,6 @@ class ReminderListAdapter(
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReminderViewHolder {
-        val layoutInflater = LayoutInflater.from(parent.context)
-        return ReminderViewHolder(
-            ListItemReminderBinding.inflate(layoutInflater, parent, false)
-        )
-    }
-
     override fun onBindViewHolder(holder: ReminderViewHolder, position: Int) {
         val reminder = getItem(position)
         holder.itemView.setOnClickListener {
@@ -46,4 +38,6 @@ class ReminderListAdapter(
         }
         holder.bind(reminder)
     }
+
+    abstract override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReminderViewHolder
 }
