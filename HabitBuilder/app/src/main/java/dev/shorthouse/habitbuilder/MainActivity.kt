@@ -33,7 +33,6 @@ class MainActivity : AppCompatActivity() {
             addReminderFab.setOnClickListener {
                 findNavController(R.id.nav_host_container).navigate(R.id.action_activeReminderListFragment_to_addReminderFragment)
             }
-            bottomNavView.background = null
         }
     }
 

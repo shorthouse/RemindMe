@@ -42,7 +42,6 @@ class AddReminderFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentAddReminderBinding.inflate(inflater, container, false)
-        disableBottomNav()
         return binding.root
     }
 
@@ -94,7 +93,6 @@ class AddReminderFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        enableBottomNav()
         _binding = null
     }
 
@@ -134,20 +132,6 @@ class AddReminderFragment : Fragment() {
             .setTimeFormat(TimeFormat.CLOCK_24H)
             .setTitleText(getString(R.string.time_picker_title))
             .build()
-    }
-
-    private fun enableBottomNav() {
-        val appBar: BottomAppBar = requireActivity().findViewById(R.id.bottom_app_bar)
-        val reminderFab: FloatingActionButton = requireActivity().findViewById(R.id.add_reminder_fab)
-        appBar.performShow()
-        reminderFab.show()
-    }
-
-    private fun disableBottomNav() {
-        val appBar: BottomAppBar = requireActivity().findViewById(R.id.bottom_app_bar)
-        val reminderFab: FloatingActionButton = requireActivity().findViewById(R.id.add_reminder_fab)
-        appBar.performHide()
-        reminderFab.hide()
     }
 
     private fun addReminder() {
