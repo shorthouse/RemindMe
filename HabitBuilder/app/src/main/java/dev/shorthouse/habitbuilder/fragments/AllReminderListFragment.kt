@@ -1,4 +1,4 @@
-package dev.shorthouse.habitbuilder
+package dev.shorthouse.habitbuilder.fragments
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -6,6 +6,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import dev.shorthouse.habitbuilder.R
+import dev.shorthouse.habitbuilder.viewmodels.AllReminderListViewModel
 
 class AllReminderListFragment : Fragment() {
 

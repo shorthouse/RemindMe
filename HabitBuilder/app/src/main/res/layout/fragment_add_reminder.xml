@@ -15,7 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="16dp"
-            tools:context=".ui.AddReminderFragment">
+            tools:context=".fragments.AddReminderFragment">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/name_label"
