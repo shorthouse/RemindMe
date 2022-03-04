@@ -12,6 +12,9 @@ interface ReminderDao {
     @Query("SELECT * FROM reminder WHERE id = :id")
     fun getReminder(id: Long): Flow<Reminder>
 
+    @Query("SELECT * FROM reminder WHERE startEpoch < 0")
+    fun getActiveReminders(): Flow<List<Reminder>>
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(reminder: Reminder)
 
