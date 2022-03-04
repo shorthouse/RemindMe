@@ -9,7 +9,8 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import dev.shorthouse.habitbuilder.BaseApplication
 import dev.shorthouse.habitbuilder.databinding.FragmentActiveReminderListBinding
-import dev.shorthouse.habitbuilder.ui.adapter.ReminderListAdapter
+import dev.shorthouse.habitbuilder.ui.adapter.ActiveReminderListAdapter
+import dev.shorthouse.habitbuilder.ui.adapter.AllReminderListAdapter
 import dev.shorthouse.habitbuilder.ui.viewmodel.ActiveReminderListViewModel
 import dev.shorthouse.habitbuilder.ui.viewmodel.ActiveReminderListViewModelFactory
 
@@ -35,7 +36,7 @@ class ActiveReminderListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val adapter = ReminderListAdapter { reminder ->
+        val adapter = AllReminderListAdapter { reminder ->
             val action = ActiveReminderListFragmentDirections
                 .actionActiveReminderListFragmentToReminderDetailsFragment(reminder.id)
             findNavController().navigate(action)
@@ -46,7 +47,7 @@ class ActiveReminderListFragment : Fragment() {
         }
 
         binding.apply {
-            activeHabitRecycler.adapter = adapter
+            activeReminderRecycler.adapter = adapter
         }
     }
 
