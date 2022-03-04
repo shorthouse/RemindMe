@@ -1,4 +1,4 @@
-package dev.shorthouse.habitbuilder.ui.viewmodel
+package dev.shorthouse.habitbuilder.viewmodels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
