@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_activeReminderListFragment_to_reminderDetailsFragment"
             app:destination="@id/reminderDetailsFragment" />
+        <action
+            android:id="@+id/action_activeReminderListFragment_to_allReminderListFragment"
+            app:destination="@id/allReminderListFragment" />
     </fragment>
 
     <fragment
@@ -30,6 +33,9 @@
         <action
             android:id="@+id/action_allReminderListFragment_to_reminderDetailsFragment"
             app:destination="@id/reminderDetailsFragment" />
+        <action
+            android:id="@+id/action_allReminderListFragment_to_activeReminderListFragment"
+            app:destination="@id/activeReminderListFragment" />
     </fragment>
 
     <fragment
