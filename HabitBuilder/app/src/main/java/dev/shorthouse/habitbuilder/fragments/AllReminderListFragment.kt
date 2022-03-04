@@ -6,28 +6,60 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
+import dev.shorthouse.habitbuilder.BaseApplication
 import dev.shorthouse.habitbuilder.R
+import dev.shorthouse.habitbuilder.adapter.AllReminderListAdapter
+import dev.shorthouse.habitbuilder.databinding.FragmentActiveReminderListBinding
+import dev.shorthouse.habitbuilder.databinding.FragmentAllReminderListBinding
+import dev.shorthouse.habitbuilder.viewmodels.ActiveReminderListViewModel
+import dev.shorthouse.habitbuilder.viewmodels.ActiveReminderListViewModelFactory
 import dev.shorthouse.habitbuilder.viewmodels.AllReminderListViewModel
 
 class AllReminderListFragment : Fragment() {
+    private var _binding: FragmentAllReminderListBinding? = null
+    private val binding get() = _binding!!
 
-    companion object {
-        fun newInstance() = AllReminderListFragment()
+    private val viewModel: AllReminderListViewModel by activityViewModels {
+        ActiveReminderListViewModelFactory(
+            (activity?.application as BaseApplication).database.reminderDao()
+        )
     }
-
-    private lateinit var viewModel: AllReminderListViewModel
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_all_reminder_list, container, false)
+        _binding = FragmentAllReminderListBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(AllReminderListViewModel::class.java)
-        // TODO: Use the ViewModel
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val adapter = AllReminderListAdapter { reminder ->
+            val action = AllReminderListFragmentDirections
+                .actionAllReminderListFragmentToReminderDetailsFragment(reminder.id)
+            findNavController().navigate(action)
+        }
+
+        viewModel.reminders.observe(this.viewLifecycleOwner) {reminders ->
+            adapter.submitList(reminders)
+        }
+
+        binding.apply {
+            allReminderRecycler.adapter = adapter
+        }
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
 
 }
+
+

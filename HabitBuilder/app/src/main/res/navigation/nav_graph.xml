@@ -19,6 +19,20 @@
     </fragment>
 
     <fragment
+        android:id="@+id/allReminderListFragment"
+        android:name="dev.shorthouse.habitbuilder.fragments.AllReminderListFragment"
+        android:label="fragment_all_reminder_list"
+        tools:layout="@layout/fragment_all_reminder_list" >
+
+        <action
+            android:id="@+id/action_allReminderListFragment_to_addReminderFragment"
+            app:destination="@id/addReminderFragment" />
+        <action
+            android:id="@+id/action_allReminderListFragment_to_reminderDetailsFragment"
+            app:destination="@id/reminderDetailsFragment" />
+    </fragment>
+
+    <fragment
         android:id="@+id/addReminderFragment"
         android:name="dev.shorthouse.habitbuilder.fragments.AddReminderFragment"
         android:label="Add Reminder"
@@ -34,6 +48,7 @@
             android:defaultValue="0L"
             app:argType="long" />
     </fragment>
+
 
 
 </navigation>

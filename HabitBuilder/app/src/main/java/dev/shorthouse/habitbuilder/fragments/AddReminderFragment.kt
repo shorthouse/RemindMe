@@ -3,6 +3,7 @@ package dev.shorthouse.habitbuilder.fragments
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -118,7 +119,8 @@ class AddReminderFragment : Fragment() {
                     R.string.reminder_time,
                     timePicker.hour.toString().padStart(2, '0'),
                     timePicker.minute.toString().padStart(2, '0'),
-                ))
+                )
+            )
         }
 
         timePicker.show(parentFragmentManager, getString(R.string.reminder_time_picker_tag))
@@ -132,7 +134,7 @@ class AddReminderFragment : Fragment() {
     }
 
     private fun addReminder() {
-        if(isValidEntry()) {
+        if (isValidEntry()) {
             val reminderStartEpoch = getReminderStartEpoch()
             val secondsUntilReminder = viewModel.getSecondsUntilReminder(reminderStartEpoch)
             val reminderInterval = viewModel.getReminderInterval(
@@ -148,7 +150,8 @@ class AddReminderFragment : Fragment() {
                 binding.notesInput.text.toString(),
             )
 
-            Toast.makeText(context, getString(R.string.toast_reminder_saved), Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, getString(R.string.toast_reminder_saved), Toast.LENGTH_SHORT)
+                .show()
             findNavController().navigateUp()
         }
     }
@@ -164,7 +167,7 @@ class AddReminderFragment : Fragment() {
         return viewModel.getReminderDateTime(reminderDateText, reminderTimeText)
     }
 
-    private fun getReminderStartEpoch() : Long {
+    private fun getReminderStartEpoch(): Long {
         return viewModel.getReminderStartEpoch(getReminderDateTime())
     }
 
@@ -218,25 +221,29 @@ class AddReminderFragment : Fragment() {
 
         when {
             years > MAX_YEARS -> {
-                Toast.makeText(context, "The maximum years interval is 10.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "The maximum years interval is 10.", Toast.LENGTH_SHORT)
+                    .show()
                 binding.yearsLabel.error = " "
                 binding.yearsLabel.errorIconDrawable = null
                 return false
             }
             days > MAX_DAYS -> {
-                Toast.makeText(context, "The maximum days interval is 364.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "The maximum days interval is 364.", Toast.LENGTH_SHORT)
+                    .show()
                 binding.daysLabel.error = " "
                 binding.daysLabel.errorIconDrawable = null
                 return false
             }
             hours > MAX_HOURS -> {
-                Toast.makeText(context, "The maximum hours interval is 23.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "The maximum hours interval is 23.", Toast.LENGTH_SHORT)
+                    .show()
                 binding.hoursLabel.error = " "
                 binding.hoursLabel.errorIconDrawable = null
                 return false
             }
             years == 0 && days == 0 && hours == 0 -> {
-                Toast.makeText(context, "The interval must have a time period.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "The interval must have a time period.", Toast.LENGTH_SHORT)
+                    .show()
                 return false
             }
             else -> return true
