@@ -9,6 +9,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import dev.shorthouse.habitbuilder.BaseApplication
 import dev.shorthouse.habitbuilder.databinding.FragmentActiveReminderListBinding
+import dev.shorthouse.habitbuilder.ui.adapter.ActiveReminderListAdapter
 import dev.shorthouse.habitbuilder.ui.adapter.AllReminderListAdapter
 import dev.shorthouse.habitbuilder.ui.viewmodel.ActiveReminderListViewModel
 import dev.shorthouse.habitbuilder.ui.viewmodel.ActiveReminderListViewModelFactory
