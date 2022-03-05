@@ -52,6 +52,12 @@ class AllReminderListFragment : Fragment() {
 
         binding.apply {
             allReminderRecycler.adapter = adapter
+
+            addReminderFab.setOnClickListener {
+                val action = AllReminderListFragmentDirections
+                    .actionAllRemindersToAddReminder()
+                findNavController().navigate(action)
+            }
         }
     }
 
