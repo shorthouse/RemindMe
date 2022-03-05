@@ -21,7 +21,7 @@
     <fragment
         android:id="@+id/all_reminders"
         android:name="dev.shorthouse.habitbuilder.fragments.AllReminderListFragment"
-        android:label="fragment_all_reminder_list"
+        android:label="All Reminders"
         tools:layout="@layout/fragment_all_reminder_list" >
         <action
             android:id="@+id/action_all_reminders_to_reminder_details"
