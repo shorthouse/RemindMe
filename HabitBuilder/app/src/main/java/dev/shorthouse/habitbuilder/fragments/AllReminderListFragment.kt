@@ -42,7 +42,7 @@ class AllReminderListFragment : Fragment() {
 
         val adapter = AllReminderListAdapter { reminder ->
             val action = AllReminderListFragmentDirections
-                .actionAllReminderListFragmentToReminderDetailsFragment(reminder.id)
+                .actionAllRemindersToReminderDetails(reminder.id)
             findNavController().navigate(action)
         }
 

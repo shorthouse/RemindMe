@@ -23,7 +23,6 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
 
         setupNavBar()
-        setupClickListeners()
     }
 
     private fun setupNavBar() {
@@ -39,14 +38,6 @@ class MainActivity : AppCompatActivity() {
             setOf(R.id.active_reminders, R.id.all_reminders)
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
-    }
-
-    private fun setupClickListeners() {
-        binding.apply {
-            addReminderFab.setOnClickListener {
-                navController.navigate(R.id.action_activeReminderListFragment_to_addReminderFragment)
-            }
-        }
     }
 
     override fun onSupportNavigateUp(): Boolean {

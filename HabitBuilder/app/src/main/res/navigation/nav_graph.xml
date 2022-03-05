@@ -11,35 +11,34 @@
         android:label="Active Reminders"
         tools:layout="@layout/fragment_active_reminder_list">
         <action
-            android:id="@+id/action_activeReminderListFragment_to_addReminderFragment"
-            app:destination="@id/addReminderFragment" />
+            android:id="@+id/action_active_reminders_to_reminder_details"
+            app:destination="@id/reminder_details" />
         <action
-            android:id="@+id/action_activeReminderListFragment_to_reminderDetailsFragment"
-            app:destination="@id/reminderDetailsFragment" />
+            android:id="@+id/action_active_reminders_to_add_reminder"
+            app:destination="@id/add_reminder" />
     </fragment>
 
     <fragment
         android:id="@+id/all_reminders"
         android:name="dev.shorthouse.habitbuilder.fragments.AllReminderListFragment"
-        android:label="All Reminders"
+        android:label="fragment_all_reminder_list"
         tools:layout="@layout/fragment_all_reminder_list" >
-
         <action
-            android:id="@+id/action_allReminderListFragment_to_addReminderFragment"
-            app:destination="@id/addReminderFragment" />
+            android:id="@+id/action_all_reminders_to_reminder_details"
+            app:destination="@id/reminder_details" />
         <action
-            android:id="@+id/action_allReminderListFragment_to_reminderDetailsFragment"
-            app:destination="@id/reminderDetailsFragment" />
+            android:id="@+id/action_all_reminders_to_add_reminder"
+            app:destination="@id/add_reminder" />
     </fragment>
 
     <fragment
-        android:id="@+id/addReminderFragment"
+        android:id="@+id/add_reminder"
         android:name="dev.shorthouse.habitbuilder.fragments.AddReminderFragment"
         android:label="Add Reminder"
         tools:layout="@layout/fragment_add_reminder" />
 
     <fragment
-        android:id="@+id/reminderDetailsFragment"
+        android:id="@+id/reminder_details"
         android:name="dev.shorthouse.habitbuilder.fragments.ReminderDetailsFragment"
         android:label="Reminder Details"
         tools:layout="@layout/fragment_reminder_details">
@@ -48,4 +47,7 @@
             android:defaultValue="0L"
             app:argType="long" />
     </fragment>
+
+
+
 </navigation>
