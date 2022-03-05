@@ -16,13 +16,14 @@ import dev.shorthouse.habitbuilder.databinding.FragmentAllReminderListBinding
 import dev.shorthouse.habitbuilder.viewmodels.ActiveReminderListViewModel
 import dev.shorthouse.habitbuilder.viewmodels.ActiveReminderListViewModelFactory
 import dev.shorthouse.habitbuilder.viewmodels.AllReminderListViewModel
+import dev.shorthouse.habitbuilder.viewmodels.AllReminderListViewModelFactory
 
 class AllReminderListFragment : Fragment() {
     private var _binding: FragmentAllReminderListBinding? = null
     private val binding get() = _binding!!
 
     private val viewModel: AllReminderListViewModel by activityViewModels {
-        ActiveReminderListViewModelFactory(
+        AllReminderListViewModelFactory(
             (activity?.application as BaseApplication).database.reminderDao()
         )
     }
@@ -41,7 +42,7 @@ class AllReminderListFragment : Fragment() {
 
         val adapter = AllReminderListAdapter { reminder ->
             val action = AllReminderListFragmentDirections
-                .actionAllReminderListFragmentToReminderDetailsFragment(reminder.id)
+                .actionAllRemindersToReminderDetails(reminder.id)
             findNavController().navigate(action)
         }
 
@@ -51,6 +52,12 @@ class AllReminderListFragment : Fragment() {
 
         binding.apply {
             allReminderRecycler.adapter = adapter
+
+            addReminderFab.setOnClickListener {
+                val action = AllReminderListFragmentDirections
+                    .actionAllRemindersToAddReminder()
+                findNavController().navigate(action)
+            }
         }
     }
 

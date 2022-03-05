@@ -13,6 +13,7 @@
         tools:context=".MainActivity">
 
         <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -24,18 +25,15 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/add_reminder_fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_add"
-            android:tint="@color/white"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="16dp"
-            android:contentDescription="@string/add_reminder_fab_description"
-            app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior" />
+        <include
+            layout="@layout/content_main" />
 
-        <include layout="@layout/content_main" />
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottom_navigation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            app:menu="@menu/bottom_navigation" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

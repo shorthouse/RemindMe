@@ -7,7 +7,7 @@ import dev.shorthouse.habitbuilder.data.ReminderDao
 
 class ActiveReminderListViewModel(private val reminderDao: ReminderDao
 ) : ViewModel() {
-    val reminders = reminderDao.getReminders().asLiveData()
+    val reminders = reminderDao.getActiveReminders().asLiveData()
 }
 
 class ActiveReminderListViewModelFactory(
