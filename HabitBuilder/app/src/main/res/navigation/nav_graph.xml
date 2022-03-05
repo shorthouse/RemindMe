@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/activeReminderListFragment">
+    app:startDestination="@id/active_reminders">
 
     <fragment
-        android:id="@+id/activeReminderListFragment"
+        android:id="@+id/active_reminders"
         android:name="dev.shorthouse.habitbuilder.fragments.ActiveReminderListFragment"
         android:label="Active Reminders"
         tools:layout="@layout/fragment_active_reminder_list">
@@ -16,13 +16,10 @@
         <action
             android:id="@+id/action_activeReminderListFragment_to_reminderDetailsFragment"
             app:destination="@id/reminderDetailsFragment" />
-        <action
-            android:id="@+id/action_activeReminderListFragment_to_allReminderListFragment"
-            app:destination="@id/allReminderListFragment" />
     </fragment>
 
     <fragment
-        android:id="@+id/allReminderListFragment"
+        android:id="@+id/all_reminders"
         android:name="dev.shorthouse.habitbuilder.fragments.AllReminderListFragment"
         android:label="All Reminders"
         tools:layout="@layout/fragment_all_reminder_list" >
@@ -33,9 +30,6 @@
         <action
             android:id="@+id/action_allReminderListFragment_to_reminderDetailsFragment"
             app:destination="@id/reminderDetailsFragment" />
-        <action
-            android:id="@+id/action_allReminderListFragment_to_activeReminderListFragment"
-            app:destination="@id/activeReminderListFragment" />
     </fragment>
 
     <fragment
@@ -54,7 +48,4 @@
             android:defaultValue="0L"
             app:argType="long" />
     </fragment>
-
-
-
 </navigation>
