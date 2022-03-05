@@ -1,6 +1,7 @@
 package dev.shorthouse.habitbuilder
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -38,6 +39,14 @@ class MainActivity : AppCompatActivity() {
             setOf(R.id.active_reminders, R.id.all_reminders)
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            if(destination.id == R.id.active_reminders || destination.id == R.id.all_reminders) {
+                bottomNavigationView.visibility = View.VISIBLE
+            } else {
+                bottomNavigationView.visibility = View.GONE
+            }
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {
