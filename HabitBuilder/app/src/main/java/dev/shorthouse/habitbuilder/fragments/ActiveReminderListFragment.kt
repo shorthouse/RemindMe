@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -40,19 +41,15 @@ class ActiveReminderListFragment : Fragment() {
 
         val clickListener = ActiveReminderListAdapter.ClickListener { reminder, itemId ->
             if (itemId == 0) {
-                Log.d("HDS", "view clicked!")
+                val action = ActiveReminderListFragmentDirections
+                    .actionActiveRemindersToReminderDetails(reminder.id)
+                findNavController().navigate(action)
             } else if (itemId == 1) {
-                Log.d("HDS", "button clicked!")
+                Toast.makeText(context, "Done clicked!", Toast.LENGTH_SHORT).show()
             }
         }
 
         val adapter = ActiveReminderListAdapter(clickListener)
-
-//        val adapter = ActiveReminderListAdapter { reminder ->
-//            val action = ActiveReminderListFragmentDirections
-//                .actionActiveRemindersToReminderDetails(reminder.id)
-//            findNavController().navigate(action)
-//        }
 
         viewModel.activeRecurringReminders.observe(this.viewLifecycleOwner) {reminders ->
             adapter.submitList(reminders)
