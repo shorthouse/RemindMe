@@ -1,6 +1,7 @@
 package dev.shorthouse.habitbuilder.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -37,11 +38,21 @@ class ActiveReminderListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val adapter = ActiveReminderListAdapter { reminder ->
-            val action = ActiveReminderListFragmentDirections
-                .actionActiveRemindersToReminderDetails(reminder.id)
-            findNavController().navigate(action)
+        val clickListener = ActiveReminderListAdapter.ClickListener { reminder, itemId ->
+            if (itemId == 0) {
+                Log.d("HDS", "view clicked!")
+            } else if (itemId == 1) {
+                Log.d("HDS", "button clicked!")
+            }
         }
+
+        val adapter = ActiveReminderListAdapter(clickListener)
+
+//        val adapter = ActiveReminderListAdapter { reminder ->
+//            val action = ActiveReminderListFragmentDirections
+//                .actionActiveRemindersToReminderDetails(reminder.id)
+//            findNavController().navigate(action)
+//        }
 
         viewModel.activeRecurringReminders.observe(this.viewLifecycleOwner) {reminders ->
             adapter.submitList(reminders)

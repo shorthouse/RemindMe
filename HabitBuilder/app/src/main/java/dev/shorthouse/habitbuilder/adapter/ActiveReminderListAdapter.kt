@@ -10,17 +10,25 @@ import dev.shorthouse.habitbuilder.databinding.ListItemReminderBinding
 import dev.shorthouse.habitbuilder.model.Reminder
 
 class ActiveReminderListAdapter(
-    private val clickListener: (Reminder) -> Unit)
+    private val clickListener: ClickListener)
     : ListAdapter<Reminder, ActiveReminderListAdapter.ReminderViewHolder>(DiffCallback)
 {
     class ReminderViewHolder(
         private var binding: ListItemActiveReminderBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(reminder: Reminder) {
+        fun bind(reminder: Reminder, clickListener: ClickListener) {
             binding.reminder = reminder
+            binding.clickListener = clickListener
             binding.executePendingBindings()
         }
+    }
+
+    class ClickListener(
+        val clickListener: (reminder: Reminder, itemId: Int) -> Unit
+    )
+    {
+        fun onClick(reminder: Reminder, itemId: Int) = clickListener(reminder, itemId)
     }
 
     companion object DiffCallback : DiffUtil.ItemCallback<Reminder>() {
@@ -41,10 +49,6 @@ class ActiveReminderListAdapter(
     }
 
     override fun onBindViewHolder(holder: ReminderViewHolder, position: Int) {
-        val reminder = getItem(position)
-        holder.itemView.setOnClickListener {
-            clickListener(reminder)
-        }
-        holder.bind(reminder)
+        holder.bind(getItem(position), clickListener)
     }
 }

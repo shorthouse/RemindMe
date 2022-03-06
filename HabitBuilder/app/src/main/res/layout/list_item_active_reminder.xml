@@ -8,6 +8,9 @@
         <variable
             name="reminder"
             type="dev.shorthouse.habitbuilder.model.Reminder" />
+        <variable
+            name="clickListener"
+            type="dev.shorthouse.habitbuilder.adapter.ActiveReminderListAdapter.ClickListener" />
         <import type="java.time.LocalDateTime" />
         <import type="java.time.Instant" />
         <import type="java.time.ZoneId" />
@@ -17,7 +20,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingStart="16dp"
-        android:paddingEnd="16dp">
+        android:paddingEnd="16dp"
+        android:onClick="@{() -> clickListener.onClick(reminder, 0)}">
 
 
         <com.google.android.material.textview.MaterialTextView
@@ -47,6 +51,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/reminder_done"
+            android:onClick="@{() -> clickListener.onClick(reminder, 1)}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent">
