@@ -1,13 +1,17 @@
 package dev.shorthouse.habitbuilder.viewmodels
 
+import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asLiveData
 import dev.shorthouse.habitbuilder.data.ReminderDao
+import dev.shorthouse.habitbuilder.model.Reminder
+import java.time.Instant
 
 class ActiveReminderListViewModel(private val reminderDao: ReminderDao
 ) : ViewModel() {
-    val reminders = reminderDao.getActiveReminders().asLiveData()
+    val activeRecurringReminders = reminderDao.getActiveRecurringReminders(Instant.now().epochSecond).asLiveData()
 }
 
 class ActiveReminderListViewModelFactory(
