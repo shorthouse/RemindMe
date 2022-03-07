@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.textfield.TextInputLayout
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import dev.shorthouse.habitbuilder.BaseApplication
@@ -71,6 +72,20 @@ class AddReminderFragment : Fragment() {
 
             hoursInput.addTextChangedListener {
                 hoursLabel.error = null
+            }
+
+            repeatSwitch.setOnCheckedChangeListener { _, isChecked ->
+                if (isChecked) {
+                    intervalHeader.visibility = View.VISIBLE
+                    yearsLabel.visibility = View.VISIBLE
+                    daysLabel.visibility = View.VISIBLE
+                    hoursLabel.visibility = View.VISIBLE
+                } else {
+                    intervalHeader.visibility = View.GONE
+                    yearsLabel.visibility = View.GONE
+                    daysLabel.visibility = View.GONE
+                    hoursLabel.visibility = View.GONE
+                }
             }
         }
     }
@@ -136,18 +151,23 @@ class AddReminderFragment : Fragment() {
     private fun addReminder() {
         if (isValidEntry()) {
             val reminderStartEpoch = getReminderStartEpoch()
-            val secondsUntilReminder = viewModel.getSecondsUntilReminder(reminderStartEpoch)
-            val reminderInterval = viewModel.getReminderInterval(
-                binding.yearsInput.text.toString().toLong(),
-                binding.daysInput.text.toString().toLong(),
-                binding.hoursInput.text.toString().toLong(),
-            )
+
+            val reminderInterval = if (!binding.repeatSwitch.isChecked) {
+                null
+            } else {
+                viewModel.getReminderInterval(
+                    binding.yearsInput.text.toString().toLongOrZero(),
+                    binding.daysInput.text.toString().toLongOrZero(),
+                    binding.hoursInput.text.toString().toLongOrZero(),
+                )
+            }
 
             viewModel.addReminder(
                 binding.nameInput.text.toString(),
                 reminderStartEpoch,
                 reminderInterval,
                 binding.notesInput.text.toString(),
+                false
             )
 
             Toast.makeText(context, getString(R.string.toast_reminder_saved), Toast.LENGTH_SHORT)
@@ -211,42 +231,52 @@ class AddReminderFragment : Fragment() {
     }
 
     private fun isIntervalValid(): Boolean {
+        if (!binding.repeatSwitch.isChecked) {
+            return true
+        }
+
         val MAX_YEARS = 10
         val MAX_DAYS = 364
         val MAX_HOURS = 23
 
-        val years = binding.yearsInput.text.toString().toInt()
-        val days = binding.daysInput.text.toString().toInt()
-        val hours = binding.hoursInput.text.toString().toInt()
+        val years = binding.yearsInput.text.toString().toLongOrZero()
+        val days = binding.daysInput.text.toString().toLongOrZero()
+        val hours = binding.hoursInput.text.toString().toLongOrZero()
 
         when {
             years > MAX_YEARS -> {
                 Toast.makeText(context, "The maximum years interval is 10.", Toast.LENGTH_SHORT)
                     .show()
-                binding.yearsLabel.error = " "
-                binding.yearsLabel.errorIconDrawable = null
+                setErrorOnTextInput(binding.yearsLabel)
                 return false
             }
             days > MAX_DAYS -> {
                 Toast.makeText(context, "The maximum days interval is 364.", Toast.LENGTH_SHORT)
                     .show()
-                binding.daysLabel.error = " "
-                binding.daysLabel.errorIconDrawable = null
+                setErrorOnTextInput(binding.daysLabel)
                 return false
             }
             hours > MAX_HOURS -> {
                 Toast.makeText(context, "The maximum hours interval is 23.", Toast.LENGTH_SHORT)
                     .show()
-                binding.hoursLabel.error = " "
-                binding.hoursLabel.errorIconDrawable = null
+                setErrorOnTextInput(binding.daysLabel)
                 return false
             }
-            years == 0 && days == 0 && hours == 0 -> {
+            years == 0L && days == 0L && hours == 0L -> {
                 Toast.makeText(context, "The interval must have a time period.", Toast.LENGTH_SHORT)
                     .show()
                 return false
             }
             else -> return true
         }
+    }
+
+    private fun String.toLongOrZero(): Long {
+        return if (this.isBlank()) 0 else this.toLong()
+    }
+
+    private fun setErrorOnTextInput(textInput: TextInputLayout) {
+        textInput.error = " "
+        textInput.errorIconDrawable = null
     }
 }
