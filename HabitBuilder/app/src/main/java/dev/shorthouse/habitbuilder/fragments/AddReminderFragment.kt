@@ -50,28 +50,10 @@ class AddReminderFragment : Fragment() {
         binding.apply {
             startTimeInput.setOnClickListener {
                 displayTimePicker()
-                startTimeLabel.error = null
             }
 
             startDateInput.setOnClickListener {
                 displayDatePicker()
-                startDateLabel.error = null
-            }
-
-            nameInput.addTextChangedListener {
-                nameLabel.error = null
-            }
-
-            yearsInput.addTextChangedListener {
-                yearsLabel.error = null
-            }
-
-            daysInput.addTextChangedListener {
-                daysLabel.error = null
-            }
-
-            hoursInput.addTextChangedListener {
-                hoursLabel.error = null
             }
 
             repeatSwitch.setOnCheckedChangeListener { _, isChecked ->
@@ -170,8 +152,7 @@ class AddReminderFragment : Fragment() {
                 false
             )
 
-            Toast.makeText(context, getString(R.string.toast_reminder_saved), Toast.LENGTH_SHORT)
-                .show()
+            makeShortToast(getString(R.string.toast_reminder_saved))
             findNavController().navigateUp()
         }
     }
@@ -198,32 +179,23 @@ class AddReminderFragment : Fragment() {
     private fun isDetailValid(): Boolean {
         when {
             binding.nameInput.text.toString().isBlank() -> {
-                Toast.makeText(context, "The name cannot be empty.", Toast.LENGTH_SHORT).show()
-                binding.nameLabel.error = " "
+                makeShortToast("The name cannot be empty.")
                 return false
             }
             binding.startDateInput.text.toString().isBlank() -> {
-                Toast.makeText(context, "The start date cannot be empty.", Toast.LENGTH_SHORT)
-                    .show()
-                binding.startDateLabel.error = " "
+                makeShortToast("The start date cannot be empty.")
                 return false
             }
             getReminderDate().isBefore(LocalDate.now()) -> {
-                Toast.makeText(context, "The start date cannot be in the past.", Toast.LENGTH_SHORT)
-                    .show()
-                binding.startDateLabel.error = " "
+                makeShortToast("The start date cannot be in the past.")
                 return false
             }
             binding.startTimeInput.text.toString().isBlank() -> {
-                Toast.makeText(context, "The start time cannot be empty.", Toast.LENGTH_SHORT)
-                    .show()
-                binding.startTimeLabel.error = " "
+                makeShortToast("The start time cannot be empty.")
                 return false
             }
             getReminderDateTime().isBefore(LocalDateTime.now()) -> {
-                Toast.makeText(context, "The start time cannot be in the past.", Toast.LENGTH_SHORT)
-                    .show()
-                binding.startTimeLabel.error = " "
+                makeShortToast("The start time cannot be in the past.")
                 return false
             }
             else -> return true
@@ -245,38 +217,34 @@ class AddReminderFragment : Fragment() {
 
         when {
             years > MAX_YEARS -> {
-                Toast.makeText(context, "The maximum years interval is 10.", Toast.LENGTH_SHORT)
-                    .show()
-                setErrorOnTextInput(binding.yearsLabel)
+                makeShortToast("The maximum years interval is 10.")
                 return false
             }
             days > MAX_DAYS -> {
-                Toast.makeText(context, "The maximum days interval is 364.", Toast.LENGTH_SHORT)
-                    .show()
-                setErrorOnTextInput(binding.daysLabel)
+                makeShortToast("The maximum days interval is 364.")
                 return false
             }
             hours > MAX_HOURS -> {
-                Toast.makeText(context, "The maximum hours interval is 23.", Toast.LENGTH_SHORT)
-                    .show()
-                setErrorOnTextInput(binding.daysLabel)
+                makeShortToast("The maximum hours interval is 23.")
                 return false
             }
             years == 0L && days == 0L && hours == 0L -> {
-                Toast.makeText(context, "The interval must have a time period.", Toast.LENGTH_SHORT)
-                    .show()
+                makeShortToast("The interval must have a time period.")
                 return false
             }
             else -> return true
         }
     }
 
-    private fun String.toLongOrZero(): Long {
-        return if (this.isBlank()) 0 else this.toLong()
+    private fun makeShortToast(message: String) {
+        Toast.makeText(
+            context,
+            message,
+            Toast.LENGTH_SHORT
+        ).show()
     }
 
-    private fun setErrorOnTextInput(textInput: TextInputLayout) {
-        textInput.error = " "
-        textInput.errorIconDrawable = null
+    private fun String.toLongOrZero(): Long {
+        return if (this.isBlank()) 0 else this.toLong()
     }
 }
