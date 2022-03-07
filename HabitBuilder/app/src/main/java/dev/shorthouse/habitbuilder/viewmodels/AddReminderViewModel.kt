@@ -1,5 +1,6 @@
 package dev.shorthouse.habitbuilder.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.*
 import dev.shorthouse.habitbuilder.data.ReminderDao
 import dev.shorthouse.habitbuilder.model.Reminder
@@ -13,17 +14,25 @@ import java.util.*
 class AddReminderViewModel(private val reminderDao: ReminderDao
 ) : ViewModel() {
 
+    companion object {
+        private val dateFormatter = DateTimeFormatter.ofPattern("EEE dd MMM yyyy")
+        private val dateTimeFormatter = DateTimeFormatter.ofPattern("EEE dd MMM yyyy HH:mm")
+    }
+
     fun addReminder(
         name: String,
         startEpoch: Long,
-        reminderInterval: Long,
+        reminderInterval: Long?,
         notes: String,
+        isArchived: Boolean,
+
     ) {
         val reminder = Reminder(
             name = name,
             startEpoch = startEpoch,
             repeatInterval = reminderInterval,
             notes = notes,
+            isArchived = isArchived
         )
 
         viewModelScope.launch(Dispatchers.IO) {
@@ -32,28 +41,22 @@ class AddReminderViewModel(private val reminderDao: ReminderDao
     }
 
     fun getFormattedDate(dateTimestamp: Long): String {
-        val dateFormatter = SimpleDateFormat("EEE dd MMM yyyy", Locale.getDefault())
-        return dateFormatter.format(dateTimestamp)
+        return Instant.ofEpochMilli(dateTimestamp)
+            .atZone(ZoneId.systemDefault())
+            .format(dateFormatter)
     }
 
     fun getReminderDate(reminderDateText: String): LocalDate {
-        val dateFormatter = DateTimeFormatter.ofPattern("EEE dd MMM yyyy")
         return LocalDate.parse(reminderDateText, dateFormatter)
     }
 
     fun getReminderDateTime(reminderDateText: String, reminderTimeText: String): LocalDateTime {
         val reminderDateTime = "$reminderDateText $reminderTimeText"
-        val formatter = DateTimeFormatter.ofPattern("EEE dd MMM yyyy HH:mm")
-        return LocalDateTime.parse(reminderDateTime, formatter)
+        return LocalDateTime.parse(reminderDateTime, dateTimeFormatter)
     }
 
     fun getReminderStartEpoch(reminderDateTime: LocalDateTime): Long {
         return reminderDateTime.atZone(ZoneId.systemDefault()).toEpochSecond()
-    }
-
-    fun getSecondsUntilReminder(startEpoch: Long): Long {
-        val nowEpoch = Instant.now().epochSecond
-        return startEpoch - nowEpoch
     }
 
     fun getReminderInterval(years: Long, days: Long, hours: Long): Long {
@@ -62,7 +65,6 @@ class AddReminderViewModel(private val reminderDao: ReminderDao
                 Duration.ofDays(days).seconds +
                 Duration.ofHours(hours).seconds
     }
-
 }
 
 class AddReminderViewModelFactory(

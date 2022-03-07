@@ -11,7 +11,6 @@ import dev.shorthouse.habitbuilder.BaseApplication
 import dev.shorthouse.habitbuilder.R
 import dev.shorthouse.habitbuilder.adapter.ActiveReminderListAdapter
 import dev.shorthouse.habitbuilder.databinding.FragmentActiveReminderListBinding
-import dev.shorthouse.habitbuilder.adapter.AllReminderListAdapter
 import dev.shorthouse.habitbuilder.viewmodels.ActiveReminderListViewModel
 import dev.shorthouse.habitbuilder.viewmodels.ActiveReminderListViewModelFactory
 
@@ -37,13 +36,9 @@ class ActiveReminderListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val adapter = ActiveReminderListAdapter { reminder ->
-            val action = ActiveReminderListFragmentDirections
-                .actionActiveRemindersToReminderDetails(reminder.id)
-            findNavController().navigate(action)
-        }
+        val adapter = ActiveReminderListAdapter(getAdapterClickListener())
 
-        viewModel.reminders.observe(this.viewLifecycleOwner) {reminders ->
+        viewModel.activeReminders.observe(this.viewLifecycleOwner) { reminders ->
             adapter.submitList(reminders)
         }
 
@@ -51,9 +46,9 @@ class ActiveReminderListFragment : Fragment() {
             activeReminderRecycler.adapter = adapter
 
             addReminderFab.setOnClickListener {
-                val action = ActiveReminderListFragmentDirections
-                    .actionActiveRemindersToAddReminder()
-                findNavController().navigate(action)
+                findNavController().navigate(
+                    R.id.action_active_reminders_to_add_reminder
+                )
             }
         }
     }
@@ -61,5 +56,42 @@ class ActiveReminderListFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun getAdapterClickListener(): ActiveReminderListAdapter.ClickListener {
+        return ActiveReminderListAdapter.ClickListener { reminder, itemId ->
+            when (itemId) {
+                R.id.active_reminder_container -> {
+                    val action = ActiveReminderListFragmentDirections
+                        .actionActiveRemindersToReminderDetails(reminder.id)
+                    findNavController().navigate(action)
+                }
+                R.id.reminder_done -> {
+                    updateDoneReminder(
+                        reminder.id,
+                        reminder.name,
+                        reminder.startEpoch,
+                        reminder.repeatInterval,
+                        reminder.notes,
+                    )
+                }
+            }
+        }
+    }
+
+    private fun updateDoneReminder(
+        id: Long,
+        name: String,
+        startEpoch: Long,
+        repeatInterval: Long?,
+        notes: String?,
+    ) {
+        viewModel.updateDoneReminder(
+            id,
+            name,
+            startEpoch,
+            repeatInterval,
+            notes,
+        )
     }
 }

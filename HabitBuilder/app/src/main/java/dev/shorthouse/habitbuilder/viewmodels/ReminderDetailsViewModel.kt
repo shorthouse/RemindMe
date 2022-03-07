@@ -31,12 +31,16 @@ class ReminderDetailsViewModel(private val reminderDao: ReminderDao
             ZoneId.systemDefault()).toLocalTime().toString()
     }
 
-    fun convertRepeatInterval(repeatInterval: Long): String {
+    fun convertRepeatInterval(repeatInterval: Long?): String {
+        if (repeatInterval == null) {
+            return ""
+        }
+
         val daysInYear = 365
         var period = Duration.ofSeconds(repeatInterval)
-
         val totalDays = period.toDays()
         val years = totalDays.div(daysInYear)
+
         val days = totalDays % daysInYear
 
         period = period.minusDays(totalDays)

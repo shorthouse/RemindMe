@@ -34,4 +34,5 @@
     <string name="repeat_icon">Repeat icon</string>
     <string name="notes_icon">Notes icon</string>
     <string name="edit_reminder_button">Edit reminder</string>
+    <string name="reminder_done">Done</string>
 </resources>

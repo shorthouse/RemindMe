@@ -41,6 +41,7 @@ class ReminderDetailsFragment : Fragment() {
         val id = navigationArgs.id
         viewModel.getReminder(id).observe(this.viewLifecycleOwner) {
             reminder = it
+            binding.reminderData = it
             bindReminder()
         }
     }
