@@ -17,11 +17,12 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/active_reminder_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
-        android:onClick="@{() -> clickListener.onClick(reminder, 0)}">
+        android:onClick="@{() -> clickListener.onClick(reminder, activeReminderContainer.getId())}">
 
 
         <com.google.android.material.textview.MaterialTextView
@@ -40,7 +41,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:text="@{String.valueOf((Instant.now().epochSecond - reminder.startEpoch) / reminder.repeatInterval)}"
             app:layout_constraintBottom_toBottomOf="@+id/reminder_name"
             app:layout_constraintStart_toEndOf="@+id/reminder_name"
             app:layout_constraintTop_toTopOf="@+id/reminder_name"
@@ -51,7 +51,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/reminder_done"
-            android:onClick="@{() -> clickListener.onClick(reminder, 1)}"
+            android:onClick="@{() -> clickListener.onClick(reminder, reminderDone.getId())}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent">
