@@ -11,8 +11,8 @@ import dev.shorthouse.habitbuilder.model.Reminder
 
 class ActiveReminderListAdapter(
     private val clickListener: ClickListener)
-    : ListAdapter<Reminder, ActiveReminderListAdapter.ReminderViewHolder>(DiffCallback)
-{
+    : ListAdapter<Reminder, ActiveReminderListAdapter.ReminderViewHolder>(DiffCallback) {
+
     class ReminderViewHolder(
         private var binding: ListItemActiveReminderBinding
     ) : RecyclerView.ViewHolder(binding.root) {
@@ -26,8 +26,7 @@ class ActiveReminderListAdapter(
 
     class ClickListener(
         val clickListener: (reminder: Reminder, itemId: Int) -> Unit
-    )
-    {
+    ) {
         fun onClick(reminder: Reminder, itemId: Int) = clickListener(reminder, itemId)
     }
 
