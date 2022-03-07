@@ -1,11 +1,9 @@
 package dev.shorthouse.habitbuilder.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -13,7 +11,6 @@ import dev.shorthouse.habitbuilder.BaseApplication
 import dev.shorthouse.habitbuilder.R
 import dev.shorthouse.habitbuilder.adapter.ActiveReminderListAdapter
 import dev.shorthouse.habitbuilder.databinding.FragmentActiveReminderListBinding
-import dev.shorthouse.habitbuilder.adapter.AllReminderListAdapter
 import dev.shorthouse.habitbuilder.viewmodels.ActiveReminderListViewModel
 import dev.shorthouse.habitbuilder.viewmodels.ActiveReminderListViewModelFactory
 
@@ -39,19 +36,9 @@ class ActiveReminderListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val clickListener = ActiveReminderListAdapter.ClickListener { reminder, itemId ->
-            if (itemId == 0) {
-                val action = ActiveReminderListFragmentDirections
-                    .actionActiveRemindersToReminderDetails(reminder.id)
-                findNavController().navigate(action)
-            } else if (itemId == 1) {
-                Toast.makeText(context, "Done clicked!", Toast.LENGTH_SHORT).show()
-            }
-        }
+        val adapter = ActiveReminderListAdapter(getAdapterClickListener())
 
-        val adapter = ActiveReminderListAdapter(clickListener)
-
-        viewModel.activeRecurringReminders.observe(this.viewLifecycleOwner) {reminders ->
+        viewModel.activeReminders.observe(this.viewLifecycleOwner) { reminders ->
             adapter.submitList(reminders)
         }
 
@@ -59,9 +46,9 @@ class ActiveReminderListFragment : Fragment() {
             activeReminderRecycler.adapter = adapter
 
             addReminderFab.setOnClickListener {
-                val action = ActiveReminderListFragmentDirections
-                    .actionActiveRemindersToAddReminder()
-                findNavController().navigate(action)
+                findNavController().navigate(
+                    R.id.action_active_reminders_to_add_reminder
+                )
             }
         }
     }
@@ -69,5 +56,42 @@ class ActiveReminderListFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun getAdapterClickListener(): ActiveReminderListAdapter.ClickListener {
+        return ActiveReminderListAdapter.ClickListener { reminder, itemId ->
+            when (itemId) {
+                R.id.active_reminder_container -> {
+                    val action = ActiveReminderListFragmentDirections
+                        .actionActiveRemindersToReminderDetails(reminder.id)
+                    findNavController().navigate(action)
+                }
+                R.id.reminder_done -> {
+                    updateDoneReminder(
+                        reminder.id,
+                        reminder.name,
+                        reminder.startEpoch,
+                        reminder.repeatInterval,
+                        reminder.notes,
+                    )
+                }
+            }
+        }
+    }
+
+    private fun updateDoneReminder(
+        id: Long,
+        name: String,
+        startEpoch: Long,
+        repeatInterval: Long?,
+        notes: String?,
+    ) {
+        viewModel.updateDoneReminder(
+            id,
+            name,
+            startEpoch,
+            repeatInterval,
+            notes,
+        )
     }
 }
