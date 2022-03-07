@@ -20,15 +20,18 @@ class ReminderDetailsViewModel(private val reminderDao: ReminderDao
     }
 
     fun convertEpochToDate(epoch: Long): String {
-        return LocalDateTime.ofInstant(
-            Instant.ofEpochSecond(epoch),
-            ZoneId.systemDefault()).toLocalDate().toString()
+        return getLocalDateTime(epoch).toLocalDate().toString()
     }
 
     fun convertEpochToTime(epoch: Long): String {
+        return getLocalDateTime(epoch).toLocalTime().toString()
+    }
+
+    private fun getLocalDateTime(epoch: Long): LocalDateTime {
         return LocalDateTime.ofInstant(
             Instant.ofEpochSecond(epoch),
-            ZoneId.systemDefault()).toLocalTime().toString()
+            ZoneId.systemDefault()
+        )
     }
 
     fun convertRepeatInterval(repeatInterval: Long?): String {
