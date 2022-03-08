@@ -28,7 +28,7 @@ class AddReminderViewModel(private val reminderDao: ReminderDao
         name: String,
         startEpoch: Long,
         reminderInterval: Long?,
-        notes: String,
+        notes: String?,
         isArchived: Boolean,
 
     ) {

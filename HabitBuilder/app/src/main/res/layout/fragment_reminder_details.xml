@@ -92,7 +92,8 @@
             android:layout_margin="16dp"
             android:background="?attr/dividerHorizontal"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ic_clock" />
+            app:layout_constraintTop_toBottomOf="@+id/ic_clock"
+            app:hideIfSingleReminder="@{reminder.repeatInterval}" />
 
         <ImageView
             android:id="@+id/ic_repeat"
@@ -101,9 +102,9 @@
             android:layout_margin="16dp"
             android:contentDescription="@string/repeat_icon"
             android:src="@drawable/ic_loop"
-            android:visibility="@{reminder.repeatInterval == null ? View.GONE : View.VISIBLE}"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/divider_start_time" />
+            app:layout_constraintTop_toBottomOf="@+id/divider_start_time"
+            app:hideIfSingleReminder="@{reminder.repeatInterval}"/>
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/repeat_interval"
@@ -111,11 +112,11 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:textAppearance="?attr/textAppearanceBody2"
-            android:visibility="@{reminder.repeatInterval == null ? View.GONE : View.VISIBLE}"
             android:text="@{viewmodel.convertRepeatInterval(reminder.repeatInterval)}"
             app:layout_constraintBottom_toBottomOf="@+id/ic_repeat"
             app:layout_constraintStart_toEndOf="@+id/ic_repeat"
             app:layout_constraintTop_toTopOf="@+id/ic_repeat"
+            app:hideIfSingleReminder="@{reminder.repeatInterval}"
             tools:text="Repeat Interval" />
 
         <View
@@ -124,9 +125,9 @@
             android:layout_height="1dp"
             android:layout_margin="16dp"
             android:background="?attr/dividerHorizontal"
-            android:visibility="@{reminder.repeatInterval == null ? View.GONE : View.VISIBLE}"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ic_repeat" />
+            app:layout_constraintTop_toBottomOf="@+id/ic_repeat"
+            app:hideIfNoNotes="@{reminder.notes}" />
 
         <ImageView
             android:id="@+id/ic_notes"
@@ -136,7 +137,8 @@
             android:contentDescription="@string/notes_icon"
             android:src="@drawable/ic_notes"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/divider_interval" />
+            app:layout_constraintTop_toBottomOf="@+id/divider_interval"
+            app:hideIfNoNotes="@{reminder.notes}"/>
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/notes"
@@ -148,6 +150,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/ic_notes"
             app:layout_constraintStart_toEndOf="@+id/ic_notes"
             app:layout_constraintTop_toTopOf="@+id/ic_notes"
+            app:hideIfNoNotes="@{reminder.notes}"
             tools:text="Notes" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
