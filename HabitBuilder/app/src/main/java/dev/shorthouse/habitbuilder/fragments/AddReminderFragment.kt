@@ -44,17 +44,7 @@ class AddReminderFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.apply {
-            startTimeInput.setOnClickListener {
-                displayTimePicker()
-            }
-
-            startDateInput.setOnClickListener {
-                displayDatePicker()
-            }
-
-            repeatSwitch.setOnCheckedChangeListener { _, isChecked ->
-                setIntervalInputVisibility(isChecked)
-            }
+            addReminderFragment = this@AddReminderFragment
         }
     }
 
@@ -80,10 +70,12 @@ class AddReminderFragment : Fragment() {
     private fun addReminder() {
         if (isValidEntry()) {
             val reminderName = binding.nameInput.text.toString()
+
             val reminderStartEpoch = viewModel.calculateReminderStartEpoch(
                 binding.startDateInput.text.toString(),
                 binding.startTimeInput.text.toString()
             )
+
             val reminderInterval = if (!binding.repeatSwitch.isChecked) {
                 null
             } else {
@@ -99,6 +91,7 @@ class AddReminderFragment : Fragment() {
             } else {
                 binding.notesInput.text.toString()
             }
+
             val isArchived = false
 
             viewModel.addReminder(
@@ -115,7 +108,7 @@ class AddReminderFragment : Fragment() {
         }
     }
 
-    private fun displayDatePicker() {
+    fun displayDatePicker() {
         val datePicker = MaterialDatePicker.Builder.datePicker()
             .setTitleText(getString(R.string.date_picker_title))
             .build()
@@ -127,7 +120,7 @@ class AddReminderFragment : Fragment() {
         datePicker.show(parentFragmentManager, getString(R.string.reminder_date_picker_tag))
     }
 
-    private fun displayTimePicker() {
+    fun displayTimePicker() {
         val timePicker = MaterialTimePicker.Builder()
             .setTimeFormat(TimeFormat.CLOCK_24H)
             .setTitleText(getString(R.string.time_picker_title))
@@ -144,22 +137,6 @@ class AddReminderFragment : Fragment() {
         }
 
         timePicker.show(parentFragmentManager, getString(R.string.reminder_time_picker_tag))
-    }
-
-    private fun setIntervalInputVisibility(isVisible: Boolean) {
-        binding.apply {
-            if (isVisible) {
-                intervalHeader.visibility = View.VISIBLE
-                yearsLabel.visibility = View.VISIBLE
-                daysLabel.visibility = View.VISIBLE
-                hoursLabel.visibility = View.VISIBLE
-            } else {
-                intervalHeader.visibility = View.GONE
-                yearsLabel.visibility = View.GONE
-                daysLabel.visibility = View.GONE
-                hoursLabel.visibility = View.GONE
-            }
-        }
     }
 
     private fun isValidEntry(): Boolean {
