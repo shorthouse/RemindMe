@@ -15,6 +15,10 @@ import java.util.*
 class ReminderDetailsViewModel(private val reminderDao: ReminderDao
 ) : ViewModel() {
 
+    companion object {
+        private const val DAYS_IN_YEAR = 365L
+    }
+
     fun getReminder(id: Long): LiveData<Reminder> {
         return reminderDao.getReminder(id).asLiveData()
     }
@@ -39,15 +43,12 @@ class ReminderDetailsViewModel(private val reminderDao: ReminderDao
             return ""
         }
 
-        val daysInYear = 365
-        var period = Duration.ofSeconds(repeatInterval)
+        val period = Duration.ofSeconds(repeatInterval)
         val totalDays = period.toDays()
-        val years = totalDays.div(daysInYear)
 
-        val days = totalDays % daysInYear
-
-        period = period.minusDays(totalDays)
-        val hours = period.toHours()
+        val years = totalDays.div(DAYS_IN_YEAR)
+        val days = totalDays.mod(DAYS_IN_YEAR)
+        val hours = period.minusDays(totalDays).toHours()
 
         return formatRepeatInterval(years, days, hours)
     }
