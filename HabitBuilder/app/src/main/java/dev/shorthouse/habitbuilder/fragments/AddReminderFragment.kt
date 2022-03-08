@@ -93,7 +93,12 @@ class AddReminderFragment : Fragment() {
                     binding.hoursInput.text.toString().toLongOrZero(),
                 )
             }
-            val reminderNotes = binding.notesInput.text.toString()
+
+            val reminderNotes = if (binding.notesInput.text.isNullOrBlank()) {
+                null
+            } else {
+                binding.notesInput.text.toString()
+            }
             val isArchived = false
 
             viewModel.addReminder(
