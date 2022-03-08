@@ -18,7 +18,6 @@ class ReminderDetailsFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val navigationArgs: ReminderDetailsFragmentArgs by navArgs()
-    private lateinit var reminder: Reminder
 
     private val viewModel: ReminderDetailsViewModel by activityViewModels {
         ReminderDetailsViewModelFactory(
@@ -32,6 +31,7 @@ class ReminderDetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentReminderDetailsBinding.inflate(inflater, container, false)
+        binding.viewmodel = viewModel
         return binding.root
     }
 
@@ -40,20 +40,13 @@ class ReminderDetailsFragment : Fragment() {
 
         val id = navigationArgs.id
         viewModel.getReminder(id).observe(this.viewLifecycleOwner) {
-            reminder = it
-            binding.reminderData = it
-            bindReminder()
+            binding.reminder = it
         }
     }
 
-    private fun bindReminder() {
-        binding.apply {
-            name.text = reminder.name
-            startDate.text = viewModel.convertEpochToDate(reminder.startEpoch)
-            startTime.text = viewModel.convertEpochToTime(reminder.startEpoch)
-            repeatInterval.text = viewModel.convertRepeatInterval(reminder.repeatInterval)
-            notes.text = reminder.notes
-        }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
 }

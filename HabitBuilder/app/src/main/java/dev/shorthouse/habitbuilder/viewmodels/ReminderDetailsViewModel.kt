@@ -15,20 +15,27 @@ import java.util.*
 class ReminderDetailsViewModel(private val reminderDao: ReminderDao
 ) : ViewModel() {
 
+    companion object {
+        private const val DAYS_IN_YEAR = 365L
+    }
+
     fun getReminder(id: Long): LiveData<Reminder> {
         return reminderDao.getReminder(id).asLiveData()
     }
 
     fun convertEpochToDate(epoch: Long): String {
-        return LocalDateTime.ofInstant(
-            Instant.ofEpochSecond(epoch),
-            ZoneId.systemDefault()).toLocalDate().toString()
+        return getLocalDateTime(epoch).toLocalDate().toString()
     }
 
     fun convertEpochToTime(epoch: Long): String {
+        return getLocalDateTime(epoch).toLocalTime().toString()
+    }
+
+    private fun getLocalDateTime(epoch: Long): LocalDateTime {
         return LocalDateTime.ofInstant(
             Instant.ofEpochSecond(epoch),
-            ZoneId.systemDefault()).toLocalTime().toString()
+            ZoneId.systemDefault()
+        )
     }
 
     fun convertRepeatInterval(repeatInterval: Long?): String {
@@ -36,15 +43,12 @@ class ReminderDetailsViewModel(private val reminderDao: ReminderDao
             return ""
         }
 
-        val daysInYear = 365
-        var period = Duration.ofSeconds(repeatInterval)
+        val period = Duration.ofSeconds(repeatInterval)
         val totalDays = period.toDays()
-        val years = totalDays.div(daysInYear)
 
-        val days = totalDays % daysInYear
-
-        period = period.minusDays(totalDays)
-        val hours = period.toHours()
+        val years = totalDays.div(DAYS_IN_YEAR)
+        val days = totalDays.mod(DAYS_IN_YEAR)
+        val hours = period.minusDays(totalDays).toHours()
 
         return formatRepeatInterval(years, days, hours)
     }
