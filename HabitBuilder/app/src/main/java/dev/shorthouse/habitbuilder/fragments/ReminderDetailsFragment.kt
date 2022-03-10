@@ -14,7 +14,6 @@ import dev.shorthouse.habitbuilder.viewmodels.ReminderDetailsViewModelFactory
 
 class ReminderDetailsFragment : Fragment() {
     private lateinit var binding: FragmentReminderDetailsBinding
-
     private val navigationArgs: ReminderDetailsFragmentArgs by navArgs()
 
     private val viewModel: ReminderDetailsViewModel by activityViewModels {
