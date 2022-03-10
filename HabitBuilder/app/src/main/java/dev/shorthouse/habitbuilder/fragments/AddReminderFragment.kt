@@ -56,6 +56,8 @@ class AddReminderFragment : Fragment() {
         return when (item.itemId) {
             R.id.action_done -> {
                 addReminder()
+                hideKeyboard()
+                navigateUp()
                 return true
             }
             else -> super.onOptionsItemSelected(item)
@@ -135,14 +137,29 @@ class AddReminderFragment : Fragment() {
         timePicker.show(parentFragmentManager, getString(R.string.reminder_time_picker_tag))
     }
 
+    private fun hideKeyboard() {
+        val inputManager =
+            activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+
+        inputManager.hideSoftInputFromWindow(
+            view?.windowToken,
+            InputMethodManager.HIDE_NOT_ALWAYS
+        )
+    }
+
+    private fun navigateUp() {
+        makeShortToast(getString(R.string.toast_reminder_saved))
+        findNavController().navigateUp()
+    }
+
     private fun isValidEntry(): Boolean {
         return isDetailValid() && isIntervalValid()
     }
 
     private fun isDetailValid(): Boolean {
         val name = binding.nameInput.text.toString()
-        val startDate =  binding.startDateInput.text.toString()
-        val reminderTime =  binding.startTimeInput.text.toString()
+        val startDate = binding.startDateInput.text.toString()
+        val reminderTime = binding.startTimeInput.text.toString()
 
         val isDetailValid = viewModel.isDetailValid(name, startDate, reminderTime)
 
