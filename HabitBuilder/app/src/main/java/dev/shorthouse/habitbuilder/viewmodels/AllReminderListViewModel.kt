@@ -5,9 +5,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asLiveData
 import dev.shorthouse.habitbuilder.data.ReminderDao
 
-class AllReminderListViewModel(private val reminderDao: ReminderDao
+class AllReminderListViewModel(
+    private val reminderDao: ReminderDao
 ) : ViewModel() {
-    val reminders = reminderDao.getReminders().asLiveData()
+    val reminders = reminderDao.getAllNonArchivedReminders().asLiveData()
 }
 
 class AllReminderListViewModelFactory(
