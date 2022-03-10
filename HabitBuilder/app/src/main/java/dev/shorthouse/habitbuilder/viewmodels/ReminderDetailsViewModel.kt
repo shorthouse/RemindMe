@@ -10,12 +10,14 @@ import java.time.Duration
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 class ReminderDetailsViewModel(private val reminderDao: ReminderDao
 ) : ViewModel() {
 
     companion object {
+        private val dateFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy")
         private const val DAYS_IN_YEAR = 365L
     }
 
@@ -24,7 +26,9 @@ class ReminderDetailsViewModel(private val reminderDao: ReminderDao
     }
 
     fun convertEpochToDate(epoch: Long): String {
-        return getLocalDateTime(epoch).toLocalDate().toString()
+        return Instant.ofEpochSecond(epoch)
+            .atZone(ZoneId.systemDefault())
+            .format(dateFormatter)
     }
 
     fun convertEpochToTime(epoch: Long): String {
