@@ -1,7 +1,9 @@
 package dev.shorthouse.habitbuilder.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.view.*
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -14,6 +16,7 @@ import dev.shorthouse.habitbuilder.R
 import dev.shorthouse.habitbuilder.databinding.FragmentAddReminderBinding
 import dev.shorthouse.habitbuilder.viewmodels.AddReminderViewModel
 import dev.shorthouse.habitbuilder.viewmodels.AddReminderViewModelFactory
+import java.time.Instant
 
 class AddReminderFragment : Fragment() {
     private var _binding: FragmentAddReminderBinding? = null
@@ -45,6 +48,7 @@ class AddReminderFragment : Fragment() {
 
         binding.apply {
             addReminderFragment = this@AddReminderFragment
+            viewmodel = viewModel
         }
     }
 
@@ -112,7 +116,9 @@ class AddReminderFragment : Fragment() {
             .build()
 
         datePicker.addOnPositiveButtonClickListener { dateTimestamp ->
-            binding.startDateInput.setText(viewModel.convertTimestampToDate(dateTimestamp))
+            binding.startDateInput.setText(
+                viewModel.convertInstantToDateString(Instant.ofEpochMilli(dateTimestamp))
+            )
         }
 
         datePicker.show(parentFragmentManager, getString(R.string.reminder_date_picker_tag))
