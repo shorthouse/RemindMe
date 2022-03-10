@@ -27,8 +27,7 @@
             android:contentDescription="@string/add_reminder_fab_description"
             android:src="@drawable/ic_add"
             android:tint="@color/white"
-            android:layout_gravity="bottom|end"
-            app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior" />
+            android:layout_gravity="bottom|end" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </layout>
