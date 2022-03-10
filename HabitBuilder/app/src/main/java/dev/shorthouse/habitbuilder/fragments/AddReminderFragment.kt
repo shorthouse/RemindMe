@@ -101,10 +101,6 @@ class AddReminderFragment : Fragment() {
                 reminderNotes,
                 isArchived
             )
-
-            makeShortToast(getString(R.string.toast_reminder_saved))
-
-            findNavController().navigateUp()
         }
     }
 
