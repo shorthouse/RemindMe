@@ -41,7 +41,7 @@ class AllReminderListFragment : Fragment() {
             findNavController().navigate(action)
         }
 
-        viewModel.reminders.observe(this.viewLifecycleOwner) {reminders ->
+        viewModel.reminders.observe(this.viewLifecycleOwner) { reminders ->
             adapter.submitList(reminders)
         }
 
