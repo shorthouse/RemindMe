@@ -14,8 +14,7 @@ import dev.shorthouse.habitbuilder.viewmodels.AllReminderListViewModel
 import dev.shorthouse.habitbuilder.viewmodels.AllReminderListViewModelFactory
 
 class AllReminderListFragment : Fragment() {
-    private var _binding: FragmentAllReminderListBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentAllReminderListBinding
 
     private val viewModel: AllReminderListViewModel by activityViewModels {
         AllReminderListViewModelFactory(
@@ -27,8 +26,8 @@ class AllReminderListFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        _binding = FragmentAllReminderListBinding.inflate(inflater, container, false)
+    ): View {
+        binding = FragmentAllReminderListBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -54,11 +53,6 @@ class AllReminderListFragment : Fragment() {
                 findNavController().navigate(action)
             }
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }
 

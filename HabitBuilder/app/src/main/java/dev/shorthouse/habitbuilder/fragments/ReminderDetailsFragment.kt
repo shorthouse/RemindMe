@@ -15,8 +15,7 @@ import dev.shorthouse.habitbuilder.viewmodels.ReminderDetailsViewModel
 import dev.shorthouse.habitbuilder.viewmodels.ReminderDetailsViewModelFactory
 
 class ReminderDetailsFragment : Fragment() {
-    private var _binding: FragmentReminderDetailsBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentReminderDetailsBinding
 
     private val navigationArgs: ReminderDetailsFragmentArgs by navArgs()
 
@@ -30,8 +29,8 @@ class ReminderDetailsFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        _binding = FragmentReminderDetailsBinding.inflate(inflater, container, false)
+    ): View {
+        binding = FragmentReminderDetailsBinding.inflate(inflater, container, false)
         binding.viewmodel = viewModel
         return binding.root
     }
@@ -43,11 +42,6 @@ class ReminderDetailsFragment : Fragment() {
         viewModel.getReminder(id).observe(this.viewLifecycleOwner) {
             binding.reminder = it
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
 }

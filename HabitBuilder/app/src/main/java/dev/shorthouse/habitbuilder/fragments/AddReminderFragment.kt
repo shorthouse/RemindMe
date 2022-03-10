@@ -19,9 +19,7 @@ import dev.shorthouse.habitbuilder.viewmodels.AddReminderViewModelFactory
 import java.time.Instant
 
 class AddReminderFragment : Fragment() {
-    private var _binding: FragmentAddReminderBinding? = null
-    private val binding get() = _binding!!
-
+    private lateinit var binding: FragmentAddReminderBinding
 
     private val viewModel: AddReminderViewModel by activityViewModels {
         AddReminderViewModelFactory(
@@ -38,8 +36,8 @@ class AddReminderFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        _binding = FragmentAddReminderBinding.inflate(inflater, container, false)
+    ): View {
+        binding = FragmentAddReminderBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -66,11 +64,6 @@ class AddReminderFragment : Fragment() {
             }
             else -> super.onOptionsItemSelected(item)
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     private fun addReminder() {

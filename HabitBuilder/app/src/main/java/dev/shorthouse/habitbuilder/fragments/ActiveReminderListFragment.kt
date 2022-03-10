@@ -15,8 +15,7 @@ import dev.shorthouse.habitbuilder.viewmodels.ActiveReminderListViewModel
 import dev.shorthouse.habitbuilder.viewmodels.ActiveReminderListViewModelFactory
 
 class ActiveReminderListFragment : Fragment() {
-    private var _binding: FragmentActiveReminderListBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentActiveReminderListBinding
 
     private val viewModel: ActiveReminderListViewModel by activityViewModels {
         ActiveReminderListViewModelFactory(
@@ -28,8 +27,8 @@ class ActiveReminderListFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        _binding = FragmentActiveReminderListBinding.inflate(inflater, container, false)
+    ): View {
+        binding = FragmentActiveReminderListBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -51,11 +50,6 @@ class ActiveReminderListFragment : Fragment() {
                 )
             }
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     private fun getAdapterClickListener(): ActiveReminderListAdapter.ClickListener {
