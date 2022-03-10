@@ -7,11 +7,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.RecyclerView
 import dev.shorthouse.habitbuilder.BaseApplication
 import dev.shorthouse.habitbuilder.adapter.AllReminderListAdapter
 import dev.shorthouse.habitbuilder.databinding.FragmentAllReminderListBinding
 import dev.shorthouse.habitbuilder.viewmodels.AllReminderListViewModel
 import dev.shorthouse.habitbuilder.viewmodels.AllReminderListViewModelFactory
+
 
 class AllReminderListFragment : Fragment() {
     private lateinit var binding: FragmentAllReminderListBinding
@@ -52,6 +54,16 @@ class AllReminderListFragment : Fragment() {
                     .actionAllRemindersToAddReminder()
                 findNavController().navigate(action)
             }
+
+            allReminderRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    when {
+                        dy > 0 && addReminderFab.isShown -> addReminderFab.hide()
+                        dy < 0 && !addReminderFab.isShown -> addReminderFab.show()
+                    }
+                }
+            })
         }
     }
 }
