@@ -10,8 +10,8 @@ import dev.shorthouse.habitbuilder.databinding.ListItemReminderBinding
 import dev.shorthouse.habitbuilder.model.Reminder
 
 class ActiveReminderListAdapter(
-    private val clickListener: ClickListener)
-    : ListAdapter<Reminder, ActiveReminderListAdapter.ReminderViewHolder>(DiffCallback) {
+    private val clickListener: ClickListener
+) : ListAdapter<Reminder, ActiveReminderListAdapter.ReminderViewHolder>(DiffCallback) {
 
     class ReminderViewHolder(
         private var binding: ListItemActiveReminderBinding
