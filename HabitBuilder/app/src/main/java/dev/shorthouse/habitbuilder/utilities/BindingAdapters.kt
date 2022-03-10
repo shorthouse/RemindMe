@@ -1,11 +1,9 @@
 package dev.shorthouse.habitbuilder.utilities
 
 import android.view.View
-import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import com.google.android.material.textview.MaterialTextView
 import java.time.Instant
-import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
