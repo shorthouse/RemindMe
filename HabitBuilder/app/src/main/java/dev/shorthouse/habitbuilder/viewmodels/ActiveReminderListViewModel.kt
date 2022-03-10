@@ -13,7 +13,8 @@ import java.time.Instant
 class ActiveReminderListViewModel(
     private val reminderDao: ReminderDao
 ) : ViewModel() {
-    val activeReminders = reminderDao.getActiveReminders(Instant.now().epochSecond).asLiveData()
+    val activeReminders =
+        reminderDao.getActiveNonArchivedReminders(Instant.now().epochSecond).asLiveData()
 
     fun updateDoneReminder(
         id: Long,
@@ -89,7 +90,6 @@ class ActiveReminderListViewModel(
         val timeStartEpochToNextInterval = nextInterval.times(repeatInterval)
         return startEpoch.plus(timeStartEpochToNextInterval)
     }
-
 }
 
 class ActiveReminderListViewModelFactory(

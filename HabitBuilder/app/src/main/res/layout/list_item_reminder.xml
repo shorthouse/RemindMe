@@ -8,9 +8,6 @@
         <variable
             name="reminder"
             type="dev.shorthouse.habitbuilder.model.Reminder" />
-        <import type="java.time.LocalDateTime" />
-        <import type="java.time.Instant" />
-        <import type="java.time.ZoneId" />
     </data>
     
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -35,8 +32,8 @@
             android:id="@+id/reminder_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{LocalDateTime.ofInstant(Instant.ofEpochSecond(reminder.startEpoch), ZoneId.systemDefault()).toLocalTime().toString()}"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+            app:formattedTime="@{reminder.startEpoch}"
             app:layout_constraintTop_toBottomOf="@id/reminder_name"
             app:layout_constraintStart_toStartOf="parent"
             tools:text="21:49" />
@@ -46,8 +43,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:text="@{LocalDateTime.ofInstant(Instant.ofEpochSecond(reminder.startEpoch), ZoneId.systemDefault()).toLocalDate().toString()}"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+            app:formattedDate="@{reminder.startEpoch}"
             app:layout_constraintStart_toEndOf="@+id/reminder_time"
             app:layout_constraintTop_toBottomOf="@+id/reminder_name"
             tools:text="2022-02-07" />

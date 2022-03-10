@@ -1,7 +1,9 @@
 package dev.shorthouse.habitbuilder.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.view.*
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -14,6 +16,7 @@ import dev.shorthouse.habitbuilder.R
 import dev.shorthouse.habitbuilder.databinding.FragmentAddReminderBinding
 import dev.shorthouse.habitbuilder.viewmodels.AddReminderViewModel
 import dev.shorthouse.habitbuilder.viewmodels.AddReminderViewModelFactory
+import java.time.Instant
 
 class AddReminderFragment : Fragment() {
     private var _binding: FragmentAddReminderBinding? = null
@@ -44,17 +47,8 @@ class AddReminderFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.apply {
-            startTimeInput.setOnClickListener {
-                displayTimePicker()
-            }
-
-            startDateInput.setOnClickListener {
-                displayDatePicker()
-            }
-
-            repeatSwitch.setOnCheckedChangeListener { _, isChecked ->
-                setIntervalInputVisibility(isChecked)
-            }
+            addReminderFragment = this@AddReminderFragment
+            viewmodel = viewModel
         }
     }
 
@@ -66,6 +60,8 @@ class AddReminderFragment : Fragment() {
         return when (item.itemId) {
             R.id.action_done -> {
                 addReminder()
+                hideKeyboard()
+                navigateUp()
                 return true
             }
             else -> super.onOptionsItemSelected(item)
@@ -80,10 +76,12 @@ class AddReminderFragment : Fragment() {
     private fun addReminder() {
         if (isValidEntry()) {
             val reminderName = binding.nameInput.text.toString()
+
             val reminderStartEpoch = viewModel.calculateReminderStartEpoch(
                 binding.startDateInput.text.toString(),
                 binding.startTimeInput.text.toString()
             )
+
             val reminderInterval = if (!binding.repeatSwitch.isChecked) {
                 null
             } else {
@@ -93,7 +91,13 @@ class AddReminderFragment : Fragment() {
                     binding.hoursInput.text.toString().toLongOrZero(),
                 )
             }
-            val reminderNotes = binding.notesInput.text.toString()
+
+            val reminderNotes = if (binding.notesInput.text.isNullOrBlank()) {
+                null
+            } else {
+                binding.notesInput.text.toString()
+            }
+
             val isArchived = false
 
             viewModel.addReminder(
@@ -103,26 +107,24 @@ class AddReminderFragment : Fragment() {
                 reminderNotes,
                 isArchived
             )
-
-            makeShortToast(getString(R.string.toast_reminder_saved))
-
-            findNavController().navigateUp()
         }
     }
 
-    private fun displayDatePicker() {
+    fun displayDatePicker() {
         val datePicker = MaterialDatePicker.Builder.datePicker()
             .setTitleText(getString(R.string.date_picker_title))
             .build()
 
         datePicker.addOnPositiveButtonClickListener { dateTimestamp ->
-            binding.startDateInput.setText(viewModel.convertTimestampToDate(dateTimestamp))
+            binding.startDateInput.setText(
+                viewModel.convertInstantToDateString(Instant.ofEpochMilli(dateTimestamp))
+            )
         }
 
         datePicker.show(parentFragmentManager, getString(R.string.reminder_date_picker_tag))
     }
 
-    private fun displayTimePicker() {
+    fun displayTimePicker() {
         val timePicker = MaterialTimePicker.Builder()
             .setTimeFormat(TimeFormat.CLOCK_24H)
             .setTitleText(getString(R.string.time_picker_title))
@@ -141,20 +143,19 @@ class AddReminderFragment : Fragment() {
         timePicker.show(parentFragmentManager, getString(R.string.reminder_time_picker_tag))
     }
 
-    private fun setIntervalInputVisibility(isVisible: Boolean) {
-        binding.apply {
-            if (isVisible) {
-                intervalHeader.visibility = View.VISIBLE
-                yearsLabel.visibility = View.VISIBLE
-                daysLabel.visibility = View.VISIBLE
-                hoursLabel.visibility = View.VISIBLE
-            } else {
-                intervalHeader.visibility = View.GONE
-                yearsLabel.visibility = View.GONE
-                daysLabel.visibility = View.GONE
-                hoursLabel.visibility = View.GONE
-            }
-        }
+    private fun hideKeyboard() {
+        val inputManager =
+            activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+
+        inputManager.hideSoftInputFromWindow(
+            view?.windowToken,
+            InputMethodManager.HIDE_NOT_ALWAYS
+        )
+    }
+
+    private fun navigateUp() {
+        makeShortToast(getString(R.string.toast_reminder_saved))
+        findNavController().navigateUp()
     }
 
     private fun isValidEntry(): Boolean {
@@ -163,8 +164,8 @@ class AddReminderFragment : Fragment() {
 
     private fun isDetailValid(): Boolean {
         val name = binding.nameInput.text.toString()
-        val startDate =  binding.startDateInput.text.toString()
-        val reminderTime =  binding.startTimeInput.text.toString()
+        val startDate = binding.startDateInput.text.toString()
+        val reminderTime = binding.startTimeInput.text.toString()
 
         val isDetailValid = viewModel.isDetailValid(name, startDate, reminderTime)
 
