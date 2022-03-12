@@ -33,7 +33,7 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Brush teeth" />
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/elapsed_intervals"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -41,6 +41,8 @@
             app:layout_constraintBottom_toBottomOf="@+id/reminder_name"
             app:layout_constraintStart_toEndOf="@+id/reminder_name"
             app:layout_constraintTop_toTopOf="@+id/reminder_name"
+            app:reminderStartEpoch="@{reminder.startEpoch}"
+            app:reminderRepeatInterval="@{reminder.repeatInterval}"
             tools:text="3" />
 
         <com.google.android.material.button.MaterialButton
