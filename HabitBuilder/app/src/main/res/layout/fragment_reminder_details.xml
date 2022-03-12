@@ -112,11 +112,11 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:textAppearance="?attr/textAppearanceBody2"
-            android:text="@{viewmodel.convertRepeatInterval(reminder.repeatInterval)}"
             app:layout_constraintBottom_toBottomOf="@+id/ic_repeat"
             app:layout_constraintStart_toEndOf="@+id/ic_repeat"
             app:layout_constraintTop_toTopOf="@+id/ic_repeat"
             app:hideIfSingleReminder="@{reminder.repeatInterval}"
+            app:formattedRepeatInterval="@{reminder.repeatInterval}"
             tools:text="Repeat Interval" />
 
         <View

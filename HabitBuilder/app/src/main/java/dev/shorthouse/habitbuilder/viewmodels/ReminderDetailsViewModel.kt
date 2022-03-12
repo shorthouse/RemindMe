@@ -6,12 +6,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asLiveData
 import dev.shorthouse.habitbuilder.data.ReminderDao
 import dev.shorthouse.habitbuilder.model.Reminder
-import java.time.Duration
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import java.util.*
 
 class ReminderDetailsViewModel(
     private val reminderDao: ReminderDao
@@ -41,31 +39,6 @@ class ReminderDetailsViewModel(
             Instant.ofEpochSecond(epoch),
             ZoneId.systemDefault()
         )
-    }
-
-    fun convertRepeatInterval(repeatInterval: Long?): String {
-        if (repeatInterval == null) {
-            return ""
-        }
-
-        val period = Duration.ofSeconds(repeatInterval)
-        val totalDays = period.toDays()
-
-        val years = totalDays.div(DAYS_IN_YEAR)
-        val days = totalDays.mod(DAYS_IN_YEAR)
-        val hours = period.minusDays(totalDays).toHours()
-
-        return formatRepeatInterval(years, days, hours)
-    }
-
-    private fun formatRepeatInterval(years: Long, days: Long, hours: Long): String {
-        val repeatInterval = StringJoiner(", ")
-
-        if (years > 0) repeatInterval.add("$years years")
-        if (days > 0) repeatInterval.add("$days days")
-        if (hours > 0) repeatInterval.add("$hours hours")
-
-        return repeatInterval.toString()
     }
 }
 
