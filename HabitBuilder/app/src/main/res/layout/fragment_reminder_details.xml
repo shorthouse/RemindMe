@@ -37,7 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:contentDescription="@string/calendar_icon"
+            android:contentDescription="@string/cd_icon_calendar"
             android:src="@drawable/ic_calendar_today"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/name" />
@@ -68,7 +68,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:contentDescription="@string/clock_icon"
+            android:contentDescription="@string/cd_icon_clock"
             android:src="@drawable/ic_clock"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/divider_start_date" />
@@ -100,7 +100,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:contentDescription="@string/repeat_icon"
+            android:contentDescription="@string/cd_icon_repeat"
             android:src="@drawable/ic_loop"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/divider_start_time"
@@ -112,11 +112,11 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:textAppearance="?attr/textAppearanceBody2"
-            android:text="@{viewmodel.convertRepeatInterval(reminder.repeatInterval)}"
             app:layout_constraintBottom_toBottomOf="@+id/ic_repeat"
             app:layout_constraintStart_toEndOf="@+id/ic_repeat"
             app:layout_constraintTop_toTopOf="@+id/ic_repeat"
             app:hideIfSingleReminder="@{reminder.repeatInterval}"
+            app:formattedRepeatInterval="@{reminder.repeatInterval}"
             tools:text="Repeat Interval" />
 
         <View
@@ -134,7 +134,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:contentDescription="@string/notes_icon"
+            android:contentDescription="@string/cd_icon_notes"
             android:src="@drawable/ic_notes"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/divider_interval"
@@ -159,7 +159,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_margin="16dp"
-            android:contentDescription="@string/edit_reminder_button"
+            android:contentDescription="@string/cd_button_edit_reminder"
             android:src="@drawable/ic_edit"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />

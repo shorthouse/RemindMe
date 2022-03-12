@@ -1,6 +1,9 @@
 package dev.shorthouse.habitbuilder.viewmodels
 
-import androidx.lifecycle.*
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
+import dev.shorthouse.habitbuilder.R
 import dev.shorthouse.habitbuilder.data.ReminderDao
 import dev.shorthouse.habitbuilder.model.Reminder
 import kotlinx.coroutines.Dispatchers
@@ -46,16 +49,12 @@ class AddReminderViewModel(
         return LocalDate.parse(reminderDateText, dateFormatter)
     }
 
-    private fun convertStringToDateTime(
-        reminderDateText: String,
-        reminderTimeText: String
-    ): LocalDateTime {
-        val reminderDateTime = "$reminderDateText $reminderTimeText"
-        return LocalDateTime.parse(reminderDateTime, dateTimeFormatter)
+    private fun convertStringToDateTime(dateTimeText: String): LocalDateTime {
+        return LocalDateTime.parse(dateTimeText, dateTimeFormatter)
     }
 
-    fun calculateReminderStartEpoch(reminderDateText: String, reminderTimeText: String): Long {
-        val reminderDateTime = convertStringToDateTime(reminderDateText, reminderTimeText)
+    fun calculateReminderStartEpoch(dateTimeText: String): Long {
+        val reminderDateTime = convertStringToDateTime(dateTimeText)
         return reminderDateTime.atZone(ZoneId.systemDefault()).toEpochSecond()
     }
 
@@ -75,18 +74,16 @@ class AddReminderViewModel(
         return when {
             name.isBlank() -> false
             convertStringToDate(startDate).isBefore(LocalDate.now()) -> false
-            convertStringToDateTime(startDate, reminderTime).isBefore(LocalDateTime.now()) -> false
+            convertStringToDateTime("$startDate $reminderTime").isBefore(LocalDateTime.now()) -> false
             else -> true
         }
     }
 
-    fun getDetailError(name: String, startDate: String, reminderTime: String): String {
+    fun getDetailError(name: String, startDate: String): Int {
         return when {
-            name.isBlank() -> "The name cannot be empty."
-            convertStringToDate(startDate).isBefore(LocalDate.now()) -> "The start date cannot be in the past."
-            convertStringToDateTime(startDate, reminderTime).isBefore(LocalDateTime.now()) ->
-                "The start time cannot be in the past."
-            else -> ""
+            name.isBlank() -> R.string.error_name_empty
+            convertStringToDate(startDate).isBefore(LocalDate.now()) -> R.string.error_date_past
+            else -> R.string.error_time_past
         }
     }
 
@@ -101,22 +98,22 @@ class AddReminderViewModel(
         }
     }
 
-    fun getIntervalError(years: Long, days: Long, hours: Long): String {
+    fun getIntervalError(years: Long, days: Long, hours: Long): Int {
         return when {
-            years > MAX_YEARS -> "The maximum years interval is 10."
-            days > MAX_DAYS -> "The maximum days interval is 364."
-            hours > MAX_HOURS -> "The maximum hours interval is 23."
-            years == 0L && days == 0L && hours == 0L -> "The interval must have a time period."
-            else -> ""
+            years > MAX_YEARS -> R.string.error_years_max
+            days > MAX_DAYS -> R.string.error_days_max
+            hours > MAX_HOURS -> R.string.error_hours_max
+            else -> R.string.error_interval_zero
         }
     }
 
-    fun getFormattedTimeNextHour(): String {
-        val now = Instant.now()
-        val zoneId = ZoneId.systemDefault()
-        val localTime = LocalDateTime.ofInstant(now, zoneId).toLocalTime()
-        val nextHour = localTime.hour.plus(1)
-        return "${nextHour}:00"
+    fun getCurrentTimeNextHour(): Int {
+        return LocalDateTime
+            .ofInstant(
+                Instant.now(),
+                ZoneId.systemDefault()
+            )
+            .toLocalTime().hour.plus(1)
     }
 }
 
