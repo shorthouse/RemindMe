@@ -70,6 +70,15 @@ class AddReminderViewModel(
                 Duration.ofHours(hours).seconds
     }
 
+    fun getCurrentTimeNextHour(): Int {
+        return LocalDateTime
+            .ofInstant(
+                Instant.now(),
+                ZoneId.systemDefault()
+            )
+            .toLocalTime().hour.plus(1)
+    }
+
     fun isDetailValid(name: String, startDate: String, reminderTime: String): Boolean {
         return when {
             name.isBlank() -> false
@@ -107,14 +116,6 @@ class AddReminderViewModel(
         }
     }
 
-    fun getCurrentTimeNextHour(): Int {
-        return LocalDateTime
-            .ofInstant(
-                Instant.now(),
-                ZoneId.systemDefault()
-            )
-            .toLocalTime().hour.plus(1)
-    }
 }
 
 class AddReminderViewModelFactory(
