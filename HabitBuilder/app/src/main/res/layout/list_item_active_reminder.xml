@@ -7,10 +7,10 @@
     <data>
         <variable
             name="reminder"
-            type="dev.shorthouse.habitbuilder.model.Reminder" />
+            type="dev.shorthouse.remindme.model.Reminder" />
         <variable
             name="clickListener"
-            type="dev.shorthouse.habitbuilder.adapter.ActiveReminderListAdapter.ClickListener" />
+            type="dev.shorthouse.remindme.adapter.ActiveReminderListAdapter.ClickListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

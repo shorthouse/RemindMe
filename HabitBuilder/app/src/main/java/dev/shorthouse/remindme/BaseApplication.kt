@@ -1,7 +1,7 @@
-package dev.shorthouse.habitbuilder
+package dev.shorthouse.remindme
 
 import android.app.Application
-import dev.shorthouse.habitbuilder.data.ReminderDatabase
+import dev.shorthouse.remindme.data.ReminderDatabase
 
 class BaseApplication : Application() {
     val database: ReminderDatabase by lazy {

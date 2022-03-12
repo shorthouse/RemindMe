@@ -1,4 +1,4 @@
-package dev.shorthouse.habitbuilder.fragments
+package dev.shorthouse.remindme.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,10 +7,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.navArgs
-import dev.shorthouse.habitbuilder.BaseApplication
-import dev.shorthouse.habitbuilder.databinding.FragmentReminderDetailsBinding
-import dev.shorthouse.habitbuilder.viewmodels.ReminderDetailsViewModel
-import dev.shorthouse.habitbuilder.viewmodels.ReminderDetailsViewModelFactory
+import dev.shorthouse.remindme.BaseApplication
+import dev.shorthouse.remindme.databinding.FragmentReminderDetailsBinding
+import dev.shorthouse.remindme.viewmodels.ReminderDetailsViewModel
+import dev.shorthouse.remindme.viewmodels.ReminderDetailsViewModelFactory
 
 class ReminderDetailsFragment : Fragment() {
     private lateinit var binding: FragmentReminderDetailsBinding

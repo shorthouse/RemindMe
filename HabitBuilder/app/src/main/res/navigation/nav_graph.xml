@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/active_reminders"
-        android:name="dev.shorthouse.habitbuilder.fragments.ActiveReminderListFragment"
+        android:name="dev.shorthouse.remindme.fragments.ActiveReminderListFragment"
         android:label="Active Reminders"
         tools:layout="@layout/fragment_active_reminder_list">
         <action
@@ -20,7 +20,7 @@
 
     <fragment
         android:id="@+id/all_reminders"
-        android:name="dev.shorthouse.habitbuilder.fragments.AllReminderListFragment"
+        android:name="dev.shorthouse.remindme.fragments.AllReminderListFragment"
         android:label="All Reminders"
         tools:layout="@layout/fragment_all_reminder_list" >
         <action
@@ -33,13 +33,13 @@
 
     <fragment
         android:id="@+id/add_reminder"
-        android:name="dev.shorthouse.habitbuilder.fragments.AddReminderFragment"
+        android:name="dev.shorthouse.remindme.fragments.AddReminderFragment"
         android:label="Add Reminder"
         tools:layout="@layout/fragment_add_reminder" />
 
     <fragment
         android:id="@+id/reminder_details"
-        android:name="dev.shorthouse.habitbuilder.fragments.ReminderDetailsFragment"
+        android:name="dev.shorthouse.remindme.fragments.ReminderDetailsFragment"
         android:label="Reminder Details"
         tools:layout="@layout/fragment_reminder_details">
         <argument

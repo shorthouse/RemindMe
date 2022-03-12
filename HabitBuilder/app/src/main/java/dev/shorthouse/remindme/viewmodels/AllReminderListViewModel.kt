@@ -1,9 +1,9 @@
-package dev.shorthouse.habitbuilder.viewmodels
+package dev.shorthouse.remindme.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asLiveData
-import dev.shorthouse.habitbuilder.data.ReminderDao
+import dev.shorthouse.remindme.data.ReminderDao
 
 class AllReminderListViewModel(
     reminderDao: ReminderDao

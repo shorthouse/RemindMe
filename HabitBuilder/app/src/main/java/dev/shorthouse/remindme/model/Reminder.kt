@@ -1,4 +1,4 @@
-package dev.shorthouse.habitbuilder.model
+package dev.shorthouse.remindme.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
