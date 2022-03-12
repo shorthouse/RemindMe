@@ -9,7 +9,7 @@ android {
     compileSdk 32
 
     defaultConfig {
-        applicationId "dev.shorthouse.habitbuilder"
+        applicationId "dev.shorthouse.remindme"
         minSdk 26
         targetSdk 32
         versionCode 1

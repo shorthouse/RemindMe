@@ -1,9 +1,9 @@
-package dev.shorthouse.habitbuilder.utilities
+package dev.shorthouse.remindme.utilities
 
 import android.view.View
 import androidx.databinding.BindingAdapter
 import com.google.android.material.textview.MaterialTextView
-import dev.shorthouse.habitbuilder.R
+import dev.shorthouse.remindme.R
 import java.time.Duration
 import java.time.Instant
 import java.time.LocalDateTime

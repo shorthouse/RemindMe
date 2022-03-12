@@ -1,4 +1,4 @@
-package dev.shorthouse.habitbuilder.fragments
+package dev.shorthouse.remindme.fragments
 
 import android.content.Context
 import android.os.Bundle
@@ -11,11 +11,11 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
-import dev.shorthouse.habitbuilder.BaseApplication
-import dev.shorthouse.habitbuilder.R
-import dev.shorthouse.habitbuilder.databinding.FragmentAddReminderBinding
-import dev.shorthouse.habitbuilder.viewmodels.AddReminderViewModel
-import dev.shorthouse.habitbuilder.viewmodels.AddReminderViewModelFactory
+import dev.shorthouse.remindme.BaseApplication
+import dev.shorthouse.remindme.R
+import dev.shorthouse.remindme.databinding.FragmentAddReminderBinding
+import dev.shorthouse.remindme.viewmodels.AddReminderViewModel
+import dev.shorthouse.remindme.viewmodels.AddReminderViewModelFactory
 import java.time.Instant
 
 class AddReminderFragment : Fragment() {

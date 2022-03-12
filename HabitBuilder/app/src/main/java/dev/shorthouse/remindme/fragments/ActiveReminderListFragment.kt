@@ -1,4 +1,4 @@
-package dev.shorthouse.habitbuilder.fragments
+package dev.shorthouse.remindme.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,12 +8,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import dev.shorthouse.habitbuilder.BaseApplication
-import dev.shorthouse.habitbuilder.R
-import dev.shorthouse.habitbuilder.adapter.ActiveReminderListAdapter
-import dev.shorthouse.habitbuilder.databinding.FragmentActiveReminderListBinding
-import dev.shorthouse.habitbuilder.viewmodels.ActiveReminderListViewModel
-import dev.shorthouse.habitbuilder.viewmodels.ActiveReminderListViewModelFactory
+import dev.shorthouse.remindme.BaseApplication
+import dev.shorthouse.remindme.R
+import dev.shorthouse.remindme.adapter.ActiveReminderListAdapter
+import dev.shorthouse.remindme.databinding.FragmentActiveReminderListBinding
+import dev.shorthouse.remindme.viewmodels.ActiveReminderListViewModel
+import dev.shorthouse.remindme.viewmodels.ActiveReminderListViewModelFactory
 
 class ActiveReminderListFragment : Fragment() {
     private lateinit var binding: FragmentActiveReminderListBinding

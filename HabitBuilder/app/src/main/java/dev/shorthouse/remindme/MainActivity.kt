@@ -1,4 +1,4 @@
-package dev.shorthouse.habitbuilder
+package dev.shorthouse.remindme
 
 import android.os.Bundle
 import android.view.View
@@ -9,7 +9,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import dev.shorthouse.habitbuilder.databinding.ActivityMainBinding
+import dev.shorthouse.remindme.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding

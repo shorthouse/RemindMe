@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">Habit Builder</string>
+    <string name="app_name" translatable="false">RemindMe</string>
 
     <string name="hint_reminder_name">Name</string>
     <string name="hint_reminder_year">Years</string>

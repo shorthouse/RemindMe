@@ -7,11 +7,11 @@
 
         <variable
             name="viewmodel"
-            type="dev.shorthouse.habitbuilder.viewmodels.ReminderDetailsViewModel" />
+            type="dev.shorthouse.remindme.viewmodels.ReminderDetailsViewModel" />
 
         <variable
             name="reminder"
-            type="dev.shorthouse.habitbuilder.model.Reminder" />
+            type="dev.shorthouse.remindme.model.Reminder" />
 
         <import type="android.view.View" />
     </data>

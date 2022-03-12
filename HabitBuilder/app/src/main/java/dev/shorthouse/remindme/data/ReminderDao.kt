@@ -1,7 +1,7 @@
-package dev.shorthouse.habitbuilder.data
+package dev.shorthouse.remindme.data
 
 import androidx.room.*
-import dev.shorthouse.habitbuilder.model.Reminder
+import dev.shorthouse.remindme.model.Reminder
 import kotlinx.coroutines.flow.Flow
 
 @Dao

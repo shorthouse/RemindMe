@@ -1,32 +1,24 @@
-package dev.shorthouse.habitbuilder.adapter
+package dev.shorthouse.remindme.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import dev.shorthouse.habitbuilder.databinding.ListItemActiveReminderBinding
-import dev.shorthouse.habitbuilder.model.Reminder
+import dev.shorthouse.remindme.databinding.ListItemReminderBinding
+import dev.shorthouse.remindme.model.Reminder
 
-class ActiveReminderListAdapter(
-    private val clickListener: ClickListener
-) : ListAdapter<Reminder, ActiveReminderListAdapter.ReminderViewHolder>(DiffCallback) {
-
+class AllReminderListAdapter(
+    private val clickListener: (Reminder) -> Unit
+) : ListAdapter<Reminder, AllReminderListAdapter.ReminderViewHolder>(DiffCallback) {
     class ReminderViewHolder(
-        private var binding: ListItemActiveReminderBinding
+        private var binding: ListItemReminderBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(reminder: Reminder, clickListener: ClickListener) {
+        fun bind(reminder: Reminder) {
             binding.reminder = reminder
-            binding.clickListener = clickListener
             binding.executePendingBindings()
         }
-    }
-
-    class ClickListener(
-        val clickListener: (reminder: Reminder, itemId: Int) -> Unit
-    ) {
-        fun onClick(reminder: Reminder, itemId: Int) = clickListener(reminder, itemId)
     }
 
     companion object DiffCallback : DiffUtil.ItemCallback<Reminder>() {
@@ -42,11 +34,15 @@ class ActiveReminderListAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReminderViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         return ReminderViewHolder(
-            ListItemActiveReminderBinding.inflate(layoutInflater, parent, false)
+            ListItemReminderBinding.inflate(layoutInflater, parent, false)
         )
     }
 
     override fun onBindViewHolder(holder: ReminderViewHolder, position: Int) {
-        holder.bind(getItem(position), clickListener)
+        val reminder = getItem(position)
+        holder.itemView.setOnClickListener {
+            clickListener(reminder)
+        }
+        holder.bind(reminder)
     }
 }

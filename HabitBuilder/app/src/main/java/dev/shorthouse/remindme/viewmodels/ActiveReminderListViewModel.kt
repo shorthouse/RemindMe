@@ -1,11 +1,11 @@
-package dev.shorthouse.habitbuilder.viewmodels
+package dev.shorthouse.remindme.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import dev.shorthouse.habitbuilder.data.ReminderDao
-import dev.shorthouse.habitbuilder.model.Reminder
+import dev.shorthouse.remindme.data.ReminderDao
+import dev.shorthouse.remindme.model.Reminder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.Instant
