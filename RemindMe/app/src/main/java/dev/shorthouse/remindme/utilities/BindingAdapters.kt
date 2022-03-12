@@ -36,6 +36,14 @@ fun formattedTime(view: MaterialTextView, reminderStartEpoch: Long) {
         .toString()
 }
 
+@BindingAdapter("reminderStartEpoch", "reminderRepeatInterval")
+fun elapsedIntervals(view: MaterialTextView, startEpoch: Long, repeatInterval: Long) {
+    val timeStartEpochToNow = Instant.now().epochSecond.minus(startEpoch)
+    val numElapsedIntervals = timeStartEpochToNow.div(repeatInterval).plus(1)
+
+    if (numElapsedIntervals > 1) view.text = numElapsedIntervals.toString()
+}
+
 @BindingAdapter("app:formattedDate")
 fun formattedDate(view: MaterialTextView, reminderStartEpoch: Long) {
     val dateFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy")
