@@ -119,7 +119,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Repeat Reminder"
+                android:text="@string/repeat_reminder_title"
                 android:textColor="@android:color/black"
                 android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent"

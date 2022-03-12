@@ -6,7 +6,7 @@ import androidx.lifecycle.asLiveData
 import dev.shorthouse.habitbuilder.data.ReminderDao
 
 class AllReminderListViewModel(
-    private val reminderDao: ReminderDao
+    reminderDao: ReminderDao
 ) : ViewModel() {
     val reminders = reminderDao.getAllNonArchivedReminders().asLiveData()
 }

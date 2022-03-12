@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            if(destination.id == R.id.active_reminders || destination.id == R.id.all_reminders) {
+            if (destination.id == R.id.active_reminders || destination.id == R.id.all_reminders) {
                 bottomNavigationView.visibility = View.VISIBLE
             } else {
                 bottomNavigationView.visibility = View.GONE

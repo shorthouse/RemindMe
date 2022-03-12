@@ -13,7 +13,8 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.*
 
-class ReminderDetailsViewModel(private val reminderDao: ReminderDao
+class ReminderDetailsViewModel(
+    private val reminderDao: ReminderDao
 ) : ViewModel() {
 
     companion object {

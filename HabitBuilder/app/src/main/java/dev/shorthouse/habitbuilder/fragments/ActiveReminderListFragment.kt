@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.RecyclerView
 import dev.shorthouse.habitbuilder.BaseApplication
 import dev.shorthouse.habitbuilder.R
 import dev.shorthouse.habitbuilder.adapter.ActiveReminderListAdapter
@@ -15,8 +16,7 @@ import dev.shorthouse.habitbuilder.viewmodels.ActiveReminderListViewModel
 import dev.shorthouse.habitbuilder.viewmodels.ActiveReminderListViewModelFactory
 
 class ActiveReminderListFragment : Fragment() {
-    private var _binding: FragmentActiveReminderListBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentActiveReminderListBinding
 
     private val viewModel: ActiveReminderListViewModel by activityViewModels {
         ActiveReminderListViewModelFactory(
@@ -28,8 +28,8 @@ class ActiveReminderListFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        _binding = FragmentActiveReminderListBinding.inflate(inflater, container, false)
+    ): View {
+        binding = FragmentActiveReminderListBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -50,12 +50,17 @@ class ActiveReminderListFragment : Fragment() {
                     R.id.action_active_reminders_to_add_reminder
                 )
             }
-        }
-    }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+            activeReminderRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    when {
+                        dy > 0 && addReminderFab.isShown -> addReminderFab.hide()
+                        dy < 0 && !addReminderFab.isShown -> addReminderFab.show()
+                    }
+                }
+            })
+        }
     }
 
     private fun getAdapterClickListener(): ActiveReminderListAdapter.ClickListener {

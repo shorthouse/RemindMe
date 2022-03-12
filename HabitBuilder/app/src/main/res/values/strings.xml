@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">Habit Builder</string>
     <string name="reminder_name">Name</string>
-    <string name="reminder_notes">Notes</string>
     <string name="reminder_year">Years</string>
     <string name="reminder_day">Days</string>
     <string name="reminder_hour">Hours</string>
@@ -9,30 +8,23 @@
     <string name="reminder_date_hint">Reminder start date</string>
     <string name="reminder_time_hint">Reminder start time</string>
     <string name="reminder_time">%1$s:%2$s</string>
-    <string name="time_before_text">Reminder appears before</string>
-    <string name="reminder_save">Save</string>
     <string name="add_reminder_fab_description">Add reminder action button</string>
     <string name="date_picker_title">Select date</string>
     <string name="reminder_date_picker_tag">reminder_date_picker</string>
     <string name="reminder_time_picker_tag">reminder_time_picker</string>
     <string name="toast_reminder_saved">Reminder saved!</string>
     <string name="time_picker_title">Select reminder start time</string>
-    <string name="reminder_name_blank_error">Enter a name</string>
-    <string name="reminder_date_blank_error">Enter a date</string>
-    <string name="reminder_date_invalid_error">Enter a current or future date</string>
-    <string name="reminder_time_blank_error">Enter a time</string>
-    <string name="reminder_time_invalid_error">Enter a current or future time</string>
     <string name="title_active_reminders">Active Reminders</string>
     <string name="cd_active_reminders">Active Reminders</string>
     <string name="cd_all_reminders">All Reminders</string>
     <string name="title_all_reminders">All Reminders</string>
     <string name="reminder_notes_hint">Notes</string>
-    <string name="cd_add_reminder">Add Reminder</string>
-    <string name="title_add_reminder">Add Reminder</string>
     <string name="calendar_icon">Calendar icon</string>
     <string name="clock_icon">Clock icon</string>
     <string name="repeat_icon">Repeat icon</string>
     <string name="notes_icon">Notes icon</string>
     <string name="edit_reminder_button">Edit reminder</string>
     <string name="reminder_done">Done</string>
+    <string name="app_bar_save_title">Save</string>
+    <string name="repeat_reminder_title">Repeat Reminder</string>
 </resources>

@@ -7,15 +7,16 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.RecyclerView
 import dev.shorthouse.habitbuilder.BaseApplication
 import dev.shorthouse.habitbuilder.adapter.AllReminderListAdapter
 import dev.shorthouse.habitbuilder.databinding.FragmentAllReminderListBinding
 import dev.shorthouse.habitbuilder.viewmodels.AllReminderListViewModel
 import dev.shorthouse.habitbuilder.viewmodels.AllReminderListViewModelFactory
 
+
 class AllReminderListFragment : Fragment() {
-    private var _binding: FragmentAllReminderListBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentAllReminderListBinding
 
     private val viewModel: AllReminderListViewModel by activityViewModels {
         AllReminderListViewModelFactory(
@@ -27,8 +28,8 @@ class AllReminderListFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        _binding = FragmentAllReminderListBinding.inflate(inflater, container, false)
+    ): View {
+        binding = FragmentAllReminderListBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -53,12 +54,17 @@ class AllReminderListFragment : Fragment() {
                     .actionAllRemindersToAddReminder()
                 findNavController().navigate(action)
             }
-        }
-    }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+            allReminderRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    when {
+                        dy > 0 && addReminderFab.isShown -> addReminderFab.hide()
+                        dy < 0 && !addReminderFab.isShown -> addReminderFab.show()
+                    }
+                }
+            })
+        }
     }
 }
 

@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import dev.shorthouse.habitbuilder.model.Reminder
 
-@Database(version = 1, exportSchema = false, entities = arrayOf(Reminder::class))
+@Database(version = 1, exportSchema = false, entities = [Reminder::class])
 abstract class ReminderDatabase : RoomDatabase() {
     abstract fun reminderDao(): ReminderDao
 
@@ -19,7 +19,8 @@ abstract class ReminderDatabase : RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context,
                     ReminderDatabase::class.java,
-                    "reminder_database")
+                    "reminder_database"
+                )
                     .build()
                 INSTANCE = instance
 
