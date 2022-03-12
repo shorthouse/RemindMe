@@ -1,0 +1,56 @@
+<resources>
+    <string name="app_name" translatable="false">RemindMe</string>
+
+    <string name="hint_reminder_name">Name</string>
+    <string name="hint_reminder_year">Years</string>
+    <string name="hint_reminder_day">Days</string>
+    <string name="hint_reminder_hour">Hours</string>
+    <string name="title_reminder_interval">Reminder Interval</string>
+    <string name="hint_reminder_date">Reminder start date</string>
+    <string name="hint_reminder_time">Reminder start time</string>
+    <string name="hint_reminder_notes">Notes</string>
+    <string name="format_reminder_time">%1$s:%2$s</string>
+    <string name="title_repeat_reminder">Repeat Reminder</string>
+    <string name="cd_fab_add_reminder">Add reminder</string>
+    <string name="app_bar_title_save">Save</string>
+    <string name="format_date_time">%1$s %2$s</string>
+    <string name="format_next_hour">%1$d:00</string>
+    <string name="error_name_empty">The name cannot be empty.</string>
+    <string name="error_date_past">The start date cannot be in the past.</string>
+    <string name="error_time_past">The start time cannot be in the past.</string>
+    <string name="error_years_max">The maximum years interval is 10.</string>
+    <string name="error_days_max">The maximum days interval is 364.</string>
+    <string name="error_hours_max">The maximum hours interval is 23.</string>
+    <string name="error_interval_zero">The interval must have a time period.</string>
+
+    <string name="title_date_picker">Select date</string>
+    <string name="title_time_picker">Select reminder start time</string>
+    <string name="tag_reminder_date_picker">reminder_date_picker</string>
+    <string name="tag_reminder_time_picker">reminder_time_picker</string>
+    <string name="toast_reminder_saved">Reminder saved!</string>
+
+    <string name="active_reminders">Active Reminders</string>
+    <string name="all_reminders">All Reminders</string>
+
+    <string name="cd_icon_calendar">Calendar icon</string>
+    <string name="cd_icon_clock">Clock icon</string>
+    <string name="cd_icon_repeat">Repeat icon</string>
+    <string name="cd_icon_notes">Notes icon</string>
+
+    <plurals name="interval_years">
+        <item quantity="one">%d year</item>
+        <item quantity="other">%d years</item>
+    </plurals>
+    <plurals name="interval_days">
+        <item quantity="one">%d day</item>
+        <item quantity="other">%d days</item>
+    </plurals>
+    <plurals name="interval_hours">
+        <item quantity="one">%d hour</item>
+        <item quantity="other">%d hours</item>
+    </plurals>
+
+    <string name="cd_button_edit_reminder">Edit reminder</string>
+    <string name="btn_reminder_done">Done</string>
+
+</resources>
