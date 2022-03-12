@@ -107,12 +107,13 @@ class AddReminderViewModel(
         }
     }
 
-    fun getFormattedTimeNextHour(): String {
-        val now = Instant.now()
-        val zoneId = ZoneId.systemDefault()
-        val localTime = LocalDateTime.ofInstant(now, zoneId).toLocalTime()
-        val nextHour = localTime.hour.plus(1)
-        return "${nextHour}:00"
+    fun getCurrentTimeNextHour(): Int {
+        return LocalDateTime
+            .ofInstant(
+                Instant.now(),
+                ZoneId.systemDefault()
+            )
+            .toLocalTime().hour.plus(1)
     }
 }
 
