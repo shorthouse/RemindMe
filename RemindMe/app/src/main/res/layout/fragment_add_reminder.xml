@@ -91,7 +91,6 @@
                     android:focusableInTouchMode="false"
                     android:hint="@string/hint_reminder_time"
                     android:text="@{@string/format_next_hour(viewmodel.getCurrentTimeNextHour())}"
-
                     android:inputType="none"
                     android:onClick="@{() -> addReminderFragment.displayTimePicker()}"
                     tools:text="16:37 PM" />
