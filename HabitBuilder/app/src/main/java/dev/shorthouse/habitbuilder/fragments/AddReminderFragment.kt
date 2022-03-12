@@ -57,9 +57,11 @@ class AddReminderFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_done -> {
-                addReminder()
-                hideKeyboard()
-                navigateUp()
+                if (isValidEntry()) {
+                    addReminder()
+                    hideKeyboard()
+                    navigateUp()
+                }
                 return true
             }
             else -> super.onOptionsItemSelected(item)
@@ -67,45 +69,46 @@ class AddReminderFragment : Fragment() {
     }
 
     private fun addReminder() {
-        if (isValidEntry()) {
-            val reminderName = binding.nameInput.text.toString()
+        val reminderName = binding.nameInput.text.toString()
 
-            val reminderStartEpoch = viewModel.calculateReminderStartEpoch(
+        val reminderStartEpoch = viewModel.calculateReminderStartEpoch(
+            getString(
+                R.string.format_date_time,
                 binding.startDateInput.text.toString(),
                 binding.startTimeInput.text.toString()
             )
+        )
 
-            val reminderInterval = if (!binding.repeatSwitch.isChecked) {
-                null
-            } else {
-                viewModel.convertReminderIntervalToSeconds(
-                    binding.yearsInput.text.toString().toLongOrZero(),
-                    binding.daysInput.text.toString().toLongOrZero(),
-                    binding.hoursInput.text.toString().toLongOrZero(),
-                )
-            }
-
-            val reminderNotes = if (binding.notesInput.text.isNullOrBlank()) {
-                null
-            } else {
-                binding.notesInput.text.toString()
-            }
-
-            val isArchived = false
-
-            viewModel.addReminder(
-                reminderName,
-                reminderStartEpoch,
-                reminderInterval,
-                reminderNotes,
-                isArchived
+        val reminderInterval = if (!binding.repeatSwitch.isChecked) {
+            null
+        } else {
+            viewModel.convertReminderIntervalToSeconds(
+                binding.yearsInput.text.toString().toLongOrZero(),
+                binding.daysInput.text.toString().toLongOrZero(),
+                binding.hoursInput.text.toString().toLongOrZero(),
             )
         }
+
+        val reminderNotes = if (binding.notesInput.text.isNullOrBlank()) {
+            null
+        } else {
+            binding.notesInput.text.toString()
+        }
+
+        val isArchived = false
+
+        viewModel.addReminder(
+            reminderName,
+            reminderStartEpoch,
+            reminderInterval,
+            reminderNotes,
+            isArchived
+        )
     }
 
     fun displayDatePicker() {
         val datePicker = MaterialDatePicker.Builder.datePicker()
-            .setTitleText(getString(R.string.date_picker_title))
+            .setTitleText(getString(R.string.title_date_picker))
             .build()
 
         datePicker.addOnPositiveButtonClickListener { dateTimestamp ->
@@ -114,26 +117,26 @@ class AddReminderFragment : Fragment() {
             )
         }
 
-        datePicker.show(parentFragmentManager, getString(R.string.reminder_date_picker_tag))
+        datePicker.show(parentFragmentManager, getString(R.string.tag_reminder_date_picker))
     }
 
     fun displayTimePicker() {
         val timePicker = MaterialTimePicker.Builder()
             .setTimeFormat(TimeFormat.CLOCK_24H)
-            .setTitleText(getString(R.string.time_picker_title))
+            .setTitleText(getString(R.string.title_time_picker))
             .build()
 
         timePicker.addOnPositiveButtonClickListener {
             binding.startTimeInput.setText(
                 getString(
-                    R.string.reminder_time,
+                    R.string.format_reminder_time,
                     timePicker.hour.toString().padStart(2, '0'),
                     timePicker.minute.toString().padStart(2, '0'),
                 )
             )
         }
 
-        timePicker.show(parentFragmentManager, getString(R.string.reminder_time_picker_tag))
+        timePicker.show(parentFragmentManager, getString(R.string.tag_reminder_time_picker))
     }
 
     private fun hideKeyboard() {
@@ -147,7 +150,11 @@ class AddReminderFragment : Fragment() {
     }
 
     private fun navigateUp() {
-        makeShortToast(getString(R.string.toast_reminder_saved))
+        Toast.makeText(
+            context,
+            getString(R.string.toast_reminder_saved),
+            Toast.LENGTH_SHORT
+        ).show()
         findNavController().navigateUp()
     }
 
@@ -165,7 +172,7 @@ class AddReminderFragment : Fragment() {
         return if (isDetailValid) {
             isDetailValid
         } else {
-            makeShortToast(viewModel.getDetailError(name, startDate, reminderTime))
+            makeShortToast(viewModel.getDetailError(name, startDate))
             isDetailValid
         }
     }
@@ -190,10 +197,10 @@ class AddReminderFragment : Fragment() {
         }
     }
 
-    private fun makeShortToast(message: String) {
+    private fun makeShortToast(stringResId: Int) {
         Toast.makeText(
             context,
-            message,
+            getString(stringResId),
             Toast.LENGTH_SHORT
         ).show()
     }

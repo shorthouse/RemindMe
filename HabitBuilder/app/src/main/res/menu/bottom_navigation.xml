@@ -4,14 +4,14 @@
         android:id="@+id/active_reminders"
         android:enabled="true"
         android:icon="@drawable/ic_calendar_today"
-        android:contentDescription="@string/cd_active_reminders"
-        android:title="@string/title_active_reminders" />
+        android:contentDescription="@string/active_reminders"
+        android:title="@string/active_reminders" />
 
     <item
         android:id="@+id/all_reminders"
         android:enabled="true"
         android:icon="@drawable/ic_calendar_range"
-        android:contentDescription="@string/cd_all_reminders"
-        android:title="@string/title_all_reminders"/>
+        android:contentDescription="@string/all_reminders"
+        android:title="@string/all_reminders"/>
 
 </menu>

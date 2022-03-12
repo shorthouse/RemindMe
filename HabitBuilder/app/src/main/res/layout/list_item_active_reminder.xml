@@ -47,7 +47,7 @@
             android:id="@+id/reminder_done"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/reminder_done"
+            android:text="@string/btn_reminder_done"
             android:onClick="@{() -> clickListener.onClick(reminder, reminderDone.getId())}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
