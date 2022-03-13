@@ -8,6 +8,8 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
@@ -107,8 +109,14 @@ class AddReminderFragment : Fragment() {
     }
 
     fun displayDatePicker() {
+        val constraints =
+            CalendarConstraints.Builder()
+                .setValidator(DateValidatorPointForward.now())
+                .build()
+
         val datePicker = MaterialDatePicker.Builder.datePicker()
             .setTitleText(getString(R.string.title_date_picker))
+            .setCalendarConstraints(constraints)
             .build()
 
         datePicker.addOnPositiveButtonClickListener { dateTimestamp ->

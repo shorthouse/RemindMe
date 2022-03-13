@@ -8,7 +8,10 @@ import dev.shorthouse.remindme.data.ReminderDao
 import dev.shorthouse.remindme.model.Reminder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.time.*
+import java.time.Duration
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 class AddReminderViewModel(
@@ -45,10 +48,6 @@ class AddReminderViewModel(
         }
     }
 
-    private fun convertStringToDate(reminderDateText: String): LocalDate {
-        return LocalDate.parse(reminderDateText, dateFormatter)
-    }
-
     private fun convertStringToDateTime(dateTimeText: String): LocalDateTime {
         return LocalDateTime.parse(dateTimeText, dateTimeFormatter)
     }
@@ -82,7 +81,6 @@ class AddReminderViewModel(
     fun isDetailValid(name: String, startDate: String, reminderTime: String): Boolean {
         return when {
             name.isBlank() -> false
-            convertStringToDate(startDate).isBefore(LocalDate.now()) -> false
             convertStringToDateTime("$startDate $reminderTime").isBefore(LocalDateTime.now()) -> false
             else -> true
         }
@@ -91,7 +89,6 @@ class AddReminderViewModel(
     fun getDetailError(name: String, startDate: String): Int {
         return when {
             name.isBlank() -> R.string.error_name_empty
-            convertStringToDate(startDate).isBefore(LocalDate.now()) -> R.string.error_date_past
             else -> R.string.error_time_past
         }
     }

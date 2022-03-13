@@ -23,7 +23,7 @@
     <string name="error_hours_max">The maximum hours interval is 23.</string>
     <string name="error_interval_zero">The interval must have a time period.</string>
 
-    <string name="title_date_picker">Select date</string>
+    <string name="title_date_picker">Select reminder start date</string>
     <string name="title_time_picker">Select reminder start time</string>
     <string name="tag_reminder_date_picker">reminder_date_picker</string>
     <string name="tag_reminder_time_picker">reminder_time_picker</string>
