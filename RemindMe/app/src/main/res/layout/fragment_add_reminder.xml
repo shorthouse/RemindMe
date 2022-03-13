@@ -41,6 +41,8 @@
                     android:layout_height="wrap_content"
                     android:inputType="textAutoComplete"
                     android:singleLine="true"
+                    android:maxLength="200"
+                    android:imeOptions="actionDone"
                     tools:text="Brush teeth" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -168,6 +170,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:inputType="number"
+                    android:imeOptions="actionNext"
                     tools:text="0" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -191,6 +194,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:inputType="number"
+                    android:imeOptions="actionNext"
                     tools:text="4" />
             </com.google.android.material.textfield.TextInputLayout>
 

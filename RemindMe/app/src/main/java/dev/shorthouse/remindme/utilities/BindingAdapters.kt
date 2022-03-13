@@ -23,7 +23,12 @@ fun hideIfNoNotes(view: View, notes: String?) {
 
 @BindingAdapter("app:showIfRepeatReminder")
 fun hideIfSingleReminder(view: View, isRepeatReminder: Boolean) {
-    view.visibility = if (isRepeatReminder) View.VISIBLE else View.GONE
+    if (isRepeatReminder) {
+        view.visibility = View.VISIBLE
+        view.clearFocus()
+    } else {
+        view.visibility = View.GONE
+    }
 }
 
 @BindingAdapter("app:formattedTime")
@@ -37,7 +42,9 @@ fun formattedTime(view: MaterialTextView, reminderStartEpoch: Long) {
 }
 
 @BindingAdapter("reminderStartEpoch", "reminderRepeatInterval")
-fun elapsedIntervals(view: MaterialTextView, startEpoch: Long, repeatInterval: Long) {
+fun elapsedIntervals(view: MaterialTextView, startEpoch: Long, repeatInterval: Long?) {
+    if (repeatInterval == null) return
+
     val timeStartEpochToNow = Instant.now().epochSecond.minus(startEpoch)
     val numElapsedIntervals = timeStartEpochToNow.div(repeatInterval).plus(1)
 

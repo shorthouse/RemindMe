@@ -24,25 +24,29 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/reminder_name"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:maxLines="1"
             android:text="@{reminder.name}"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+            app:layout_constraintEnd_toStartOf="@+id/reminder_done"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="Brush teeth" />
+            android:ellipsize="end"
+            tools:text="Brush teethBrush teethBrush teeth" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/elapsed_intervals"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            app:layout_constraintBottom_toBottomOf="@+id/reminder_name"
-            app:layout_constraintStart_toEndOf="@+id/reminder_name"
-            app:layout_constraintTop_toTopOf="@+id/reminder_name"
-            app:reminderStartEpoch="@{reminder.startEpoch}"
+            app:layout_constraintBottom_toBottomOf="@+id/reminder_date"
+            app:layout_constraintStart_toEndOf="@+id/reminder_date"
+            app:layout_constraintTop_toTopOf="@+id/reminder_date"
             app:reminderRepeatInterval="@{reminder.repeatInterval}"
+            app:reminderStartEpoch="@{reminder.startEpoch}"
             tools:text="3" />
 
         <com.google.android.material.button.MaterialButton
