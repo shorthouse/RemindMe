@@ -52,5 +52,6 @@
 
     <string name="cd_button_edit_reminder">Edit reminder</string>
     <string name="btn_reminder_done">Done</string>
+    <string name="btn_save_reminder">save</string>
 
 </resources>

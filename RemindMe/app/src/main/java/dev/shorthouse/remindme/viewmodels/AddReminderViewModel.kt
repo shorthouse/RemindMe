@@ -86,7 +86,7 @@ class AddReminderViewModel(
         }
     }
 
-    fun getDetailError(name: String, startDate: String): Int {
+    fun getDetailError(name: String): Int {
         return when {
             name.isBlank() -> R.string.error_name_empty
             else -> R.string.error_time_past

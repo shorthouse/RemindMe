@@ -22,9 +22,7 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ab5d6aff-0558-45f9-8e31-81952340e3db" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="ab5d6aff-0558-45f9-8e31-81952340e3db" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -89,7 +87,7 @@
     <option name="optimizeImportsOnTheFly" value="true" />
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedIndex" value="4" />
+    <option name="selectedIndex" value="1" />
   </component>
   <component name="ProjectId" id="24TtsAeFxluQqty40nsyP5bNyrP" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -108,11 +106,15 @@
     <property name="android-custom-viewC:/Users/short/.gradle/caches/modules-2/files-2.1/com.google.android.material/material/1.5.0/8d3b87c7463f55053836b805e014cb238f64757a/material-1.5.0-sources.jar!/com/google/android/material/textfield/TextInputLayout.java_TextInputLayout_DIMENSIONS" value="1080&#10;1920" />
     <property name="cidr.known.project.marker" value="true" />
     <property name="com.android.tools.idea.sqlite.queryhistory" value="UPDATE reminder&#10;SET repeatInterval = NULL&#10;WHERE id = 3 ; &#10;INSERT INTO Reminder  (name, startEpoch, repeatInterval, notes) VALUES ('2222', 143, 323, 'www'); " />
-    <property name="last_opened_file_path" value="$USER_HOME$/Downloads/android-basics-kotlin-cupcake-app-main" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Downloads/sunflower-main" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
     <property name="settings.editor.selected.configurable" value="Errors" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\short\Documents\Files\Coding\Git repos\RemindMe\RemindMe\app\src\main\res\layout" />
+      <recent name="C:\Users\short\Documents\Files\Coding\Git repos\RemindMe\RemindMe\app\src\main\res\menu" />
+    </key>
     <key name="MoveKotlinTopLevelDeclarationsDialog.RECENTS_KEY">
       <recent name="dev.shorthouse.habitbuilder" />
       <recent name="dev.shorthouse.habitbuilder.ui" />
