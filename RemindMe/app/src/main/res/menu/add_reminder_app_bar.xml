@@ -5,7 +5,7 @@
 
     <item
         android:id="@+id/action_done"
-        android:icon="@drawable/ic_done"
         android:title="@string/app_bar_title_save"
+        app:actionLayout="@layout/save_reminder_app_bar"
         app:showAsAction="always"/>
 </menu>

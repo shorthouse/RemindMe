@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -56,18 +57,17 @@ class AddReminderFragment : Fragment() {
         inflater.inflate(R.menu.add_reminder_app_bar, menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.action_done -> {
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        super.onPrepareOptionsMenu(menu)
+        menu.findItem(R.id.action_done).actionView
+            .findViewById<MaterialButton>(R.id.save_reminder)
+            .setOnClickListener {
                 if (isValidEntry()) {
                     addReminder()
                     hideKeyboard()
                     navigateUp()
                 }
-                return true
             }
-            else -> super.onOptionsItemSelected(item)
-        }
     }
 
     private fun addReminder() {
@@ -180,7 +180,7 @@ class AddReminderFragment : Fragment() {
         return if (isDetailValid) {
             isDetailValid
         } else {
-            makeShortToast(viewModel.getDetailError(name, startDate))
+            makeShortToast(viewModel.getDetailError(name))
             isDetailValid
         }
     }
