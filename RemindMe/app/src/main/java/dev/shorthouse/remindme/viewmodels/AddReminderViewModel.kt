@@ -6,6 +6,10 @@ import androidx.lifecycle.viewModelScope
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.data.ReminderDao
 import dev.shorthouse.remindme.model.Reminder
+import dev.shorthouse.remindme.utilities.DAYS_IN_YEAR
+import dev.shorthouse.remindme.utilities.MAX_DAYS
+import dev.shorthouse.remindme.utilities.MAX_HOURS
+import dev.shorthouse.remindme.utilities.MAX_YEARS
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.Duration
@@ -21,11 +25,6 @@ class AddReminderViewModel(
     companion object {
         private val dateFormatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy")
         private val dateTimeFormatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm")
-
-        private const val MAX_YEARS = 10
-        private const val MAX_DAYS = 364
-        private const val MAX_HOURS = 23
-        private const val DAYS_IN_YEAR = 365
     }
 
     fun addReminder(
