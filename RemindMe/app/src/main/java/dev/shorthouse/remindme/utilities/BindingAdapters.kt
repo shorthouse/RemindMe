@@ -61,7 +61,6 @@ fun formatRepeatInterval(view: MaterialTextView, repeatInterval: Long?) {
     val period = Duration.ofSeconds(repeatInterval)
     val totalDays = period.toDays()
 
-    val DAYS_IN_YEAR = 365
     val years = totalDays.div(DAYS_IN_YEAR)
     val days = totalDays.mod(DAYS_IN_YEAR)
     val hours = period.minusDays(totalDays).toHours()

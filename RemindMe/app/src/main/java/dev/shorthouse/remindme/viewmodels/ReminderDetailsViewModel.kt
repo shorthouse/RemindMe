@@ -17,7 +17,6 @@ class ReminderDetailsViewModel(
 
     companion object {
         private val dateFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy")
-        private const val DAYS_IN_YEAR = 365L
     }
 
     fun getReminder(id: Long): LiveData<Reminder> {
