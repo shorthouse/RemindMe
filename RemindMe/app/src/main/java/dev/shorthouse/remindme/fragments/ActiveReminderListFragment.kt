@@ -46,9 +46,9 @@ class ActiveReminderListFragment : Fragment() {
             activeReminderRecycler.adapter = adapter
 
             addReminderFab.setOnClickListener {
-                findNavController().navigate(
-                    R.id.action_active_reminders_to_add_reminder
-                )
+                val action = ActiveReminderListFragmentDirections
+                    .actionActiveRemindersToAddReminder()
+                findNavController().navigate(action)
             }
 
             activeReminderRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
