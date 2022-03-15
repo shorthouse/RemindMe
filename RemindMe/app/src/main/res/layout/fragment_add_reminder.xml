@@ -10,6 +10,9 @@
         <variable
             name="viewmodel"
             type="dev.shorthouse.remindme.viewmodels.AddReminderViewModel" />
+        <variable
+            name="reminder"
+            type="dev.shorthouse.remindme.model.Reminder" />
         <import type="java.time.Instant" />
     </data>
 
@@ -43,6 +46,7 @@
                     android:singleLine="true"
                     android:maxLength="200"
                     android:imeOptions="actionDone"
+                    android:text='@{reminder.name ?? ""}'
                     tools:text="Brush teeth" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -68,7 +72,7 @@
                     android:hint="@string/hint_reminder_date"
                     android:inputType="none"
                     android:onClick="@{() -> addReminderFragment.displayDatePicker()}"
-                    android:text="@{viewmodel.convertInstantToDateString(Instant.now())}"
+                    android:text="@{viewmodel.getStartDate(reminder)}"
                     tools:text="Fri 17 Jun 2024" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -92,7 +96,7 @@
                     android:focusable="false"
                     android:focusableInTouchMode="false"
                     android:hint="@string/hint_reminder_time"
-                    android:text="@{@string/format_next_hour(viewmodel.getCurrentTimeNextHour())}"
+                    android:text="@{viewmodel.getStartTime(reminder)}"
                     android:inputType="none"
                     android:onClick="@{() -> addReminderFragment.displayTimePicker()}"
                     tools:text="16:37 PM" />
@@ -113,6 +117,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/hint_reminder_notes"
+                    android:text='@{reminder.notes ?? ""}'
                     tools:text="Make sure scrubbed" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -169,6 +174,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
+                    android:text='@{viewmodel.getRepeatIntervalYears(reminder.repeatInterval)}'
                     android:inputType="number"
                     android:imeOptions="actionNext"
                     tools:text="0" />
@@ -194,6 +200,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:inputType="number"
+                    android:text='@{viewmodel.getRepeatIntervalDays(reminder.repeatInterval)}'
                     android:imeOptions="actionNext"
                     tools:text="4" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -218,6 +225,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:inputType="number"
+                    android:text='@{viewmodel.getRepeatIntervalHours(reminder.repeatInterval)}'
                     tools:text="0" />
             </com.google.android.material.textfield.TextInputLayout>
 

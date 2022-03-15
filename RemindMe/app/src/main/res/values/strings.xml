@@ -12,7 +12,7 @@
     <string name="format_reminder_time">%1$s:%2$s</string>
     <string name="title_repeat_reminder">Repeat Reminder</string>
     <string name="cd_fab_add_reminder">Add reminder</string>
-    <string name="app_bar_title_save">Save</string>
+    <string name="toolbar_save_action_title">Save</string>
     <string name="format_date_time">%1$s %2$s</string>
     <string name="format_next_hour">%1$d:00</string>
     <string name="error_name_empty">The name cannot be empty.</string>
@@ -27,7 +27,7 @@
     <string name="title_time_picker">Select reminder start time</string>
     <string name="tag_reminder_date_picker">reminder_date_picker</string>
     <string name="tag_reminder_time_picker">reminder_time_picker</string>
-    <string name="toast_reminder_saved">Reminder saved!</string>
+    <string name="toast_reminder_saved">Reminder saved</string>
 
     <string name="active_reminders">Active Reminders</string>
     <string name="all_reminders">All Reminders</string>
@@ -53,5 +53,7 @@
     <string name="cd_button_edit_reminder">Edit reminder</string>
     <string name="btn_reminder_done">Done</string>
     <string name="btn_save_reminder">save</string>
+    <string name="toolbar_delete_action_title">Delete</string>
+    <string name="toast_reminder_deleted">Reminder deleted</string>
 
 </resources>

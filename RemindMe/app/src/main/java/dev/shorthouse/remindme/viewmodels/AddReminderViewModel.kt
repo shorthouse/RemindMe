@@ -1,15 +1,10 @@
 package dev.shorthouse.remindme.viewmodels
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.data.ReminderDao
 import dev.shorthouse.remindme.model.Reminder
-import dev.shorthouse.remindme.utilities.DAYS_IN_YEAR
-import dev.shorthouse.remindme.utilities.MAX_DAYS
-import dev.shorthouse.remindme.utilities.MAX_HOURS
-import dev.shorthouse.remindme.utilities.MAX_YEARS
+import dev.shorthouse.remindme.utilities.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.Duration
@@ -17,6 +12,7 @@ import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 
 class AddReminderViewModel(
     private val reminderDao: ReminderDao
@@ -47,6 +43,32 @@ class AddReminderViewModel(
         }
     }
 
+    fun updateReminder(
+        id: Long,
+        name: String,
+        startEpoch: Long,
+        reminderInterval: Long?,
+        notes: String?,
+        isArchived: Boolean
+    ) {
+        val reminder = Reminder(
+            id = id,
+            name = name,
+            startEpoch = startEpoch,
+            repeatInterval = reminderInterval,
+            notes = notes,
+            isArchived = isArchived
+        )
+
+        viewModelScope.launch(Dispatchers.IO) {
+            reminderDao.update(reminder)
+        }
+    }
+
+    fun getReminder(id: Long): LiveData<Reminder> {
+        return reminderDao.getReminder(id).asLiveData()
+    }
+
     private fun convertStringToDateTime(dateTimeText: String): LocalDateTime {
         return LocalDateTime.parse(dateTimeText, dateTimeFormatter)
     }
@@ -56,10 +78,28 @@ class AddReminderViewModel(
         return reminderDateTime.atZone(ZoneId.systemDefault()).toEpochSecond()
     }
 
+    fun getStartDate(reminder: Reminder?): String {
+        return when (reminder) {
+            null -> convertInstantToDateString(Instant.now())
+            else -> convertInstantToDateString(Instant.ofEpochSecond(reminder.startEpoch))
+        }
+    }
+
     fun convertInstantToDateString(instant: Instant): String {
         return instant
             .atZone(ZoneId.systemDefault())
             .format(dateFormatter)
+    }
+
+    fun getStartTime(reminder: Reminder?): String {
+        return when (reminder) {
+            null -> getCurrentTimeNextHour()
+            else -> convertEpochToTime(reminder.startEpoch)
+        }
+    }
+
+    fun getIsRepeatChecked(reminder: Reminder?): Boolean {
+        return if (reminder == null) false else reminder.repeatInterval != null
     }
 
     fun convertReminderIntervalToSeconds(years: Long, days: Long, hours: Long): Long {
@@ -68,13 +108,36 @@ class AddReminderViewModel(
                 Duration.ofHours(hours).seconds
     }
 
-    fun getCurrentTimeNextHour(): Int {
-        return LocalDateTime
-            .ofInstant(
-                Instant.now(),
-                ZoneId.systemDefault()
-            )
-            .toLocalTime().hour.plus(1)
+    private fun convertEpochToTime(epoch: Long): String {
+        return LocalDateTime.ofInstant(
+            Instant.ofEpochSecond(epoch),
+            ZoneId.systemDefault()
+        )
+            .toLocalTime().toString()
+    }
+
+    private fun getCurrentTimeNextHour(): String {
+        return LocalDateTime.ofInstant(
+            Instant.now(),
+            ZoneId.systemDefault()
+        )
+            .truncatedTo(ChronoUnit.HOURS).plusHours(1)
+            .toLocalTime().toString()
+    }
+
+    fun getRepeatIntervalYears(repeatInterval: Long?): String {
+        if (repeatInterval == null) return ""
+        return Duration.ofSeconds(repeatInterval).toYearPart().toString()
+    }
+
+    fun getRepeatIntervalDays(repeatInterval: Long?): String {
+        if (repeatInterval == null) return ""
+        return Duration.ofSeconds(repeatInterval).toDayPart().toString()
+    }
+
+    fun getRepeatIntervalHours(repeatInterval: Long?): String {
+        if (repeatInterval == null) return ""
+        return Duration.ofSeconds(repeatInterval).toHourPart().toString()
     }
 
     fun isDetailValid(name: String, startDate: String, reminderTime: String): Boolean {

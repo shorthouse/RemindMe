@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointForward
@@ -22,6 +23,9 @@ import dev.shorthouse.remindme.viewmodels.AddReminderViewModelFactory
 import java.time.Instant
 
 class AddReminderFragment : Fragment() {
+
+    private val navigationArgs: AddReminderFragmentArgs by navArgs()
+
     private lateinit var binding: FragmentAddReminderBinding
 
     private val viewModel: AddReminderViewModel by activityViewModels {
@@ -47,14 +51,23 @@ class AddReminderFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val id = navigationArgs.id
+        if (id > 0) {
+            viewModel.getReminder(id).observe(this.viewLifecycleOwner) {
+                binding.reminder = it
+                binding.repeatSwitch.isChecked = viewModel.getIsRepeatChecked(binding.reminder)
+            }
+        }
+
         binding.apply {
             addReminderFragment = this@AddReminderFragment
             viewmodel = viewModel
         }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.add_reminder_app_bar, menu)
+        inflater.inflate(R.menu.toolbar_add_reminder, menu)
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
@@ -63,14 +76,14 @@ class AddReminderFragment : Fragment() {
             .findViewById<MaterialButton>(R.id.save_reminder)
             .setOnClickListener {
                 if (isValidEntry()) {
-                    addReminder()
+                    saveReminder()
                     hideKeyboard()
                     navigateUp()
                 }
             }
     }
 
-    private fun addReminder() {
+    private fun saveReminder() {
         val reminderName = binding.nameInput.text.toString()
 
         val reminderStartEpoch = viewModel.calculateReminderStartEpoch(
@@ -99,13 +112,25 @@ class AddReminderFragment : Fragment() {
 
         val isArchived = false
 
-        viewModel.addReminder(
-            reminderName,
-            reminderStartEpoch,
-            reminderInterval,
-            reminderNotes,
-            isArchived
-        )
+        if (navigationArgs.id > 0) {
+            viewModel.updateReminder(
+                navigationArgs.id,
+                reminderName,
+                reminderStartEpoch,
+                reminderInterval,
+                reminderNotes,
+                isArchived
+            )
+        } else {
+            viewModel.addReminder(
+                reminderName,
+                reminderStartEpoch,
+                reminderInterval,
+                reminderNotes,
+                isArchived
+            )
+        }
+
     }
 
     fun displayDatePicker() {
