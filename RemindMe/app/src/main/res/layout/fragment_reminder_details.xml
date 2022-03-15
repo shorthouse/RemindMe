@@ -147,12 +147,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:textAppearance="?attr/textAppearanceBody2"
+            android:layout_marginTop="16dp"
             android:text="@{reminder.notes}"
-            app:layout_constraintBottom_toBottomOf="@+id/ic_notes"
-            app:layout_constraintStart_toEndOf="@+id/ic_notes"
-            app:layout_constraintTop_toTopOf="@+id/ic_notes"
+            android:textAppearance="?attr/textAppearanceBody2"
             app:hideIfNoNotes="@{reminder.notes}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/ic_notes"
+            app:layout_constraintTop_toBottomOf="@+id/divider_interval"
             tools:text="Notes" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton

@@ -35,7 +35,12 @@
         android:id="@+id/add_reminder"
         android:name="dev.shorthouse.remindme.fragments.AddReminderFragment"
         android:label="Add Reminder"
-        tools:layout="@layout/fragment_add_reminder" />
+        tools:layout="@layout/fragment_add_reminder" >
+        <argument
+            android:name="id"
+            android:defaultValue="0L"
+            app:argType="long" />
+    </fragment>
 
     <fragment
         android:id="@+id/reminder_details"
@@ -46,6 +51,9 @@
             android:name="id"
             android:defaultValue="0L"
             app:argType="long" />
+        <action
+            android:id="@+id/action_reminder_details_to_add_reminder"
+            app:destination="@id/add_reminder" />
     </fragment>
 
 
