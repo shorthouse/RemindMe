@@ -1,11 +1,10 @@
 package dev.shorthouse.remindme.viewmodels
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.asLiveData
+import androidx.lifecycle.*
 import dev.shorthouse.remindme.data.ReminderDao
 import dev.shorthouse.remindme.model.Reminder
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -21,6 +20,12 @@ class ReminderDetailsViewModel(
 
     fun getReminder(id: Long): LiveData<Reminder> {
         return reminderDao.getReminder(id).asLiveData()
+    }
+
+    fun deleteReminder(reminder: Reminder) {
+        viewModelScope.launch(Dispatchers.IO) {
+            reminderDao.delete(reminder)
+        }
     }
 
     fun convertEpochToDate(epoch: Long): String {
@@ -39,6 +44,7 @@ class ReminderDetailsViewModel(
             ZoneId.systemDefault()
         )
     }
+
 }
 
 class ReminderDetailsViewModelFactory(
