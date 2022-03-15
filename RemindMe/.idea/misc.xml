@@ -28,6 +28,7 @@
         <entry key="..\:/Users/short/Documents/Files/Coding/Git repos/Habit-Builder/HabitBuilder/app/src/main/res/menu/bottom_nav.xml" value="0.16822916666666668" />
         <entry key="..\:/Users/short/Documents/Files/Coding/Git repos/Habit-Builder/HabitBuilder/app/src/main/res/menu/bottom_nav_menu.xml" value="0.1" />
         <entry key="..\:/Users/short/Documents/Files/Coding/Git repos/Habit-Builder/HabitBuilder/app/src/main/res/menu/bottom_navigation.xml" value="0.1" />
+        <entry key="..\:/Users/short/Documents/Files/Coding/Git repos/RemindMe/RemindMe/app/src/main/res/drawable/ic_delete.xml" value="0.1" />
         <entry key="..\:/Users/short/Documents/Files/Coding/Git repos/RemindMe/RemindMe/app/src/main/res/layout/activity_main.xml" value="0.2830269345874305" />
         <entry key="..\:/Users/short/Documents/Files/Coding/Git repos/RemindMe/RemindMe/app/src/main/res/layout/add_reminder_app_bar_layout.xml" value="0.2830269345874305" />
         <entry key="..\:/Users/short/Documents/Files/Coding/Git repos/RemindMe/RemindMe/app/src/main/res/layout/content_main.xml" value="0.2830269345874305" />
@@ -38,6 +39,8 @@
         <entry key="..\:/Users/short/Documents/Files/Coding/Git repos/RemindMe/RemindMe/app/src/main/res/layout/list_item_reminder.xml" value="0.2830269345874305" />
         <entry key="..\:/Users/short/Documents/Files/Coding/Git repos/RemindMe/RemindMe/app/src/main/res/menu/add_reminder_app_bar.xml" value="0.2830269345874305" />
         <entry key="..\:/Users/short/Documents/Files/Coding/Git repos/RemindMe/RemindMe/app/src/main/res/menu/add_reminder_app_bar_layout.xml" value="0.2830269345874305" />
+        <entry key="..\:/Users/short/Documents/Files/Coding/Git repos/RemindMe/RemindMe/app/src/main/res/menu/toolbar_add_reminder.xml" value="0.1" />
+        <entry key="..\:/Users/short/Documents/Files/Coding/Git repos/RemindMe/RemindMe/app/src/main/res/menu/toolbar_reminder_details.xml" value="0.2830269345874305" />
       </map>
     </option>
   </component>

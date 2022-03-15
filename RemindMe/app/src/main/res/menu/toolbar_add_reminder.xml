@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_done"
+        android:title="@string/toolbar_save_action_title"
+        app:actionLayout="@layout/save_reminder_app_bar"
+        app:showAsAction="always"/>
+</menu>
