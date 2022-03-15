@@ -23,12 +23,7 @@ fun hideIfNoNotes(view: View, notes: String?) {
 
 @BindingAdapter("app:showIfRepeatReminder")
 fun hideIfSingleReminder(view: View, isRepeatReminder: Boolean) {
-    if (isRepeatReminder) {
-        view.visibility = View.VISIBLE
-        view.clearFocus()
-    } else {
-        view.visibility = View.GONE
-    }
+    view.visibility = if (isRepeatReminder) View.VISIBLE else View.GONE
 }
 
 @BindingAdapter("app:formattedTime")
