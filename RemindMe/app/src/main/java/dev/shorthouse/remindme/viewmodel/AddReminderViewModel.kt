@@ -1,4 +1,4 @@
-package dev.shorthouse.remindme.viewmodels
+package dev.shorthouse.remindme.viewmodel
 
 import androidx.lifecycle.*
 import androidx.work.*
@@ -18,7 +18,7 @@ import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
 class AddReminderViewModel(
-    private val application: BaseApplication,
+    application: BaseApplication,
     private val reminderDao: ReminderDao
 ) : ViewModel() {
 
@@ -193,7 +193,8 @@ class AddReminderViewModel(
     fun isDetailValid(name: String, startDate: String, reminderTime: String): Boolean {
         return when {
             name.isBlank() -> false
-            convertStringToDateTime("$startDate $reminderTime").isBefore(LocalDateTime.now()) -> false
+            convertStringToDateTime("$startDate $reminderTime")
+                .isBefore(LocalDateTime.now()) -> false
             else -> true
         }
     }

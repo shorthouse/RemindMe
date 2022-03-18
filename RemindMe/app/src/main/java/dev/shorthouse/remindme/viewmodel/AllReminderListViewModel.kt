@@ -1,4 +1,4 @@
-package dev.shorthouse.remindme.viewmodels
+package dev.shorthouse.remindme.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

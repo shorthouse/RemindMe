@@ -9,7 +9,7 @@
             type="dev.shorthouse.remindme.fragments.AddReminderFragment" />
         <variable
             name="viewmodel"
-            type="dev.shorthouse.remindme.viewmodels.AddReminderViewModel" />
+            type="dev.shorthouse.remindme.viewmodel.AddReminderViewModel" />
         <variable
             name="reminder"
             type="dev.shorthouse.remindme.model.Reminder" />
