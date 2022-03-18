@@ -11,8 +11,8 @@ import dev.shorthouse.remindme.BaseApplication
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.databinding.FragmentReminderDetailsBinding
 import dev.shorthouse.remindme.model.Reminder
-import dev.shorthouse.remindme.viewmodels.ReminderDetailsViewModel
-import dev.shorthouse.remindme.viewmodels.ReminderDetailsViewModelFactory
+import dev.shorthouse.remindme.viewmodel.ReminderDetailsViewModel
+import dev.shorthouse.remindme.viewmodel.ReminderDetailsViewModelFactory
 
 class ReminderDetailsFragment : Fragment() {
     private lateinit var binding: FragmentReminderDetailsBinding

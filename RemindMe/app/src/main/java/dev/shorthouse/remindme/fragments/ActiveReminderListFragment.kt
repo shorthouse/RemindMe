@@ -12,8 +12,8 @@ import dev.shorthouse.remindme.BaseApplication
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.adapter.ActiveReminderListAdapter
 import dev.shorthouse.remindme.databinding.FragmentActiveReminderListBinding
-import dev.shorthouse.remindme.viewmodels.ActiveReminderListViewModel
-import dev.shorthouse.remindme.viewmodels.ActiveReminderListViewModelFactory
+import dev.shorthouse.remindme.viewmodel.ActiveReminderListViewModel
+import dev.shorthouse.remindme.viewmodel.ActiveReminderListViewModelFactory
 
 class ActiveReminderListFragment : Fragment() {
     private lateinit var binding: FragmentActiveReminderListBinding

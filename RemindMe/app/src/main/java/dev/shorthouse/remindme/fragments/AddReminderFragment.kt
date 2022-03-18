@@ -18,8 +18,8 @@ import com.google.android.material.timepicker.TimeFormat
 import dev.shorthouse.remindme.BaseApplication
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.databinding.FragmentAddReminderBinding
-import dev.shorthouse.remindme.viewmodels.AddReminderViewModel
-import dev.shorthouse.remindme.viewmodels.AddReminderViewModelFactory
+import dev.shorthouse.remindme.viewmodel.AddReminderViewModel
+import dev.shorthouse.remindme.viewmodel.AddReminderViewModelFactory
 import java.time.Instant
 
 class AddReminderFragment : Fragment() {

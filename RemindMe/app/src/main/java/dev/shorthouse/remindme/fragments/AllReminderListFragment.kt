@@ -11,8 +11,8 @@ import androidx.recyclerview.widget.RecyclerView
 import dev.shorthouse.remindme.BaseApplication
 import dev.shorthouse.remindme.adapter.AllReminderListAdapter
 import dev.shorthouse.remindme.databinding.FragmentAllReminderListBinding
-import dev.shorthouse.remindme.viewmodels.AllReminderListViewModel
-import dev.shorthouse.remindme.viewmodels.AllReminderListViewModelFactory
+import dev.shorthouse.remindme.viewmodel.AllReminderListViewModel
+import dev.shorthouse.remindme.viewmodel.AllReminderListViewModelFactory
 
 
 class AllReminderListFragment : Fragment() {
