@@ -121,6 +121,26 @@
                     tools:text="Make sure scrubbed" />
             </com.google.android.material.textfield.TextInputLayout>
 
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/notification_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="@+id/notification_header"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/notification_header"
+                tools:checked="true" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/notification_header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/title_send_notification"
+                android:textColor="@android:color/black"
+                android:textSize="20sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/notes_label" />
+
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/repeat_header"
                 android:layout_width="wrap_content"
@@ -130,7 +150,7 @@
                 android:textColor="@android:color/black"
                 android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/notes_label" />
+                app:layout_constraintTop_toBottomOf="@+id/notification_header" />
 
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/repeat_switch"
@@ -139,7 +159,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/repeat_header"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/repeat_header"
-                tools:checked="true"/>
+                tools:checked="true" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/interval_header"
