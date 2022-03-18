@@ -17,16 +17,16 @@ import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import dev.shorthouse.remindme.BaseApplication
 import dev.shorthouse.remindme.R
-import dev.shorthouse.remindme.databinding.FragmentAddReminderBinding
+import dev.shorthouse.remindme.databinding.FragmentAddEditReminderBinding
 import dev.shorthouse.remindme.viewmodel.AddReminderViewModel
 import dev.shorthouse.remindme.viewmodel.AddReminderViewModelFactory
 import java.time.Instant
 
-class AddReminderFragment : Fragment() {
+class AddEditReminderFragment : Fragment() {
 
-    private val navigationArgs: AddReminderFragmentArgs by navArgs()
+    private val navigationArgs: AddEditReminderFragmentArgs by navArgs()
 
-    private lateinit var binding: FragmentAddReminderBinding
+    private lateinit var binding: FragmentAddEditReminderBinding
 
     private val viewModel: AddReminderViewModel by activityViewModels {
         AddReminderViewModelFactory(
@@ -45,7 +45,7 @@ class AddReminderFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentAddReminderBinding.inflate(inflater, container, false)
+        binding = FragmentAddEditReminderBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -61,7 +61,7 @@ class AddReminderFragment : Fragment() {
         }
 
         binding.apply {
-            addReminderFragment = this@AddReminderFragment
+            addReminderFragment = this@AddEditReminderFragment
             viewmodel = viewModel
         }
 

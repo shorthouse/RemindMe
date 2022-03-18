@@ -47,7 +47,7 @@ class ActiveReminderListFragment : Fragment() {
 
             addReminderFab.setOnClickListener {
                 val action = ActiveReminderListFragmentDirections
-                    .actionActiveRemindersToAddReminder()
+                    .actionActiveRemindersToAddEditReminder()
                 findNavController().navigate(action)
             }
 
