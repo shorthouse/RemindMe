@@ -52,7 +52,7 @@ class ReminderDetailsFragment : Fragment() {
         binding.apply {
             editReminderFab.setOnClickListener {
                 val action = ReminderDetailsFragmentDirections
-                    .actionReminderDetailsToAddReminder(navigationArgs.id)
+                    .actionReminderDetailsToAddEditReminder(navigationArgs.id)
                 findNavController().navigate(action)
             }
         }

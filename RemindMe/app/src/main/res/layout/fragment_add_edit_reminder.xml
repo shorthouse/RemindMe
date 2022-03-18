@@ -6,7 +6,7 @@
     <data>
         <variable
             name="addReminderFragment"
-            type="dev.shorthouse.remindme.fragments.AddReminderFragment" />
+            type="dev.shorthouse.remindme.fragments.AddEditReminderFragment" />
         <variable
             name="viewmodel"
             type="dev.shorthouse.remindme.viewmodel.AddReminderViewModel" />
@@ -25,7 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="16dp"
-            tools:context=".fragments.AddReminderFragment">
+            tools:context=".fragments.AddEditReminderFragment">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/name_label"
