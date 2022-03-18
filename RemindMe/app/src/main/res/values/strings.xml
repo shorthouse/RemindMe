@@ -55,5 +55,10 @@
     <string name="btn_save_reminder">save</string>
     <string name="toolbar_delete_action_title">Delete</string>
     <string name="toast_reminder_deleted">Reminder deleted</string>
+    <string name="title_send_notification">Send Notification</string>
+    <string name="notification_reminder_name">Verbose WorkManager Notifications</string>
+    <string name="notification_reminder_description">Verbose WorkManager Notifications</string>
+    <string name="notification_channel_id">VERBOSE_NOTIFICATION</string>
+    <string name="notification_content_title">RemindMe to…</string>
 
 </resources>

@@ -1,10 +1,13 @@
 package dev.shorthouse.remindme.viewmodels
 
 import androidx.lifecycle.*
+import androidx.work.*
+import dev.shorthouse.remindme.BaseApplication
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.data.ReminderDao
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.utilities.*
+import dev.shorthouse.remindme.workers.ReminderNotificationWorker
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.Duration
@@ -15,13 +18,13 @@ import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
 class AddReminderViewModel(
+    private val application: BaseApplication,
     private val reminderDao: ReminderDao
 ) : ViewModel() {
 
-    companion object {
-        private val dateFormatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy")
-        private val dateTimeFormatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm")
-    }
+    private val workManager = WorkManager.getInstance(application)
+    private val dateFormatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy")
+    private val dateTimeFormatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm")
 
     fun addReminder(
         name: String,
@@ -29,14 +32,18 @@ class AddReminderViewModel(
         reminderInterval: Long?,
         notes: String?,
         isArchived: Boolean,
+        isNotificationSent: Boolean
     ) {
         val reminder = Reminder(
             name = name,
             startEpoch = startEpoch,
             repeatInterval = reminderInterval,
             notes = notes,
-            isArchived = isArchived
+            isArchived = isArchived,
+            isNotificationSent = isNotificationSent
         )
+
+        if (isNotificationSent) scheduleNotification(reminder)
 
         viewModelScope.launch(Dispatchers.IO) {
             reminderDao.insert(reminder)
@@ -49,7 +56,8 @@ class AddReminderViewModel(
         startEpoch: Long,
         reminderInterval: Long?,
         notes: String?,
-        isArchived: Boolean
+        isArchived: Boolean,
+        isNotificationSent: Boolean
     ) {
         val reminder = Reminder(
             id = id,
@@ -57,7 +65,8 @@ class AddReminderViewModel(
             startEpoch = startEpoch,
             repeatInterval = reminderInterval,
             notes = notes,
-            isArchived = isArchived
+            isArchived = isArchived,
+            isNotificationSent = isNotificationSent
         )
 
         viewModelScope.launch(Dispatchers.IO) {
@@ -67,6 +76,47 @@ class AddReminderViewModel(
 
     fun getReminder(id: Long): LiveData<Reminder> {
         return reminderDao.getReminder(id).asLiveData()
+    }
+
+    private fun scheduleNotification(reminder: Reminder) {
+        workManager.enqueue(getNotificationRequest(reminder))
+    }
+
+    private fun getNotificationRequest(reminder: Reminder): WorkRequest {
+        return when (reminder.repeatInterval) {
+            null -> getOneTimeNotificationWorker(reminder)
+            else -> getRepeatNotificationWorker(reminder)
+        }
+    }
+
+    private fun getRepeatNotificationWorker(reminder: Reminder): WorkRequest {
+        return PeriodicWorkRequestBuilder<ReminderNotificationWorker>(
+            Duration.ofSeconds(reminder.repeatInterval!!)
+        )
+            .setInitialDelay(getDurationUntilReminder(reminder))
+            .setInputData(createInputData(reminder))
+            .build()
+    }
+
+    private fun getOneTimeNotificationWorker(reminder: Reminder): WorkRequest {
+        return OneTimeWorkRequestBuilder<ReminderNotificationWorker>()
+            .setInitialDelay(getDurationUntilReminder(reminder))
+            .setInputData(createInputData(reminder))
+            .build()
+    }
+
+    private fun getDurationUntilReminder(reminder: Reminder): Duration {
+        return Duration.ofMillis(
+            Instant.ofEpochSecond(reminder.startEpoch)
+                .minusMillis(Instant.now().toEpochMilli())
+                .toEpochMilli()
+        )
+    }
+
+    private fun createInputData(reminder: Reminder): Data {
+        return Data.Builder()
+            .putString(KEY_REMINDER_NAME, reminder.name)
+            .build()
     }
 
     private fun convertStringToDateTime(dateTimeText: String): LocalDateTime {
@@ -178,12 +228,13 @@ class AddReminderViewModel(
 }
 
 class AddReminderViewModelFactory(
+    private val application: BaseApplication,
     private val reminderDao: ReminderDao
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(AddReminderViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return AddReminderViewModel(reminderDao) as T
+            return AddReminderViewModel(application, reminderDao) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

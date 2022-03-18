@@ -78,6 +78,7 @@ class ActiveReminderListFragment : Fragment() {
                         reminder.startEpoch,
                         reminder.repeatInterval,
                         reminder.notes,
+                        reminder.isNotificationSent,
                     )
                 }
             }
@@ -90,6 +91,7 @@ class ActiveReminderListFragment : Fragment() {
         startEpoch: Long,
         repeatInterval: Long?,
         notes: String?,
+        isNotificationSent: Boolean,
     ) {
         viewModel.updateDoneReminder(
             id,
@@ -97,6 +99,7 @@ class ActiveReminderListFragment : Fragment() {
             startEpoch,
             repeatInterval,
             notes,
+            isNotificationSent,
         )
     }
 }
