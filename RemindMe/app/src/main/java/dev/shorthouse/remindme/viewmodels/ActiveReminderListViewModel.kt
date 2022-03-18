@@ -22,6 +22,7 @@ class ActiveReminderListViewModel(
         startEpoch: Long,
         repeatInterval: Long?,
         notes: String?,
+        isNotificationSent: Boolean,
     ) {
         when (repeatInterval) {
             null -> updateDoneSingleReminder(
@@ -30,6 +31,7 @@ class ActiveReminderListViewModel(
                 startEpoch,
                 repeatInterval,
                 notes,
+                isNotificationSent,
             )
             else -> updateDoneRepeatReminder(
                 id,
@@ -37,6 +39,7 @@ class ActiveReminderListViewModel(
                 startEpoch,
                 repeatInterval,
                 notes,
+                isNotificationSent,
             )
         }
     }
@@ -47,6 +50,7 @@ class ActiveReminderListViewModel(
         startEpoch: Long,
         repeatInterval: Long?,
         notes: String?,
+        isNotificationSent: Boolean,
     ) {
         val reminder = Reminder(
             id = id,
@@ -55,6 +59,7 @@ class ActiveReminderListViewModel(
             repeatInterval = repeatInterval,
             notes = notes,
             isArchived = true,
+            isNotificationSent = isNotificationSent,
         )
 
         viewModelScope.launch(Dispatchers.IO) {
@@ -68,6 +73,7 @@ class ActiveReminderListViewModel(
         startEpoch: Long,
         repeatInterval: Long,
         notes: String?,
+        isNotificationSent: Boolean,
     ) {
         val reminder = Reminder(
             id = id,
@@ -76,6 +82,7 @@ class ActiveReminderListViewModel(
             repeatInterval = repeatInterval,
             notes = notes,
             isArchived = false,
+            isNotificationSent = isNotificationSent,
         )
 
         viewModelScope.launch(Dispatchers.IO) {

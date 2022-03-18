@@ -15,13 +15,13 @@ import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
 class AddReminderViewModel(
+    private val application: BaseApplication,
     private val reminderDao: ReminderDao
 ) : ViewModel() {
 
-    companion object {
-        private val dateFormatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy")
-        private val dateTimeFormatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm")
-    }
+    private val workManager = WorkManager.getInstance(application)
+    private val dateFormatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy")
+    private val dateTimeFormatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm")
 
     fun addReminder(
         name: String,
@@ -29,14 +29,18 @@ class AddReminderViewModel(
         reminderInterval: Long?,
         notes: String?,
         isArchived: Boolean,
+        isNotificationSent: Boolean
     ) {
         val reminder = Reminder(
             name = name,
             startEpoch = startEpoch,
             repeatInterval = reminderInterval,
             notes = notes,
-            isArchived = isArchived
+            isArchived = isArchived,
+            isNotificationSent = isNotificationSent
         )
+
+        if (isNotificationSent) scheduleNotification(reminder)
 
         viewModelScope.launch(Dispatchers.IO) {
             reminderDao.insert(reminder)
@@ -49,7 +53,8 @@ class AddReminderViewModel(
         startEpoch: Long,
         reminderInterval: Long?,
         notes: String?,
-        isArchived: Boolean
+        isArchived: Boolean,
+        isNotificationSent: Boolean
     ) {
         val reminder = Reminder(
             id = id,
@@ -57,7 +62,8 @@ class AddReminderViewModel(
             startEpoch = startEpoch,
             repeatInterval = reminderInterval,
             notes = notes,
-            isArchived = isArchived
+            isArchived = isArchived,
+            isNotificationSent = isNotificationSent
         )
 
         viewModelScope.launch(Dispatchers.IO) {

@@ -112,6 +112,8 @@ class AddReminderFragment : Fragment() {
 
         val isArchived = false
 
+        val isNotificationSent = binding.notificationSwitch.isChecked
+
         if (navigationArgs.id > 0) {
             viewModel.updateReminder(
                 navigationArgs.id,
@@ -119,7 +121,8 @@ class AddReminderFragment : Fragment() {
                 reminderStartEpoch,
                 reminderInterval,
                 reminderNotes,
-                isArchived
+                isArchived,
+                isNotificationSent
             )
         } else {
             viewModel.addReminder(
@@ -127,7 +130,8 @@ class AddReminderFragment : Fragment() {
                 reminderStartEpoch,
                 reminderInterval,
                 reminderNotes,
-                isArchived
+                isArchived,
+                isNotificationSent
             )
         }
 
