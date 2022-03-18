@@ -30,6 +30,7 @@ class AddReminderFragment : Fragment() {
 
     private val viewModel: AddReminderViewModel by activityViewModels {
         AddReminderViewModelFactory(
+            activity?.application as BaseApplication,
             (activity?.application as BaseApplication).database.reminderDao()
         )
     }
