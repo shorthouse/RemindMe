@@ -228,7 +228,7 @@ class AddReminderViewModel(
 
 }
 
-class AddReminderViewModelFactory(
+class AddEditReminderViewModelFactory(
     private val application: BaseApplication,
     private val reminderDao: ReminderDao
 ) : ViewModelProvider.Factory {

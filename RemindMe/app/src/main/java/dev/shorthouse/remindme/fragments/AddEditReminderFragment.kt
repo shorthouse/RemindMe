@@ -19,7 +19,7 @@ import dev.shorthouse.remindme.BaseApplication
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.databinding.FragmentAddEditReminderBinding
 import dev.shorthouse.remindme.viewmodel.AddReminderViewModel
-import dev.shorthouse.remindme.viewmodel.AddReminderViewModelFactory
+import dev.shorthouse.remindme.viewmodel.AddEditReminderViewModelFactory
 import java.time.Instant
 
 class AddEditReminderFragment : Fragment() {
@@ -29,7 +29,7 @@ class AddEditReminderFragment : Fragment() {
     private lateinit var binding: FragmentAddEditReminderBinding
 
     private val viewModel: AddReminderViewModel by activityViewModels {
-        AddReminderViewModelFactory(
+        AddEditReminderViewModelFactory(
             activity?.application as BaseApplication,
             (activity?.application as BaseApplication).database.reminderDao()
         )
@@ -68,7 +68,7 @@ class AddEditReminderFragment : Fragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.toolbar_add_reminder, menu)
+        inflater.inflate(R.menu.toolbar_add_edit_reminder, menu)
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
