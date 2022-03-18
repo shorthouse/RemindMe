@@ -22,10 +22,14 @@ class ReminderNotificationWorker(
     }
 
     private fun makeReminderNotification(context: Context) {
-        val name = "Verbose WorkManager Notifications"
-        val description = "Verbose WorkManager Notifications"
+        val name = context.getString(R.string.notification_reminder_name)
+        val description = context.getString(R.string.notification_reminder_description)
         val importance = NotificationManager.IMPORTANCE_DEFAULT
-        val channel = NotificationChannel("VERBOSE_NOTIFICATION", name, importance)
+        val channel = NotificationChannel(
+            context.getString(R.string.notification_channel_id),
+            name,
+            importance
+        )
         channel.description = description
 
         val notificationManager =
@@ -34,11 +38,12 @@ class ReminderNotificationWorker(
         notificationManager?.createNotificationChannel(channel)
 
         val reminderName = inputData.getString(KEY_REMINDER_NAME)
-        val builder = NotificationCompat.Builder(context, "VERBOSE_NOTIFICATION")
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
-            .setContentTitle("RemindMe to...")
-            .setContentText(reminderName)
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+        val builder =
+            NotificationCompat.Builder(context, context.getString(R.string.notification_channel_id))
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setContentTitle(context.getString(R.string.notification_content_title))
+                .setContentText(reminderName)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
 
         NotificationManagerCompat.from(context).notify(REMINDER_NOTIFICATION_ID, builder.build())
     }
