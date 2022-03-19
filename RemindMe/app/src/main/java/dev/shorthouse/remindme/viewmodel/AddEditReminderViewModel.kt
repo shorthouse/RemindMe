@@ -1,5 +1,6 @@
 package dev.shorthouse.remindme.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.*
 import androidx.work.*
 import dev.shorthouse.remindme.BaseApplication
@@ -43,10 +44,9 @@ class AddReminderViewModel(
             isNotificationSent = isNotificationSent
         )
 
-        if (isNotificationSent) scheduleNotification(reminder)
-
         viewModelScope.launch(Dispatchers.IO) {
-            reminderDao.insert(reminder)
+            val id = reminderDao.insert(reminder)
+            if (isNotificationSent) scheduleNotification(id, reminder)
         }
     }
 
@@ -71,6 +71,7 @@ class AddReminderViewModel(
 
         viewModelScope.launch(Dispatchers.IO) {
             reminderDao.update(reminder)
+            if (isNotificationSent) scheduleNotification(id, reminder)
         }
     }
 
@@ -78,18 +79,25 @@ class AddReminderViewModel(
         return reminderDao.getReminder(id).asLiveData()
     }
 
-    private fun scheduleNotification(reminder: Reminder) {
-        workManager.enqueue(getNotificationRequest(reminder))
-    }
-
-    private fun getNotificationRequest(reminder: Reminder): WorkRequest {
-        return when (reminder.repeatInterval) {
-            null -> getOneTimeNotificationWorker(reminder)
-            else -> getRepeatNotificationWorker(reminder)
+    private fun scheduleNotification(reminderId: Long, reminder: Reminder) {
+        if (reminder.repeatInterval == null) {
+            Log.d("HDS", "scheduled one-time unique work")
+            workManager.enqueueUniqueWork(
+                NOTIFICATION_UNIQUE_WORK_NAME_PREFIX + reminderId,
+                ExistingWorkPolicy.REPLACE,
+                getOneTimeNotificationWorker(reminder)
+            )
+        } else {
+            Log.d("HDS", "scheduled repeat unique work")
+            workManager.enqueueUniquePeriodicWork(
+                NOTIFICATION_UNIQUE_WORK_NAME_PREFIX + reminderId,
+                ExistingPeriodicWorkPolicy.REPLACE,
+                getRepeatNotificationWorker(reminder)
+            )
         }
     }
 
-    private fun getRepeatNotificationWorker(reminder: Reminder): WorkRequest {
+    private fun getRepeatNotificationWorker(reminder: Reminder): PeriodicWorkRequest {
         return PeriodicWorkRequestBuilder<ReminderNotificationWorker>(
             Duration.ofSeconds(reminder.repeatInterval!!)
         )
@@ -98,10 +106,16 @@ class AddReminderViewModel(
             .build()
     }
 
-    private fun getOneTimeNotificationWorker(reminder: Reminder): WorkRequest {
+    private fun getOneTimeNotificationWorker(reminder: Reminder): OneTimeWorkRequest {
         return OneTimeWorkRequestBuilder<ReminderNotificationWorker>()
             .setInitialDelay(getDurationUntilReminder(reminder))
             .setInputData(createInputData(reminder))
+            .build()
+    }
+
+    private fun createInputData(reminder: Reminder): Data {
+        return Data.Builder()
+            .putString(KEY_REMINDER_NAME, reminder.name)
             .build()
     }
 
@@ -111,12 +125,6 @@ class AddReminderViewModel(
                 .minusMillis(Instant.now().toEpochMilli())
                 .toEpochMilli()
         )
-    }
-
-    private fun createInputData(reminder: Reminder): Data {
-        return Data.Builder()
-            .putString(KEY_REMINDER_NAME, reminder.name)
-            .build()
     }
 
     private fun convertStringToDateTime(dateTimeText: String): LocalDateTime {
@@ -225,7 +233,6 @@ class AddReminderViewModel(
             else -> R.string.error_interval_zero
         }
     }
-
 }
 
 class AddEditReminderViewModelFactory(

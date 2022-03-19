@@ -18,8 +18,8 @@ import com.google.android.material.timepicker.TimeFormat
 import dev.shorthouse.remindme.BaseApplication
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.databinding.FragmentAddEditReminderBinding
-import dev.shorthouse.remindme.viewmodel.AddReminderViewModel
 import dev.shorthouse.remindme.viewmodel.AddEditReminderViewModelFactory
+import dev.shorthouse.remindme.viewmodel.AddReminderViewModel
 import java.time.Instant
 
 class AddEditReminderFragment : Fragment() {
@@ -57,6 +57,7 @@ class AddEditReminderFragment : Fragment() {
             viewModel.getReminder(id).observe(this.viewLifecycleOwner) {
                 binding.reminder = it
                 binding.repeatSwitch.isChecked = viewModel.getIsRepeatChecked(binding.reminder)
+                binding.notificationSwitch.isChecked = it.isNotificationSent
             }
         }
 
