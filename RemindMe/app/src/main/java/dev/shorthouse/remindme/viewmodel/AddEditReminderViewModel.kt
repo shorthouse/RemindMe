@@ -81,14 +81,12 @@ class AddReminderViewModel(
 
     private fun scheduleNotification(reminderId: Long, reminder: Reminder) {
         if (reminder.repeatInterval == null) {
-            Log.d("HDS", "scheduled one-time unique work")
             workManager.enqueueUniqueWork(
                 NOTIFICATION_UNIQUE_WORK_NAME_PREFIX + reminderId,
                 ExistingWorkPolicy.REPLACE,
                 getOneTimeNotificationWorker(reminder)
             )
         } else {
-            Log.d("HDS", "scheduled repeat unique work")
             workManager.enqueueUniquePeriodicWork(
                 NOTIFICATION_UNIQUE_WORK_NAME_PREFIX + reminderId,
                 ExistingPeriodicWorkPolicy.REPLACE,
