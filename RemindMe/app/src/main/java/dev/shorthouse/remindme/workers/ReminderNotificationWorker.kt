@@ -24,7 +24,7 @@ class ReminderNotificationWorker(
     private fun makeReminderNotification(context: Context) {
         val name = context.getString(R.string.notification_reminder_name)
         val description = context.getString(R.string.notification_reminder_description)
-        val importance = NotificationManager.IMPORTANCE_DEFAULT
+        val importance = NotificationManager.IMPORTANCE_HIGH
         val channel = NotificationChannel(
             context.getString(R.string.notification_channel_id),
             name,
@@ -43,7 +43,7 @@ class ReminderNotificationWorker(
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setContentTitle(context.getString(R.string.notification_content_title))
                 .setContentText(reminderName)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
 
         NotificationManagerCompat.from(context).notify(REMINDER_NOTIFICATION_ID, builder.build())
     }

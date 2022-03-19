@@ -18,8 +18,8 @@ interface ReminderDao {
     @Query("SELECT * FROM reminder WHERE isArchived = 0")
     fun getAllNonArchivedReminders(): Flow<List<Reminder>>
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insert(reminder: Reminder)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insert(reminder: Reminder): Long
 
     @Update
     fun update(reminder: Reminder)

@@ -1,9 +1,6 @@
 package dev.shorthouse.remindme.viewmodel
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import dev.shorthouse.remindme.data.ReminderDao
 import dev.shorthouse.remindme.model.Reminder
 import kotlinx.coroutines.Dispatchers
@@ -13,8 +10,10 @@ import java.time.Instant
 class ActiveReminderListViewModel(
     private val reminderDao: ReminderDao
 ) : ViewModel() {
-    val activeReminders =
-        reminderDao.getActiveNonArchivedReminders(Instant.now().epochSecond).asLiveData()
+
+    fun getActiveReminders(): LiveData<List<Reminder>> {
+        return reminderDao.getActiveNonArchivedReminders(Instant.now().epochSecond).asLiveData()
+    }
 
     fun updateDoneReminder(
         id: Long,
