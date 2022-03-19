@@ -170,7 +170,7 @@
                 android:textColor="@android:color/black"
                 android:textSize="20sp"
                 android:visibility="gone"
-                app:showIfRepeatReminder="@{repeatSwitch.checked}"
+                app:showIfRepeatChecked="@{repeatSwitch.checked}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/repeat_header" />
@@ -187,7 +187,7 @@
                 app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/interval_header"
-                app:showIfRepeatReminder="@{repeatSwitch.checked}" >
+                app:showIfRepeatChecked="@{repeatSwitch.checked}" >
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/years_input"
@@ -212,7 +212,7 @@
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/years_label"
                 app:layout_constraintTop_toBottomOf="@+id/interval_header"
-                app:showIfRepeatReminder="@{repeatSwitch.checked}" >
+                app:showIfRepeatChecked="@{repeatSwitch.checked}" >
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/days_input"
@@ -237,7 +237,7 @@
                 app:layout_constraintHorizontal_chainStyle="spread_inside"
                 app:layout_constraintStart_toEndOf="@+id/days_label"
                 app:layout_constraintTop_toBottomOf="@+id/interval_header"
-                app:showIfRepeatReminder="@{repeatSwitch.checked}" >
+                app:showIfRepeatChecked="@{repeatSwitch.checked}" >
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/hours_input"

@@ -95,7 +95,7 @@
             android:background="?attr/dividerHorizontal"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ic_clock"
-            app:hideIfSingleReminder="@{reminder.repeatInterval}" />
+            app:showIfRepeatReminder="@{reminder.repeatInterval}" />
 
         <ImageView
             android:id="@+id/ic_repeat"
@@ -106,7 +106,7 @@
             android:src="@drawable/ic_loop"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/divider_start_time"
-            app:hideIfSingleReminder="@{reminder.repeatInterval}"/>
+            app:showIfRepeatReminder="@{reminder.repeatInterval}"/>
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/repeat_interval"
@@ -117,7 +117,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/ic_repeat"
             app:layout_constraintStart_toEndOf="@+id/ic_repeat"
             app:layout_constraintTop_toTopOf="@+id/ic_repeat"
-            app:hideIfSingleReminder="@{reminder.repeatInterval}"
+            app:showIfRepeatReminder="@{reminder.repeatInterval}"
             app:formattedRepeatInterval="@{reminder.repeatInterval}"
             tools:text="Repeat Interval" />
 
