@@ -160,6 +160,17 @@ class AddReminderViewModel(
         return if (reminder == null) false else reminder.repeatInterval != null
     }
 
+    fun getCheckedRadioButton(reminder: Reminder?): Int {
+        if (reminder == null) return R.id.radio_repeat_daily
+
+        return when (reminder.repeatInterval) {
+            Duration.ofDays(1).seconds -> R.id.radio_repeat_daily
+            Duration.ofDays(7).seconds -> R.id.radio_repeat_weekly
+            Duration.ofDays(30).seconds -> R.id.radio_repeat_monthly
+            else -> R.id.radio_repeat_yearly
+        }
+    }
+
     // TODO months should be just +1 to the month
     // TODO year should be just +1 to the year
     fun getReminderIntervalSeconds(timeUnit: ChronoUnit): Long {
