@@ -8,10 +8,6 @@ import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.utilities.NOTIFICATION_UNIQUE_WORK_NAME_PREFIX
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.time.Instant
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
 
 class ReminderDetailsViewModel(
     application: BaseApplication,
@@ -19,7 +15,6 @@ class ReminderDetailsViewModel(
 ) : ViewModel() {
 
     private val workManager = WorkManager.getInstance(application)
-    private val dateFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy")
 
     fun getReminder(id: Long): LiveData<Reminder> {
         return reminderDao.getReminder(id).asLiveData()
@@ -35,24 +30,6 @@ class ReminderDetailsViewModel(
     private fun cancelNotification(reminder: Reminder) {
         workManager.cancelUniqueWork(NOTIFICATION_UNIQUE_WORK_NAME_PREFIX + reminder.id)
     }
-
-    fun convertEpochToDate(epoch: Long): String {
-        return Instant.ofEpochSecond(epoch)
-            .atZone(ZoneId.systemDefault())
-            .format(dateFormatter)
-    }
-
-    fun convertEpochToTime(epoch: Long): String {
-        return getLocalDateTime(epoch).toLocalTime().toString()
-    }
-
-    private fun getLocalDateTime(epoch: Long): LocalDateTime {
-        return LocalDateTime.ofInstant(
-            Instant.ofEpochSecond(epoch),
-            ZoneId.systemDefault()
-        )
-    }
-
 }
 
 class ReminderDetailsViewModelFactory(

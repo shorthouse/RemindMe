@@ -35,7 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
-            app:formattedTime="@{reminder.startEpoch}"
+            android:text="@{reminder.startDateTime.toLocalTime().toString()}"
             app:layout_constraintTop_toBottomOf="@id/reminder_name"
             app:layout_constraintStart_toStartOf="parent"
             tools:text="21:49" />
@@ -46,7 +46,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
-            app:formattedDate="@{reminder.startEpoch}"
             app:layout_constraintStart_toEndOf="@+id/reminder_time"
             app:layout_constraintTop_toBottomOf="@+id/reminder_name"
             tools:text="2022-02-07" />

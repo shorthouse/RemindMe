@@ -6,9 +6,7 @@ import com.google.android.material.textview.MaterialTextView
 import dev.shorthouse.remindme.R
 import java.time.Duration
 import java.time.Instant
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
+import java.time.ZonedDateTime
 import java.util.*
 
 @BindingAdapter("app:showIfRepeatReminder")
@@ -26,34 +24,14 @@ fun showIfRepeatChecked(view: View, isRepeatChecked: Boolean) {
     view.visibility = if (isRepeatChecked) View.VISIBLE else View.GONE
 }
 
-@BindingAdapter("app:formattedTime")
-fun formattedTime(view: MaterialTextView, reminderStartEpoch: Long) {
-    view.text = LocalDateTime.ofInstant(
-        Instant.ofEpochSecond(reminderStartEpoch),
-        ZoneId.systemDefault()
-    )
-        .toLocalTime()
-        .toString()
-}
-
-@BindingAdapter("reminderStartEpoch", "reminderRepeatInterval")
-fun elapsedIntervals(view: MaterialTextView, startEpoch: Long, repeatInterval: Long?) {
+@BindingAdapter("reminderStartDateTime", "reminderRepeatInterval")
+fun elapsedIntervals(view: MaterialTextView, startDateTime: ZonedDateTime, repeatInterval: Long?) {
     if (repeatInterval == null) return
 
-    val timeStartEpochToNow = Instant.now().epochSecond.minus(startEpoch)
+    val timeStartEpochToNow = Instant.now().epochSecond.minus(startDateTime.toEpochSecond())
     val numElapsedIntervals = timeStartEpochToNow.div(repeatInterval).plus(1)
 
     if (numElapsedIntervals > 1) view.text = numElapsedIntervals.toString()
-}
-
-@BindingAdapter("app:formattedDate")
-fun formattedDate(view: MaterialTextView, reminderStartEpoch: Long) {
-    val dateFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy")
-
-    view.text = Instant.ofEpochSecond(reminderStartEpoch)
-        .atZone(ZoneId.systemDefault())
-        .format(dateFormatter)
-
 }
 
 @BindingAdapter("app:formattedRepeatInterval")

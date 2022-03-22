@@ -20,7 +20,6 @@ import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.databinding.FragmentAddEditReminderBinding
 import dev.shorthouse.remindme.viewmodel.AddEditReminderViewModelFactory
 import dev.shorthouse.remindme.viewmodel.AddReminderViewModel
-import java.time.Instant
 
 class AddEditReminderFragment : Fragment() {
 
@@ -88,12 +87,9 @@ class AddEditReminderFragment : Fragment() {
     private fun saveReminder() {
         val reminderName = binding.nameInput.text.toString()
 
-        val reminderStartEpoch = viewModel.calculateReminderStartEpoch(
-            getString(
-                R.string.format_date_time,
-                binding.startDateInput.text.toString(),
-                binding.startTimeInput.text.toString()
-            )
+        val reminderStartDateTime = viewModel.convertDateTimeStringToDateTime(
+            binding.startDateInput.text.toString(),
+            binding.startTimeInput.text.toString()
         )
 
         val reminderInterval = if (!binding.repeatSwitch.isChecked) {
@@ -120,7 +116,7 @@ class AddEditReminderFragment : Fragment() {
             viewModel.updateReminder(
                 navigationArgs.id,
                 reminderName,
-                reminderStartEpoch,
+                reminderStartDateTime,
                 reminderInterval,
                 reminderNotes,
                 isArchived,
@@ -129,7 +125,7 @@ class AddEditReminderFragment : Fragment() {
         } else {
             viewModel.addReminder(
                 reminderName,
-                reminderStartEpoch,
+                reminderStartDateTime,
                 reminderInterval,
                 reminderNotes,
                 isArchived,
@@ -152,7 +148,7 @@ class AddEditReminderFragment : Fragment() {
 
         datePicker.addOnPositiveButtonClickListener { dateTimestamp ->
             binding.startDateInput.setText(
-                viewModel.convertInstantToDateString(Instant.ofEpochMilli(dateTimestamp))
+                viewModel.convertTimestampToDateString(dateTimestamp)
             )
         }
 
@@ -204,9 +200,10 @@ class AddEditReminderFragment : Fragment() {
     private fun isDetailValid(): Boolean {
         val name = binding.nameInput.text.toString()
         val startDate = binding.startDateInput.text.toString()
-        val reminderTime = binding.startTimeInput.text.toString()
+        val startTime = binding.startTimeInput.text.toString()
+        val startDateTime = viewModel.convertDateTimeStringToDateTime(startDate, startTime)
 
-        val isDetailValid = viewModel.isDetailValid(name, startDate, reminderTime)
+        val isDetailValid = viewModel.isDetailValid(name, startDateTime)
 
         return if (isDetailValid) {
             isDetailValid

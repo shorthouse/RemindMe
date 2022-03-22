@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import dev.shorthouse.remindme.databinding.ListItemActiveReminderBinding
 import dev.shorthouse.remindme.model.Reminder
+import dev.shorthouse.remindme.utilities.DATE_PATTERN
+import java.time.format.DateTimeFormatter
 
 class ActiveReminderListAdapter(
     private val clickListener: ClickListener
@@ -19,6 +21,12 @@ class ActiveReminderListAdapter(
         fun bind(reminder: Reminder, clickListener: ClickListener) {
             binding.reminder = reminder
             binding.clickListener = clickListener
+
+            binding.reminderDate.text = reminder.startDateTime
+                .toLocalDate()
+                .format(DateTimeFormatter.ofPattern(DATE_PATTERN))
+                .toString()
+
             binding.executePendingBindings()
         }
     }
