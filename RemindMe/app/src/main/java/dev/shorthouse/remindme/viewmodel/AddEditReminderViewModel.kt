@@ -169,6 +169,10 @@ class AddReminderViewModel(
             Duration.ofDays(30).seconds -> R.id.radio_repeat_monthly
             else -> R.id.radio_repeat_yearly
         }
+
+        val test = LocalDateTime.of(2020, 03, 20, 13, 0)
+        test.plusMonths(1)
+        test.plusYears()
     }
 
     // TODO months should be just +1 to the month
