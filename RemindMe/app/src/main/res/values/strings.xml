@@ -60,5 +60,9 @@
     <string name="notification_reminder_description">Verbose WorkManager Notifications</string>
     <string name="notification_channel_id">VERBOSE_NOTIFICATION</string>
     <string name="notification_content_title">RemindMe to…</string>
+    <string name="radio_label_repeat_daily">Every day</string>
+    <string name="radio_label_repeat_weekly">Every week</string>
+    <string name="radio_label_repeat_monthly">Every month</string>
+    <string name="radio_label_repeat_yearly">Every year</string>
 
 </resources>

@@ -6,7 +6,8 @@ import dev.shorthouse.remindme.BaseApplication
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.data.ReminderDao
 import dev.shorthouse.remindme.model.Reminder
-import dev.shorthouse.remindme.utilities.*
+import dev.shorthouse.remindme.utilities.KEY_REMINDER_NAME
+import dev.shorthouse.remindme.utilities.NOTIFICATION_UNIQUE_WORK_NAME_PREFIX
 import dev.shorthouse.remindme.workers.ReminderNotificationWorker
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -159,26 +160,30 @@ class AddReminderViewModel(
         return if (reminder == null) false else reminder.repeatInterval != null
     }
 
-    // TODO change with interval to a single type changes
-    fun convertReminderIntervalToSeconds(years: Long, days: Long, hours: Long): Long {
-        return Duration.ofDays(years * DAYS_IN_YEAR).seconds +
-                Duration.ofDays(days).seconds +
-                Duration.ofHours(hours).seconds
+    fun getCheckedRadioButton(reminder: Reminder?): Int {
+        if (reminder == null) return R.id.radio_repeat_daily
+
+        return when (reminder.repeatInterval) {
+            Duration.ofDays(1).seconds -> R.id.radio_repeat_daily
+            Duration.ofDays(7).seconds -> R.id.radio_repeat_weekly
+            Duration.ofDays(30).seconds -> R.id.radio_repeat_monthly
+            else -> R.id.radio_repeat_yearly
+        }
+
+        val test = LocalDateTime.of(2020, 03, 20, 13, 0)
+        test.plusMonths(1)
+        test.plusYears()
     }
 
-    fun getRepeatIntervalYears(repeatInterval: Long?): String {
-        if (repeatInterval == null) return ""
-        return Duration.ofSeconds(repeatInterval).toYearPart().toString()
-    }
-
-    fun getRepeatIntervalDays(repeatInterval: Long?): String {
-        if (repeatInterval == null) return ""
-        return Duration.ofSeconds(repeatInterval).toDayPart().toString()
-    }
-
-    fun getRepeatIntervalHours(repeatInterval: Long?): String {
-        if (repeatInterval == null) return ""
-        return Duration.ofSeconds(repeatInterval).toHourPart().toString()
+    // TODO months should be just +1 to the month
+    // TODO year should be just +1 to the year
+    fun getReminderIntervalSeconds(timeUnit: ChronoUnit): Long {
+        return when (timeUnit) {
+            ChronoUnit.DAYS -> Duration.ofDays(1).seconds
+            ChronoUnit.WEEKS -> Duration.ofDays(7).seconds
+            ChronoUnit.MONTHS -> Duration.ofDays(30).seconds
+            else -> Duration.ofDays(365).seconds
+        }
     }
 
     fun isDetailValid(name: String, startDateTime: ZonedDateTime): Boolean {
@@ -193,26 +198,6 @@ class AddReminderViewModel(
         return when {
             name.isBlank() -> R.string.error_name_empty
             else -> R.string.error_time_past
-        }
-    }
-
-    fun isIntervalValid(isRepeatReminder: Boolean, years: Long, days: Long, hours: Long): Boolean {
-        return when {
-            !isRepeatReminder -> true
-            years > MAX_YEARS -> false
-            days > MAX_DAYS -> false
-            hours > MAX_HOURS -> false
-            years == 0L && days == 0L && hours == 0L -> false
-            else -> true
-        }
-    }
-
-    fun getIntervalError(years: Long, days: Long, hours: Long): Int {
-        return when {
-            years > MAX_YEARS -> R.string.error_years_max
-            days > MAX_DAYS -> R.string.error_days_max
-            hours > MAX_HOURS -> R.string.error_hours_max
-            else -> R.string.error_interval_zero
         }
     }
 }

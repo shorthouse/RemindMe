@@ -20,6 +20,7 @@ import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.databinding.FragmentAddEditReminderBinding
 import dev.shorthouse.remindme.viewmodel.AddEditReminderViewModelFactory
 import dev.shorthouse.remindme.viewmodel.AddReminderViewModel
+import java.time.temporal.ChronoUnit
 
 class AddEditReminderFragment : Fragment() {
 
@@ -76,7 +77,7 @@ class AddEditReminderFragment : Fragment() {
         menu.findItem(R.id.action_done).actionView
             .findViewById<MaterialButton>(R.id.save_reminder)
             .setOnClickListener {
-                if (isValidEntry()) {
+                if (isDetailValid()) {
                     saveReminder()
                     hideKeyboard()
                     navigateUp()
@@ -95,11 +96,12 @@ class AddEditReminderFragment : Fragment() {
         val reminderInterval = if (!binding.repeatSwitch.isChecked) {
             null
         } else {
-            viewModel.convertReminderIntervalToSeconds(
-                binding.yearsInput.text.toString().toLongOrZero(),
-                binding.daysInput.text.toString().toLongOrZero(),
-                binding.hoursInput.text.toString().toLongOrZero(),
-            )
+            when (binding.radioRepeatGroup.checkedRadioButtonId) {
+                R.id.radio_repeat_daily -> viewModel.getReminderIntervalSeconds(ChronoUnit.DAYS)
+                R.id.radio_repeat_weekly -> viewModel.getReminderIntervalSeconds(ChronoUnit.WEEKS)
+                R.id.radio_repeat_monthly -> viewModel.getReminderIntervalSeconds(ChronoUnit.MONTHS)
+                else -> viewModel.getReminderIntervalSeconds(ChronoUnit.YEARS)
+            }
         }
 
         val reminderNotes = if (binding.notesInput.text.isNullOrBlank()) {
@@ -132,7 +134,6 @@ class AddEditReminderFragment : Fragment() {
                 isNotificationSent
             )
         }
-
     }
 
     fun displayDatePicker() {
@@ -193,10 +194,6 @@ class AddEditReminderFragment : Fragment() {
         findNavController().navigateUp()
     }
 
-    private fun isValidEntry(): Boolean {
-        return isDetailValid() && isIntervalValid()
-    }
-
     private fun isDetailValid(): Boolean {
         val name = binding.nameInput.text.toString()
         val startDate = binding.startDateInput.text.toString()
@@ -213,35 +210,11 @@ class AddEditReminderFragment : Fragment() {
         }
     }
 
-    private fun isIntervalValid(): Boolean {
-        val years = binding.yearsInput.text.toString().toLongOrZero()
-        val days = binding.daysInput.text.toString().toLongOrZero()
-        val hours = binding.hoursInput.text.toString().toLongOrZero()
-
-        val isIntervalValid = viewModel.isIntervalValid(
-            binding.repeatSwitch.isChecked,
-            years,
-            days,
-            hours
-        )
-
-        return if (isIntervalValid) {
-            isIntervalValid
-        } else {
-            makeShortToast(viewModel.getIntervalError(years, days, hours))
-            isIntervalValid
-        }
-    }
-
     private fun makeShortToast(stringResId: Int) {
         Toast.makeText(
             context,
             getString(stringResId),
             Toast.LENGTH_SHORT
         ).show()
-    }
-
-    private fun String.toLongOrZero(): Long {
-        return if (this.isBlank()) 0L else this.toLong()
     }
 }
