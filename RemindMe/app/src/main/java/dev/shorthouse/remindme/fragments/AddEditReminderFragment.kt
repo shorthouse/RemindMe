@@ -93,14 +93,14 @@ class AddEditReminderFragment : Fragment() {
             binding.startTimeInput.text.toString()
         )
 
-        val reminderInterval = if (!binding.repeatSwitch.isChecked) {
+        val repeatInterval = if (!binding.repeatSwitch.isChecked) {
             null
         } else {
             when (binding.radioRepeatGroup.checkedRadioButtonId) {
-                R.id.radio_repeat_daily -> viewModel.getReminderIntervalSeconds(ChronoUnit.DAYS)
-                R.id.radio_repeat_weekly -> viewModel.getReminderIntervalSeconds(ChronoUnit.WEEKS)
-                R.id.radio_repeat_monthly -> viewModel.getReminderIntervalSeconds(ChronoUnit.MONTHS)
-                else -> viewModel.getReminderIntervalSeconds(ChronoUnit.YEARS)
+                R.id.radio_repeat_daily -> Pair(1, ChronoUnit.DAYS)
+                R.id.radio_repeat_weekly -> Pair(1, ChronoUnit.WEEKS)
+                R.id.radio_repeat_monthly -> Pair(1, ChronoUnit.MONTHS)
+                else -> Pair(1, ChronoUnit.YEARS)
             }
         }
 
@@ -119,7 +119,7 @@ class AddEditReminderFragment : Fragment() {
                 navigationArgs.id,
                 reminderName,
                 reminderStartDateTime,
-                reminderInterval,
+                repeatInterval,
                 reminderNotes,
                 isArchived,
                 isNotificationSent
@@ -128,7 +128,7 @@ class AddEditReminderFragment : Fragment() {
             viewModel.addReminder(
                 reminderName,
                 reminderStartDateTime,
-                reminderInterval,
+                repeatInterval,
                 reminderNotes,
                 isArchived,
                 isNotificationSent

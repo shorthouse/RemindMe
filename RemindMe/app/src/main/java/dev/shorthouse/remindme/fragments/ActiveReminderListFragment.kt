@@ -15,6 +15,7 @@ import dev.shorthouse.remindme.databinding.FragmentActiveReminderListBinding
 import dev.shorthouse.remindme.viewmodel.ActiveReminderListViewModel
 import dev.shorthouse.remindme.viewmodel.ActiveReminderListViewModelFactory
 import java.time.ZonedDateTime
+import java.time.temporal.ChronoUnit
 
 class ActiveReminderListFragment : Fragment() {
     private lateinit var binding: FragmentActiveReminderListBinding
@@ -90,7 +91,7 @@ class ActiveReminderListFragment : Fragment() {
         id: Long,
         name: String,
         startDateTime: ZonedDateTime,
-        repeatInterval: Long?,
+        repeatInterval: Pair<Int, ChronoUnit>?,
         notes: String?,
         isNotificationSent: Boolean,
     ) {

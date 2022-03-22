@@ -4,16 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
-        <variable
-            name="viewmodel"
-            type="dev.shorthouse.remindme.viewmodel.ReminderDetailsViewModel" />
-
         <variable
             name="reminder"
             type="dev.shorthouse.remindme.model.Reminder" />
-
-        <import type="android.view.View" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

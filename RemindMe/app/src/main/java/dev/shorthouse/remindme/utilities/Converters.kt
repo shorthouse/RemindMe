@@ -21,7 +21,5 @@ class Converters {
         fun dateToEpochSecond(dateTime: ZonedDateTime): Long {
             return dateTime.toEpochSecond()
         }
-
-
     }
 }
