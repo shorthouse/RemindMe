@@ -4,9 +4,12 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import dev.shorthouse.remindme.model.Reminder
+import dev.shorthouse.remindme.utilities.Converters
 
 @Database(version = 2, exportSchema = false, entities = [Reminder::class])
+@TypeConverters(Converters::class)
 abstract class ReminderDatabase : RoomDatabase() {
     abstract fun reminderDao(): ReminderDao
 
