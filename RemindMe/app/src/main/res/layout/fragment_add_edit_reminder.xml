@@ -162,7 +162,7 @@
                 tools:checked="true" />
 
             <RadioGroup
-                android:id="@+id/radio_group"
+                android:id="@+id/radio_repeat_group"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
