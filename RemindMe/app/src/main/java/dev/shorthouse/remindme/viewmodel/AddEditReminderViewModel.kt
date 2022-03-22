@@ -177,21 +177,6 @@ class AddReminderViewModel(
                 Duration.ofHours(hours).seconds
     }
 
-    fun getRepeatIntervalYears(repeatInterval: Long?): String {
-        if (repeatInterval == null) return ""
-        return Duration.ofSeconds(repeatInterval).toYearPart().toString()
-    }
-
-    fun getRepeatIntervalDays(repeatInterval: Long?): String {
-        if (repeatInterval == null) return ""
-        return Duration.ofSeconds(repeatInterval).toDayPart().toString()
-    }
-
-    fun getRepeatIntervalHours(repeatInterval: Long?): String {
-        if (repeatInterval == null) return ""
-        return Duration.ofSeconds(repeatInterval).toHourPart().toString()
-    }
-
     fun isDetailValid(name: String, startDateTime: ZonedDateTime): Boolean {
         return when {
             name.isBlank() -> false
