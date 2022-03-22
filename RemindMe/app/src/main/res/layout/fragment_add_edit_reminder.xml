@@ -161,56 +161,6 @@
                 app:layout_constraintTop_toTopOf="@+id/repeat_header"
                 tools:checked="true" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/years_label"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="4dp"
-                android:hint="@string/hint_reminder_year"
-                app:layout_constraintEnd_toStartOf="@+id/days_label"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintHorizontal_chainStyle="packed"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/interval_header"
-                app:showIfRepeatChecked="@{repeatSwitch.checked}" >
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/years_input"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text='@{viewmodel.getRepeatIntervalYears(reminder.repeatInterval)}'
-                    android:inputType="number"
-                    android:imeOptions="actionNext"
-                    tools:text="0" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/days_label"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="4dp"
-                android:hint="@string/hint_reminder_day"
-                app:layout_constraintEnd_toStartOf="@+id/hours_label"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/years_label"
-                app:layout_constraintTop_toBottomOf="@+id/interval_header"
-                app:showIfRepeatChecked="@{repeatSwitch.checked}" >
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/days_input"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:inputType="number"
-                    android:text='@{viewmodel.getRepeatIntervalDays(reminder.repeatInterval)}'
-                    android:imeOptions="actionNext"
-                    tools:text="4" />
-            </com.google.android.material.textfield.TextInputLayout>
-
             <RadioGroup
                 android:id="@+id/radio_group"
                 android:layout_width="match_parent"
@@ -245,31 +195,6 @@
                     android:layout_height="match_parent"
                     android:text="@string/radio_label_repeat_yearly" />
             </RadioGroup>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/hours_label"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:layout_marginTop="16dp"
-                android:hint="@string/hint_reminder_hour"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintHorizontal_chainStyle="spread_inside"
-                app:layout_constraintStart_toEndOf="@+id/days_label"
-                app:layout_constraintTop_toBottomOf="@+id/interval_header"
-                app:showIfRepeatChecked="@{repeatSwitch.checked}" >
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/hours_input"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:inputType="number"
-                    android:text='@{viewmodel.getRepeatIntervalHours(reminder.repeatInterval)}'
-                    tools:text="0" />
-            </com.google.android.material.textfield.TextInputLayout>
-
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 </layout>
