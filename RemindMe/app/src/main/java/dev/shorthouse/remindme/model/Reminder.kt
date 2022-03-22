@@ -2,6 +2,7 @@ package dev.shorthouse.remindme.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.time.ZonedDateTime
 
 @Entity
 data class Reminder(
@@ -10,7 +11,7 @@ data class Reminder(
 
     val name: String,
 
-    val startEpoch: Long,
+    val startDateTime: ZonedDateTime,
 
     val repeatInterval: Long?,
 
