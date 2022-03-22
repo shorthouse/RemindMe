@@ -170,13 +170,6 @@ class AddReminderViewModel(
         }
     }
 
-    // TODO change with interval to a single type changes
-    fun convertReminderIntervalToSeconds(years: Long, days: Long, hours: Long): Long {
-        return Duration.ofDays(years * DAYS_IN_YEAR).seconds +
-                Duration.ofDays(days).seconds +
-                Duration.ofHours(hours).seconds
-    }
-
     fun isDetailValid(name: String, startDateTime: ZonedDateTime): Boolean {
         return when {
             name.isBlank() -> false
