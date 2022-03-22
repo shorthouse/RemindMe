@@ -6,19 +6,20 @@ import dev.shorthouse.remindme.model.Reminder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.Instant
+import java.time.ZonedDateTime
 
 class ActiveReminderListViewModel(
     private val reminderDao: ReminderDao
 ) : ViewModel() {
 
     fun getActiveReminders(): LiveData<List<Reminder>> {
-        return reminderDao.getActiveNonArchivedReminders(Instant.now().epochSecond).asLiveData()
+        return reminderDao.getActiveNonArchivedReminders(ZonedDateTime.now()).asLiveData()
     }
 
     fun updateDoneReminder(
         id: Long,
         name: String,
-        startEpoch: Long,
+        startDateTime: ZonedDateTime,
         repeatInterval: Long?,
         notes: String?,
         isNotificationSent: Boolean,
@@ -27,7 +28,7 @@ class ActiveReminderListViewModel(
             null -> updateDoneSingleReminder(
                 id,
                 name,
-                startEpoch,
+                startDateTime,
                 repeatInterval,
                 notes,
                 isNotificationSent,
@@ -35,7 +36,7 @@ class ActiveReminderListViewModel(
             else -> updateDoneRepeatReminder(
                 id,
                 name,
-                startEpoch,
+                startDateTime,
                 repeatInterval,
                 notes,
                 isNotificationSent,
@@ -46,7 +47,7 @@ class ActiveReminderListViewModel(
     private fun updateDoneSingleReminder(
         id: Long,
         name: String,
-        startEpoch: Long,
+        startDateTime: ZonedDateTime,
         repeatInterval: Long?,
         notes: String?,
         isNotificationSent: Boolean,
@@ -54,7 +55,7 @@ class ActiveReminderListViewModel(
         val reminder = Reminder(
             id = id,
             name = name,
-            startEpoch = startEpoch,
+            startDateTime = startDateTime,
             repeatInterval = repeatInterval,
             notes = notes,
             isArchived = true,
@@ -69,7 +70,7 @@ class ActiveReminderListViewModel(
     private fun updateDoneRepeatReminder(
         id: Long,
         name: String,
-        startEpoch: Long,
+        startDateTime: ZonedDateTime,
         repeatInterval: Long,
         notes: String?,
         isNotificationSent: Boolean,
@@ -77,7 +78,7 @@ class ActiveReminderListViewModel(
         val reminder = Reminder(
             id = id,
             name = name,
-            startEpoch = getUpdatedStartEpoch(startEpoch, repeatInterval),
+            startDateTime = getUpdatedStartDateTime(startDateTime, repeatInterval),
             repeatInterval = repeatInterval,
             notes = notes,
             isArchived = false,
@@ -89,12 +90,20 @@ class ActiveReminderListViewModel(
         }
     }
 
-    private fun getUpdatedStartEpoch(startEpoch: Long, repeatInterval: Long): Long {
-        val timeStartEpochToNow = Instant.now().epochSecond.minus(startEpoch)
-        val numElapsedIntervals = timeStartEpochToNow.div(repeatInterval)
-        val nextInterval = numElapsedIntervals.plus(1)
-        val timeStartEpochToNextInterval = nextInterval.times(repeatInterval)
-        return startEpoch.plus(timeStartEpochToNextInterval)
+    private fun getUpdatedStartDateTime(
+        startDateTime: ZonedDateTime,
+        repeatInterval: Long
+    ): ZonedDateTime {
+        val numElapsedIntervals = Instant.now().epochSecond
+            .minus(startDateTime.toEpochSecond())
+            .div(repeatInterval)
+
+        val oneInterval = 1
+        val secondsToNextInterval = numElapsedIntervals
+            .plus(oneInterval)
+            .times(repeatInterval)
+
+        return startDateTime.plusSeconds(secondsToNextInterval)
     }
 }
 

@@ -1,6 +1,5 @@
 package dev.shorthouse.remindme.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.*
 import androidx.work.*
 import dev.shorthouse.remindme.BaseApplication
@@ -11,10 +10,7 @@ import dev.shorthouse.remindme.utilities.*
 import dev.shorthouse.remindme.workers.ReminderNotificationWorker
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.time.Duration
-import java.time.Instant
-import java.time.LocalDateTime
-import java.time.ZoneId
+import java.time.*
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
@@ -29,7 +25,7 @@ class AddReminderViewModel(
 
     fun addReminder(
         name: String,
-        startEpoch: Long,
+        startDateTime: ZonedDateTime,
         reminderInterval: Long?,
         notes: String?,
         isArchived: Boolean,
@@ -37,7 +33,7 @@ class AddReminderViewModel(
     ) {
         val reminder = Reminder(
             name = name,
-            startEpoch = startEpoch,
+            startDateTime = startDateTime,
             repeatInterval = reminderInterval,
             notes = notes,
             isArchived = isArchived,
@@ -53,7 +49,7 @@ class AddReminderViewModel(
     fun updateReminder(
         id: Long,
         name: String,
-        startEpoch: Long,
+        startDateTime: ZonedDateTime,
         reminderInterval: Long?,
         notes: String?,
         isArchived: Boolean,
@@ -62,7 +58,7 @@ class AddReminderViewModel(
         val reminder = Reminder(
             id = id,
             name = name,
-            startEpoch = startEpoch,
+            startDateTime = startDateTime,
             repeatInterval = reminderInterval,
             notes = notes,
             isArchived = isArchived,
@@ -99,14 +95,14 @@ class AddReminderViewModel(
         return PeriodicWorkRequestBuilder<ReminderNotificationWorker>(
             Duration.ofSeconds(reminder.repeatInterval!!)
         )
-            .setInitialDelay(getDurationUntilReminder(reminder))
+            .setInitialDelay(getDurationUntilReminder(reminder.startDateTime))
             .setInputData(createInputData(reminder))
             .build()
     }
 
     private fun getOneTimeNotificationWorker(reminder: Reminder): OneTimeWorkRequest {
         return OneTimeWorkRequestBuilder<ReminderNotificationWorker>()
-            .setInitialDelay(getDurationUntilReminder(reminder))
+            .setInitialDelay(getDurationUntilReminder(reminder.startDateTime))
             .setInputData(createInputData(reminder))
             .build()
     }
@@ -117,32 +113,31 @@ class AddReminderViewModel(
             .build()
     }
 
-    private fun getDurationUntilReminder(reminder: Reminder): Duration {
-        return Duration.ofMillis(
-            Instant.ofEpochSecond(reminder.startEpoch)
-                .minusMillis(Instant.now().toEpochMilli())
-                .toEpochMilli()
+    private fun getDurationUntilReminder(startDateTime: ZonedDateTime): Duration {
+        return Duration.ofSeconds(
+            startDateTime
+                .minusSeconds(Instant.now().epochSecond)
+                .toEpochSecond()
         )
     }
 
-    private fun convertStringToDateTime(dateTimeText: String): LocalDateTime {
-        return LocalDateTime.parse(dateTimeText, dateTimeFormatter)
-    }
-
-    fun calculateReminderStartEpoch(dateTimeText: String): Long {
-        val reminderDateTime = convertStringToDateTime(dateTimeText)
-        return reminderDateTime.atZone(ZoneId.systemDefault()).toEpochSecond()
+    fun convertDateTimeStringToDateTime(dateText: String, timeText: String): ZonedDateTime {
+        return LocalDateTime.parse(
+            "$dateText $timeText",
+            dateTimeFormatter
+        )
+            .atZone(ZoneId.systemDefault())
     }
 
     fun getStartDate(reminder: Reminder?): String {
         return when (reminder) {
-            null -> convertInstantToDateString(Instant.now())
-            else -> convertInstantToDateString(Instant.ofEpochSecond(reminder.startEpoch))
+            null -> ZonedDateTime.now().toLocalDate().format(dateFormatter).toString()
+            else -> reminder.startDateTime.toLocalDate().format(dateFormatter).toString()
         }
     }
 
-    fun convertInstantToDateString(instant: Instant): String {
-        return instant
+    fun convertTimestampToDateString(dateTimestamp: Long): String {
+        return Instant.ofEpochMilli(dateTimestamp)
             .atZone(ZoneId.systemDefault())
             .format(dateFormatter)
     }
@@ -150,35 +145,25 @@ class AddReminderViewModel(
     fun getStartTime(reminder: Reminder?): String {
         return when (reminder) {
             null -> getCurrentTimeNextHour()
-            else -> convertEpochToTime(reminder.startEpoch)
+            else -> reminder.startDateTime.toLocalTime().toString()
         }
+    }
+
+    private fun getCurrentTimeNextHour(): String {
+        return ZonedDateTime.now()
+            .truncatedTo(ChronoUnit.HOURS).plusHours(1)
+            .toLocalTime().toString()
     }
 
     fun getIsRepeatChecked(reminder: Reminder?): Boolean {
         return if (reminder == null) false else reminder.repeatInterval != null
     }
 
+    // TODO change with interval to a single type changes
     fun convertReminderIntervalToSeconds(years: Long, days: Long, hours: Long): Long {
         return Duration.ofDays(years * DAYS_IN_YEAR).seconds +
                 Duration.ofDays(days).seconds +
                 Duration.ofHours(hours).seconds
-    }
-
-    private fun convertEpochToTime(epoch: Long): String {
-        return LocalDateTime.ofInstant(
-            Instant.ofEpochSecond(epoch),
-            ZoneId.systemDefault()
-        )
-            .toLocalTime().toString()
-    }
-
-    private fun getCurrentTimeNextHour(): String {
-        return LocalDateTime.ofInstant(
-            Instant.now(),
-            ZoneId.systemDefault()
-        )
-            .truncatedTo(ChronoUnit.HOURS).plusHours(1)
-            .toLocalTime().toString()
     }
 
     fun getRepeatIntervalYears(repeatInterval: Long?): String {
@@ -196,11 +181,10 @@ class AddReminderViewModel(
         return Duration.ofSeconds(repeatInterval).toHourPart().toString()
     }
 
-    fun isDetailValid(name: String, startDate: String, reminderTime: String): Boolean {
+    fun isDetailValid(name: String, startDateTime: ZonedDateTime): Boolean {
         return when {
             name.isBlank() -> false
-            convertStringToDateTime("$startDate $reminderTime")
-                .isBefore(LocalDateTime.now()) -> false
+            startDateTime.isBefore(ZonedDateTime.now()) -> false
             else -> true
         }
     }

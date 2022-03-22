@@ -14,6 +14,7 @@ import dev.shorthouse.remindme.adapter.ActiveReminderListAdapter
 import dev.shorthouse.remindme.databinding.FragmentActiveReminderListBinding
 import dev.shorthouse.remindme.viewmodel.ActiveReminderListViewModel
 import dev.shorthouse.remindme.viewmodel.ActiveReminderListViewModelFactory
+import java.time.ZonedDateTime
 
 class ActiveReminderListFragment : Fragment() {
     private lateinit var binding: FragmentActiveReminderListBinding
@@ -75,7 +76,7 @@ class ActiveReminderListFragment : Fragment() {
                     updateDoneReminder(
                         reminder.id,
                         reminder.name,
-                        reminder.startEpoch,
+                        reminder.startDateTime,
                         reminder.repeatInterval,
                         reminder.notes,
                         reminder.isNotificationSent,
@@ -88,7 +89,7 @@ class ActiveReminderListFragment : Fragment() {
     private fun updateDoneReminder(
         id: Long,
         name: String,
-        startEpoch: Long,
+        startDateTime: ZonedDateTime,
         repeatInterval: Long?,
         notes: String?,
         isNotificationSent: Boolean,
@@ -96,7 +97,7 @@ class ActiveReminderListFragment : Fragment() {
         viewModel.updateDoneReminder(
             id,
             name,
-            startEpoch,
+            startDateTime,
             repeatInterval,
             notes,
             isNotificationSent,
