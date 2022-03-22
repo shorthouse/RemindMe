@@ -159,6 +159,17 @@ class AddReminderViewModel(
         return if (reminder == null) false else reminder.repeatInterval != null
     }
 
+    // TODO months should be just +1 to the month
+    // TODO year should be just +1 to the year
+    fun getReminderIntervalSeconds(timeUnit: ChronoUnit): Long {
+        return when (timeUnit) {
+            ChronoUnit.DAYS -> Duration.ofDays(1).seconds
+            ChronoUnit.WEEKS -> Duration.ofDays(7).seconds
+            ChronoUnit.MONTHS -> Duration.ofDays(30).seconds
+            else -> Duration.ofDays(365).seconds
+        }
+    }
+
     // TODO change with interval to a single type changes
     fun convertReminderIntervalToSeconds(years: Long, days: Long, hours: Long): Long {
         return Duration.ofDays(years * DAYS_IN_YEAR).seconds +
