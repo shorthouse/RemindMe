@@ -161,20 +161,6 @@
                 app:layout_constraintTop_toTopOf="@+id/repeat_header"
                 tools:checked="true" />
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/interval_header"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/title_reminder_interval"
-                android:textColor="@android:color/black"
-                android:textSize="20sp"
-                android:visibility="gone"
-                app:showIfRepeatChecked="@{repeatSwitch.checked}"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/repeat_header" />
-
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/years_label"
                 android:layout_width="0dp"
@@ -224,6 +210,41 @@
                     android:imeOptions="actionNext"
                     tools:text="4" />
             </com.google.android.material.textfield.TextInputLayout>
+
+            <RadioGroup
+                android:id="@+id/radio_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/repeat_header"
+                app:showIfRepeatChecked="@{repeatSwitch.checked}">
+
+                <RadioButton
+                    android:id="@+id/radio_repeat_daily"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/radio_label_repeat_daily" />
+
+                <RadioButton
+                    android:id="@+id/radio_repeat_weekly"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/radio_label_repeat_weekly" />
+
+                <RadioButton
+                    android:id="@+id/radio_repeat_monthly"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/radio_label_repeat_monthly" />
+
+                <RadioButton
+                    android:id="@+id/radio_repeat_yearly"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/radio_label_repeat_yearly" />
+            </RadioGroup>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/hours_label"
