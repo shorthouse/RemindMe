@@ -6,7 +6,8 @@ import dev.shorthouse.remindme.BaseApplication
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.data.ReminderDao
 import dev.shorthouse.remindme.model.Reminder
-import dev.shorthouse.remindme.utilities.*
+import dev.shorthouse.remindme.utilities.KEY_REMINDER_NAME
+import dev.shorthouse.remindme.utilities.NOTIFICATION_UNIQUE_WORK_NAME_PREFIX
 import dev.shorthouse.remindme.workers.ReminderNotificationWorker
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -182,26 +183,6 @@ class AddReminderViewModel(
         return when {
             name.isBlank() -> R.string.error_name_empty
             else -> R.string.error_time_past
-        }
-    }
-
-    fun isIntervalValid(isRepeatReminder: Boolean, years: Long, days: Long, hours: Long): Boolean {
-        return when {
-            !isRepeatReminder -> true
-            years > MAX_YEARS -> false
-            days > MAX_DAYS -> false
-            hours > MAX_HOURS -> false
-            years == 0L && days == 0L && hours == 0L -> false
-            else -> true
-        }
-    }
-
-    fun getIntervalError(years: Long, days: Long, hours: Long): Int {
-        return when {
-            years > MAX_YEARS -> R.string.error_years_max
-            days > MAX_DAYS -> R.string.error_days_max
-            hours > MAX_HOURS -> R.string.error_hours_max
-            else -> R.string.error_interval_zero
         }
     }
 }
