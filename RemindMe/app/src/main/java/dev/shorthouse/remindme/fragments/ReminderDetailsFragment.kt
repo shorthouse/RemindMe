@@ -39,7 +39,6 @@ class ReminderDetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentReminderDetailsBinding.inflate(inflater, container, false)
-        binding.viewmodel = viewModel
         return binding.root
     }
 
@@ -63,8 +62,6 @@ class ReminderDetailsFragment : Fragment() {
                     .actionReminderDetailsToAddEditReminder(navigationArgs.id)
                 findNavController().navigate(action)
             }
-
-
         }
     }
 

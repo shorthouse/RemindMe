@@ -37,17 +37,13 @@
     <string name="cd_icon_repeat">Repeat icon</string>
     <string name="cd_icon_notes">Notes icon</string>
 
-    <plurals name="interval_years">
-        <item quantity="one">%d year</item>
-        <item quantity="other">%d years</item>
-    </plurals>
     <plurals name="interval_days">
         <item quantity="one">%d day</item>
         <item quantity="other">%d days</item>
     </plurals>
-    <plurals name="interval_hours">
-        <item quantity="one">%d hour</item>
-        <item quantity="other">%d hours</item>
+    <plurals name="interval_weeks">
+        <item quantity="one">%d week</item>
+        <item quantity="other">%d weeks</item>
     </plurals>
 
     <string name="cd_button_edit_reminder">Edit reminder</string>
@@ -64,5 +60,9 @@
     <string name="radio_label_repeat_weekly">Every week</string>
     <string name="radio_label_repeat_monthly">Every month</string>
     <string name="radio_label_repeat_yearly">Every year</string>
+    <string name="repeat_interval_day">day</string>
+    <string name="repeat_interval_week">week</string>
+    <string name="title_repeats_every">Repeats every</string>
+    <string name="interval_dropdown_default_value">day</string>
 
 </resources>

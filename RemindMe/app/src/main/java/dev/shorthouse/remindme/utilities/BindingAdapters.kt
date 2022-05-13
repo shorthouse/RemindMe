@@ -4,13 +4,12 @@ import android.view.View
 import androidx.databinding.BindingAdapter
 import com.google.android.material.textview.MaterialTextView
 import dev.shorthouse.remindme.R
-import java.time.Duration
 import java.time.Instant
 import java.time.ZonedDateTime
-import java.util.*
+import java.time.temporal.ChronoUnit
 
 @BindingAdapter("app:showIfRepeatReminder")
-fun showIfRepeatReminder(view: View, repeatInterval: Long?) {
+fun showIfRepeatReminder(view: View, repeatInterval: Pair<Int, ChronoUnit>?) {
     view.visibility = if (repeatInterval != null) View.VISIBLE else View.GONE
 }
 
@@ -35,47 +34,18 @@ fun elapsedIntervals(view: MaterialTextView, startDateTime: ZonedDateTime, repea
 }
 
 @BindingAdapter("app:formattedRepeatInterval")
-fun formatRepeatInterval(view: MaterialTextView, repeatInterval: Long?) {
+fun formatRepeatInterval(view: MaterialTextView, repeatInterval: Pair<Int, ChronoUnit>?) {
     if (repeatInterval == null) return
 
-    val period = Duration.ofSeconds(repeatInterval)
-    val totalDays = period.toDays()
+    val timeValue = repeatInterval.first
+    val timeUnit = repeatInterval.second
 
-    val years = totalDays.div(DAYS_IN_YEAR)
-    val days = totalDays.mod(DAYS_IN_YEAR)
-    val hours = period.minusDays(totalDays).toHours()
-
-    val formattedRepeatInterval = StringJoiner(", ")
-
-    if (years > 0) {
-        formattedRepeatInterval.add(
-            view.resources.getQuantityString(
-                R.plurals.interval_years,
-                years.toInt(),
-                years
-            )
-        )
+    when (timeUnit) {
+        ChronoUnit.DAYS -> view.text =
+            view.resources.getQuantityString(R.plurals.interval_days, timeValue, timeValue)
+        else -> view.text =
+            view.resources.getQuantityString(R.plurals.interval_weeks, timeValue, timeValue)
     }
-    if (days > 0) {
-        formattedRepeatInterval.add(
-            view.resources.getQuantityString(
-                R.plurals.interval_days,
-                days,
-                days
-            )
-        )
-    }
-    if (hours > 0) {
-        formattedRepeatInterval.add(
-            view.resources.getQuantityString(
-                R.plurals.interval_hours,
-                hours.toInt(),
-                hours
-            )
-        )
-    }
-
-    view.text = formattedRepeatInterval.toString()
 }
 
 

@@ -6,6 +6,7 @@ import dev.shorthouse.remindme.BaseApplication
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.data.ReminderDao
 import dev.shorthouse.remindme.model.Reminder
+import dev.shorthouse.remindme.utilities.DAYS_IN_WEEK
 import dev.shorthouse.remindme.utilities.KEY_REMINDER_NAME
 import dev.shorthouse.remindme.utilities.NOTIFICATION_UNIQUE_WORK_NAME_PREFIX
 import dev.shorthouse.remindme.workers.ReminderNotificationWorker
@@ -24,10 +25,14 @@ class AddReminderViewModel(
     private val dateFormatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy")
     private val dateTimeFormatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm")
 
+    fun getReminder(id: Long): LiveData<Reminder> {
+        return reminderDao.getReminder(id).asLiveData()
+    }
+
     fun addReminder(
         name: String,
         startDateTime: ZonedDateTime,
-        reminderInterval: Long?,
+        repeatInterval: Pair<Int, ChronoUnit>?,
         notes: String?,
         isArchived: Boolean,
         isNotificationSent: Boolean
@@ -35,7 +40,7 @@ class AddReminderViewModel(
         val reminder = Reminder(
             name = name,
             startDateTime = startDateTime,
-            repeatInterval = reminderInterval,
+            repeatInterval = repeatInterval,
             notes = notes,
             isArchived = isArchived,
             isNotificationSent = isNotificationSent
@@ -51,7 +56,7 @@ class AddReminderViewModel(
         id: Long,
         name: String,
         startDateTime: ZonedDateTime,
-        reminderInterval: Long?,
+        repeatInterval: Pair<Int, ChronoUnit>?,
         notes: String?,
         isArchived: Boolean,
         isNotificationSent: Boolean
@@ -60,7 +65,7 @@ class AddReminderViewModel(
             id = id,
             name = name,
             startDateTime = startDateTime,
-            repeatInterval = reminderInterval,
+            repeatInterval = repeatInterval,
             notes = notes,
             isArchived = isArchived,
             isNotificationSent = isNotificationSent
@@ -70,10 +75,6 @@ class AddReminderViewModel(
             reminderDao.update(reminder)
             if (isNotificationSent) scheduleNotification(id, reminder)
         }
-    }
-
-    fun getReminder(id: Long): LiveData<Reminder> {
-        return reminderDao.getReminder(id).asLiveData()
     }
 
     private fun scheduleNotification(reminderId: Long, reminder: Reminder) {
@@ -94,11 +95,21 @@ class AddReminderViewModel(
 
     private fun getRepeatNotificationWorker(reminder: Reminder): PeriodicWorkRequest {
         return PeriodicWorkRequestBuilder<ReminderNotificationWorker>(
-            Duration.ofSeconds(reminder.repeatInterval!!)
+            getPeriodicDuration(reminder.repeatInterval!!)
         )
             .setInitialDelay(getDurationUntilReminder(reminder.startDateTime))
             .setInputData(createInputData(reminder))
             .build()
+    }
+
+    private fun getPeriodicDuration(repeatInterval: Pair<Int, ChronoUnit>): Duration {
+        val intervalTimeValue = repeatInterval.first
+        val intervalTimeUnit = repeatInterval.second
+
+        return when (intervalTimeUnit) {
+            ChronoUnit.DAYS -> Duration.ofDays(intervalTimeValue.toLong())
+            else -> Duration.ofDays(intervalTimeValue.toLong() * DAYS_IN_WEEK)
+        }
     }
 
     private fun getOneTimeNotificationWorker(reminder: Reminder): OneTimeWorkRequest {
@@ -158,32 +169,6 @@ class AddReminderViewModel(
 
     fun getIsRepeatChecked(reminder: Reminder?): Boolean {
         return if (reminder == null) false else reminder.repeatInterval != null
-    }
-
-    fun getCheckedRadioButton(reminder: Reminder?): Int {
-        if (reminder == null) return R.id.radio_repeat_daily
-
-        return when (reminder.repeatInterval) {
-            Duration.ofDays(1).seconds -> R.id.radio_repeat_daily
-            Duration.ofDays(7).seconds -> R.id.radio_repeat_weekly
-            Duration.ofDays(30).seconds -> R.id.radio_repeat_monthly
-            else -> R.id.radio_repeat_yearly
-        }
-
-        val test = LocalDateTime.of(2020, 03, 20, 13, 0)
-        test.plusMonths(1)
-        test.plusYears()
-    }
-
-    // TODO months should be just +1 to the month
-    // TODO year should be just +1 to the year
-    fun getReminderIntervalSeconds(timeUnit: ChronoUnit): Long {
-        return when (timeUnit) {
-            ChronoUnit.DAYS -> Duration.ofDays(1).seconds
-            ChronoUnit.WEEKS -> Duration.ofDays(7).seconds
-            ChronoUnit.MONTHS -> Duration.ofDays(30).seconds
-            else -> Duration.ofDays(365).seconds
-        }
     }
 
     fun isDetailValid(name: String, startDateTime: ZonedDateTime): Boolean {

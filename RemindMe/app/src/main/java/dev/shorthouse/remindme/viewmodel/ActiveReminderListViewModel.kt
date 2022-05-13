@@ -3,10 +3,14 @@ package dev.shorthouse.remindme.viewmodel
 import androidx.lifecycle.*
 import dev.shorthouse.remindme.data.ReminderDao
 import dev.shorthouse.remindme.model.Reminder
+import dev.shorthouse.remindme.utilities.DAYS_IN_WEEK
+import dev.shorthouse.remindme.utilities.ONE_INTERVAL
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.time.Instant
+import java.time.LocalDate
+import java.time.Period
 import java.time.ZonedDateTime
+import java.time.temporal.ChronoUnit
 
 class ActiveReminderListViewModel(
     private val reminderDao: ReminderDao
@@ -20,7 +24,7 @@ class ActiveReminderListViewModel(
         id: Long,
         name: String,
         startDateTime: ZonedDateTime,
-        repeatInterval: Long?,
+        repeatInterval: Pair<Int, ChronoUnit>?,
         notes: String?,
         isNotificationSent: Boolean,
     ) {
@@ -48,7 +52,7 @@ class ActiveReminderListViewModel(
         id: Long,
         name: String,
         startDateTime: ZonedDateTime,
-        repeatInterval: Long?,
+        repeatInterval: Pair<Int, ChronoUnit>?,
         notes: String?,
         isNotificationSent: Boolean,
     ) {
@@ -71,7 +75,7 @@ class ActiveReminderListViewModel(
         id: Long,
         name: String,
         startDateTime: ZonedDateTime,
-        repeatInterval: Long,
+        repeatInterval: Pair<Int, ChronoUnit>,
         notes: String?,
         isNotificationSent: Boolean,
     ) {
@@ -92,18 +96,28 @@ class ActiveReminderListViewModel(
 
     private fun getUpdatedStartDateTime(
         startDateTime: ZonedDateTime,
-        repeatInterval: Long
+        repeatInterval: Pair<Int, ChronoUnit>,
     ): ZonedDateTime {
-        val numElapsedIntervals = Instant.now().epochSecond
-            .minus(startDateTime.toEpochSecond())
-            .div(repeatInterval)
+        val timeValue = repeatInterval.first.toLong()
+        val timeUnit = repeatInterval.second
+        val period = Period.between(startDateTime.toLocalDate(), LocalDate.now())
 
-        val oneInterval = 1
-        val secondsToNextInterval = numElapsedIntervals
-            .plus(oneInterval)
-            .times(repeatInterval)
-
-        return startDateTime.plusSeconds(secondsToNextInterval)
+        return when (timeUnit) {
+            ChronoUnit.DAYS -> {
+                val passedDays = period.days
+                val passedIntervals = passedDays.div(timeValue)
+                val nextInterval = passedIntervals.plus(ONE_INTERVAL)
+                val daysUntilNextStart = timeValue * nextInterval
+                startDateTime.plusDays(daysUntilNextStart)
+            }
+            else -> {
+                val passedWeeks = period.days.div(DAYS_IN_WEEK)
+                val passedIntervals = passedWeeks.div(timeValue)
+                val nextInterval = passedIntervals.plus(ONE_INTERVAL)
+                val weeksUntilNextStart = timeValue * nextInterval
+                startDateTime.plusWeeks(weeksUntilNextStart)
+            }
+        }
     }
 }
 

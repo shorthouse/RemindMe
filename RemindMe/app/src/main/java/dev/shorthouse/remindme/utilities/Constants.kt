@@ -5,6 +5,8 @@ const val MAX_DAYS = 364
 const val MAX_HOURS = 23
 const val DAYS_IN_YEAR = 365
 const val HOURS_IN_DAY = 24
+const val DAYS_IN_WEEK = 7
+const val ONE_INTERVAL = 1
 
 const val KEY_REMINDER_NAME = "KEY_REMINDER_NAME"
 const val REMINDER_NOTIFICATION_ID = 1
