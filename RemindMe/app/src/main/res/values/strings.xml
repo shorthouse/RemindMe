@@ -45,15 +45,6 @@
         <item quantity="one">%d week</item>
         <item quantity="other">%d weeks</item>
     </plurals>
-    <plurals name="interval_months">
-        <item quantity="one">%d month</item>
-        <item quantity="other">%d months</item>
-    </plurals>
-    <plurals name="interval_years">
-        <item quantity="one">%d year</item>
-        <item quantity="other">%d years</item>
-    </plurals>
-
 
     <string name="cd_button_edit_reminder">Edit reminder</string>
     <string name="btn_reminder_done">Done</string>
@@ -69,5 +60,9 @@
     <string name="radio_label_repeat_weekly">Every week</string>
     <string name="radio_label_repeat_monthly">Every month</string>
     <string name="radio_label_repeat_yearly">Every year</string>
+    <string name="repeat_interval_day">day</string>
+    <string name="repeat_interval_week">week</string>
+    <string name="title_repeats_every">Repeats every</string>
+    <string name="interval_dropdown_default_value">day</string>
 
 </resources>

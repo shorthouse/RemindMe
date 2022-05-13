@@ -37,18 +37,14 @@ fun elapsedIntervals(view: MaterialTextView, startDateTime: ZonedDateTime, repea
 fun formatRepeatInterval(view: MaterialTextView, repeatInterval: Pair<Int, ChronoUnit>?) {
     if (repeatInterval == null) return
 
-    val intervalTimeValue = repeatInterval.first
-    val intervalTimeUnit = repeatInterval.second
+    val timeValue = repeatInterval.first
+    val timeUnit = repeatInterval.second
 
-    when (intervalTimeUnit) {
+    when (timeUnit) {
         ChronoUnit.DAYS -> view.text =
-            view.resources.getQuantityString(R.plurals.interval_days, intervalTimeValue)
-        ChronoUnit.WEEKS -> view.text =
-            view.resources.getQuantityString(R.plurals.interval_weeks, intervalTimeValue)
-        ChronoUnit.MONTHS -> view.text =
-            view.resources.getQuantityString(R.plurals.interval_months, intervalTimeValue)
+            view.resources.getQuantityString(R.plurals.interval_days, timeValue, timeValue)
         else -> view.text =
-            view.resources.getQuantityString(R.plurals.interval_years, intervalTimeValue)
+            view.resources.getQuantityString(R.plurals.interval_weeks, timeValue, timeValue)
     }
 }
 

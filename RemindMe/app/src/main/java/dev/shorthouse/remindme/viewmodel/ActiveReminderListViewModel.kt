@@ -98,38 +98,24 @@ class ActiveReminderListViewModel(
         startDateTime: ZonedDateTime,
         repeatInterval: Pair<Int, ChronoUnit>,
     ): ZonedDateTime {
-        val intervalTimeValue = repeatInterval.first.toLong()
-        val intervalTimeUnit = repeatInterval.second
+        val timeValue = repeatInterval.first.toLong()
+        val timeUnit = repeatInterval.second
         val period = Period.between(startDateTime.toLocalDate(), LocalDate.now())
 
-        return when (intervalTimeUnit) {
+        return when (timeUnit) {
             ChronoUnit.DAYS -> {
                 val passedDays = period.days
-                val passedIntervals = passedDays.div(intervalTimeValue)
+                val passedIntervals = passedDays.div(timeValue)
                 val nextInterval = passedIntervals.plus(ONE_INTERVAL)
-                val daysUntilNextStart = intervalTimeValue * nextInterval
+                val daysUntilNextStart = timeValue * nextInterval
                 startDateTime.plusDays(daysUntilNextStart)
             }
-            ChronoUnit.WEEKS -> {
-                val passedWeeks = period.days.div(DAYS_IN_WEEK)
-                val passedIntervals = passedWeeks.div(intervalTimeValue)
-                val nextInterval = passedIntervals.plus(ONE_INTERVAL)
-                val weeksUntilNextStart = intervalTimeValue * nextInterval
-                startDateTime.plusWeeks(weeksUntilNextStart)
-            }
-            ChronoUnit.MONTHS -> {
-                val passedMonths = period.months
-                val passedIntervals = passedMonths.div(intervalTimeValue)
-                val nextInterval = passedIntervals.plus(ONE_INTERVAL)
-                val monthsUntilNextStart = intervalTimeValue * nextInterval
-                startDateTime.plusMonths(monthsUntilNextStart)
-            }
             else -> {
-                val passedYears = period.years
-                val passedIntervals = passedYears.div(intervalTimeValue)
+                val passedWeeks = period.days.div(DAYS_IN_WEEK)
+                val passedIntervals = passedWeeks.div(timeValue)
                 val nextInterval = passedIntervals.plus(ONE_INTERVAL)
-                val yearsUntilNextStart = intervalTimeValue * nextInterval
-                startDateTime.plusYears(yearsUntilNextStart)
+                val weeksUntilNextStart = timeValue * nextInterval
+                startDateTime.plusWeeks(weeksUntilNextStart)
             }
         }
     }

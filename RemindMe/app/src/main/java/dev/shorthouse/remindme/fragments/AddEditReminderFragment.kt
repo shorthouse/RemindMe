@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.view.*
 import android.view.inputmethod.InputMethodManager
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -64,6 +65,13 @@ class AddEditReminderFragment : Fragment() {
         binding.apply {
             addReminderFragment = this@AddEditReminderFragment
             viewmodel = viewModel
+
+            val adapter = ArrayAdapter(
+                requireContext(),
+                R.layout.list_item_dropdown_interval,
+                listOf("day", "week")
+            )
+            dropdownIntervalMenuInput.setAdapter(adapter)
         }
 
     }
@@ -93,14 +101,14 @@ class AddEditReminderFragment : Fragment() {
             binding.startTimeInput.text.toString()
         )
 
+
         val repeatInterval = if (!binding.repeatSwitch.isChecked) {
             null
         } else {
-            when (binding.radioRepeatGroup.checkedRadioButtonId) {
-                R.id.radio_repeat_daily -> Pair(1, ChronoUnit.DAYS)
-                R.id.radio_repeat_weekly -> Pair(1, ChronoUnit.WEEKS)
-                R.id.radio_repeat_monthly -> Pair(1, ChronoUnit.MONTHS)
-                else -> Pair(1, ChronoUnit.YEARS)
+            val timeValue = binding.intervalTimeValueInput.text.toString().toInt()
+            when (binding.dropdownIntervalMenuInput.text.toString()) {
+                getString(R.string.repeat_interval_day) -> Pair(timeValue, ChronoUnit.DAYS)
+                else -> Pair(timeValue, ChronoUnit.WEEKS)
             }
         }
 

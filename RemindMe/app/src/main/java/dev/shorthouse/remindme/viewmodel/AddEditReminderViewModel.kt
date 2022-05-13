@@ -6,6 +6,7 @@ import dev.shorthouse.remindme.BaseApplication
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.data.ReminderDao
 import dev.shorthouse.remindme.model.Reminder
+import dev.shorthouse.remindme.utilities.DAYS_IN_WEEK
 import dev.shorthouse.remindme.utilities.KEY_REMINDER_NAME
 import dev.shorthouse.remindme.utilities.NOTIFICATION_UNIQUE_WORK_NAME_PREFIX
 import dev.shorthouse.remindme.workers.ReminderNotificationWorker
@@ -94,11 +95,21 @@ class AddReminderViewModel(
 
     private fun getRepeatNotificationWorker(reminder: Reminder): PeriodicWorkRequest {
         return PeriodicWorkRequestBuilder<ReminderNotificationWorker>(
-            Duration.ofSeconds(reminder.repeatInterval!!)
+            getPeriodicDuration(reminder.repeatInterval!!)
         )
             .setInitialDelay(getDurationUntilReminder(reminder.startDateTime))
             .setInputData(createInputData(reminder))
             .build()
+    }
+
+    private fun getPeriodicDuration(repeatInterval: Pair<Int, ChronoUnit>): Duration {
+        val intervalTimeValue = repeatInterval.first
+        val intervalTimeUnit = repeatInterval.second
+
+        return when (intervalTimeUnit) {
+            ChronoUnit.DAYS -> Duration.ofDays(intervalTimeValue.toLong())
+            else -> Duration.ofDays(intervalTimeValue.toLong() * DAYS_IN_WEEK)
+        }
     }
 
     private fun getOneTimeNotificationWorker(reminder: Reminder): OneTimeWorkRequest {
@@ -158,17 +169,6 @@ class AddReminderViewModel(
 
     fun getIsRepeatChecked(reminder: Reminder?): Boolean {
         return if (reminder == null) false else reminder.repeatInterval != null
-    }
-
-    fun getCheckedRadioButton(reminder: Reminder?): Int {
-        if (reminder == null) return R.id.radio_repeat_daily
-
-        return when (reminder.repeatInterval?.second) {
-            ChronoUnit.DAYS -> R.id.radio_repeat_daily
-            ChronoUnit.WEEKS -> R.id.radio_repeat_weekly
-            ChronoUnit.MONTHS -> R.id.radio_repeat_monthly
-            else -> R.id.radio_repeat_yearly
-        }
     }
 
     fun isDetailValid(name: String, startDateTime: ZonedDateTime): Boolean {

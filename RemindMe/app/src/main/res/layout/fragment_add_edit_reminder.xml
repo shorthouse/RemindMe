@@ -161,41 +161,58 @@
                 app:layout_constraintTop_toTopOf="@+id/repeat_header"
                 tools:checked="true" />
 
-            <RadioGroup
-                android:id="@+id/radio_repeat_group"
-                android:layout_width="match_parent"
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/repeats_every_header"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:checkedButton="@{viewmodel.getCheckedRadioButton(reminder)}"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:text="@string/title_repeats_every"
+                android:textColor="@android:color/black"
+                android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/repeat_header"
-                app:showIfRepeatChecked="@{repeatSwitch.checked}">
+                app:showIfRepeatChecked="@{repeatSwitch.checked}" />
 
-                <RadioButton
-                    android:id="@+id/radio_repeat_daily"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="@string/radio_label_repeat_daily" />
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/interval_time_value_label"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/repeats_every_header"
+                app:showIfRepeatChecked="@{repeatSwitch.checked}" >
 
-                <RadioButton
-                    android:id="@+id/radio_repeat_weekly"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="@string/radio_label_repeat_weekly" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/interval_time_value_input"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxLength="2"
+                    android:text='@{reminder.notes ?? ""}'
+                    tools:text="2" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-                <RadioButton
-                    android:id="@+id/radio_repeat_monthly"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="@string/radio_label_repeat_monthly" />
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/dropdown_interval_menu_label"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="@+id/interval_time_value_label"
+                app:layout_constraintStart_toEndOf="@+id/interval_time_value_label"
+                app:layout_constraintTop_toTopOf="@+id/interval_time_value_label"
+                app:showIfRepeatChecked="@{repeatSwitch.checked}" >
 
-                <RadioButton
-                    android:id="@+id/radio_repeat_yearly"
+                <AutoCompleteTextView
+                    android:id="@+id/dropdown_interval_menu_input"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="@string/radio_label_repeat_yearly" />
-            </RadioGroup>
+                    android:layout_height="wrap_content"
+                    android:inputType="none"
+                    android:text="@string/interval_dropdown_default_value"
+                    tools:text="day" />
+
+            </com.google.android.material.textfield.TextInputLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 </layout>
