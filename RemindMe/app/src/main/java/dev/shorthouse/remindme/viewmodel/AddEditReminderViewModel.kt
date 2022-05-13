@@ -1,15 +1,11 @@
 package dev.shorthouse.remindme.viewmodel
 
 import androidx.lifecycle.*
-import androidx.work.*
 import dev.shorthouse.remindme.BaseApplication
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.data.ReminderDao
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.utilities.DAYS_IN_WEEK
-import dev.shorthouse.remindme.utilities.KEY_REMINDER_NAME
-import dev.shorthouse.remindme.utilities.NOTIFICATION_UNIQUE_WORK_NAME_PREFIX
-import dev.shorthouse.remindme.workers.ReminderNotificationWorker
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.*
@@ -21,7 +17,6 @@ class AddReminderViewModel(
     private val reminderDao: ReminderDao
 ) : ViewModel() {
 
-    private val workManager = WorkManager.getInstance(application)
     private val dateFormatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy")
     private val dateTimeFormatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm")
 
@@ -46,10 +41,7 @@ class AddReminderViewModel(
             isNotificationSent = isNotificationSent
         )
 
-        viewModelScope.launch(Dispatchers.IO) {
-            val id = reminderDao.insert(reminder)
-            if (isNotificationSent) scheduleNotification(id, reminder)
-        }
+        viewModelScope.launch(Dispatchers.IO) { reminderDao.insert(reminder) }
     }
 
     fun updateReminder(
@@ -71,66 +63,17 @@ class AddReminderViewModel(
             isNotificationSent = isNotificationSent
         )
 
-        viewModelScope.launch(Dispatchers.IO) {
-            reminderDao.update(reminder)
-            if (isNotificationSent) scheduleNotification(id, reminder)
-        }
+        viewModelScope.launch(Dispatchers.IO) { reminderDao.update(reminder) }
     }
 
-    private fun scheduleNotification(reminderId: Long, reminder: Reminder) {
-        if (reminder.repeatInterval == null) {
-            workManager.enqueueUniqueWork(
-                NOTIFICATION_UNIQUE_WORK_NAME_PREFIX + reminderId,
-                ExistingWorkPolicy.REPLACE,
-                getOneTimeNotificationWorker(reminder)
-            )
-        } else {
-            workManager.enqueueUniquePeriodicWork(
-                NOTIFICATION_UNIQUE_WORK_NAME_PREFIX + reminderId,
-                ExistingPeriodicWorkPolicy.REPLACE,
-                getRepeatNotificationWorker(reminder)
-            )
-        }
-    }
-
-    private fun getRepeatNotificationWorker(reminder: Reminder): PeriodicWorkRequest {
-        return PeriodicWorkRequestBuilder<ReminderNotificationWorker>(
-            getPeriodicDuration(reminder.repeatInterval!!)
-        )
-            .setInitialDelay(getDurationUntilReminder(reminder.startDateTime))
-            .setInputData(createInputData(reminder))
-            .build()
-    }
-
-    private fun getPeriodicDuration(repeatInterval: Pair<Int, ChronoUnit>): Duration {
+    fun getRepeatIntervalMillis(repeatInterval: Pair<Int, ChronoUnit>): Long {
         val intervalTimeValue = repeatInterval.first
         val intervalTimeUnit = repeatInterval.second
 
         return when (intervalTimeUnit) {
-            ChronoUnit.DAYS -> Duration.ofDays(intervalTimeValue.toLong())
-            else -> Duration.ofDays(intervalTimeValue.toLong() * DAYS_IN_WEEK)
+            ChronoUnit.DAYS -> Duration.ofDays(intervalTimeValue.toLong()).toMillis()
+            else -> Duration.ofDays(intervalTimeValue.toLong() * DAYS_IN_WEEK).toMillis()
         }
-    }
-
-    private fun getOneTimeNotificationWorker(reminder: Reminder): OneTimeWorkRequest {
-        return OneTimeWorkRequestBuilder<ReminderNotificationWorker>()
-            .setInitialDelay(getDurationUntilReminder(reminder.startDateTime))
-            .setInputData(createInputData(reminder))
-            .build()
-    }
-
-    private fun createInputData(reminder: Reminder): Data {
-        return Data.Builder()
-            .putString(KEY_REMINDER_NAME, reminder.name)
-            .build()
-    }
-
-    private fun getDurationUntilReminder(startDateTime: ZonedDateTime): Duration {
-        return Duration.ofSeconds(
-            startDateTime
-                .minusSeconds(Instant.now().epochSecond)
-                .toEpochSecond()
-        )
     }
 
     fun convertDateTimeStringToDateTime(dateText: String, timeText: String): ZonedDateTime {
@@ -184,6 +127,10 @@ class AddReminderViewModel(
             name.isBlank() -> R.string.error_name_empty
             else -> R.string.error_time_past
         }
+    }
+
+    fun getReminderStartDateTimeMillis(reminderStartDateTime: ZonedDateTime): Long {
+        return reminderStartDateTime.toInstant().toEpochMilli()
     }
 }
 

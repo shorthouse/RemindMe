@@ -1,6 +1,9 @@
 package dev.shorthouse.remindme.fragments
 
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import android.view.inputmethod.InputMethodManager
@@ -19,8 +22,10 @@ import com.google.android.material.timepicker.TimeFormat
 import dev.shorthouse.remindme.BaseApplication
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.databinding.FragmentAddEditReminderBinding
+import dev.shorthouse.remindme.receivers.ReminderNotificationAlarmReceiver
 import dev.shorthouse.remindme.viewmodel.AddEditReminderViewModelFactory
 import dev.shorthouse.remindme.viewmodel.AddReminderViewModel
+import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
 
 class AddEditReminderFragment : Fragment() {
@@ -140,6 +145,40 @@ class AddEditReminderFragment : Fragment() {
                 reminderNotes,
                 isArchived,
                 isNotificationSent
+            )
+        }
+
+        if (isNotificationSent) scheduleNotification(
+            reminderName,
+            repeatInterval,
+            reminderStartDateTime
+        )
+    }
+
+    private fun scheduleNotification(
+        reminderName: String,
+        repeatInterval: Pair<Int, ChronoUnit>?,
+        reminderStartDateTime: ZonedDateTime
+    ) {
+        val alarmManager =
+            context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val alarmIntent = Intent(context, ReminderNotificationAlarmReceiver::class.java)
+        alarmIntent.putExtra("reminderName", reminderName)
+        val pendingIntent =
+            PendingIntent.getBroadcast(context, 0, alarmIntent, 0)
+
+        if (repeatInterval == null) {
+            alarmManager.setExactAndAllowWhileIdle(
+                AlarmManager.RTC_WAKEUP,
+                viewModel.getReminderStartDateTimeMillis(reminderStartDateTime),
+                pendingIntent
+            )
+        } else {
+            alarmManager.setRepeating(
+                AlarmManager.RTC_WAKEUP,
+                viewModel.getReminderStartDateTimeMillis(reminderStartDateTime),
+                viewModel.getRepeatIntervalMillis(repeatInterval),
+                pendingIntent
             )
         }
     }
