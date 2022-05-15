@@ -23,10 +23,10 @@ import dev.shorthouse.remindme.BaseApplication
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.data.RepeatInterval
 import dev.shorthouse.remindme.databinding.FragmentAddEditReminderBinding
-import dev.shorthouse.remindme.receivers.AlarmReceiver
+import dev.shorthouse.remindme.model.Reminder
+import dev.shorthouse.remindme.receivers.AlarmNotificationReceiver
 import dev.shorthouse.remindme.viewmodel.AddEditReminderViewModelFactory
 import dev.shorthouse.remindme.viewmodel.AddReminderViewModel
-import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
 
 class AddEditReminderFragment : Fragment() {
@@ -37,7 +37,6 @@ class AddEditReminderFragment : Fragment() {
 
     private val viewModel: AddReminderViewModel by activityViewModels {
         AddEditReminderViewModelFactory(
-            activity?.application as BaseApplication,
             (activity?.application as BaseApplication).database.reminderDao()
         )
     }
@@ -65,6 +64,7 @@ class AddEditReminderFragment : Fragment() {
                 binding.reminder = it
                 binding.repeatSwitch.isChecked = viewModel.getIsRepeatChecked(binding.reminder)
                 binding.notificationSwitch.isChecked = it.isNotificationSent
+                //binding.intervalTimeValueInput.setText(it.repeatInterval?.timeValue.toString())
             }
         }
 
@@ -80,6 +80,13 @@ class AddEditReminderFragment : Fragment() {
             dropdownIntervalMenuInput.setAdapter(adapter)
         }
 
+        viewModel.reminder.observe(viewLifecycleOwner) { reminder ->
+            reminder?.let {
+                scheduleAlarmNotification(reminder)
+                viewModel.clearLiveData()
+                navigateUp()
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -94,7 +101,6 @@ class AddEditReminderFragment : Fragment() {
                 if (isDetailValid()) {
                     saveReminder()
                     hideKeyboard()
-                    navigateUp()
                 }
             }
     }
@@ -109,7 +115,7 @@ class AddEditReminderFragment : Fragment() {
 
         val repeatInterval = if (binding.repeatSwitch.isChecked) {
             val timeValueString = binding.intervalTimeValueInput.text.toString()
-            val timeValueUnit = when (timeValueString) {
+            val timeValueUnit = when (binding.dropdownIntervalMenuInput.text.toString()) {
                 getString(R.string.repeat_interval_day) -> ChronoUnit.DAYS
                 else -> ChronoUnit.WEEKS
             }
@@ -146,36 +152,32 @@ class AddEditReminderFragment : Fragment() {
                 isNotificationSent
             )
         }
-
-        if (isNotificationSent) {
-            scheduleNotification(reminderName, repeatInterval, reminderStartDateTime)
-        }
-
     }
 
-    private fun scheduleNotification(
-        reminderName: String,
-        repeatInterval: RepeatInterval?,
-        reminderStartDateTime: ZonedDateTime
-    ) {
+    private fun scheduleAlarmNotification(reminder: Reminder) {
         val alarmManager =
             context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val alarmIntent = Intent(context, AlarmReceiver::class.java)
-        alarmIntent.putExtra("reminderName", reminderName)
+        val alarmIntent = Intent(context, AlarmNotificationReceiver::class.java)
+        alarmIntent.putExtra("reminderName", reminder.name)
         val pendingIntent =
-            PendingIntent.getBroadcast(context, 0, alarmIntent, 0)
+            PendingIntent.getBroadcast(
+                context,
+                reminder.id.toInt(),
+                alarmIntent,
+                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_CANCEL_CURRENT,
+            )
 
-        if (repeatInterval == null) {
+        if (reminder.repeatInterval == null) {
             alarmManager.setExactAndAllowWhileIdle(
                 AlarmManager.RTC_WAKEUP,
-                viewModel.getReminderStartDateTimeMillis(reminderStartDateTime),
+                viewModel.getReminderStartDateTimeMillis(reminder.startDateTime),
                 pendingIntent
             )
         } else {
             alarmManager.setRepeating(
                 AlarmManager.RTC_WAKEUP,
-                viewModel.getReminderStartDateTimeMillis(reminderStartDateTime),
-                viewModel.getRepeatIntervalMillis(repeatInterval),
+                viewModel.getReminderStartDateTimeMillis(reminder.startDateTime),
+                viewModel.getRepeatIntervalMillis(reminder.repeatInterval),
                 pendingIntent
             )
         }

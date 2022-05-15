@@ -1,9 +1,8 @@
-package dev.shorthouse.remindme.utilities
+package dev.shorthouse.remindme.data
 
 import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import dev.shorthouse.remindme.data.RepeatInterval
 import java.time.Instant
 import java.time.ZoneId
 import java.time.ZonedDateTime

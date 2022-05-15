@@ -190,7 +190,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:maxLength="2"
-                    android:text='@{reminder.notes ?? ""}'
+                    android:text="@{Long.toString(reminder.repeatInterval.timeValue)}"
                     tools:text="2" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -209,7 +209,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="none"
-                    android:text="@string/interval_dropdown_default_value"
+                    app:dropDownText="@{reminder.repeatInterval}"
                     tools:text="day" />
 
             </com.google.android.material.textfield.TextInputLayout>

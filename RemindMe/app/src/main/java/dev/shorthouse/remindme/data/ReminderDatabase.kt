@@ -6,7 +6,6 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import dev.shorthouse.remindme.model.Reminder
-import dev.shorthouse.remindme.utilities.Converters
 
 @Database(version = 1, exportSchema = false, entities = [Reminder::class])
 @TypeConverters(Converters::class)
