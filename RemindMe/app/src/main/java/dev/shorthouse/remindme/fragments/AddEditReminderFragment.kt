@@ -5,6 +5,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
@@ -22,7 +23,7 @@ import com.google.android.material.timepicker.TimeFormat
 import dev.shorthouse.remindme.BaseApplication
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.databinding.FragmentAddEditReminderBinding
-import dev.shorthouse.remindme.receivers.ReminderNotificationAlarmReceiver
+import dev.shorthouse.remindme.receivers.AlarmReceiver
 import dev.shorthouse.remindme.viewmodel.AddEditReminderViewModelFactory
 import dev.shorthouse.remindme.viewmodel.AddReminderViewModel
 import java.time.ZonedDateTime
@@ -162,11 +163,12 @@ class AddEditReminderFragment : Fragment() {
     ) {
         val alarmManager =
             context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val alarmIntent = Intent(context, ReminderNotificationAlarmReceiver::class.java)
+        val alarmIntent = Intent(context, AlarmReceiver::class.java)
         alarmIntent.putExtra("reminderName", reminderName)
         val pendingIntent =
             PendingIntent.getBroadcast(context, 0, alarmIntent, 0)
 
+        Log.d("HDS", "Repeat interval: ${viewModel.getRepeatIntervalMillis(repeatInterval!!)}")
         if (repeatInterval == null) {
             alarmManager.setExactAndAllowWhileIdle(
                 AlarmManager.RTC_WAKEUP,
