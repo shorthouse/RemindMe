@@ -1,9 +1,6 @@
 package dev.shorthouse.remindme.fragments
 
-import android.app.AlarmManager
-import android.app.PendingIntent
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import android.view.inputmethod.InputMethodManager
@@ -24,7 +21,7 @@ import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.data.RepeatInterval
 import dev.shorthouse.remindme.databinding.FragmentAddEditReminderBinding
 import dev.shorthouse.remindme.model.Reminder
-import dev.shorthouse.remindme.receivers.AlarmNotificationReceiver
+import dev.shorthouse.remindme.utilities.AlarmHelper
 import dev.shorthouse.remindme.viewmodel.AddEditReminderViewModelFactory
 import dev.shorthouse.remindme.viewmodel.AddReminderViewModel
 import java.time.temporal.ChronoUnit
@@ -155,32 +152,14 @@ class AddEditReminderFragment : Fragment() {
     }
 
     private fun scheduleAlarmNotification(reminder: Reminder) {
-        val alarmManager =
-            context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val alarmIntent = Intent(context, AlarmNotificationReceiver::class.java)
-        alarmIntent.putExtra("reminderName", reminder.name)
-        val pendingIntent =
-            PendingIntent.getBroadcast(
-                context,
-                reminder.id.toInt(),
-                alarmIntent,
-                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_CANCEL_CURRENT,
-            )
-
-        if (reminder.repeatInterval == null) {
-            alarmManager.setExactAndAllowWhileIdle(
-                AlarmManager.RTC_WAKEUP,
-                viewModel.getReminderStartDateTimeMillis(reminder.startDateTime),
-                pendingIntent
-            )
-        } else {
-            alarmManager.setRepeating(
-                AlarmManager.RTC_WAKEUP,
-                viewModel.getReminderStartDateTimeMillis(reminder.startDateTime),
-                viewModel.getRepeatIntervalMillis(reminder.repeatInterval),
-                pendingIntent
-            )
-        }
+        val alarmTriggerAtMillis = viewModel.getAlarmTriggerAtMillis(reminder.startDateTime)
+        val alarmRepeatIntervalMillis = viewModel.getRepeatIntervalMillis(reminder.repeatInterval)
+        AlarmHelper().setAlarm(
+            requireContext(),
+            reminder,
+            alarmTriggerAtMillis,
+            alarmRepeatIntervalMillis
+        )
     }
 
     fun displayDatePicker() {

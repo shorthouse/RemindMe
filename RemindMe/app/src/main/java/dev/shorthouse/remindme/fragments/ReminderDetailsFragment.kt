@@ -11,6 +11,7 @@ import dev.shorthouse.remindme.BaseApplication
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.databinding.FragmentReminderDetailsBinding
 import dev.shorthouse.remindme.model.Reminder
+import dev.shorthouse.remindme.utilities.AlarmHelper
 import dev.shorthouse.remindme.utilities.DATE_PATTERN
 import dev.shorthouse.remindme.viewmodel.ReminderDetailsViewModel
 import dev.shorthouse.remindme.viewmodel.ReminderDetailsViewModelFactory
@@ -81,6 +82,7 @@ class ReminderDetailsFragment : Fragment() {
 
     private fun deleteReminder() {
         viewModel.deleteReminder(reminder)
+        if (reminder.isNotificationSent) cancelNotificationAlarm(reminder)
         findNavController().navigateUp()
         Toast.makeText(
             context,
@@ -88,5 +90,9 @@ class ReminderDetailsFragment : Fragment() {
             Toast.LENGTH_SHORT
         )
             .show()
+    }
+
+    private fun cancelNotificationAlarm(reminder: Reminder) {
+        AlarmHelper().cancelAlarm(requireContext(), reminder)
     }
 }

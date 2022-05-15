@@ -6,6 +6,7 @@ import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import dev.shorthouse.remindme.MainActivity
@@ -14,6 +15,7 @@ import dev.shorthouse.remindme.utilities.REMINDER_NOTIFICATION_ID
 
 class AlarmNotificationReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent) {
+        Log.d("HDS", "Recieved!")
         context?.let { makeReminderNotification(it, intent) }
     }
 

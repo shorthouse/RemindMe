@@ -72,7 +72,9 @@ class AddReminderViewModel(
         }
     }
 
-    fun getRepeatIntervalMillis(repeatInterval: RepeatInterval): Long {
+    fun getRepeatIntervalMillis(repeatInterval: RepeatInterval?): Long? {
+        if (repeatInterval == null) return null
+
         val repeatIntervalDays = when (repeatInterval.timeUnit) {
             ChronoUnit.DAYS -> repeatInterval.timeValue
             else -> repeatInterval.timeValue * DAYS_IN_WEEK
@@ -133,7 +135,7 @@ class AddReminderViewModel(
         }
     }
 
-    fun getReminderStartDateTimeMillis(reminderStartDateTime: ZonedDateTime): Long {
+    fun getAlarmTriggerAtMillis(reminderStartDateTime: ZonedDateTime): Long {
         return reminderStartDateTime.toInstant().toEpochMilli()
     }
 
