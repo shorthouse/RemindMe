@@ -5,7 +5,6 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
@@ -168,7 +167,6 @@ class AddEditReminderFragment : Fragment() {
         val pendingIntent =
             PendingIntent.getBroadcast(context, 0, alarmIntent, 0)
 
-        Log.d("HDS", "Repeat interval: ${viewModel.getRepeatIntervalMillis(repeatInterval!!)}")
         if (repeatInterval == null) {
             alarmManager.setExactAndAllowWhileIdle(
                 AlarmManager.RTC_WAKEUP,
