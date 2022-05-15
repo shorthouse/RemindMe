@@ -1,4 +1,8 @@
 package dev.shorthouse.remindme.data
 
-class RepeatInterval {
-}
+import java.time.temporal.ChronoUnit
+
+data class RepeatInterval(
+    val timeValue: Long,
+    val timeUnit: ChronoUnit,
+)
