@@ -4,12 +4,13 @@ import android.view.View
 import androidx.databinding.BindingAdapter
 import com.google.android.material.textview.MaterialTextView
 import dev.shorthouse.remindme.R
+import dev.shorthouse.remindme.data.RepeatInterval
 import java.time.Instant
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
 
 @BindingAdapter("app:showIfRepeatReminder")
-fun showIfRepeatReminder(view: View, repeatInterval: Pair<Int, ChronoUnit>?) {
+fun showIfRepeatReminder(view: View, repeatInterval: RepeatInterval?) {
     view.visibility = if (repeatInterval != null) View.VISIBLE else View.GONE
 }
 
@@ -34,13 +35,12 @@ fun elapsedIntervals(view: MaterialTextView, startDateTime: ZonedDateTime, repea
 }
 
 @BindingAdapter("app:formattedRepeatInterval")
-fun formatRepeatInterval(view: MaterialTextView, repeatInterval: Pair<Int, ChronoUnit>?) {
+fun formatRepeatInterval(view: MaterialTextView, repeatInterval: RepeatInterval?) {
     if (repeatInterval == null) return
 
-    val timeValue = repeatInterval.first
-    val timeUnit = repeatInterval.second
+    val timeValue = repeatInterval.timeValue.toInt()
 
-    when (timeUnit) {
+    when (repeatInterval.timeUnit) {
         ChronoUnit.DAYS -> view.text =
             view.resources.getQuantityString(R.plurals.interval_days, timeValue, timeValue)
         else -> view.text =

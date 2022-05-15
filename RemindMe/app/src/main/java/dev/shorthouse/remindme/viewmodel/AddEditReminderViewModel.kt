@@ -4,6 +4,7 @@ import androidx.lifecycle.*
 import dev.shorthouse.remindme.BaseApplication
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.data.ReminderDao
+import dev.shorthouse.remindme.data.RepeatInterval
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.utilities.DAYS_IN_WEEK
 import kotlinx.coroutines.Dispatchers
@@ -13,7 +14,6 @@ import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
 class AddReminderViewModel(
-    application: BaseApplication,
     private val reminderDao: ReminderDao
 ) : ViewModel() {
 
@@ -27,7 +27,7 @@ class AddReminderViewModel(
     fun addReminder(
         name: String,
         startDateTime: ZonedDateTime,
-        repeatInterval: Pair<Int, ChronoUnit>?,
+        repeatInterval: RepeatInterval?,
         notes: String?,
         isArchived: Boolean,
         isNotificationSent: Boolean
@@ -48,7 +48,7 @@ class AddReminderViewModel(
         id: Long,
         name: String,
         startDateTime: ZonedDateTime,
-        repeatInterval: Pair<Int, ChronoUnit>?,
+        repeatInterval: RepeatInterval?,
         notes: String?,
         isArchived: Boolean,
         isNotificationSent: Boolean
@@ -66,14 +66,12 @@ class AddReminderViewModel(
         viewModelScope.launch(Dispatchers.IO) { reminderDao.update(reminder) }
     }
 
-    fun getRepeatIntervalMillis(repeatInterval: Pair<Int, ChronoUnit>): Long {
-        val intervalTimeValue = repeatInterval.first
-        val intervalTimeUnit = repeatInterval.second
-
-        return when (intervalTimeUnit) {
-            ChronoUnit.DAYS -> Duration.ofDays(intervalTimeValue.toLong()).toMillis()
-            else -> Duration.ofDays(intervalTimeValue.toLong() * DAYS_IN_WEEK).toMillis()
+    fun getRepeatIntervalMillis(repeatInterval: RepeatInterval): Long {
+        val repeatIntervalDays = when (repeatInterval.timeUnit) {
+            ChronoUnit.DAYS -> repeatInterval.timeValue
+            else -> repeatInterval.timeValue * DAYS_IN_WEEK
         }
+        return Duration.ofDays(repeatIntervalDays).toMillis()
     }
 
     fun convertDateTimeStringToDateTime(dateText: String, timeText: String): ZonedDateTime {
@@ -141,7 +139,7 @@ class AddEditReminderViewModelFactory(
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(AddReminderViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return AddReminderViewModel(application, reminderDao) as T
+            return AddReminderViewModel(reminderDao) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

@@ -3,10 +3,10 @@ package dev.shorthouse.remindme.utilities
 import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import dev.shorthouse.remindme.data.RepeatInterval
 import java.time.Instant
 import java.time.ZoneId
 import java.time.ZonedDateTime
-import java.time.temporal.ChronoUnit
 
 class Converters {
     companion object {
@@ -27,14 +27,14 @@ class Converters {
 
         @TypeConverter
         @JvmStatic
-        fun repeatIntervalToGson(repeatInterval: Pair<Int, ChronoUnit>?): String? {
+        fun repeatIntervalToGson(repeatInterval: RepeatInterval?): String? {
             return Gson().toJson(repeatInterval);
         }
 
         @TypeConverter
         @JvmStatic
-        fun gsonToRepeatInterval(json: String?): Pair<Int, ChronoUnit>? {
-            val pairType = object : TypeToken<Pair<Int, ChronoUnit>>() {}.type
+        fun gsonToRepeatInterval(json: String?): RepeatInterval? {
+            val pairType = object : TypeToken<RepeatInterval>() {}.type
             return Gson().fromJson(json, pairType)
         }
     }

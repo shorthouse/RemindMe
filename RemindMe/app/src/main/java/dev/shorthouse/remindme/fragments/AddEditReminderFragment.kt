@@ -21,6 +21,7 @@ import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import dev.shorthouse.remindme.BaseApplication
 import dev.shorthouse.remindme.R
+import dev.shorthouse.remindme.data.RepeatInterval
 import dev.shorthouse.remindme.databinding.FragmentAddEditReminderBinding
 import dev.shorthouse.remindme.receivers.AlarmReceiver
 import dev.shorthouse.remindme.viewmodel.AddEditReminderViewModelFactory
@@ -106,16 +107,14 @@ class AddEditReminderFragment : Fragment() {
             binding.startTimeInput.text.toString()
         )
 
-
-        val repeatInterval = if (!binding.repeatSwitch.isChecked) {
-            null
-        } else {
-            val timeValue = binding.intervalTimeValueInput.text.toString().toInt()
-            when (binding.dropdownIntervalMenuInput.text.toString()) {
-                getString(R.string.repeat_interval_day) -> Pair(timeValue, ChronoUnit.DAYS)
-                else -> Pair(timeValue, ChronoUnit.WEEKS)
+        val repeatInterval = if (binding.repeatSwitch.isChecked) {
+            val timeValueString = binding.intervalTimeValueInput.text.toString()
+            val timeValueUnit = when (timeValueString) {
+                getString(R.string.repeat_interval_day) -> ChronoUnit.DAYS
+                else -> ChronoUnit.WEEKS
             }
-        }
+            RepeatInterval(timeValueString.toLong(), timeValueUnit)
+        } else null
 
         val reminderNotes = if (binding.notesInput.text.isNullOrBlank()) {
             null
@@ -148,16 +147,15 @@ class AddEditReminderFragment : Fragment() {
             )
         }
 
-        if (isNotificationSent) scheduleNotification(
-            reminderName,
-            repeatInterval,
-            reminderStartDateTime
-        )
+        if (isNotificationSent) {
+            scheduleNotification(reminderName, repeatInterval, reminderStartDateTime)
+        }
+
     }
 
     private fun scheduleNotification(
         reminderName: String,
-        repeatInterval: Pair<Int, ChronoUnit>?,
+        repeatInterval: RepeatInterval?,
         reminderStartDateTime: ZonedDateTime
     ) {
         val alarmManager =
