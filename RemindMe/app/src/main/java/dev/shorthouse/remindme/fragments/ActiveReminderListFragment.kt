@@ -11,11 +11,11 @@ import androidx.recyclerview.widget.RecyclerView
 import dev.shorthouse.remindme.BaseApplication
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.adapter.ActiveReminderListAdapter
+import dev.shorthouse.remindme.data.RepeatInterval
 import dev.shorthouse.remindme.databinding.FragmentActiveReminderListBinding
 import dev.shorthouse.remindme.viewmodel.ActiveReminderListViewModel
 import dev.shorthouse.remindme.viewmodel.ActiveReminderListViewModelFactory
 import java.time.ZonedDateTime
-import java.time.temporal.ChronoUnit
 
 class ActiveReminderListFragment : Fragment() {
     private lateinit var binding: FragmentActiveReminderListBinding
@@ -91,7 +91,7 @@ class ActiveReminderListFragment : Fragment() {
         id: Long,
         name: String,
         startDateTime: ZonedDateTime,
-        repeatInterval: Pair<Int, ChronoUnit>?,
+        repeatInterval: RepeatInterval?,
         notes: String?,
         isNotificationSent: Boolean,
     ) {

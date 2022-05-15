@@ -2,8 +2,8 @@ package dev.shorthouse.remindme.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import dev.shorthouse.remindme.data.RepeatInterval
 import java.time.ZonedDateTime
-import java.time.temporal.ChronoUnit
 
 @Entity
 data class Reminder(
@@ -14,7 +14,7 @@ data class Reminder(
 
     val startDateTime: ZonedDateTime,
 
-    val repeatInterval: Pair<Int, ChronoUnit>?,
+    val repeatInterval: RepeatInterval?,
 
     val notes: String?,
 
