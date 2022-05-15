@@ -8,7 +8,7 @@ import androidx.room.TypeConverters
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.utilities.Converters
 
-@Database(version = 2, exportSchema = false, entities = [Reminder::class])
+@Database(version = 1, exportSchema = false, entities = [Reminder::class])
 @TypeConverters(Converters::class)
 abstract class ReminderDatabase : RoomDatabase() {
     abstract fun reminderDao(): ReminderDao
@@ -24,6 +24,7 @@ abstract class ReminderDatabase : RoomDatabase() {
                     ReminderDatabase::class.java,
                     "reminder_database"
                 )
+                    .fallbackToDestructiveMigration()
                     .build()
                 INSTANCE = instance
 
