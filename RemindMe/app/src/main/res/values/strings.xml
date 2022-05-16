@@ -16,12 +16,8 @@
     <string name="format_date_time">%1$s %2$s</string>
     <string name="format_next_hour">%1$d:00</string>
     <string name="error_name_empty">The name cannot be empty.</string>
-    <string name="error_date_past">The start date cannot be in the past.</string>
     <string name="error_time_past">The start time cannot be in the past.</string>
-    <string name="error_years_max">The maximum years interval is 10.</string>
-    <string name="error_days_max">The maximum days interval is 364.</string>
-    <string name="error_hours_max">The maximum hours interval is 23.</string>
-    <string name="error_interval_zero">The interval must have a time period.</string>
+    <string name="error_interval_zero">The repeat interval cannot be 0.</string>
 
     <string name="title_date_picker">Select reminder start date</string>
     <string name="title_time_picker">Select reminder start time</string>
@@ -55,6 +51,9 @@
         <item quantity="other">weeks</item>
     </plurals>
 
+    <string name="time_unit_day">day</string>
+    <string name="time_unit_week">week</string>
+
     <string name="cd_button_edit_reminder">Edit reminder</string>
     <string name="btn_reminder_done">Done</string>
     <string name="btn_save_reminder">save</string>
@@ -73,5 +72,7 @@
     <string name="repeat_interval_week">week</string>
     <string name="title_repeats_every">Repeats every</string>
     <string name="interval_dropdown_default_value">day</string>
+    <string name="cd_icon_notification">Notification Icon</string>
+    <string name="notifications_on">Notifications enabled</string>
 
 </resources>

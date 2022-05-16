@@ -119,27 +119,29 @@ class AddReminderViewModel(
         return if (reminder == null) false else reminder.repeatInterval != null
     }
 
-    fun isDetailValid(name: String, startDateTime: ZonedDateTime): Boolean {
-        return when {
-            name.isBlank() -> false
-            startDateTime.isBefore(ZonedDateTime.now()) -> false
-            else -> true
-        }
-    }
-
-    fun getDetailError(name: String): Int {
-        return when {
-            name.isBlank() -> R.string.error_name_empty
-            else -> R.string.error_time_past
-        }
-    }
-
     fun getAlarmTriggerAtMillis(reminderStartDateTime: ZonedDateTime): Long {
         return reminderStartDateTime.toInstant().toEpochMilli()
     }
 
+    fun isNameValid(name: String): Boolean {
+        return name.isNotBlank()
+    }
+
+    fun isStartTimeValid(startDate: String, startTime: String): Boolean {
+        val startDateTime = convertDateTimeStringToDateTime(startDate, startTime)
+        return startDateTime.isAfter(ZonedDateTime.now())
+    }
+
+    fun isRepeatIntervalValid(repeatIntervalValue: Long): Boolean {
+        return repeatIntervalValue > 0
+    }
+
     fun clearLiveData() {
-        reminder.postValue(null)
+        newReminder.postValue(null)
+    }
+
+    fun getRepeatIntervalValue(reminder: Reminder?): Long {
+        return if (reminder?.repeatInterval == null) 1L else reminder.repeatInterval.timeValue
     }
 }
 
