@@ -1,8 +1,6 @@
 package dev.shorthouse.remindme.viewmodel
 
 import androidx.lifecycle.*
-import dev.shorthouse.remindme.BaseApplication
-import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.data.ReminderDao
 import dev.shorthouse.remindme.data.RepeatInterval
 import dev.shorthouse.remindme.model.Reminder
@@ -19,6 +17,7 @@ class AddReminderViewModel(
 
     private val dateFormatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy")
     private val dateTimeFormatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm")
+    val newReminder = MutableLiveData<Reminder?>()
 
     fun getReminder(id: Long): LiveData<Reminder> {
         return reminderDao.getReminder(id).asLiveData()
@@ -41,7 +40,10 @@ class AddReminderViewModel(
             isNotificationSent = isNotificationSent
         )
 
-        viewModelScope.launch(Dispatchers.IO) { reminderDao.insert(reminder) }
+        viewModelScope.launch(Dispatchers.IO) {
+            reminder.id = reminderDao.insert(reminder)
+            newReminder.postValue(reminder)
+        }
     }
 
     fun updateReminder(
@@ -63,10 +65,15 @@ class AddReminderViewModel(
             isNotificationSent = isNotificationSent
         )
 
-        viewModelScope.launch(Dispatchers.IO) { reminderDao.update(reminder) }
+        viewModelScope.launch(Dispatchers.IO) {
+            reminderDao.update(reminder)
+            newReminder.postValue(reminder)
+        }
     }
 
-    fun getRepeatIntervalMillis(repeatInterval: RepeatInterval): Long {
+    fun getRepeatIntervalMillis(repeatInterval: RepeatInterval?): Long? {
+        if (repeatInterval == null) return null
+
         val repeatIntervalDays = when (repeatInterval.timeUnit) {
             ChronoUnit.DAYS -> repeatInterval.timeValue
             else -> repeatInterval.timeValue * DAYS_IN_WEEK
@@ -127,13 +134,16 @@ class AddReminderViewModel(
         }
     }
 
-    fun getReminderStartDateTimeMillis(reminderStartDateTime: ZonedDateTime): Long {
+    fun getAlarmTriggerAtMillis(reminderStartDateTime: ZonedDateTime): Long {
         return reminderStartDateTime.toInstant().toEpochMilli()
+    }
+
+    fun clearLiveData() {
+        reminder.postValue(null)
     }
 }
 
 class AddEditReminderViewModelFactory(
-    private val application: BaseApplication,
     private val reminderDao: ReminderDao
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {

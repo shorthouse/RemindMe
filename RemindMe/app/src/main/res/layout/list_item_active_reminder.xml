@@ -45,8 +45,8 @@
 <!--            app:layout_constraintBottom_toBottomOf="@+id/reminder_date"-->
 <!--            app:layout_constraintStart_toEndOf="@+id/reminder_date"-->
 <!--            app:layout_constraintTop_toTopOf="@+id/reminder_date"-->
-<!--            app:reminderRepeatInterval="@{reminder.repeatInterval}"-->
-<!--            app:reminderStartDateTime="@{reminder.startDateTime}"-->
+<!--            app:reminderRepeatInterval="@{newReminder.repeatInterval}"-->
+<!--            app:reminderStartDateTime="@{newReminder.startDateTime}"-->
 <!--            tools:text="3" />-->
 
         <com.google.android.material.button.MaterialButton

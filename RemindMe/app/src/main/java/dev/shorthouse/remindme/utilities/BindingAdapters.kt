@@ -1,6 +1,7 @@
 package dev.shorthouse.remindme.utilities
 
 import android.view.View
+import android.widget.AutoCompleteTextView
 import androidx.databinding.BindingAdapter
 import com.google.android.material.textview.MaterialTextView
 import dev.shorthouse.remindme.R
@@ -48,9 +49,26 @@ fun formatRepeatInterval(view: MaterialTextView, repeatInterval: RepeatInterval?
     }
 }
 
-
-
-
-
-
-
+@BindingAdapter("app:dropDownText")
+fun dropDownText(view: AutoCompleteTextView, repeatInterval: RepeatInterval?) {
+    if (repeatInterval == null) {
+        view.setText(view.resources.getQuantityString(R.plurals.dropdown_days, 1, 1), false)
+    } else {
+        when (repeatInterval.timeUnit) {
+            ChronoUnit.DAYS -> view.setText(
+                view.resources.getQuantityString(
+                    R.plurals.dropdown_days,
+                    repeatInterval.timeValue.toInt(),
+                    repeatInterval.timeValue,
+                ), false
+            )
+            else -> view.setText(
+                view.resources.getQuantityString(
+                    R.plurals.dropdown_weeks,
+                    repeatInterval.timeValue.toInt(),
+                    repeatInterval.timeValue,
+                ), false
+            )
+        }
+    }
+}

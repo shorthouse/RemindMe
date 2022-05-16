@@ -1,9 +1,6 @@
 package dev.shorthouse.remindme.fragments
 
-import android.app.AlarmManager
-import android.app.PendingIntent
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import android.view.inputmethod.InputMethodManager
@@ -23,10 +20,10 @@ import dev.shorthouse.remindme.BaseApplication
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.data.RepeatInterval
 import dev.shorthouse.remindme.databinding.FragmentAddEditReminderBinding
-import dev.shorthouse.remindme.receivers.AlarmReceiver
+import dev.shorthouse.remindme.model.Reminder
+import dev.shorthouse.remindme.utilities.AlarmHelper
 import dev.shorthouse.remindme.viewmodel.AddEditReminderViewModelFactory
 import dev.shorthouse.remindme.viewmodel.AddReminderViewModel
-import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
 
 class AddEditReminderFragment : Fragment() {
@@ -37,7 +34,6 @@ class AddEditReminderFragment : Fragment() {
 
     private val viewModel: AddReminderViewModel by activityViewModels {
         AddEditReminderViewModelFactory(
-            activity?.application as BaseApplication,
             (activity?.application as BaseApplication).database.reminderDao()
         )
     }
@@ -59,9 +55,8 @@ class AddEditReminderFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val id = navigationArgs.id
-        if (id > 0) {
-            viewModel.getReminder(id).observe(this.viewLifecycleOwner) {
+        if (navigationArgs.isEditReminder) {
+            viewModel.getReminder(navigationArgs.id).observe(this.viewLifecycleOwner) {
                 binding.reminder = it
                 binding.repeatSwitch.isChecked = viewModel.getIsRepeatChecked(binding.reminder)
                 binding.notificationSwitch.isChecked = it.isNotificationSent
@@ -80,6 +75,13 @@ class AddEditReminderFragment : Fragment() {
             dropdownIntervalMenuInput.setAdapter(adapter)
         }
 
+        viewModel.reminder.observe(viewLifecycleOwner) { reminder ->
+            reminder?.let {
+                scheduleAlarmNotification(reminder)
+                viewModel.clearLiveData()
+                navigateUp()
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -94,7 +96,6 @@ class AddEditReminderFragment : Fragment() {
                 if (isDetailValid()) {
                     saveReminder()
                     hideKeyboard()
-                    navigateUp()
                 }
             }
     }
@@ -109,7 +110,7 @@ class AddEditReminderFragment : Fragment() {
 
         val repeatInterval = if (binding.repeatSwitch.isChecked) {
             val timeValueString = binding.intervalTimeValueInput.text.toString()
-            val timeValueUnit = when (timeValueString) {
+            val timeValueUnit = when (binding.dropdownIntervalMenuInput.text.toString()) {
                 getString(R.string.repeat_interval_day) -> ChronoUnit.DAYS
                 else -> ChronoUnit.WEEKS
             }
@@ -126,7 +127,7 @@ class AddEditReminderFragment : Fragment() {
 
         val isNotificationSent = binding.notificationSwitch.isChecked
 
-        if (navigationArgs.id > 0) {
+        if (navigationArgs.isEditReminder) {
             viewModel.updateReminder(
                 navigationArgs.id,
                 reminderName,
@@ -146,39 +147,29 @@ class AddEditReminderFragment : Fragment() {
                 isNotificationSent
             )
         }
-
-        if (isNotificationSent) {
-            scheduleNotification(reminderName, repeatInterval, reminderStartDateTime)
-        }
-
     }
 
-    private fun scheduleNotification(
-        reminderName: String,
-        repeatInterval: RepeatInterval?,
-        reminderStartDateTime: ZonedDateTime
-    ) {
-        val alarmManager =
-            context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val alarmIntent = Intent(context, AlarmReceiver::class.java)
-        alarmIntent.putExtra("reminderName", reminderName)
-        val pendingIntent =
-            PendingIntent.getBroadcast(context, 0, alarmIntent, 0)
+    private fun updateNotificationAlarms(reminder: Reminder) {
+        if (navigationArgs.isEditReminder) cancelExistingAlarmNotification(reminder)
+        if (reminder.isNotificationSent) scheduleAlarmNotification(reminder)
+    }
 
-        if (repeatInterval == null) {
-            alarmManager.setExactAndAllowWhileIdle(
-                AlarmManager.RTC_WAKEUP,
-                viewModel.getReminderStartDateTimeMillis(reminderStartDateTime),
-                pendingIntent
-            )
-        } else {
-            alarmManager.setRepeating(
-                AlarmManager.RTC_WAKEUP,
-                viewModel.getReminderStartDateTimeMillis(reminderStartDateTime),
-                viewModel.getRepeatIntervalMillis(repeatInterval),
-                pendingIntent
-            )
-        }
+    private fun scheduleAlarmNotification(reminder: Reminder) {
+        val alarmTriggerAtMillis = viewModel.getAlarmTriggerAtMillis(reminder.startDateTime)
+        val alarmRepeatIntervalMillis = viewModel.getRepeatIntervalMillis(reminder.repeatInterval)
+        AlarmHelper().setNotificationAlarm(
+            requireContext(),
+            reminder,
+            alarmTriggerAtMillis,
+            alarmRepeatIntervalMillis
+        )
+    }
+
+    private fun cancelExistingAlarmNotification(reminder: Reminder) {
+        AlarmHelper().cancelExistingNotificationAlarm(
+            requireContext(),
+            reminder
+        )
     }
 
     fun displayDatePicker() {
@@ -239,20 +230,27 @@ class AddEditReminderFragment : Fragment() {
         findNavController().navigateUp()
     }
 
-    private fun isDetailValid(): Boolean {
+    private fun isReminderValid(): Boolean {
         val name = binding.nameInput.text.toString()
+        if (!viewModel.isNameValid(name)) {
+            makeShortToast(R.string.error_name_empty)
+            return false
+        }
+
         val startDate = binding.startDateInput.text.toString()
         val startTime = binding.startTimeInput.text.toString()
-        val startDateTime = viewModel.convertDateTimeStringToDateTime(startDate, startTime)
-
-        val isDetailValid = viewModel.isDetailValid(name, startDateTime)
-
-        return if (isDetailValid) {
-            isDetailValid
-        } else {
-            makeShortToast(viewModel.getDetailError(name))
-            isDetailValid
+        if (!viewModel.isStartTimeValid(startDate, startTime)) {
+            makeShortToast(R.string.error_time_past)
+            return false
         }
+
+        val repeatIntervalValue = binding.intervalTimeValueInput.text.toString().toLong()
+        if (!viewModel.isRepeatIntervalValid(repeatIntervalValue)) {
+            makeShortToast(R.string.error_interval_zero)
+            return false
+        }
+
+        return true
     }
 
     private fun makeShortToast(stringResId: Int) {

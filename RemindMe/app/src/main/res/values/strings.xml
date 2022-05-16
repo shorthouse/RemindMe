@@ -46,6 +46,15 @@
         <item quantity="other">%d weeks</item>
     </plurals>
 
+    <plurals name="dropdown_days">
+        <item quantity="one">day</item>
+        <item quantity="other">days</item>
+    </plurals>
+    <plurals name="dropdown_weeks">
+        <item quantity="one">week</item>
+        <item quantity="other">weeks</item>
+    </plurals>
+
     <string name="cd_button_edit_reminder">Edit reminder</string>
     <string name="btn_reminder_done">Done</string>
     <string name="btn_save_reminder">save</string>

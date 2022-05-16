@@ -11,6 +11,7 @@ import dev.shorthouse.remindme.BaseApplication
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.databinding.FragmentReminderDetailsBinding
 import dev.shorthouse.remindme.model.Reminder
+import dev.shorthouse.remindme.utilities.AlarmHelper
 import dev.shorthouse.remindme.utilities.DATE_PATTERN
 import dev.shorthouse.remindme.viewmodel.ReminderDetailsViewModel
 import dev.shorthouse.remindme.viewmodel.ReminderDetailsViewModelFactory
@@ -56,10 +57,11 @@ class ReminderDetailsFragment : Fragment() {
                 .toString()
         }
 
+        val isEditReminder = true
         binding.apply {
             editReminderFab.setOnClickListener {
                 val action = ReminderDetailsFragmentDirections
-                    .actionReminderDetailsToAddEditReminder(navigationArgs.id)
+                    .actionReminderDetailsToAddEditReminder(navigationArgs.id, isEditReminder)
                 findNavController().navigate(action)
             }
         }
@@ -81,12 +83,19 @@ class ReminderDetailsFragment : Fragment() {
 
     private fun deleteReminder() {
         viewModel.deleteReminder(reminder)
-        findNavController().navigateUp()
+
+        if (reminder.isNotificationSent) cancelNotificationAlarm(reminder)
+
         Toast.makeText(
             context,
             getString(R.string.toast_reminder_deleted),
             Toast.LENGTH_SHORT
-        )
-            .show()
+        ).show()
+
+        findNavController().navigateUp()
+    }
+
+    private fun cancelNotificationAlarm(reminder: Reminder) {
+        AlarmHelper().cancelExistingNotificationAlarm(requireContext(), reminder)
     }
 }
