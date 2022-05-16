@@ -93,7 +93,7 @@ class AddEditReminderFragment : Fragment() {
         menu.findItem(R.id.action_done).actionView
             .findViewById<MaterialButton>(R.id.save_reminder)
             .setOnClickListener {
-                if (isDetailValid()) {
+                if (isReminderValid()) {
                     saveReminder()
                     hideKeyboard()
                 }
