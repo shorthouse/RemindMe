@@ -6,6 +6,7 @@ import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -67,21 +68,42 @@ class AddEditReminderFragment : Fragment() {
             addReminderFragment = this@AddEditReminderFragment
             viewmodel = viewModel
 
-            val adapter = ArrayAdapter(
-                requireContext(),
-                R.layout.list_item_dropdown_interval,
-                listOf("day", "week")
-            )
-            dropdownIntervalMenuInput.setAdapter(adapter)
+            intervalTimeValueInput.doAfterTextChanged {
+                if (it.toString().isNotBlank()) setDropdownTimeUnitAdapter(it.toString())
+            }
         }
 
-        viewModel.reminder.observe(viewLifecycleOwner) { reminder ->
+        viewModel.newReminder.observe(viewLifecycleOwner) { reminder ->
             reminder?.let {
-                scheduleAlarmNotification(reminder)
+                updateNotificationAlarms(reminder)
                 viewModel.clearLiveData()
                 navigateUp()
             }
         }
+    }
+
+    private fun setDropdownTimeUnitAdapter(timeValueString: String) {
+        val timeValue = timeValueString.toLong()
+
+        val dropdownItems = listOf(
+            resources.getQuantityString(R.plurals.dropdown_days, timeValue.toInt()),
+            resources.getQuantityString(R.plurals.dropdown_weeks, timeValue.toInt())
+        )
+
+        val adapter = ArrayAdapter(
+            requireContext(),
+            R.layout.list_item_dropdown_interval,
+            dropdownItems
+        )
+
+        val currentTimeUnit = binding.dropdownIntervalMenuInput.text.toString()
+        if (getString(R.string.time_unit_day) in currentTimeUnit) {
+            binding.dropdownIntervalMenuInput.setText(dropdownItems[0])
+        } else if (getString(R.string.time_unit_week) in currentTimeUnit) {
+            binding.dropdownIntervalMenuInput.setText(dropdownItems[1])
+        }
+
+        binding.dropdownIntervalMenuInput.setAdapter(adapter)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
