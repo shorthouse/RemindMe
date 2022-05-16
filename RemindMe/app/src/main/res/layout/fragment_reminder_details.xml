@@ -121,7 +121,7 @@
             android:background="?attr/dividerHorizontal"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ic_repeat"
-            app:hideIfNoNotes="@{reminder.notes}" />
+            app:showIfNotesExist="@{reminder.notes}" />
 
         <ImageView
             android:id="@+id/ic_notes"
@@ -132,7 +132,7 @@
             android:src="@drawable/ic_notes"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/divider_interval"
-            app:hideIfNoNotes="@{reminder.notes}"/>
+            app:showIfNotesExist="@{reminder.notes}"/>
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/notes"
@@ -142,12 +142,48 @@
             android:layout_marginTop="16dp"
             android:text="@{reminder.notes}"
             android:textAppearance="?attr/textAppearanceBody2"
-            app:hideIfNoNotes="@{reminder.notes}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/ic_notes"
             app:layout_constraintTop_toBottomOf="@+id/divider_interval"
-            tools:text="Remember to floss!" />
+            tools:text="Remember to floss!"
+            app:showIfNotesExist="@{reminder.notes}"/>
+
+        <View
+            android:id="@+id/divider_notification"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_margin="16dp"
+            android:background="?attr/dividerHorizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ic_notes"
+            app:showIfNotificationEnabled="@{reminder.notificationSent}" />
+
+        <ImageView
+            android:id="@+id/ic_notification"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:contentDescription="@string/cd_icon_notification"
+            android:src="@drawable/ic_notification"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/divider_notification"
+            app:showIfNotificationEnabled="@{reminder.notificationSent}" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/notification"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/notifications_on"
+            android:textAppearance="?attr/textAppearanceBody2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/ic_notification"
+            app:layout_constraintTop_toBottomOf="@+id/divider_notification"
+            app:showIfNotificationEnabled="@{reminder.notificationSent}"
+            tools:text="Notifications on" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/edit_reminder_fab"
@@ -159,7 +195,6 @@
             android:src="@drawable/ic_edit"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
