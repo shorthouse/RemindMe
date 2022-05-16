@@ -8,58 +8,106 @@ import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.receivers.AlarmNotificationReceiver
 
 class AlarmHelper {
-    fun setAlarm(
+    fun setNotificationAlarm(
         context: Context,
         reminder: Reminder,
         alarmTriggerAtMillis: Long,
         alarmRepeatIntervalMillis: Long?
     ) {
-        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-
-        val alarmIntent = Intent(context, AlarmNotificationReceiver::class.java)
-        alarmIntent.putExtra("reminderName", reminder.name)
-
-        val alarmBroadcastIntent = PendingIntent.getBroadcast(
-            context,
-            reminder.id.toInt(),
-            alarmIntent,
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_CANCEL_CURRENT,
-        )
+        val alarmManager = getAlarmManager(context)
+        val alarmIntent = getAlarmIntent(context, reminder)
+        val alarmBroadcastIntent = getNewBroadcastIntent(context, alarmIntent, reminder)
 
         if (alarmRepeatIntervalMillis == null) {
-            alarmManager.setExactAndAllowWhileIdle(
-                AlarmManager.RTC_WAKEUP,
+            scheduleOneTimeNotification(
+                alarmManager,
                 alarmTriggerAtMillis,
                 alarmBroadcastIntent
             )
         } else {
-            alarmManager.setRepeating(
-                AlarmManager.RTC_WAKEUP,
+            scheduleRepeatNotification(
+                alarmManager,
                 alarmTriggerAtMillis,
-                61000,
+                alarmRepeatIntervalMillis,
                 alarmBroadcastIntent
             )
         }
     }
 
-    fun cancelAlarm(
+    fun cancelExistingNotificationAlarm(
         context: Context,
         reminder: Reminder
     ) {
-        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-
-        val alarmIntent = Intent(context, AlarmNotificationReceiver::class.java)
-        alarmIntent.putExtra("reminderName", reminder.name)
-
-        val alarmBroadcastIntent = PendingIntent.getBroadcast(
-            context,
-            reminder.id.toInt(),
-            alarmIntent,
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_NO_CREATE,
-        )
+        val alarmManager = getAlarmManager(context)
+        val alarmIntent = getAlarmIntent(context, reminder)
+        val alarmBroadcastIntent = getExistingBroadcastIntent(context, alarmIntent, reminder)
 
         if (alarmBroadcastIntent != null) {
             alarmManager.cancel(alarmBroadcastIntent)
         }
+    }
+
+    private fun getAlarmManager(context: Context): AlarmManager {
+        return context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    }
+
+    private fun getAlarmIntent(context: Context, reminder: Reminder): Intent {
+        return Intent(context, AlarmNotificationReceiver::class.java)
+            .putExtra(
+                "reminderName",
+                reminder.name
+            )
+    }
+
+    private fun getNewBroadcastIntent(
+        context: Context,
+        alarmIntent: Intent,
+        reminder: Reminder
+    ): PendingIntent {
+        return PendingIntent.getBroadcast(
+            context,
+            reminder.id.toInt(),
+            alarmIntent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_CANCEL_CURRENT,
+        )
+    }
+
+    private fun getExistingBroadcastIntent(
+        context: Context,
+        alarmIntent: Intent,
+        reminder: Reminder
+    ): PendingIntent? {
+        return PendingIntent.getBroadcast(
+            context,
+            reminder.id.toInt(),
+            alarmIntent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_NO_CREATE
+        )
+    }
+
+    private fun scheduleOneTimeNotification(
+        alarmManager: AlarmManager,
+        alarmTriggerAtMillis: Long,
+        alarmBroadcastIntent: PendingIntent
+    ) {
+        alarmManager.setExactAndAllowWhileIdle(
+            AlarmManager.RTC_WAKEUP,
+            alarmTriggerAtMillis,
+            alarmBroadcastIntent
+        )
+    }
+
+    private fun scheduleRepeatNotification(
+        alarmManager: AlarmManager,
+        alarmTriggerAtMillis: Long,
+        alarmRepeatIntervalMillis: Long,
+        alarmBroadcastIntent: PendingIntent
+    ) {
+        alarmManager.setRepeating(
+            AlarmManager.RTC_WAKEUP,
+            alarmTriggerAtMillis,
+            alarmRepeatIntervalMillis,
+            alarmBroadcastIntent
+        )
     }
 }

@@ -57,10 +57,11 @@ class ReminderDetailsFragment : Fragment() {
                 .toString()
         }
 
+        val isEditReminder = true
         binding.apply {
             editReminderFab.setOnClickListener {
                 val action = ReminderDetailsFragmentDirections
-                    .actionReminderDetailsToAddEditReminder(navigationArgs.id)
+                    .actionReminderDetailsToAddEditReminder(navigationArgs.id, isEditReminder)
                 findNavController().navigate(action)
             }
         }
@@ -82,17 +83,19 @@ class ReminderDetailsFragment : Fragment() {
 
     private fun deleteReminder() {
         viewModel.deleteReminder(reminder)
+
         if (reminder.isNotificationSent) cancelNotificationAlarm(reminder)
-        findNavController().navigateUp()
+
         Toast.makeText(
             context,
             getString(R.string.toast_reminder_deleted),
             Toast.LENGTH_SHORT
-        )
-            .show()
+        ).show()
+
+        findNavController().navigateUp()
     }
 
     private fun cancelNotificationAlarm(reminder: Reminder) {
-        AlarmHelper().cancelAlarm(requireContext(), reminder)
+        AlarmHelper().cancelExistingNotificationAlarm(requireContext(), reminder)
     }
 }

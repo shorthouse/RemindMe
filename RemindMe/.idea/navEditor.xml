@@ -19,7 +19,7 @@
                         </option>
                         <option name="myPositions">
                           <map>
-                            <entry key="action_active_reminders_to_add_reminder">
+                            <entry key="action_active_reminders_to_add_edit_reminder">
                               <value>
                                 <LayoutPositions />
                               </value>
@@ -34,12 +34,12 @@
                       </LayoutPositions>
                     </value>
                   </entry>
-                  <entry key="add_reminder">
+                  <entry key="add_edit_reminder">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="448" />
+                            <option name="x" value="12" />
                             <option name="y" value="12" />
                           </Point>
                         </option>
@@ -57,7 +57,7 @@
                         </option>
                         <option name="myPositions">
                           <map>
-                            <entry key="action_all_reminders_to_add_reminder">
+                            <entry key="action_all_reminders_to_add_edit_reminder">
                               <value>
                                 <LayoutPositions />
                               </value>
@@ -80,6 +80,15 @@
                             <option name="x" value="447" />
                             <option name="y" value="325" />
                           </Point>
+                        </option>
+                        <option name="myPositions">
+                          <map>
+                            <entry key="action_reminder_details_to_add_edit_reminder">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                          </map>
                         </option>
                       </LayoutPositions>
                     </value>

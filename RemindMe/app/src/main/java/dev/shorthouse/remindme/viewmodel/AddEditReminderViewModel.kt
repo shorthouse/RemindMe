@@ -1,7 +1,6 @@
 package dev.shorthouse.remindme.viewmodel
 
 import androidx.lifecycle.*
-import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.data.ReminderDao
 import dev.shorthouse.remindme.data.RepeatInterval
 import dev.shorthouse.remindme.model.Reminder
@@ -18,7 +17,7 @@ class AddReminderViewModel(
 
     private val dateFormatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy")
     private val dateTimeFormatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm")
-    val reminder = MutableLiveData<Reminder?>()
+    val newReminder = MutableLiveData<Reminder?>()
 
     fun getReminder(id: Long): LiveData<Reminder> {
         return reminderDao.getReminder(id).asLiveData()
@@ -32,7 +31,7 @@ class AddReminderViewModel(
         isArchived: Boolean,
         isNotificationSent: Boolean
     ) {
-        val newReminder = Reminder(
+        val reminder = Reminder(
             name = name,
             startDateTime = startDateTime,
             repeatInterval = repeatInterval,
@@ -42,8 +41,8 @@ class AddReminderViewModel(
         )
 
         viewModelScope.launch(Dispatchers.IO) {
-            newReminder.id = reminderDao.insert(newReminder)
-            reminder.postValue(newReminder)
+            reminder.id = reminderDao.insert(reminder)
+            newReminder.postValue(reminder)
         }
     }
 
@@ -56,7 +55,7 @@ class AddReminderViewModel(
         isArchived: Boolean,
         isNotificationSent: Boolean
     ) {
-        val updatedReminder = Reminder(
+        val reminder = Reminder(
             id = id,
             name = name,
             startDateTime = startDateTime,
@@ -67,8 +66,8 @@ class AddReminderViewModel(
         )
 
         viewModelScope.launch(Dispatchers.IO) {
-            reminderDao.update(updatedReminder)
-            reminder.postValue(updatedReminder)
+            reminderDao.update(reminder)
+            newReminder.postValue(reminder)
         }
     }
 

@@ -55,13 +55,11 @@ class AddEditReminderFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val id = navigationArgs.id
-        if (id > 0) {
-            viewModel.getReminder(id).observe(this.viewLifecycleOwner) {
+        if (navigationArgs.isEditReminder) {
+            viewModel.getReminder(navigationArgs.id).observe(this.viewLifecycleOwner) {
                 binding.reminder = it
                 binding.repeatSwitch.isChecked = viewModel.getIsRepeatChecked(binding.reminder)
                 binding.notificationSwitch.isChecked = it.isNotificationSent
-                //binding.intervalTimeValueInput.setText(it.repeatInterval?.timeValue.toString())
             }
         }
 
@@ -129,7 +127,7 @@ class AddEditReminderFragment : Fragment() {
 
         val isNotificationSent = binding.notificationSwitch.isChecked
 
-        if (navigationArgs.id > 0) {
+        if (navigationArgs.isEditReminder) {
             viewModel.updateReminder(
                 navigationArgs.id,
                 reminderName,
@@ -151,14 +149,26 @@ class AddEditReminderFragment : Fragment() {
         }
     }
 
+    private fun updateNotificationAlarms(reminder: Reminder) {
+        if (navigationArgs.isEditReminder) cancelExistingAlarmNotification(reminder)
+        if (reminder.isNotificationSent) scheduleAlarmNotification(reminder)
+    }
+
     private fun scheduleAlarmNotification(reminder: Reminder) {
         val alarmTriggerAtMillis = viewModel.getAlarmTriggerAtMillis(reminder.startDateTime)
         val alarmRepeatIntervalMillis = viewModel.getRepeatIntervalMillis(reminder.repeatInterval)
-        AlarmHelper().setAlarm(
+        AlarmHelper().setNotificationAlarm(
             requireContext(),
             reminder,
             alarmTriggerAtMillis,
             alarmRepeatIntervalMillis
+        )
+    }
+
+    private fun cancelExistingAlarmNotification(reminder: Reminder) {
+        AlarmHelper().cancelExistingNotificationAlarm(
+            requireContext(),
+            reminder
         )
     }
 
@@ -220,20 +230,27 @@ class AddEditReminderFragment : Fragment() {
         findNavController().navigateUp()
     }
 
-    private fun isDetailValid(): Boolean {
+    private fun isReminderValid(): Boolean {
         val name = binding.nameInput.text.toString()
+        if (!viewModel.isNameValid(name)) {
+            makeShortToast(R.string.error_name_empty)
+            return false
+        }
+
         val startDate = binding.startDateInput.text.toString()
         val startTime = binding.startTimeInput.text.toString()
-        val startDateTime = viewModel.convertDateTimeStringToDateTime(startDate, startTime)
-
-        val isDetailValid = viewModel.isDetailValid(name, startDateTime)
-
-        return if (isDetailValid) {
-            isDetailValid
-        } else {
-            makeShortToast(viewModel.getDetailError(name))
-            isDetailValid
+        if (!viewModel.isStartTimeValid(startDate, startTime)) {
+            makeShortToast(R.string.error_time_past)
+            return false
         }
+
+        val repeatIntervalValue = binding.intervalTimeValueInput.text.toString().toLong()
+        if (!viewModel.isRepeatIntervalValid(repeatIntervalValue)) {
+            makeShortToast(R.string.error_interval_zero)
+            return false
+        }
+
+        return true
     }
 
     private fun makeShortToast(stringResId: Int) {
