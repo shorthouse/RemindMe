@@ -111,8 +111,10 @@ class AddReminderViewModel(
 
     private fun getCurrentTimeNextHour(): String {
         return ZonedDateTime.now()
-            .truncatedTo(ChronoUnit.HOURS).plusHours(1)
-            .toLocalTime().toString()
+            .truncatedTo(ChronoUnit.HOURS)
+            .plusHours(1)
+            .toLocalTime()
+            .toString()
     }
 
     fun getIsRepeatChecked(reminder: Reminder?): Boolean {
@@ -143,6 +145,23 @@ class AddReminderViewModel(
     fun getRepeatIntervalValue(reminder: Reminder?): Long {
         return if (reminder?.repeatInterval == null) 1L else reminder.repeatInterval.timeValue
     }
+
+    fun getRepeatInterval(
+        isRepeatReminder: Boolean,
+        timeValue: Long,
+        timeUnitString: String
+    ): RepeatInterval? {
+        if (!isRepeatReminder) return null
+
+        val timeUnit = when (timeUnitString) {
+            in "days" -> ChronoUnit.DAYS
+            else -> ChronoUnit.WEEKS
+        }
+
+        return RepeatInterval(timeValue, timeUnit)
+    }
+
+    fun getReminderNotes(notes: String): String? = notes.ifBlank { null }
 }
 
 class AddEditReminderViewModelFactory(
