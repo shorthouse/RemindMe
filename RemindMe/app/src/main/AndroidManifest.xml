@@ -3,6 +3,7 @@
     package="dev.shorthouse.remindme">
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
 
     <application
         android:name="dev.shorthouse.remindme.BaseApplication"
@@ -12,15 +13,20 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.RemindMe">
+
         <activity
             android:name="dev.shorthouse.remindme.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service android:name=".services.RescheduleAlarmsOnBootService"
+            android:enabled="true"
+            android:exported="false" />
+
         <receiver android:name=".receivers.AlarmNotificationReceiver" />
         <receiver
             android:name=".receivers.BootCompleteReceiver"
