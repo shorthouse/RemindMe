@@ -51,8 +51,8 @@
         <item quantity="other">weeks</item>
     </plurals>
 
-    <string name="time_unit_day">day</string>
-    <string name="time_unit_week">week</string>
+    <string name="time_unit_days">days</string>
+    <string name="time_unit_weeks">weeks</string>
 
     <string name="cd_button_edit_reminder">Edit reminder</string>
     <string name="btn_reminder_done">Done</string>

@@ -196,7 +196,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/dropdown_interval_menu_label"
+                android:id="@+id/interval_time_unit_label"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -206,7 +206,7 @@
                 app:showIfRepeatChecked="@{repeatSwitch.checked}" >
 
                 <AutoCompleteTextView
-                    android:id="@+id/dropdown_interval_menu_input"
+                    android:id="@+id/interval_time_unit_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="none"
