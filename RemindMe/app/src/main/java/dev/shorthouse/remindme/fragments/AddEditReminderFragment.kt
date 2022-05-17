@@ -19,13 +19,11 @@ import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import dev.shorthouse.remindme.BaseApplication
 import dev.shorthouse.remindme.R
-import dev.shorthouse.remindme.data.RepeatInterval
 import dev.shorthouse.remindme.databinding.FragmentAddEditReminderBinding
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.utilities.AlarmHelper
 import dev.shorthouse.remindme.viewmodel.AddEditReminderViewModelFactory
 import dev.shorthouse.remindme.viewmodel.AddReminderViewModel
-import java.time.temporal.ChronoUnit
 
 class AddEditReminderFragment : Fragment() {
 
@@ -96,14 +94,13 @@ class AddEditReminderFragment : Fragment() {
             dropdownItems
         )
 
-        val currentTimeUnit = binding.dropdownIntervalMenuInput.text.toString()
-        if (getString(R.string.time_unit_day) in currentTimeUnit) {
-            binding.dropdownIntervalMenuInput.setText(dropdownItems[0])
-        } else if (getString(R.string.time_unit_week) in currentTimeUnit) {
-            binding.dropdownIntervalMenuInput.setText(dropdownItems[1])
+        val timeUnitInput = binding.intervalTimeUnitInput
+        when (timeUnitInput.text.toString()) {
+            in getString(R.string.time_unit_days) -> timeUnitInput.setText(dropdownItems[0])
+            else -> timeUnitInput.setText(dropdownItems[1])
         }
 
-        binding.dropdownIntervalMenuInput.setAdapter(adapter)
+        binding.intervalTimeUnitInput.setAdapter(adapter)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -130,20 +127,13 @@ class AddEditReminderFragment : Fragment() {
             binding.startTimeInput.text.toString()
         )
 
-        val repeatInterval = if (binding.repeatSwitch.isChecked) {
-            val timeValueString = binding.intervalTimeValueInput.text.toString()
-            val timeValueUnit = when (binding.dropdownIntervalMenuInput.text.toString()) {
-                getString(R.string.repeat_interval_day) -> ChronoUnit.DAYS
-                else -> ChronoUnit.WEEKS
-            }
-            RepeatInterval(timeValueString.toLong(), timeValueUnit)
-        } else null
+        val repeatInterval = viewModel.getRepeatInterval(
+            binding.repeatSwitch.isChecked,
+            binding.intervalTimeValueInput.text.toString().toLong(),
+            binding.intervalTimeUnitInput.text.toString()
+        )
 
-        val reminderNotes = if (binding.notesInput.text.isNullOrBlank()) {
-            null
-        } else {
-            binding.notesInput.text.toString()
-        }
+        val reminderNotes = viewModel.getReminderNotes(binding.notesInput.text.toString())
 
         val isArchived = false
 
@@ -188,10 +178,7 @@ class AddEditReminderFragment : Fragment() {
     }
 
     private fun cancelExistingAlarmNotification(reminder: Reminder) {
-        AlarmHelper().cancelExistingNotificationAlarm(
-            requireContext(),
-            reminder
-        )
+        AlarmHelper().cancelExistingNotificationAlarm(requireContext(), reminder)
     }
 
     fun displayDatePicker() {
