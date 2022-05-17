@@ -23,20 +23,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ab5d6aff-0558-45f9-8e31-81952340e3db" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ic_notification.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/assetWizardSettings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/assetWizardSettings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/navEditor.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/navEditor.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/dev/shorthouse/remindme/receivers/BootCompleteReceiver.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/dev/shorthouse/remindme/data/ReminderDatabase.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/dev/shorthouse/remindme/data/ReminderDatabase.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/dev/shorthouse/remindme/fragments/AddEditReminderFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/dev/shorthouse/remindme/fragments/AddEditReminderFragment.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/dev/shorthouse/remindme/fragments/ReminderDetailsFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/dev/shorthouse/remindme/fragments/ReminderDetailsFragment.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/dev/shorthouse/remindme/receivers/AlarmNotificationReceiver.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/dev/shorthouse/remindme/receivers/AlarmNotificationReceiver.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/dev/shorthouse/remindme/utilities/AlarmHelper.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/dev/shorthouse/remindme/utilities/AlarmHelper.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/dev/shorthouse/remindme/utilities/BindingAdapters.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/dev/shorthouse/remindme/utilities/BindingAdapters.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/dev/shorthouse/remindme/viewmodel/AddEditReminderViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/dev/shorthouse/remindme/viewmodel/AddEditReminderViewModel.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_add_edit_reminder.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_add_edit_reminder.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_reminder_details.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_reminder_details.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/list_item_active_reminder.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/list_item_active_reminder.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/navigation/nav_graph.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/navigation/nav_graph.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
