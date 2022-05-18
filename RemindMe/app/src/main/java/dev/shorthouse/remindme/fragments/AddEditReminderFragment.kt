@@ -167,14 +167,7 @@ class AddEditReminderFragment : Fragment() {
     }
 
     private fun scheduleAlarmNotification(reminder: Reminder) {
-        val alarmTriggerAtMillis = viewModel.getAlarmTriggerAtMillis(reminder.startDateTime)
-        val alarmRepeatIntervalMillis = viewModel.getRepeatIntervalMillis(reminder.repeatInterval)
-        AlarmHelper().setNotificationAlarm(
-            requireContext(),
-            reminder,
-            alarmTriggerAtMillis,
-            alarmRepeatIntervalMillis
-        )
+        AlarmHelper().setNotificationAlarm(requireContext(), reminder)
     }
 
     private fun cancelExistingAlarmNotification(reminder: Reminder) {
