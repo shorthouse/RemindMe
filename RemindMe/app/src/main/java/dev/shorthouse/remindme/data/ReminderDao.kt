@@ -14,7 +14,7 @@ interface ReminderDao {
     fun getReminder(id: Long): Flow<Reminder>
 
     @Query("SELECT * FROM reminder WHERE startDateTime <= :nowDateTime AND isArchived = 0")
-    fun getActiveNonArchivedReminders(nowDateTime: ZonedDateTime): Flow<List<Reminder>>
+    fun getAllActiveNonArchivedReminders(nowDateTime: ZonedDateTime): Flow<List<Reminder>>
 
     @Query("SELECT * FROM reminder WHERE isArchived = 0")
     fun getAllNonArchivedReminders(): Flow<List<Reminder>>
