@@ -23,19 +23,31 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".services.RescheduleAlarmsOnBootService"
+        <service android:name=".services.RescheduleNotificationsService"
             android:enabled="true"
             android:exported="false" />
 
-        <receiver android:name=".receivers.AlarmNotificationReceiver" />
+        <service android:name=".services.UpdateReminderTimeZoneService"
+            android:exported="false" />
+
+        <receiver
+            android:name=".receivers.AlarmNotificationReceiver" />
         <receiver
             android:name=".receivers.BootCompleteReceiver"
-            android:exported="false"
-            android:enabled="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
         </receiver>
+        <receiver
+            android:name=".receivers.TimeZoneChangedReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+            </intent-filter>
+        </receiver>
+
+
     </application>
 
 </manifest>
