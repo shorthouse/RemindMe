@@ -54,6 +54,7 @@
     <string name="time_unit_days">days</string>
     <string name="time_unit_weeks">weeks</string>
 
+
     <string name="cd_button_edit_reminder">Edit reminder</string>
     <string name="btn_reminder_done">Done</string>
     <string name="btn_save_reminder">save</string>
@@ -74,5 +75,7 @@
     <string name="interval_dropdown_default_value">day</string>
     <string name="cd_icon_notification">Notification Icon</string>
     <string name="notifications_on">Notifications enabled</string>
-
+    <string name="notification_reschedule_body">Scheduling reminder notifications</string>
+    <string name="notification_timezone_change_title">Time zone has changed</string>
+    <string name="notification_timezone_change_text">Updating reminder timezones</string>
 </resources>
