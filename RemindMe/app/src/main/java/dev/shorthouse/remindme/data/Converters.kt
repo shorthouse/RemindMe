@@ -3,38 +3,33 @@ package dev.shorthouse.remindme.data
 import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import java.time.Instant
-import java.time.ZoneId
 import java.time.ZonedDateTime
+
 
 class Converters {
     companion object {
         @TypeConverter
         @JvmStatic
-        fun epochSecondToDate(epochSecond: Long): ZonedDateTime {
-            return ZonedDateTime.ofInstant(
-                Instant.ofEpochSecond(epochSecond),
-                ZoneId.systemDefault()
-            )
+        fun startDateTimeToString(startDateTime: ZonedDateTime): String {
+            return startDateTime.toString()
         }
 
         @TypeConverter
         @JvmStatic
-        fun dateToEpochSecond(dateTime: ZonedDateTime): Long {
-            return dateTime.toEpochSecond()
+        fun startDateTimeFromString(startDateTimeString: String): ZonedDateTime {
+            return ZonedDateTime.parse(startDateTimeString)
         }
 
         @TypeConverter
         @JvmStatic
-        fun repeatIntervalToGson(repeatInterval: RepeatInterval?): String? {
+        fun repeatIntervalToJson(repeatInterval: RepeatInterval?): String? {
             return Gson().toJson(repeatInterval);
         }
 
         @TypeConverter
         @JvmStatic
-        fun gsonToRepeatInterval(json: String?): RepeatInterval? {
-            val pairType = object : TypeToken<RepeatInterval>() {}.type
-            return Gson().fromJson(json, pairType)
+        fun repeatIntervalFromJson(json: String?): RepeatInterval? {
+            return Gson().fromJson(json, object : TypeToken<RepeatInterval?>() {}.type)
         }
     }
 }
