@@ -4,10 +4,12 @@ import androidx.lifecycle.*
 import dev.shorthouse.remindme.data.ReminderDao
 import dev.shorthouse.remindme.data.RepeatInterval
 import dev.shorthouse.remindme.model.Reminder
-import dev.shorthouse.remindme.utilities.DAYS_IN_WEEK
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.time.*
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
@@ -71,16 +73,6 @@ class AddReminderViewModel(
         }
     }
 
-    fun getRepeatIntervalMillis(repeatInterval: RepeatInterval?): Long? {
-        if (repeatInterval == null) return null
-
-        val repeatIntervalDays = when (repeatInterval.timeUnit) {
-            ChronoUnit.DAYS -> repeatInterval.timeValue
-            else -> repeatInterval.timeValue * DAYS_IN_WEEK
-        }
-        return Duration.ofDays(repeatIntervalDays).toMillis()
-    }
-
     fun convertDateTimeStringToDateTime(dateText: String, timeText: String): ZonedDateTime {
         return LocalDateTime.parse(
             "$dateText $timeText",
@@ -119,10 +111,6 @@ class AddReminderViewModel(
 
     fun getIsRepeatChecked(reminder: Reminder?): Boolean {
         return if (reminder == null) false else reminder.repeatInterval != null
-    }
-
-    fun getAlarmTriggerAtMillis(reminderStartDateTime: ZonedDateTime): Long {
-        return reminderStartDateTime.toInstant().toEpochMilli()
     }
 
     fun isNameValid(name: String): Boolean {
