@@ -18,7 +18,7 @@ class ActiveReminderListViewModel(
 ) : ViewModel() {
 
     fun getActiveReminders(): LiveData<List<Reminder>> {
-        return reminderDao.getActiveNonArchivedReminders(ZonedDateTime.now()).asLiveData()
+        return reminderDao.getAllActiveNonArchivedReminders(ZonedDateTime.now()).asLiveData()
     }
 
     fun updateDoneReminder(
