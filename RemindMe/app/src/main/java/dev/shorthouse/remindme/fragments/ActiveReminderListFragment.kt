@@ -22,9 +22,7 @@ class ActiveReminderListFragment : Fragment() {
     private lateinit var binding: FragmentActiveReminderListBinding
 
     private val viewModel: ActiveReminderListViewModel by activityViewModels {
-        ActiveReminderListViewModelFactory(
-            activity?.application as BaseApplication
-        )
+        ActiveReminderListViewModelFactory(activity?.application as BaseApplication)
     }
 
     override fun onCreateView(
@@ -96,8 +94,8 @@ class ActiveReminderListFragment : Fragment() {
         notes: String?,
         isNotificationSent: Boolean,
     ) {
-        if (isNotificationSent) context?.let {
-            NotificationManagerCompat.from(it).cancel(id.toInt())
+        if (isNotificationSent) context?.let { context ->
+            NotificationManagerCompat.from(context).cancel(id.toInt())
         }
 
         viewModel.updateDoneReminder(

@@ -26,15 +26,12 @@ import dev.shorthouse.remindme.viewmodel.AddEditReminderViewModelFactory
 import dev.shorthouse.remindme.viewmodel.AddReminderViewModel
 
 class AddEditReminderFragment : Fragment() {
+    private lateinit var binding: FragmentAddEditReminderBinding
 
     private val navigationArgs: AddEditReminderFragmentArgs by navArgs()
 
-    private lateinit var binding: FragmentAddEditReminderBinding
-
     private val viewModel: AddReminderViewModel by activityViewModels {
-        AddEditReminderViewModelFactory(
-            (activity?.application as BaseApplication)
-        )
+        AddEditReminderViewModelFactory(activity?.application as BaseApplication)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,10 +52,10 @@ class AddEditReminderFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         if (navigationArgs.isEditReminder) {
-            viewModel.getReminder(navigationArgs.id).observe(this.viewLifecycleOwner) {
-                binding.reminder = it
+            viewModel.getReminder(navigationArgs.id).observe(this.viewLifecycleOwner) { reminder ->
+                binding.reminder = reminder
                 binding.repeatSwitch.isChecked = viewModel.getIsRepeatChecked(binding.reminder)
-                binding.notificationSwitch.isChecked = it.isNotificationSent
+                binding.notificationSwitch.isChecked = reminder.isNotificationSent
             }
         }
 
@@ -78,29 +75,6 @@ class AddEditReminderFragment : Fragment() {
                 navigateUp()
             }
         }
-    }
-
-    private fun setDropdownTimeUnitAdapter(timeValueString: String) {
-        val timeValue = timeValueString.toLong()
-
-        val dropdownItems = listOf(
-            resources.getQuantityString(R.plurals.dropdown_days, timeValue.toInt()),
-            resources.getQuantityString(R.plurals.dropdown_weeks, timeValue.toInt())
-        )
-
-        val adapter = ArrayAdapter(
-            requireContext(),
-            R.layout.list_item_dropdown_interval,
-            dropdownItems
-        )
-
-        val timeUnitInput = binding.intervalTimeUnitInput
-        when (timeUnitInput.text.toString()) {
-            in getString(R.string.time_unit_days) -> timeUnitInput.setText(dropdownItems[0])
-            else -> timeUnitInput.setText(dropdownItems[1])
-        }
-
-        binding.intervalTimeUnitInput.setAdapter(adapter)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -159,6 +133,29 @@ class AddEditReminderFragment : Fragment() {
                 isNotificationSent
             )
         }
+    }
+
+    private fun setDropdownTimeUnitAdapter(timeValueString: String) {
+        val timeValue = timeValueString.toLong()
+
+        val dropdownItems = listOf(
+            resources.getQuantityString(R.plurals.dropdown_days, timeValue.toInt()),
+            resources.getQuantityString(R.plurals.dropdown_weeks, timeValue.toInt())
+        )
+
+        val adapter = ArrayAdapter(
+            requireContext(),
+            R.layout.list_item_dropdown_interval,
+            dropdownItems
+        )
+
+        val timeUnitInput = binding.intervalTimeUnitInput
+        when (timeUnitInput.text.toString()) {
+            in getString(R.string.time_unit_days) -> timeUnitInput.setText(dropdownItems[0])
+            else -> timeUnitInput.setText(dropdownItems[1])
+        }
+
+        binding.intervalTimeUnitInput.setAdapter(adapter)
     }
 
     private fun updateNotificationAlarms(reminder: Reminder) {
