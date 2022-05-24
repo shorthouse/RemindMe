@@ -15,15 +15,15 @@ class ReminderRepository(
 
     fun getReminder(reminderId: Long) = reminderDao.getReminder(reminderId)
 
-    suspend fun insertReminder(reminder: Reminder): Long {
+    fun insertReminder(reminder: Reminder): Long {
         return reminderDao.insert(reminder)
     }
 
-    suspend fun updateReminder(reminder: Reminder) {
+    fun updateReminder(reminder: Reminder) {
         reminderDao.update(reminder)
     }
 
-    suspend fun deleteReminder(reminder: Reminder) {
+    fun deleteReminder(reminder: Reminder) {
         reminderDao.delete(reminder)
     }
 }
