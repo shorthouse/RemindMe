@@ -11,8 +11,8 @@ import kotlinx.coroutines.launch
 import java.time.format.DateTimeFormatter
 
 class ReminderDetailsViewModel(
-    application: BaseApplication,
-) : ViewModel() {
+    application: BaseApplication
+) : AndroidViewModel(application) {
     private val repository = ReminderRepository(
         ReminderDatabase.getDatabase(application).reminderDao()
     )
