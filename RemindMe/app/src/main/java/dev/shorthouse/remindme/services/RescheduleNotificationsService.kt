@@ -12,6 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.asLiveData
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.data.ReminderDatabase
+import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.utilities.AlarmHelper
 import dev.shorthouse.remindme.utilities.RESCHEDULE_ALARMS_SERVICE_CHANNEL_ID
@@ -19,6 +20,9 @@ import dev.shorthouse.remindme.utilities.RESCHEDULE_ALARMS_SERVICE_ID
 
 
 class RescheduleNotificationsService : Service() {
+    private val repository = ReminderRepository(
+        ReminderDatabase.getDatabase(application).reminderDao()
+    )
 
     override fun onCreate() {
         createNotificationChannel()
@@ -27,11 +31,7 @@ class RescheduleNotificationsService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         startForeground(RESCHEDULE_ALARMS_SERVICE_ID, getNotification())
 
-        val remindersLiveData =
-            ReminderDatabase.getDatabase(this)
-                .reminderDao()
-                .getNonArchivedReminders()
-                .asLiveData()
+        val remindersLiveData = repository.getNonArchivedReminders().asLiveData()
 
         remindersLiveData.observeForever(object : Observer<List<Reminder>> {
             override fun onChanged(reminders: List<Reminder>?) {

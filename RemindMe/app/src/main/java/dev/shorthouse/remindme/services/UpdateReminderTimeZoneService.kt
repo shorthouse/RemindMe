@@ -12,6 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.asLiveData
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.data.ReminderDatabase
+import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.utilities.UPDATED_TIME_ZONE_EXTRA
 import dev.shorthouse.remindme.utilities.UPDATE_REMINDER_TIME_ZONE_SERVICE_ID
@@ -23,6 +24,9 @@ import java.time.ZoneId
 import java.time.ZonedDateTime
 
 class UpdateReminderTimeZoneService : Service() {
+    private val repository = ReminderRepository(
+        ReminderDatabase.getDatabase(application).reminderDao()
+    )
 
     override fun onCreate() {
         createNotificationChannel()
@@ -31,11 +35,7 @@ class UpdateReminderTimeZoneService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         startForeground(UPDATE_REMINDER_TIME_ZONE_SERVICE_ID, getNotification())
 
-        val remindersLiveData =
-            ReminderDatabase.getDatabase(this)
-                .reminderDao()
-                .getReminders()
-                .asLiveData()
+        val remindersLiveData = repository.getReminders().asLiveData()
 
         val newTimeZone = intent?.getStringExtra(UPDATED_TIME_ZONE_EXTRA) ?: return START_NOT_STICKY
 
@@ -53,10 +53,6 @@ class UpdateReminderTimeZoneService : Service() {
     }
 
     private fun updateReminderTimeZones(reminders: List<Reminder>, newTimeZone: String) {
-        val reminderDao = ReminderDatabase
-            .getDatabase(this)
-            .reminderDao()
-
         val newZoneId = ZoneId.of(newTimeZone)
         reminders.forEach { reminder ->
             val newReminder = Reminder(
@@ -70,7 +66,7 @@ class UpdateReminderTimeZoneService : Service() {
             )
 
             CoroutineScope(Dispatchers.IO).launch {
-                reminderDao.update(newReminder)
+                repository.updateReminder(newReminder)
             }
         }
     }
