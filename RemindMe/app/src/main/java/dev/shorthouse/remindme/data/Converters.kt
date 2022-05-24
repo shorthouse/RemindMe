@@ -5,7 +5,6 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.time.ZonedDateTime
 
-
 class Converters {
     companion object {
         @TypeConverter
