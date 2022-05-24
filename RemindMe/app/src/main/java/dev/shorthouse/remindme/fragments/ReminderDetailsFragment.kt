@@ -12,10 +12,8 @@ import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.databinding.FragmentReminderDetailsBinding
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.utilities.AlarmHelper
-import dev.shorthouse.remindme.utilities.DATE_PATTERN
 import dev.shorthouse.remindme.viewmodel.ReminderDetailsViewModel
 import dev.shorthouse.remindme.viewmodel.ReminderDetailsViewModelFactory
-import java.time.format.DateTimeFormatter
 
 class ReminderDetailsFragment : Fragment() {
     private lateinit var binding: FragmentReminderDetailsBinding
@@ -47,14 +45,11 @@ class ReminderDetailsFragment : Fragment() {
         viewModel.getReminder(id).observe(this.viewLifecycleOwner) {
             reminder = it
             binding.reminder = reminder
-
-            binding.startDate.text = reminder.startDateTime
-                .toLocalDate()
-                .format(DateTimeFormatter.ofPattern(DATE_PATTERN))
-                .toString()
         }
 
         binding.apply {
+            viewmodel = viewModel
+
             editReminderFab.setOnClickListener {
                 val action = ReminderDetailsFragmentDirections
                     .actionReminderDetailsToAddEditReminder(
@@ -83,6 +78,7 @@ class ReminderDetailsFragment : Fragment() {
     private fun deleteReminder() {
         viewModel.deleteReminder(reminder)
 
+        
         if (reminder.isNotificationSent) cancelNotificationAlarm(reminder)
 
         Toast.makeText(

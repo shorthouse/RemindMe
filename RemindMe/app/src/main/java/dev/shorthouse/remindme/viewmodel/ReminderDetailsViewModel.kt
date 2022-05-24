@@ -5,8 +5,10 @@ import dev.shorthouse.remindme.BaseApplication
 import dev.shorthouse.remindme.data.ReminderDatabase
 import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.model.Reminder
+import dev.shorthouse.remindme.utilities.DATE_PATTERN
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.time.format.DateTimeFormatter
 
 class ReminderDetailsViewModel(
     application: BaseApplication,
@@ -23,6 +25,14 @@ class ReminderDetailsViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             repository.deleteReminder(reminder)
         }
+    }
+
+    fun getFormattedStartDate(reminder: Reminder?): String {
+        if (reminder == null) return ""
+        return reminder.startDateTime
+            .toLocalDate()
+            .format(DateTimeFormatter.ofPattern(DATE_PATTERN))
+            .toString()
     }
 }
 

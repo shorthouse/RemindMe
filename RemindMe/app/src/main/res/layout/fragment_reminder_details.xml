@@ -7,6 +7,9 @@
         <variable
             name="reminder"
             type="dev.shorthouse.remindme.model.Reminder" />
+        <variable
+            name="viewmodel"
+            type="dev.shorthouse.remindme.viewmodel.ReminderDetailsViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -42,6 +45,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
+            android:text="@{viewmodel.getFormattedStartDate(reminder)}"
             android:textAppearance="?attr/textAppearanceBody2"
             app:layout_constraintBottom_toBottomOf="@+id/ic_calendar"
             app:layout_constraintStart_toEndOf="@+id/ic_calendar"
