@@ -8,7 +8,7 @@ import java.time.ZonedDateTime
 @Entity
 data class Reminder(
     @PrimaryKey(autoGenerate = true)
-    var id: Long = 0,
+    var id: Long,
 
     val name: String,
 
