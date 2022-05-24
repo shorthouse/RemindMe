@@ -13,21 +13,15 @@ import dev.shorthouse.remindme.MainActivity
 import dev.shorthouse.remindme.R
 
 class AlarmNotificationReceiver : BroadcastReceiver() {
-    companion object {
-        const val REMINDER_ID = "reminderId"
-        const val NOTIFICATION_TITLE = "notificationTitle"
-        const val NOTIFICATION_TEXT = "notificationText"
-    }
-
     override fun onReceive(context: Context?, intent: Intent?) {
         if (context == null || intent == null) return
+
         createNotificationChannel(context)
+
         val reminderNotification = getReminderNotification(context, intent)
-        if (reminderNotification != null) displayReminderNotification(
-            context,
-            intent,
-            reminderNotification
-        )
+        if (reminderNotification != null) {
+            displayReminderNotification(context, intent, reminderNotification)
+        }
     }
 
     private fun getReminderNotification(context: Context, intent: Intent): Notification? {
@@ -39,10 +33,13 @@ class AlarmNotificationReceiver : BroadcastReceiver() {
             context, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE
         )
 
-        val reminderId = intent.getLongExtra(REMINDER_ID, -1L)
-        val notificationTitle = intent.getStringExtra(NOTIFICATION_TITLE)
-        val notificationText = intent.getStringExtra(NOTIFICATION_TEXT)
-        if (reminderId == -1L || notificationTitle == null || notificationText == null) return null
+        val reminderId =
+            intent.getLongExtra(context.getString(R.string.intent_key_reminderId), -1L)
+        val notificationTitle =
+            intent.getStringExtra(context.getString(R.string.intent_key_notificationTitle))
+        val notificationText =
+            intent.getStringExtra(context.getString(R.string.intent_key_notificationText))
+        if (isIntentValuesInvalid(reminderId, notificationTitle, notificationText)) return null
 
         return NotificationCompat.Builder(
             context,
@@ -53,9 +50,21 @@ class AlarmNotificationReceiver : BroadcastReceiver() {
             .setContentText(notificationText)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setContentIntent(pendingIntent)
-            .addAction(R.drawable.ic_clock, "Done", getDoneActionIntent(context, reminderId))
+            .addAction(
+                R.drawable.ic_clock,
+                context.getString(R.string.reminder_notification_action_done_text),
+                getDoneActionIntent(context, reminderId)
+            )
             .setAutoCancel(true)
             .build()
+    }
+
+    private fun isIntentValuesInvalid(
+        reminderId: Long,
+        notificationTitle: String?,
+        notificationText: String?
+    ): Boolean {
+        return reminderId == -1L || notificationTitle == null || notificationText == null
     }
 
     private fun displayReminderNotification(

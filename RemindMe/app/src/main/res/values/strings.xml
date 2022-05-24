@@ -21,6 +21,11 @@
 
     <string name="reminder_database_name">reminder_database</string>
     <string name="reminder_notification_body">%1$s</string>
+    <string name="reminder_notification_action_done_text">Done</string>
+
+    <string name="intent_key_reminderId">reminderId</string>
+    <string name="intent_key_notificationTitle">notificationTitle</string>
+    <string name="intent_key_notificationText">notificationText</string>
 
     <string name="title_date_picker">Select reminder start date</string>
     <string name="title_time_picker">Select reminder start time</string>
