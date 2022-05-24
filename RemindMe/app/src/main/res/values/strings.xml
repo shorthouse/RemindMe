@@ -19,6 +19,7 @@
     <string name="error_time_past">The start time cannot be in the past.</string>
     <string name="error_interval_zero">The repeat interval cannot be 0.</string>
 
+    <string name="reminder_database_name">reminder_database</string>
     <string name="reminder_notification_body">%1$s</string>
 
     <string name="title_date_picker">Select reminder start date</string>
