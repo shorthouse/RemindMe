@@ -24,10 +24,12 @@
         </activity>
 
         <service android:name=".services.RescheduleNotificationsService"
-            android:enabled="true"
             android:exported="false" />
 
         <service android:name=".services.UpdateReminderTimeZoneService"
+            android:exported="false" />
+
+        <service android:name=".services.UpdateDoneReminderService"
             android:exported="false" />
 
         <receiver
@@ -46,8 +48,8 @@
                 <action android:name="android.intent.action.TIMEZONE_CHANGED" />
             </intent-filter>
         </receiver>
-
-
+        <receiver
+            android:name=".receivers.NotificationActionDoneReceiver" />
     </application>
 
 </manifest>

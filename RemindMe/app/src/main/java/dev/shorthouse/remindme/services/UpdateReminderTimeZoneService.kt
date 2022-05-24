@@ -49,7 +49,7 @@ class UpdateReminderTimeZoneService : Service() {
             }
         })
 
-        return START_NOT_STICKY
+        return super.onStartCommand(intent, flags, startId)
     }
 
     private fun updateReminderTimeZones(reminders: List<Reminder>, newTimeZone: String) {
