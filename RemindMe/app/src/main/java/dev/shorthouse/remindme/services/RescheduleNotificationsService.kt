@@ -43,7 +43,7 @@ class RescheduleNotificationsService : Service() {
             }
         })
 
-        return START_NOT_STICKY
+        return super.onStartCommand(intent, flags, startId)
     }
 
     private fun rescheduleNotifications(reminders: List<Reminder>) {

@@ -48,6 +48,7 @@ class UpdateDoneReminderService : Service() {
                 )
             }
         })
+
         return super.onStartCommand(intent, flags, startId)
     }
 
