@@ -19,6 +19,8 @@
     <string name="error_time_past">The start time cannot be in the past.</string>
     <string name="error_interval_zero">The repeat interval cannot be 0.</string>
 
+    <string name="reminder_notification_body">%1$s</string>
+
     <string name="title_date_picker">Select reminder start date</string>
     <string name="title_time_picker">Select reminder start time</string>
     <string name="tag_reminder_date_picker">reminder_date_picker</string>
@@ -60,9 +62,9 @@
     <string name="btn_save_reminder">save</string>
     <string name="toolbar_delete_action_title">Delete</string>
     <string name="toast_reminder_deleted">Reminder deleted</string>
-    <string name="title_send_notification">Send Notification</string>
-    <string name="notification_reminder_name">Verbose WorkManager Notifications</string>
-    <string name="notification_reminder_description">Verbose WorkManager Notifications</string>
+    <string name="title_send_notification">Send Notification</string>#
+    <string name="notification_reminder_name">Verbose Reminder Notifications</string>
+    <string name="notification_reminder_description">Verbose Reminder Notifications</string>
     <string name="notification_channel_id">VERBOSE_NOTIFICATION</string>
     <string name="notification_content_title">RemindMe to…</string>
     <string name="radio_label_repeat_daily">Every day</string>
