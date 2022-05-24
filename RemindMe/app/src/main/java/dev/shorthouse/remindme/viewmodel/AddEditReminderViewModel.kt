@@ -1,7 +1,9 @@
 package dev.shorthouse.remindme.viewmodel
 
 import androidx.lifecycle.*
-import dev.shorthouse.remindme.data.ReminderDao
+import dev.shorthouse.remindme.BaseApplication
+import dev.shorthouse.remindme.data.ReminderDatabase
+import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.data.RepeatInterval
 import dev.shorthouse.remindme.model.Reminder
 import kotlinx.coroutines.Dispatchers
@@ -14,15 +16,18 @@ import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
 class AddReminderViewModel(
-    private val reminderDao: ReminderDao
+    val application: BaseApplication
 ) : ViewModel() {
 
+    private val repository = ReminderRepository(
+        ReminderDatabase.getDatabase(application).reminderDao()
+    )
     private val dateFormatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy")
     private val dateTimeFormatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm")
     val newReminder = MutableLiveData<Reminder?>()
 
     fun getReminder(id: Long): LiveData<Reminder> {
-        return reminderDao.getReminder(id).asLiveData()
+        return repository.getReminder(id).asLiveData()
     }
 
     fun addReminder(
@@ -43,7 +48,7 @@ class AddReminderViewModel(
         )
 
         viewModelScope.launch(Dispatchers.IO) {
-            reminder.id = reminderDao.insert(reminder)
+            reminder.id = repository.insertReminder(reminder)
             newReminder.postValue(reminder)
         }
     }
@@ -68,7 +73,7 @@ class AddReminderViewModel(
         )
 
         viewModelScope.launch(Dispatchers.IO) {
-            reminderDao.update(reminder)
+            repository.updateReminder(reminder)
             newReminder.postValue(reminder)
         }
     }
@@ -153,12 +158,12 @@ class AddReminderViewModel(
 }
 
 class AddEditReminderViewModelFactory(
-    private val reminderDao: ReminderDao
+    private val application: BaseApplication,
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(AddReminderViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return AddReminderViewModel(reminderDao) as T
+            return AddReminderViewModel(application) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
