@@ -6,7 +6,7 @@ import java.time.ZonedDateTime
 class ReminderRepository(
     private val reminderDao: ReminderDao
 ) {
-    fun getAllReminders() = reminderDao.getReminders()
+    fun getReminders() = reminderDao.getReminders()
 
     fun getNonArchivedReminders() = reminderDao.getNonArchivedReminders()
 
