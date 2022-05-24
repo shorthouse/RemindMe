@@ -7,6 +7,7 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.asLiveData
 import dev.shorthouse.remindme.data.ReminderDatabase
+import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.data.RepeatInterval
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.utilities.DAYS_IN_WEEK
@@ -20,54 +21,62 @@ import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
 
 class UpdateDoneReminderService : Service() {
+    private val repository = ReminderRepository(
+        ReminderDatabase.getDatabase(application).reminderDao()
+    )
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if (intent == null) return START_NOT_STICKY
         val reminderId = intent.getLongExtra("reminderId", -1L)
         if (reminderId == -1L) return START_NOT_STICKY
 
-        val reminderLiveData =
-            ReminderDatabase.getDatabase(this)
-                .reminderDao()
-                .getReminder(reminderId)
-                .asLiveData()
+        val reminderLiveData = repository.getReminder(reminderId).asLiveData()
 
         reminderLiveData.observeForever(object : Observer<Reminder> {
             override fun onChanged(reminder: Reminder?) {
                 if (reminder == null) return
                 reminderLiveData.removeObserver(this)
-                updateDoneReminder(
-                    reminder.id,
-                    reminder.name,
-                    reminder.startDateTime,
-                    reminder.repeatInterval,
-                    reminder.notes,
-                    reminder.isNotificationSent
+                insertUpdatedDoneReminder(
+                    getUpdatedDoneReminder(
+                        reminder.id,
+                        reminder.name,
+                        reminder.startDateTime,
+                        reminder.repeatInterval,
+                        reminder.notes,
+                        reminder.isNotificationSent
+                    )
                 )
             }
         })
-
         return super.onStartCommand(intent, flags, startId)
-
     }
 
-    fun updateDoneReminder(
+    private fun insertUpdatedDoneReminder(updatedDoneReminder: Reminder) {
+        CoroutineScope(Dispatchers.IO).launch {
+            repository.insertReminder(updatedDoneReminder)
+            NotificationManagerCompat.from(this@UpdateDoneReminderService)
+                .cancel(updatedDoneReminder.id.toInt())
+            this@UpdateDoneReminderService.stopSelf()
+        }
+    }
+
+    fun getUpdatedDoneReminder(
         id: Long,
         name: String,
         startDateTime: ZonedDateTime,
         repeatInterval: RepeatInterval?,
         notes: String?,
         isNotificationSent: Boolean,
-    ) {
-        when (repeatInterval) {
-            null -> updateDoneSingleReminder(
+    ): Reminder {
+        return when (repeatInterval) {
+            null -> getUpdatedDoneSingleReminder(
                 id,
                 name,
                 startDateTime,
                 notes,
                 isNotificationSent,
             )
-            else -> updateDoneRepeatReminder(
+            else -> getUpdatedDoneRepeatReminder(
                 id,
                 name,
                 startDateTime,
@@ -78,14 +87,14 @@ class UpdateDoneReminderService : Service() {
         }
     }
 
-    private fun updateDoneSingleReminder(
+    private fun getUpdatedDoneSingleReminder(
         id: Long,
         name: String,
         startDateTime: ZonedDateTime,
         notes: String?,
         isNotificationSent: Boolean,
-    ) {
-        val reminder = Reminder(
+    ): Reminder {
+        return Reminder(
             id = id,
             name = name,
             startDateTime = startDateTime,
@@ -94,26 +103,17 @@ class UpdateDoneReminderService : Service() {
             isArchived = true,
             isNotificationSent = isNotificationSent,
         )
-
-        CoroutineScope(Dispatchers.IO).launch {
-            ReminderDatabase.getDatabase(this@UpdateDoneReminderService)
-                .reminderDao()
-                .update(reminder)
-            NotificationManagerCompat.from(this@UpdateDoneReminderService)
-                .cancel(id.toInt())
-            this@UpdateDoneReminderService.stopSelf()
-        }
     }
 
-    private fun updateDoneRepeatReminder(
+    private fun getUpdatedDoneRepeatReminder(
         id: Long,
         name: String,
         startDateTime: ZonedDateTime,
         repeatInterval: RepeatInterval,
         notes: String?,
         isNotificationSent: Boolean,
-    ) {
-        val reminder = Reminder(
+    ): Reminder {
+        return Reminder(
             id = id,
             name = name,
             startDateTime = getUpdatedStartDateTime(startDateTime, repeatInterval),
@@ -122,15 +122,6 @@ class UpdateDoneReminderService : Service() {
             isArchived = false,
             isNotificationSent = isNotificationSent,
         )
-
-        CoroutineScope(Dispatchers.IO).launch {
-            ReminderDatabase.getDatabase(this@UpdateDoneReminderService)
-                .reminderDao()
-                .update(reminder)
-            NotificationManagerCompat.from(this@UpdateDoneReminderService)
-                .cancel(id.toInt())
-            this@UpdateDoneReminderService.stopSelf()
-        }
     }
 
     private fun getUpdatedStartDateTime(
