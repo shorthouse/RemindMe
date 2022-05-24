@@ -15,12 +15,23 @@ import dev.shorthouse.remindme.R
 class AlarmNotificationReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         if (context == null || intent == null) return
-
         createNotificationChannel(context)
+        displayReminderNotification(context, intent)
+    }
 
+    private fun displayReminderNotification(
+        context: Context,
+        intent: Intent,
+    ) {
         val reminderNotification = getReminderNotification(context, intent)
-        if (reminderNotification != null) {
-            displayReminderNotification(context, intent, reminderNotification)
+        reminderNotification?.let {
+            NotificationManagerCompat.from(context).notify(
+                intent.getLongExtra(
+                    context.getString(R.string.intent_key_reminderId),
+                    -1L
+                ).toInt(),
+                reminderNotification
+            )
         }
     }
 
@@ -59,26 +70,9 @@ class AlarmNotificationReceiver : BroadcastReceiver() {
             .build()
     }
 
-    private fun isIntentValuesInvalid(
-        reminderId: Long,
-        notificationTitle: String?,
-        notificationText: String?
-    ): Boolean {
-        return reminderId == -1L || notificationTitle == null || notificationText == null
-    }
-
-    private fun displayReminderNotification(
-        context: Context,
-        intent: Intent,
-        reminderNotification: Notification
-    ) {
-        NotificationManagerCompat.from(context)
-            .notify(intent.getLongExtra(REMINDER_ID, -1L).toInt(), reminderNotification)
-    }
-
     private fun getDoneActionIntent(context: Context, reminderId: Long): PendingIntent {
         val doneIntent = Intent(context, NotificationActionDoneReceiver::class.java)
-            .putExtra(REMINDER_ID, reminderId)
+            .putExtra(context.getString(R.string.intent_key_reminderId), reminderId)
 
         return PendingIntent.getBroadcast(context, reminderId.toInt(), doneIntent, 0)
     }
@@ -94,5 +88,13 @@ class AlarmNotificationReceiver : BroadcastReceiver() {
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
 
         notificationManager?.createNotificationChannel(channel)
+    }
+
+    private fun isIntentValuesInvalid(
+        reminderId: Long,
+        notificationTitle: String?,
+        notificationText: String?
+    ): Boolean {
+        return reminderId == -1L || notificationTitle == null || notificationText == null
     }
 }
