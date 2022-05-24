@@ -27,6 +27,8 @@
     <string name="intent_key_notificationTitle">notificationTitle</string>
     <string name="intent_key_notificationText">notificationText</string>
 
+    <string name="intent_key_timeZone">"time-zone"</string>
+
     <string name="title_date_picker">Select reminder start date</string>
     <string name="title_time_picker">Select reminder start time</string>
     <string name="tag_reminder_date_picker">reminder_date_picker</string>
