@@ -23,7 +23,7 @@ class ActiveReminderListFragment : Fragment() {
 
     private val viewModel: ActiveReminderListViewModel by activityViewModels {
         ActiveReminderListViewModelFactory(
-            (activity?.application as BaseApplication).database.reminderDao()
+            activity?.application as BaseApplication
         )
     }
 

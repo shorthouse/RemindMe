@@ -33,7 +33,7 @@ class AddEditReminderFragment : Fragment() {
 
     private val viewModel: AddReminderViewModel by activityViewModels {
         AddEditReminderViewModelFactory(
-            (activity?.application as BaseApplication).database.reminderDao()
+            (activity?.application as BaseApplication)
         )
     }
 

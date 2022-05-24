@@ -20,7 +20,7 @@ class AllReminderListFragment : Fragment() {
 
     private val viewModel: AllReminderListViewModel by activityViewModels {
         AllReminderListViewModelFactory(
-            (activity?.application as BaseApplication).database.reminderDao()
+            (activity?.application as BaseApplication)
         )
     }
 
