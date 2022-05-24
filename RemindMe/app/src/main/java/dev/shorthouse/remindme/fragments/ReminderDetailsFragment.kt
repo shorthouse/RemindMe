@@ -44,7 +44,7 @@ class ReminderDetailsFragment : Fragment() {
         val id = navigationArgs.id
         viewModel.getReminder(id).observe(this.viewLifecycleOwner) {
             reminder = it
-            binding.reminder = reminder
+            binding.reminder = it
         }
 
         binding.apply {
@@ -78,7 +78,6 @@ class ReminderDetailsFragment : Fragment() {
     private fun deleteReminder() {
         viewModel.deleteReminder(reminder)
 
-        
         if (reminder.isNotificationSent) cancelNotificationAlarm(reminder)
 
         Toast.makeText(
