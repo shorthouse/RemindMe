@@ -1,7 +1,9 @@
 package dev.shorthouse.remindme.viewmodel
 
 import androidx.lifecycle.*
-import dev.shorthouse.remindme.data.ReminderDao
+import dev.shorthouse.remindme.BaseApplication
+import dev.shorthouse.remindme.data.ReminderDatabase
+import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.data.RepeatInterval
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.utilities.DAYS_IN_WEEK
@@ -14,11 +16,15 @@ import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
 
 class ActiveReminderListViewModel(
-    private val reminderDao: ReminderDao
+    val application: BaseApplication
 ) : ViewModel() {
 
+    private val repository = ReminderRepository(
+        ReminderDatabase.getDatabase(application).reminderDao()
+    )
+
     fun getActiveReminders(): LiveData<List<Reminder>> {
-        return reminderDao.getAllActiveNonArchivedReminders(ZonedDateTime.now()).asLiveData()
+        return repository.getActiveNonArchivedReminders(ZonedDateTime.now()).asLiveData()
     }
 
     fun updateDoneReminder(
@@ -29,13 +35,13 @@ class ActiveReminderListViewModel(
         notes: String?,
         isNotificationSent: Boolean,
     ) {
-        when (repeatInterval) {
+        val reminder = when (repeatInterval) {
             null -> updateDoneSingleReminder(
                 id,
                 name,
                 startDateTime,
                 notes,
-                isNotificationSent,
+                isNotificationSent
             )
             else -> updateDoneRepeatReminder(
                 id,
@@ -43,8 +49,12 @@ class ActiveReminderListViewModel(
                 startDateTime,
                 repeatInterval,
                 notes,
-                isNotificationSent,
+                isNotificationSent
             )
+        }
+
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.updateReminder(reminder)
         }
     }
 
@@ -54,8 +64,8 @@ class ActiveReminderListViewModel(
         startDateTime: ZonedDateTime,
         notes: String?,
         isNotificationSent: Boolean,
-    ) {
-        val reminder = Reminder(
+    ): Reminder {
+        return Reminder(
             id = id,
             name = name,
             startDateTime = startDateTime,
@@ -64,10 +74,6 @@ class ActiveReminderListViewModel(
             isArchived = true,
             isNotificationSent = isNotificationSent,
         )
-
-        viewModelScope.launch(Dispatchers.IO) {
-            reminderDao.update(reminder)
-        }
     }
 
     private fun updateDoneRepeatReminder(
@@ -77,8 +83,8 @@ class ActiveReminderListViewModel(
         repeatInterval: RepeatInterval,
         notes: String?,
         isNotificationSent: Boolean,
-    ) {
-        val reminder = Reminder(
+    ): Reminder {
+        return Reminder(
             id = id,
             name = name,
             startDateTime = getUpdatedStartDateTime(startDateTime, repeatInterval),
@@ -87,10 +93,6 @@ class ActiveReminderListViewModel(
             isArchived = false,
             isNotificationSent = isNotificationSent,
         )
-
-        viewModelScope.launch(Dispatchers.IO) {
-            reminderDao.update(reminder)
-        }
     }
 
     private fun getUpdatedStartDateTime(
@@ -120,12 +122,12 @@ class ActiveReminderListViewModel(
 }
 
 class ActiveReminderListViewModelFactory(
-    private val reminderDao: ReminderDao
+    private val application: BaseApplication
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(ActiveReminderListViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return ActiveReminderListViewModel(reminderDao) as T
+            return ActiveReminderListViewModel(application) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
