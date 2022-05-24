@@ -30,7 +30,7 @@ class RescheduleNotificationsService : Service() {
         val remindersLiveData =
             ReminderDatabase.getDatabase(this)
                 .reminderDao()
-                .getAllNonArchivedReminders()
+                .getNonArchivedReminders()
                 .asLiveData()
 
         remindersLiveData.observeForever(object : Observer<List<Reminder>> {
