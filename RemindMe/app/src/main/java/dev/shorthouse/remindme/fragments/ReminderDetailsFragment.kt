@@ -23,9 +23,7 @@ class ReminderDetailsFragment : Fragment() {
     private lateinit var reminder: Reminder
 
     private val viewModel: ReminderDetailsViewModel by activityViewModels {
-        ReminderDetailsViewModelFactory(
-            activity?.application as BaseApplication
-        )
+        ReminderDetailsViewModelFactory(activity?.application as BaseApplication)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,11 +54,13 @@ class ReminderDetailsFragment : Fragment() {
                 .toString()
         }
 
-        val isEditReminder = true
         binding.apply {
             editReminderFab.setOnClickListener {
                 val action = ReminderDetailsFragmentDirections
-                    .actionReminderDetailsToAddEditReminder(navigationArgs.id, isEditReminder)
+                    .actionReminderDetailsToAddEditReminder(
+                        navigationArgs.id,
+                        isEditReminder = true
+                    )
                 findNavController().navigate(action)
             }
         }
