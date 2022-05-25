@@ -14,9 +14,7 @@ import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.data.ReminderDatabase
 import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.model.Reminder
-import dev.shorthouse.remindme.utilities.UPDATED_TIME_ZONE_EXTRA
 import dev.shorthouse.remindme.utilities.UPDATE_REMINDER_TIME_ZONE_SERVICE_ID
-import dev.shorthouse.remindme.utilities.UPDATE_REMINDER_TIME_ZONE__SERVICE_CHANNEL_ID
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -24,6 +22,10 @@ import java.time.ZoneId
 import java.time.ZonedDateTime
 
 class UpdateReminderTimeZoneService : Service() {
+    companion object {
+        const val NOTIFICATION_CHANNEL_ID = "UPDATE_REMINDER_TIME_ZONE_SERVICE_CHANNEL_ID"
+    }
+
     private val repository = ReminderRepository(
         ReminderDatabase.getDatabase(application).reminderDao()
     )
