@@ -36,14 +36,15 @@ class ActiveReminderListViewModel(
         isNotificationSent: Boolean,
     ) {
         val reminder = when (repeatInterval) {
-            null -> updateDoneSingleReminder(
+            null -> getCompletedSingleReminder(
                 id,
                 name,
                 startDateTime,
+                repeatInterval,
                 notes,
                 isNotificationSent
             )
-            else -> updateDoneRepeatReminder(
+            else -> getUpdatedRepeatReminder(
                 id,
                 name,
                 startDateTime,
@@ -58,10 +59,11 @@ class ActiveReminderListViewModel(
         }
     }
 
-    private fun updateDoneSingleReminder(
+    private fun getCompletedSingleReminder(
         id: Long,
         name: String,
         startDateTime: ZonedDateTime,
+        repeatInterval: RepeatInterval?,
         notes: String?,
         isNotificationSent: Boolean,
     ): Reminder {
@@ -69,14 +71,14 @@ class ActiveReminderListViewModel(
             id = id,
             name = name,
             startDateTime = startDateTime,
-            repeatInterval = null,
+            repeatInterval = repeatInterval,
             notes = notes,
             isArchived = true,
             isNotificationSent = isNotificationSent,
         )
     }
 
-    private fun updateDoneRepeatReminder(
+    private fun getUpdatedRepeatReminder(
         id: Long,
         name: String,
         startDateTime: ZonedDateTime,
