@@ -5,9 +5,6 @@
 
     <data>
         <variable
-            name="addReminderFragment"
-            type="dev.shorthouse.remindme.fragments.AddEditReminderFragment" />
-        <variable
             name="viewmodel"
             type="dev.shorthouse.remindme.viewmodel.AddReminderViewModel" />
         <variable
@@ -46,7 +43,7 @@
                     android:singleLine="true"
                     android:maxLength="200"
                     android:imeOptions="actionDone"
-                    android:text='@{reminder.name ?? ""}'
+                    android:text='@{reminder.name}'
                     tools:text="Brush teeth" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -71,7 +68,6 @@
                     android:focusableInTouchMode="false"
                     android:hint="@string/hint_reminder_date"
                     android:inputType="none"
-                    android:onClick="@{() -> addReminderFragment.displayDatePicker()}"
                     android:text="@{viewmodel.getStartDate(reminder)}"
                     tools:text="Fri 17 Jun 2024" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -98,7 +94,6 @@
                     android:hint="@string/hint_reminder_time"
                     android:text="@{viewmodel.getStartTime(reminder)}"
                     android:inputType="none"
-                    android:onClick="@{() -> addReminderFragment.displayTimePicker()}"
                     tools:text="16:37 PM" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -117,7 +112,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/hint_reminder_notes"
-                    android:text='@{reminder.notes ?? ""}'
+                    android:text='@{reminder.notes}'
                     tools:text="Make sure scrubbed" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -211,7 +206,8 @@
                     android:layout_height="wrap_content"
                     android:inputType="none"
                     app:dropDownText="@{reminder.repeatInterval}"
-                    tools:text="day" />
+                    tools:text="day"
+                    tools:ignore="LabelFor" />
 
             </com.google.android.material.textfield.TextInputLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
