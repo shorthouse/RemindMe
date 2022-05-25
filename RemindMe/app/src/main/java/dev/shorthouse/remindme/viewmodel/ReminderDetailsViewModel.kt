@@ -12,7 +12,7 @@ import java.time.format.DateTimeFormatter
 
 class ReminderDetailsViewModel(
     application: BaseApplication
-) : AndroidViewModel(application) {
+) : ViewModel() {
     private val repository = ReminderRepository(
         ReminderDatabase.getDatabase(application).reminderDao()
     )
