@@ -6,7 +6,9 @@ import dev.shorthouse.remindme.data.ReminderDatabase
 import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.data.RepeatInterval
 import dev.shorthouse.remindme.model.Reminder
-import kotlinx.coroutines.Dispatchers
+import dev.shorthouse.remindme.utilities.DATE_INPUT_PATTERN
+import dev.shorthouse.remindme.utilities.DATE_TIME_INPUT_PATTERN
+import dev.shorthouse.remindme.utilities.NotificationScheduler
 import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.LocalDateTime
@@ -22,38 +24,12 @@ class AddReminderViewModel(
     private val repository = ReminderRepository(
         ReminderDatabase.getDatabase(application).reminderDao()
     )
-    private val dateFormatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy")
-    private val dateTimeFormatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm")
-    val newReminder = MutableLiveData<Reminder?>()
 
     fun getReminder(id: Long): LiveData<Reminder> {
         return repository.getReminder(id).asLiveData()
     }
 
-    fun addReminder(
-        name: String,
-        startDateTime: ZonedDateTime,
-        repeatInterval: RepeatInterval?,
-        notes: String?,
-        isArchived: Boolean,
-        isNotificationSent: Boolean
-    ) {
-        val reminder = Reminder(
-            name = name,
-            startDateTime = startDateTime,
-            repeatInterval = repeatInterval,
-            notes = notes,
-            isArchived = isArchived,
-            isNotificationSent = isNotificationSent
-        )
-
-        viewModelScope.launch(Dispatchers.IO) {
-            reminder.id = repository.insertReminder(reminder)
-            newReminder.postValue(reminder)
-        }
-    }
-
-    fun updateReminder(
+    fun saveReminder(
         id: Long,
         name: String,
         startDateTime: ZonedDateTime,
@@ -72,71 +48,68 @@ class AddReminderViewModel(
             isNotificationSent = isNotificationSent
         )
 
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.updateReminder(reminder)
-            newReminder.postValue(reminder)
+        viewModelScope.launch {
+            if (isUpdatedReminder(reminder)) {
+                repository.updateReminder(reminder)
+                cancelExistingReminderNotification(reminder)
+            } else {
+                repository.insertReminder(reminder)
+            }
+            scheduleReminderNotification(reminder)
         }
+    }
+
+    private fun scheduleReminderNotification(reminder: Reminder) {
+        if (!reminder.isNotificationSent) return
+        NotificationScheduler().scheduleReminderNotification(application, reminder)
+    }
+
+    private fun cancelExistingReminderNotification(reminder: Reminder) {
+        if (isUpdatedReminder(reminder)) return
+        NotificationScheduler().cancelExistingReminderNotification(application, reminder)
+    }
+
+    fun getStartDate(reminder: Reminder?): String {
+        val startDateTime = when (reminder) {
+            null -> ZonedDateTime.now()
+            else -> reminder.startDateTime
+        }
+
+        return startDateTime
+            .toLocalDate()
+            .format(DateTimeFormatter.ofPattern(DATE_INPUT_PATTERN))
+            .toString()
+    }
+
+    fun getStartTime(reminder: Reminder?): String {
+        val startTime = when (reminder) {
+            null -> ZonedDateTime.now().truncatedTo(ChronoUnit.HOURS).plusHours(1)
+            else -> reminder.startDateTime
+        }
+
+        return startTime.toLocalTime().toString()
+    }
+
+    fun getRepeatIntervalValue(reminder: Reminder?): Long {
+        return if (reminder?.repeatInterval == null) 1L else reminder.repeatInterval.timeValue
     }
 
     fun convertDateTimeStringToDateTime(dateText: String, timeText: String): ZonedDateTime {
         return LocalDateTime.parse(
             "$dateText $timeText",
-            dateTimeFormatter
+            DateTimeFormatter.ofPattern(DATE_TIME_INPUT_PATTERN)
         )
             .atZone(ZoneId.systemDefault())
-    }
-
-    fun getStartDate(reminder: Reminder?): String {
-        return when (reminder) {
-            null -> ZonedDateTime.now().toLocalDate().format(dateFormatter).toString()
-            else -> reminder.startDateTime.toLocalDate().format(dateFormatter).toString()
-        }
     }
 
     fun convertTimestampToDateString(dateTimestamp: Long): String {
         return Instant.ofEpochMilli(dateTimestamp)
             .atZone(ZoneId.systemDefault())
-            .format(dateFormatter)
-    }
-
-    fun getStartTime(reminder: Reminder?): String {
-        return when (reminder) {
-            null -> getCurrentTimeNextHour()
-            else -> reminder.startDateTime.toLocalTime().toString()
-        }
-    }
-
-    private fun getCurrentTimeNextHour(): String {
-        return ZonedDateTime.now()
-            .truncatedTo(ChronoUnit.HOURS)
-            .plusHours(1)
-            .toLocalTime()
-            .toString()
+            .format(DateTimeFormatter.ofPattern(DATE_INPUT_PATTERN))
     }
 
     fun getIsRepeatChecked(reminder: Reminder?): Boolean {
         return if (reminder == null) false else reminder.repeatInterval != null
-    }
-
-    fun isNameValid(name: String): Boolean {
-        return name.isNotBlank()
-    }
-
-    fun isStartTimeValid(startDate: String, startTime: String): Boolean {
-        val startDateTime = convertDateTimeStringToDateTime(startDate, startTime)
-        return startDateTime.isAfter(ZonedDateTime.now())
-    }
-
-    fun isRepeatIntervalValid(repeatIntervalValue: Long): Boolean {
-        return repeatIntervalValue > 0
-    }
-
-    fun clearLiveData() {
-        newReminder.postValue(null)
-    }
-
-    fun getRepeatIntervalValue(reminder: Reminder?): Long {
-        return if (reminder?.repeatInterval == null) 1L else reminder.repeatInterval.timeValue
     }
 
     fun getRepeatInterval(
@@ -155,6 +128,11 @@ class AddReminderViewModel(
     }
 
     fun getReminderNotes(notes: String): String? = notes.ifBlank { null }
+    private fun isUpdatedReminder(reminder: Reminder) = reminder.id != 0L
+    fun isNameValid(name: String) = name.isNotBlank()
+    fun isRepeatIntervalValid(repeatIntervalValue: Long) = repeatIntervalValue > 0
+    fun isStartTimeValid(startDate: String, startTime: String) =
+        convertDateTimeStringToDateTime(startDate, startTime).isAfter(ZonedDateTime.now())
 }
 
 class AddEditReminderViewModelFactory(
