@@ -11,7 +11,7 @@ import dev.shorthouse.remindme.BaseApplication
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.databinding.FragmentReminderDetailsBinding
 import dev.shorthouse.remindme.model.Reminder
-import dev.shorthouse.remindme.utilities.AlarmHelper
+import dev.shorthouse.remindme.utilities.NotificationScheduler
 import dev.shorthouse.remindme.viewmodel.ReminderDetailsViewModel
 import dev.shorthouse.remindme.viewmodel.ReminderDetailsViewModelFactory
 
@@ -90,6 +90,6 @@ class ReminderDetailsFragment : Fragment() {
     }
 
     private fun cancelNotificationAlarm(reminder: Reminder) {
-        AlarmHelper().cancelExistingNotificationAlarm(requireContext(), reminder)
+        NotificationScheduler().cancelExistingReminderNotification(requireContext(), reminder)
     }
 }
