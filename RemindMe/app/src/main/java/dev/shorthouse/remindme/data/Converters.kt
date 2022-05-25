@@ -22,7 +22,7 @@ class Converters {
         @TypeConverter
         @JvmStatic
         fun repeatIntervalToJson(repeatInterval: RepeatInterval?): String? {
-            return Gson().toJson(repeatInterval);
+            return Gson().toJson(repeatInterval)
         }
 
         @TypeConverter
