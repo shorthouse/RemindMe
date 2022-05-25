@@ -27,17 +27,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupNavBar() {
-        val navHostFragment = supportFragmentManager.findFragmentById(
-            R.id.nav_host_fragment_container
-        ) as NavHostFragment
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment_container) as NavHostFragment
         navController = navHostFragment.navController
 
         val bottomNavigationView = binding.bottomNavigation
         bottomNavigationView.setupWithNavController(navController)
 
-        appBarConfiguration = AppBarConfiguration(
-            setOf(R.id.active_reminders, R.id.all_reminders)
-        )
+        appBarConfiguration = AppBarConfiguration(setOf(R.id.active_reminders, R.id.all_reminders))
         setupActionBarWithNavController(navController, appBarConfiguration)
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
