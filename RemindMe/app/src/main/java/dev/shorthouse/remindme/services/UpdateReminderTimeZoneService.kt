@@ -5,7 +5,6 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.Service
 import android.content.Intent
-import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.Observer
@@ -35,19 +34,24 @@ class UpdateReminderTimeZoneService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        val newTimeZone = intent?.getStringExtra(this.getString(R.string.intent_key_timeZone))
+        if (intent == null || newTimeZone == null) {
+            stopForeground(true)
+            stopSelf()
+            return START_NOT_STICKY
+        }
+
         startForeground(UPDATE_REMINDER_TIME_ZONE_SERVICE_ID, getNotification())
 
         val remindersLiveData = repository.getReminders().asLiveData()
-
-        val newTimeZone = intent?.getStringExtra(UPDATED_TIME_ZONE_EXTRA) ?: return START_NOT_STICKY
-
         remindersLiveData.observeForever(object : Observer<List<Reminder>> {
             override fun onChanged(reminders: List<Reminder>?) {
-                if (reminders == null) return
-                remindersLiveData.removeObserver(this)
-                updateReminderTimeZones(reminders, newTimeZone)
-                stopForeground(true)
-                stopSelf()
+                reminders?.let {
+                    remindersLiveData.removeObserver(this)
+                    updateReminderTimeZones(reminders, newTimeZone)
+                    stopForeground(true)
+                    stopSelf()
+                }
             }
         })
 
@@ -56,6 +60,7 @@ class UpdateReminderTimeZoneService : Service() {
 
     private fun updateReminderTimeZones(reminders: List<Reminder>, newTimeZone: String) {
         val newZoneId = ZoneId.of(newTimeZone)
+
         reminders.forEach { reminder ->
             val newReminder = Reminder(
                 reminder.id,
@@ -74,21 +79,19 @@ class UpdateReminderTimeZoneService : Service() {
     }
 
     private fun createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val appName = getString(R.string.app_name)
-            val serviceChannel = NotificationChannel(
-                UPDATE_REMINDER_TIME_ZONE__SERVICE_CHANNEL_ID,
-                appName,
-                NotificationManager.IMPORTANCE_DEFAULT
-            )
-            val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.createNotificationChannel(serviceChannel)
-        }
+        val appName = getString(R.string.app_name)
+        val notificationChannel = NotificationChannel(
+            NOTIFICATION_CHANNEL_ID,
+            appName,
+            NotificationManager.IMPORTANCE_DEFAULT
+        )
+        val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(notificationChannel)
     }
 
     private fun getNotification(): Notification {
-        return NotificationCompat.Builder(this, UPDATE_REMINDER_TIME_ZONE__SERVICE_CHANNEL_ID)
-            .setContentTitle(getString(R.string.notification_timezone_change_title))
+        return NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
+            .setContentTitle(getString(R.string.app_name))
             .setContentText(getString(R.string.notification_timezone_change_text))
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .build()
