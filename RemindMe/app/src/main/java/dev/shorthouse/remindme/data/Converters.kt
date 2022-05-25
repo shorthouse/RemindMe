@@ -5,7 +5,6 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.time.ZonedDateTime
 
-
 class Converters {
     companion object {
         @TypeConverter
@@ -23,7 +22,7 @@ class Converters {
         @TypeConverter
         @JvmStatic
         fun repeatIntervalToJson(repeatInterval: RepeatInterval?): String? {
-            return Gson().toJson(repeatInterval);
+            return Gson().toJson(repeatInterval)
         }
 
         @TypeConverter

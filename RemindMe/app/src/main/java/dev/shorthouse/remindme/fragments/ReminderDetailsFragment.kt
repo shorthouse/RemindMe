@@ -11,11 +11,9 @@ import dev.shorthouse.remindme.BaseApplication
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.databinding.FragmentReminderDetailsBinding
 import dev.shorthouse.remindme.model.Reminder
-import dev.shorthouse.remindme.utilities.AlarmHelper
-import dev.shorthouse.remindme.utilities.DATE_PATTERN
+import dev.shorthouse.remindme.utilities.NotificationScheduler
 import dev.shorthouse.remindme.viewmodel.ReminderDetailsViewModel
 import dev.shorthouse.remindme.viewmodel.ReminderDetailsViewModelFactory
-import java.time.format.DateTimeFormatter
 
 class ReminderDetailsFragment : Fragment() {
     private lateinit var binding: FragmentReminderDetailsBinding
@@ -23,9 +21,7 @@ class ReminderDetailsFragment : Fragment() {
     private lateinit var reminder: Reminder
 
     private val viewModel: ReminderDetailsViewModel by activityViewModels {
-        ReminderDetailsViewModelFactory(
-            activity?.application as BaseApplication
-        )
+        ReminderDetailsViewModelFactory(activity?.application as BaseApplication)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,19 +44,18 @@ class ReminderDetailsFragment : Fragment() {
         val id = navigationArgs.id
         viewModel.getReminder(id).observe(this.viewLifecycleOwner) {
             reminder = it
-            binding.reminder = reminder
-
-            binding.startDate.text = reminder.startDateTime
-                .toLocalDate()
-                .format(DateTimeFormatter.ofPattern(DATE_PATTERN))
-                .toString()
+            binding.reminder = it
         }
 
-        val isEditReminder = true
         binding.apply {
+            viewmodel = viewModel
+
             editReminderFab.setOnClickListener {
                 val action = ReminderDetailsFragmentDirections
-                    .actionReminderDetailsToAddEditReminder(navigationArgs.id, isEditReminder)
+                    .actionReminderDetailsToAddEditReminder(
+                        navigationArgs.id,
+                        isEditReminder = true
+                    )
                 findNavController().navigate(action)
             }
         }
@@ -95,6 +90,6 @@ class ReminderDetailsFragment : Fragment() {
     }
 
     private fun cancelNotificationAlarm(reminder: Reminder) {
-        AlarmHelper().cancelExistingNotificationAlarm(requireContext(), reminder)
+        NotificationScheduler().cancelExistingReminderNotification(requireContext(), reminder)
     }
 }

@@ -21,6 +21,7 @@ import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
 
 class UpdateDoneReminderService : Service() {
+
     private val repository = ReminderRepository(
         ReminderDatabase.getDatabase(application).reminderDao()
     )
@@ -34,18 +35,19 @@ class UpdateDoneReminderService : Service() {
 
         reminderLiveData.observeForever(object : Observer<Reminder> {
             override fun onChanged(reminder: Reminder?) {
-                if (reminder == null) return
-                reminderLiveData.removeObserver(this)
-                insertUpdatedDoneReminder(
-                    getUpdatedDoneReminder(
-                        reminder.id,
-                        reminder.name,
-                        reminder.startDateTime,
-                        reminder.repeatInterval,
-                        reminder.notes,
-                        reminder.isNotificationSent
+                reminder?.let {
+                    reminderLiveData.removeObserver(this)
+                    insertUpdatedDoneReminder(
+                        getUpdatedDoneReminder(
+                            reminder.id,
+                            reminder.name,
+                            reminder.startDateTime,
+                            reminder.repeatInterval,
+                            reminder.notes,
+                            reminder.isNotificationSent
+                        )
                     )
-                )
+                }
             }
         })
 
@@ -55,8 +57,10 @@ class UpdateDoneReminderService : Service() {
     private fun insertUpdatedDoneReminder(updatedDoneReminder: Reminder) {
         CoroutineScope(Dispatchers.IO).launch {
             repository.insertReminder(updatedDoneReminder)
+
             NotificationManagerCompat.from(this@UpdateDoneReminderService)
                 .cancel(updatedDoneReminder.id.toInt())
+
             this@UpdateDoneReminderService.stopSelf()
         }
     }
@@ -70,14 +74,14 @@ class UpdateDoneReminderService : Service() {
         isNotificationSent: Boolean,
     ): Reminder {
         return when (repeatInterval) {
-            null -> getUpdatedDoneSingleReminder(
+            null -> getCompletedSingleReminder(
                 id,
                 name,
                 startDateTime,
                 notes,
                 isNotificationSent,
             )
-            else -> getUpdatedDoneRepeatReminder(
+            else -> getUpdatedRepeatReminder(
                 id,
                 name,
                 startDateTime,
@@ -88,7 +92,7 @@ class UpdateDoneReminderService : Service() {
         }
     }
 
-    private fun getUpdatedDoneSingleReminder(
+    private fun getCompletedSingleReminder(
         id: Long,
         name: String,
         startDateTime: ZonedDateTime,
@@ -106,7 +110,7 @@ class UpdateDoneReminderService : Service() {
         )
     }
 
-    private fun getUpdatedDoneRepeatReminder(
+    private fun getUpdatedRepeatReminder(
         id: Long,
         name: String,
         startDateTime: ZonedDateTime,

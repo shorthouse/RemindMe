@@ -19,9 +19,7 @@ class AllReminderListFragment : Fragment() {
     private lateinit var binding: FragmentAllReminderListBinding
 
     private val viewModel: AllReminderListViewModel by activityViewModels {
-        AllReminderListViewModelFactory(
-            (activity?.application as BaseApplication)
-        )
+        AllReminderListViewModelFactory(activity?.application as BaseApplication)
     }
 
     override fun onCreateView(
@@ -67,5 +65,3 @@ class AllReminderListFragment : Fragment() {
         }
     }
 }
-
-

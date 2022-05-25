@@ -23,7 +23,7 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".services.RescheduleNotificationsService"
+        <service android:name=".services.RescheduleNotificationsOnRebootService"
             android:exported="false" />
 
         <service android:name=".services.UpdateReminderTimeZoneService"

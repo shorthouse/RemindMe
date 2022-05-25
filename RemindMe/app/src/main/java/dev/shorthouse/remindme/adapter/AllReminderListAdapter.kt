@@ -13,6 +13,7 @@ import java.time.format.DateTimeFormatter
 class AllReminderListAdapter(
     private val clickListener: (Reminder) -> Unit
 ) : ListAdapter<Reminder, AllReminderListAdapter.ReminderViewHolder>(DiffCallback) {
+
     class ReminderViewHolder(
         private var binding: ListItemReminderBinding
     ) : RecyclerView.ViewHolder(binding.root) {

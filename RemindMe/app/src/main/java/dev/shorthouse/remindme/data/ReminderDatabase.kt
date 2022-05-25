@@ -5,6 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.model.Reminder
 
 @Database(version = 1, exportSchema = false, entities = [Reminder::class])
@@ -21,7 +22,7 @@ abstract class ReminderDatabase : RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context,
                     ReminderDatabase::class.java,
-                    "reminder_database"
+                    context.getString(R.string.reminder_database_name)
                 )
                     .build()
                 INSTANCE = instance

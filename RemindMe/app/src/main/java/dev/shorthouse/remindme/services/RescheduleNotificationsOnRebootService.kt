@@ -5,7 +5,6 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.Service
 import android.content.Intent
-import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.Observer
@@ -14,12 +13,14 @@ import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.data.ReminderDatabase
 import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.model.Reminder
-import dev.shorthouse.remindme.utilities.AlarmHelper
-import dev.shorthouse.remindme.utilities.RESCHEDULE_ALARMS_SERVICE_CHANNEL_ID
-import dev.shorthouse.remindme.utilities.RESCHEDULE_ALARMS_SERVICE_ID
+import dev.shorthouse.remindme.utilities.NotificationScheduler
+import dev.shorthouse.remindme.utilities.RESCHEDULE_NOTIFICATIONS_SERVICE_ID
 
+class RescheduleNotificationsOnRebootService : Service() {
+    companion object {
+        const val NOTIFICATION_CHANNEL_ID = "RESCHEDULE_ALARMS_SERVICE_CHANNEL_ID"
+    }
 
-class RescheduleNotificationsService : Service() {
     private val repository = ReminderRepository(
         ReminderDatabase.getDatabase(application).reminderDao()
     )
@@ -29,47 +30,45 @@ class RescheduleNotificationsService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        startForeground(RESCHEDULE_ALARMS_SERVICE_ID, getNotification())
+        startForeground(RESCHEDULE_NOTIFICATIONS_SERVICE_ID, getNotification())
 
         val remindersLiveData = repository.getNonArchivedReminders().asLiveData()
 
         remindersLiveData.observeForever(object : Observer<List<Reminder>> {
             override fun onChanged(reminders: List<Reminder>?) {
-                if (reminders == null) return
-                remindersLiveData.removeObserver(this)
-                rescheduleNotifications(reminders)
-                stopForeground(true)
-                stopSelf()
+                reminders?.let {
+                    remindersLiveData.removeObserver(this)
+                    rescheduleNotifications(reminders)
+                    stopForeground(true)
+                    stopSelf()
+                }
             }
         })
 
         return super.onStartCommand(intent, flags, startId)
     }
 
-    private fun rescheduleNotifications(reminders: List<Reminder>) {
-        val alarmHelper = AlarmHelper()
-        val notifyingReminders = reminders.filter { reminder -> reminder.isNotificationSent }
-
-        notifyingReminders.forEach { reminder ->
-            alarmHelper.setNotificationAlarm(this, reminder)
-        }
+    private fun rescheduleNotifications(nonArchivedReminders: List<Reminder>) {
+        nonArchivedReminders
+            .filter { reminder -> reminder.isNotificationSent }
+            .forEach { reminder ->
+                NotificationScheduler().scheduleReminderNotification(this, reminder)
+            }
     }
 
     private fun createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val appName = getString(R.string.app_name)
-            val serviceChannel = NotificationChannel(
-                RESCHEDULE_ALARMS_SERVICE_CHANNEL_ID,
-                appName,
-                NotificationManager.IMPORTANCE_DEFAULT
-            )
-            val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.createNotificationChannel(serviceChannel)
-        }
+        val appName = getString(R.string.app_name)
+        val notificationChannel = NotificationChannel(
+            NOTIFICATION_CHANNEL_ID,
+            appName,
+            NotificationManager.IMPORTANCE_DEFAULT
+        )
+        val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(notificationChannel)
     }
 
     private fun getNotification(): Notification {
-        return NotificationCompat.Builder(this, RESCHEDULE_ALARMS_SERVICE_CHANNEL_ID)
+        return NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
             .setContentTitle(getString(R.string.app_name))
             .setContentText(getString(R.string.notification_reschedule_body))
             .setSmallIcon(R.drawable.ic_launcher_foreground)
