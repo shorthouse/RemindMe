@@ -1,8 +1,12 @@
 package dev.shorthouse.remindme.viewmodel
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dev.shorthouse.remindme.BaseApplication
-import dev.shorthouse.remindme.data.ReminderDatabase
 import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.data.RepeatInterval
 import dev.shorthouse.remindme.model.Reminder
@@ -16,14 +20,13 @@ import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
+import javax.inject.Inject
 
-class AddReminderViewModel(
-    val application: BaseApplication
+@HiltViewModel
+class AddReminderViewModel @Inject constructor(
+    @ApplicationContext private val application: BaseApplication,
+    private val repository: ReminderRepository,
 ) : ViewModel() {
-
-    private val repository = ReminderRepository(
-        ReminderDatabase.getDatabase(application).reminderDao()
-    )
 
     fun getReminder(id: Long): LiveData<Reminder> {
         return repository.getReminder(id).asLiveData()
@@ -133,16 +136,4 @@ class AddReminderViewModel(
     fun isRepeatIntervalValid(repeatIntervalValue: Long) = repeatIntervalValue > 0
     fun isStartTimeValid(startDate: String, startTime: String) =
         convertDateTimeStringToDateTime(startDate, startTime).isAfter(ZonedDateTime.now())
-}
-
-class AddEditReminderViewModelFactory(
-    private val application: BaseApplication,
-) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(AddReminderViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return AddReminderViewModel(application) as T
-        }
-        throw IllegalArgumentException("Unknown ViewModel class")
-    }
 }
