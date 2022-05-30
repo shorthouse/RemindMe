@@ -4,7 +4,6 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.model.Reminder
@@ -19,7 +18,6 @@ class NotificationScheduler @Inject constructor(
 ) {
     fun scheduleReminderNotification(reminder: Reminder) {
         if (reminder.isRepeatReminder()) {
-            Log.d("HDS", "repeat")
             scheduleRepeatNotification(reminder)
         } else {
             scheduleOneTimeNotification(reminder)
