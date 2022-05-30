@@ -5,22 +5,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import dev.shorthouse.remindme.BaseApplication
+import dagger.hilt.android.AndroidEntryPoint
 import dev.shorthouse.remindme.adapter.AllReminderListAdapter
 import dev.shorthouse.remindme.databinding.FragmentAllReminderListBinding
 import dev.shorthouse.remindme.viewmodel.AllReminderListViewModel
-import dev.shorthouse.remindme.viewmodel.AllReminderListViewModelFactory
 
-
+@AndroidEntryPoint
 class AllReminderListFragment : Fragment() {
     private lateinit var binding: FragmentAllReminderListBinding
 
-    private val viewModel: AllReminderListViewModel by activityViewModels {
-        AllReminderListViewModelFactory(activity?.application as BaseApplication)
-    }
+    private val viewModel: AllReminderListViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,

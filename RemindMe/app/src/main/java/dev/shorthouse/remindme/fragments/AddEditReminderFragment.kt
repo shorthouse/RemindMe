@@ -3,13 +3,14 @@ package dev.shorthouse.remindme.fragments
 import android.content.Context
 import android.os.Bundle
 import android.text.Editable
+import android.util.Log
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.button.MaterialButton
@@ -18,18 +19,16 @@ import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
-import dev.shorthouse.remindme.BaseApplication
+import dagger.hilt.android.AndroidEntryPoint
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.databinding.FragmentAddEditReminderBinding
-import dev.shorthouse.remindme.viewmodel.AddEditReminderViewModelFactory
-import dev.shorthouse.remindme.viewmodel.AddReminderViewModel
+import dev.shorthouse.remindme.viewmodel.AddEditReminderViewModel
 
+@AndroidEntryPoint
 class AddEditReminderFragment : Fragment() {
     private lateinit var binding: FragmentAddEditReminderBinding
     private val navigationArgs: AddEditReminderFragmentArgs by navArgs()
-    private val viewModel: AddReminderViewModel by activityViewModels {
-        AddEditReminderViewModelFactory(activity?.application as BaseApplication)
-    }
+    private val viewModelEdit: AddEditReminderViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
