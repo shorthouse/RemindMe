@@ -3,7 +3,6 @@ package dev.shorthouse.remindme.fragments
 import android.content.Context
 import android.os.Bundle
 import android.text.Editable
-import android.util.Log
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
@@ -28,7 +27,7 @@ import dev.shorthouse.remindme.viewmodel.AddEditReminderViewModel
 class AddEditReminderFragment : Fragment() {
     private lateinit var binding: FragmentAddEditReminderBinding
     private val navigationArgs: AddEditReminderFragmentArgs by navArgs()
-    private val viewModelEdit: AddEditReminderViewModel by viewModels()
+    private val viewModel: AddEditReminderViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,11 +54,13 @@ class AddEditReminderFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         if (navigationArgs.isEditReminder) {
-            viewModel.getReminder(navigationArgs.id).observe(this.viewLifecycleOwner) { reminder ->
-                binding.reminder = reminder
-                binding.repeatSwitch.isChecked = viewModel.getIsRepeatChecked(binding.reminder)
-                binding.notificationSwitch.isChecked = reminder.isNotificationSent
-            }
+            viewModel.getReminder(navigationArgs.id)
+                .observe(this.viewLifecycleOwner) { reminder ->
+                    binding.reminder = reminder
+                    binding.repeatSwitch.isChecked =
+                        viewModel.getIsRepeatChecked(binding.reminder)
+                    binding.notificationSwitch.isChecked = reminder.isNotificationSent
+                }
         }
     }
 
@@ -150,13 +151,13 @@ class AddEditReminderFragment : Fragment() {
             dropdownItems
         )
 
-        binding.intervalTimeUnitInput.setAdapter(adapter)
-
         val timeUnitInput = binding.intervalTimeUnitInput
         when (timeUnitInput.text.toString()) {
             in getString(R.string.time_unit_days) -> timeUnitInput.setText(dropdownItems[0])
             else -> timeUnitInput.setText(dropdownItems[1])
         }
+
+        binding.intervalTimeUnitInput.setAdapter(adapter)
     }
 
     private fun displayDatePicker() {

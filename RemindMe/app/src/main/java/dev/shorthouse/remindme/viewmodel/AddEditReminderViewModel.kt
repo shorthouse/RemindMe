@@ -5,14 +5,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
-import dev.shorthouse.remindme.BaseApplication
 import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.data.RepeatInterval
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.utilities.DATE_INPUT_PATTERN
 import dev.shorthouse.remindme.utilities.DATE_TIME_INPUT_PATTERN
 import dev.shorthouse.remindme.utilities.NotificationScheduler
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.LocalDateTime
@@ -23,9 +22,9 @@ import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 
 @HiltViewModel
-class AddReminderViewModel @Inject constructor(
-    @ApplicationContext private val application: BaseApplication,
+class AddEditReminderViewModel @Inject constructor(
     private val repository: ReminderRepository,
+    private val notificationScheduler: NotificationScheduler,
 ) : ViewModel() {
 
     fun getReminder(id: Long): LiveData<Reminder> {
@@ -51,7 +50,7 @@ class AddReminderViewModel @Inject constructor(
             isNotificationSent = isNotificationSent
         )
 
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             if (isUpdatedReminder(reminder)) {
                 repository.updateReminder(reminder)
                 cancelExistingReminderNotification(reminder)
@@ -64,12 +63,12 @@ class AddReminderViewModel @Inject constructor(
 
     private fun scheduleReminderNotification(reminder: Reminder) {
         if (!reminder.isNotificationSent) return
-        NotificationScheduler().scheduleReminderNotification(application, reminder)
+        notificationScheduler.scheduleReminderNotification(reminder)
     }
 
     private fun cancelExistingReminderNotification(reminder: Reminder) {
         if (isUpdatedReminder(reminder)) return
-        NotificationScheduler().cancelExistingReminderNotification(application, reminder)
+        notificationScheduler.cancelExistingReminderNotification(reminder)
     }
 
     fun getStartDate(reminder: Reminder?): String {
@@ -130,8 +129,8 @@ class AddReminderViewModel @Inject constructor(
         return RepeatInterval(timeValue, timeUnit)
     }
 
-    fun getReminderNotes(notes: String): String? = notes.ifBlank { null }
     private fun isUpdatedReminder(reminder: Reminder) = reminder.id != 0L
+    fun getReminderNotes(notes: String): String? = notes.ifBlank { null }
     fun isNameValid(name: String) = name.isNotBlank()
     fun isRepeatIntervalValid(repeatIntervalValue: Long) = repeatIntervalValue > 0
     fun isStartTimeValid(startDate: String, startTime: String) =

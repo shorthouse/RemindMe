@@ -8,6 +8,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.utilities.DATE_PATTERN
+import dev.shorthouse.remindme.utilities.NotificationScheduler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.format.DateTimeFormatter
@@ -16,6 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ReminderDetailsViewModel @Inject constructor(
     private val repository: ReminderRepository,
+    private val notificationScheduler: NotificationScheduler,
 ) : ViewModel() {
 
     fun getReminder(id: Long): LiveData<Reminder> {
@@ -34,5 +36,9 @@ class ReminderDetailsViewModel @Inject constructor(
             .toLocalDate()
             .format(DateTimeFormatter.ofPattern(DATE_PATTERN))
             .toString()
+    }
+
+    fun cancelReminderNotification(reminder: Reminder) {
+        notificationScheduler.cancelExistingReminderNotification(reminder)
     }
 }
