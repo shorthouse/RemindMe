@@ -1,6 +1,5 @@
 package dev.shorthouse.remindme.utilities
 
-import android.util.Log
 import android.view.View
 import android.widget.AutoCompleteTextView
 import androidx.databinding.BindingAdapter
@@ -21,7 +20,6 @@ fun showIfNotesExist(view: View, notes: String?) {
 
 @BindingAdapter("showIfRepeatChecked")
 fun showIfRepeatChecked(view: View, isRepeatChecked: Boolean) {
-    Log.d("HDS", "is checked: $isRepeatChecked")
     view.visibility = if (isRepeatChecked) View.VISIBLE else View.GONE
 }
 
