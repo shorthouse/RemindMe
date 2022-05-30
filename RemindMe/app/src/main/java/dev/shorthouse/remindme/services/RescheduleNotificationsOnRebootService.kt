@@ -9,21 +9,22 @@ import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.asLiveData
+import dagger.hilt.android.AndroidEntryPoint
 import dev.shorthouse.remindme.R
-import dev.shorthouse.remindme.data.ReminderDatabase
 import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.utilities.NotificationScheduler
 import dev.shorthouse.remindme.utilities.RESCHEDULE_NOTIFICATIONS_SERVICE_ID
+import javax.inject.Inject
 
-class RescheduleNotificationsOnRebootService : Service() {
+@AndroidEntryPoint
+class RescheduleNotificationsOnRebootService @Inject constructor(
+    private val repository: ReminderRepository,
+    private val notificationScheduler: NotificationScheduler,
+) : Service() {
     companion object {
         const val NOTIFICATION_CHANNEL_ID = "RESCHEDULE_ALARMS_SERVICE_CHANNEL_ID"
     }
-
-    private val repository = ReminderRepository(
-        ReminderDatabase.getDatabase(application).reminderDao()
-    )
 
     override fun onCreate() {
         createNotificationChannel()
@@ -52,7 +53,7 @@ class RescheduleNotificationsOnRebootService : Service() {
         nonArchivedReminders
             .filter { reminder -> reminder.isNotificationSent }
             .forEach { reminder ->
-                NotificationScheduler().scheduleReminderNotification(this, reminder)
+                notificationScheduler.scheduleReminderNotification(reminder)
             }
     }
 
