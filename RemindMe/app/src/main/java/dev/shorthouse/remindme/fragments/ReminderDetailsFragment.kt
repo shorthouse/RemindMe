@@ -75,7 +75,7 @@ class ReminderDetailsFragment : Fragment() {
     private fun deleteReminder() {
         viewModel.deleteReminder(reminder)
 
-        if (reminder.isNotificationSent) cancelNotificationAlarm(reminder)
+        if (reminder.isNotificationSent) cancelReminderNotification(reminder)
 
         Toast.makeText(
             context,
@@ -86,7 +86,7 @@ class ReminderDetailsFragment : Fragment() {
         findNavController().navigateUp()
     }
 
-    private fun cancelNotificationAlarm(reminder: Reminder) {
-        NotificationScheduler().cancelExistingReminderNotification(requireContext(), reminder)
+    private fun cancelReminderNotification(reminder: Reminder) {
+        viewModel.cancelReminderNotification(reminder)
     }
 }
