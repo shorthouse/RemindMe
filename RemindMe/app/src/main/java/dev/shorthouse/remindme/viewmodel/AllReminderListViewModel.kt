@@ -8,7 +8,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AllReminderListViewModel @Inject constructor(
-    private val repository: ReminderRepository,
+    repository: ReminderRepository,
 ) : ViewModel() {
     val reminders = repository.getNonArchivedReminders().asLiveData()
 }
