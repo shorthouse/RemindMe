@@ -54,7 +54,7 @@ class AlarmNotificationReceiver : BroadcastReceiver() {
 
         return NotificationCompat.Builder(
             context,
-            context.getString(R.string.notification_channel_id)
+            context.getString(R.string.notification_channel_id_reminder)
         )
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setContentTitle(notificationTitle)
@@ -79,8 +79,8 @@ class AlarmNotificationReceiver : BroadcastReceiver() {
 
     private fun createNotificationChannel(context: Context) {
         val channel = NotificationChannel(
-            context.getString(R.string.notification_channel_id),
-            context.getString(R.string.notification_reminder_name),
+            context.getString(R.string.notification_channel_id_reminder),
+            context.getString(R.string.notification_channel_name_reminder),
             NotificationManager.IMPORTANCE_HIGH
         )
 
