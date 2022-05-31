@@ -9,8 +9,8 @@ import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.asLiveData
+import dagger.hilt.android.AndroidEntryPoint
 import dev.shorthouse.remindme.R
-import dev.shorthouse.remindme.data.ReminderDatabase
 import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.model.Reminder
 import kotlinx.coroutines.CoroutineScope
@@ -18,11 +18,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.ZoneId
 import java.time.ZonedDateTime
+import javax.inject.Inject
 
-class UpdateReminderTimeZoneService : Service() {
-    private val repository = ReminderRepository(
-        ReminderDatabase.getDatabase(application).reminderDao()
-    )
+@AndroidEntryPoint
+class UpdateReminderTimeZoneService @Inject constructor(
+    private val repository: ReminderRepository,
+) : Service() {
 
     override fun onCreate() {
         createNotificationChannel()
@@ -30,7 +31,7 @@ class UpdateReminderTimeZoneService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val newTimeZone = intent?.getStringExtra(this.getString(R.string.intent_key_timeZone))
-        if (intent == null || newTimeZone == null) {
+        if (newTimeZone == null) {
             stopForeground(true)
             stopSelf()
             return START_NOT_STICKY
@@ -39,6 +40,7 @@ class UpdateReminderTimeZoneService : Service() {
         startForeground(System.currentTimeMillis().toInt(), getNotification())
 
         val remindersLiveData = repository.getReminders().asLiveData()
+
         remindersLiveData.observeForever(object : Observer<List<Reminder>> {
             override fun onChanged(reminders: List<Reminder>?) {
                 reminders?.let {
