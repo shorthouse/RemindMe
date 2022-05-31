@@ -13,7 +13,6 @@ import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.data.ReminderDatabase
 import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.model.Reminder
-import dev.shorthouse.remindme.utilities.UPDATE_REMINDER_TIME_ZONE_SERVICE_ID
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -21,10 +20,6 @@ import java.time.ZoneId
 import java.time.ZonedDateTime
 
 class UpdateReminderTimeZoneService : Service() {
-    companion object {
-        const val NOTIFICATION_CHANNEL_ID = "UPDATE_REMINDER_TIME_ZONE_SERVICE_CHANNEL_ID"
-    }
-
     private val repository = ReminderRepository(
         ReminderDatabase.getDatabase(application).reminderDao()
     )
@@ -41,7 +36,7 @@ class UpdateReminderTimeZoneService : Service() {
             return START_NOT_STICKY
         }
 
-        startForeground(UPDATE_REMINDER_TIME_ZONE_SERVICE_ID, getNotification())
+        startForeground(System.currentTimeMillis().toInt(), getNotification())
 
         val remindersLiveData = repository.getReminders().asLiveData()
         remindersLiveData.observeForever(object : Observer<List<Reminder>> {
@@ -79,10 +74,9 @@ class UpdateReminderTimeZoneService : Service() {
     }
 
     private fun createNotificationChannel() {
-        val appName = getString(R.string.app_name)
         val notificationChannel = NotificationChannel(
-            NOTIFICATION_CHANNEL_ID,
-            appName,
+            getString(R.string.notification_channel_id_time_zone_update),
+            getString(R.string.notification_channel_name_time_zone_update),
             NotificationManager.IMPORTANCE_DEFAULT
         )
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
@@ -90,7 +84,10 @@ class UpdateReminderTimeZoneService : Service() {
     }
 
     private fun getNotification(): Notification {
-        return NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
+        return NotificationCompat.Builder(
+            this,
+            getString(R.string.notification_channel_id_time_zone_update)
+        )
             .setContentTitle(getString(R.string.app_name))
             .setContentText(getString(R.string.notification_timezone_change_text))
             .setSmallIcon(R.drawable.ic_launcher_foreground)
