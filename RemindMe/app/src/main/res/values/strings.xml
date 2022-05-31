@@ -1,49 +1,27 @@
 <resources>
     <string name="app_name" translatable="false">RemindMe</string>
+    <string name="reminder_database_name">reminder_database</string>
 
+    <!-- Add edit reminder -->
     <string name="hint_reminder_name">Name</string>
     <string name="hint_reminder_date">Reminder start date</string>
     <string name="hint_reminder_time">Reminder start time</string>
     <string name="hint_reminder_notes">Notes</string>
     <string name="format_reminder_time">%1$s:%2$s</string>
     <string name="title_repeat_reminder">Repeat Reminder</string>
-    <string name="cd_fab_add_reminder">Add reminder</string>
-    <string name="toolbar_save_action_title">Save</string>
     <string name="error_name_empty">The name cannot be empty.</string>
     <string name="error_time_past">The start time cannot be in the past.</string>
     <string name="error_interval_zero">The repeat interval cannot be 0.</string>
-
-    <string name="reminder_database_name">reminder_database</string>
-    <string name="reminder_notification_body">%1$s</string>
-    <string name="reminder_notification_action_done_text">Done</string>
-
-    <string name="intent_key_reminderId">reminderId</string>
-    <string name="intent_key_notificationTitle">notificationTitle</string>
-    <string name="intent_key_notificationText">notificationText</string>
-    <string name="intent_key_timeZone">"time-zone"</string>
-
     <string name="title_date_picker">Select reminder start date</string>
     <string name="title_time_picker">Select reminder start time</string>
     <string name="tag_reminder_date_picker">reminder_date_picker</string>
     <string name="tag_reminder_time_picker">reminder_time_picker</string>
+    <string name="time_unit_days">days</string>
+    <string name="title_repeats_every">Repeats every</string>
     <string name="toast_reminder_saved">Reminder saved</string>
-
-    <string name="active_reminders">Active Reminders</string>
-    <string name="all_reminders">All Reminders</string>
-
-    <string name="cd_icon_calendar">Calendar icon</string>
-    <string name="cd_icon_clock">Clock icon</string>
-    <string name="cd_icon_repeat">Repeat icon</string>
-    <string name="cd_icon_notes">Notes icon</string>
-
-    <plurals name="interval_days">
-        <item quantity="one">%d day</item>
-        <item quantity="other">%d days</item>
-    </plurals>
-    <plurals name="interval_weeks">
-        <item quantity="one">%d week</item>
-        <item quantity="other">%d weeks</item>
-    </plurals>
+    <string name="title_send_notification">Send Notification</string>
+    <string name="toolbar_save_action_title">Save</string>
+    <string name="btn_save_reminder">Save</string>
 
     <plurals name="dropdown_days">
         <item quantity="one">day</item>
@@ -54,29 +32,46 @@
         <item quantity="other">weeks</item>
     </plurals>
 
-    <string name="time_unit_days">days</string>
-
-
-    <string name="cd_button_edit_reminder">Edit reminder</string>
+    <!-- Reminder lists -->
+    <string name="active_reminders">Active Reminders</string>
+    <string name="all_reminders">All Reminders</string>
+    <string name="cd_fab_add_reminder">Add reminder</string>
     <string name="btn_reminder_done">Done</string>
-    <string name="btn_save_reminder">save</string>
+
+    <!-- Reminder details -->
+    <string name="cd_icon_calendar">Calendar icon</string>
+    <string name="cd_icon_clock">Clock icon</string>
+    <string name="cd_icon_repeat">Repeat icon</string>
+    <string name="notifications_on">Notifications enabled</string>
+    <string name="cd_icon_notes">Notes icon</string>
+    <string name="cd_icon_notification">Notification Icon</string>
+    <string name="cd_button_edit_reminder">Edit reminder</string>
     <string name="toolbar_delete_action_title">Delete</string>
     <string name="toast_reminder_deleted">Reminder deleted</string>
-    <string name="title_send_notification">Send Notification</string>
+    <plurals name="interval_days">
+        <item quantity="one">%d day</item>
+        <item quantity="other">%d days</item>
+    </plurals>
+    <plurals name="interval_weeks">
+        <item quantity="one">%d week</item>
+        <item quantity="other">%d weeks</item>
+    </plurals>
 
+    <!-- Intent Keys -->
+    <string name="intent_key_reminderId">reminderId</string>
+    <string name="intent_key_notificationTitle">notificationTitle</string>
+    <string name="intent_key_notificationText">notificationText</string>
+    <string name="intent_key_timeZone">"time-zone"</string>
+
+    <!-- Notifications -->
+    <string name="notification_body_text_reboot_reschedule">Scheduling reminder notifications</string>
+    <string name="notification_body_text_time_zone_update">Updating reminder timezones</string>
+    <string name="reminder_notification_action_done_text">Done</string>
     <string name="notification_channel_id_reminder">NOTIFICATION_CHANNEL_ID_REMINDER</string>
     <string name="notification_channel_name_reminder">NOTIFICATION_CHANNEL_NAME_REMINDER</string>
-
     <string name="notification_channel_id_reboot_reschedule">NOTIFICATION_CHANNEL_ID_REBOOT_RESCHEDULE</string>
     <string name="notification_channel_name_reboot_reschedule">NOTIFICATION_CHANNEL_NAME_REBOOT_RESCHEDULE</string>
-
     <string name="notification_channel_id_time_zone_update">NOTIFICATION_CHANNEL_ID_TIME_ZONE_UPDATE</string>
     <string name="notification_channel_name_time_zone_update">NOTIFICATION_CHANNEL_NAME_TIME_ZONE_UPDATE</string>
 
-
-    <string name="title_repeats_every">Repeats every</string>
-    <string name="cd_icon_notification">Notification Icon</string>
-    <string name="notifications_on">Notifications enabled</string>
-    <string name="notification_reschedule_body">Scheduling reminder notifications</string>
-    <string name="notification_timezone_change_text">Updating reminder timezones</string>
 </resources>

@@ -91,7 +91,7 @@ class UpdateReminderTimeZoneService @Inject constructor(
             getString(R.string.notification_channel_id_time_zone_update)
         )
             .setContentTitle(getString(R.string.app_name))
-            .setContentText(getString(R.string.notification_timezone_change_text))
+            .setContentText(getString(R.string.notification_body_text_time_zone_update))
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .build()
     }
