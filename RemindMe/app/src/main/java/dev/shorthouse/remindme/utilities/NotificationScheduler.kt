@@ -79,7 +79,7 @@ class NotificationScheduler @Inject constructor(
             )
             .putExtra(
                 context.getString(R.string.intent_key_notificationText),
-                getReminderNotificationText(context, reminder)
+                getReminderNotificationText(reminder)
             )
     }
 
@@ -102,12 +102,7 @@ class NotificationScheduler @Inject constructor(
         return reminder.name
     }
 
-    private fun getReminderNotificationText(context: Context, reminder: Reminder): String {
-        val formattedStartTime = reminder.startDateTime.toLocalTime().toString()
-
-        return context.getString(
-            R.string.reminder_notification_body,
-            formattedStartTime
-        )
+    private fun getReminderNotificationText(reminder: Reminder): String {
+        return reminder.startDateTime.toLocalTime().toString()
     }
 }
