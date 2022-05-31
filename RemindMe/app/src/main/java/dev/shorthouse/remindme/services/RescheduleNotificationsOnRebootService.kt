@@ -69,7 +69,7 @@ class RescheduleNotificationsOnRebootService @Inject constructor(
             getString(R.string.notification_channel_id_reboot_reschedule)
         )
             .setContentTitle(getString(R.string.app_name))
-            .setContentText(getString(R.string.notification_reschedule_body))
+            .setContentText(getString(R.string.notification_body_text_reboot_reschedule))
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .build()
     }
