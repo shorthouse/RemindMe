@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewmodel"
-            type="dev.shorthouse.remindme.viewmodel.AddReminderViewModel" />
+            type="dev.shorthouse.remindme.viewmodel.AddEditReminderViewModel" />
         <variable
             name="reminder"
             type="dev.shorthouse.remindme.model.Reminder" />

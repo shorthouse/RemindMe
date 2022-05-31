@@ -4,25 +4,22 @@ import android.os.Bundle
 import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import dev.shorthouse.remindme.BaseApplication
+import dagger.hilt.android.AndroidEntryPoint
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.databinding.FragmentReminderDetailsBinding
 import dev.shorthouse.remindme.model.Reminder
-import dev.shorthouse.remindme.utilities.NotificationScheduler
 import dev.shorthouse.remindme.viewmodel.ReminderDetailsViewModel
-import dev.shorthouse.remindme.viewmodel.ReminderDetailsViewModelFactory
 
+@AndroidEntryPoint
 class ReminderDetailsFragment : Fragment() {
     private lateinit var binding: FragmentReminderDetailsBinding
     private val navigationArgs: ReminderDetailsFragmentArgs by navArgs()
     private lateinit var reminder: Reminder
 
-    private val viewModel: ReminderDetailsViewModel by activityViewModels {
-        ReminderDetailsViewModelFactory(activity?.application as BaseApplication)
-    }
+    private val viewModel: ReminderDetailsViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,7 +75,7 @@ class ReminderDetailsFragment : Fragment() {
     private fun deleteReminder() {
         viewModel.deleteReminder(reminder)
 
-        if (reminder.isNotificationSent) cancelNotificationAlarm(reminder)
+        if (reminder.isNotificationSent) cancelReminderNotification(reminder)
 
         Toast.makeText(
             context,
@@ -89,7 +86,7 @@ class ReminderDetailsFragment : Fragment() {
         findNavController().navigateUp()
     }
 
-    private fun cancelNotificationAlarm(reminder: Reminder) {
-        NotificationScheduler().cancelExistingReminderNotification(requireContext(), reminder)
+    private fun cancelReminderNotification(reminder: Reminder) {
+        viewModel.cancelReminderNotification(reminder)
     }
 }

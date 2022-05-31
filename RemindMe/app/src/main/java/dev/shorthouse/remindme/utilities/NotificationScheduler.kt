@@ -4,75 +4,70 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.receivers.AlarmNotificationReceiver
 import java.time.Duration
 import java.time.temporal.ChronoUnit
+import javax.inject.Inject
 
-class NotificationScheduler {
-    fun scheduleReminderNotification(context: Context, reminder: Reminder) {
+class NotificationScheduler @Inject constructor(
+    @ApplicationContext private val context: Context,
+    private val alarmManager: AlarmManager
+) {
+    fun scheduleReminderNotification(reminder: Reminder) {
         if (reminder.isRepeatReminder()) {
-            scheduleRepeatNotification(context, reminder)
+            scheduleRepeatNotification(reminder)
         } else {
-            scheduleOneTimeNotification(context, reminder)
+            scheduleOneTimeNotification(reminder)
         }
     }
 
-    private fun scheduleOneTimeNotification(context: Context, reminder: Reminder) {
-        getAlarmManager(context).setExactAndAllowWhileIdle(
+    private fun scheduleOneTimeNotification(reminder: Reminder) {
+        alarmManager.setExactAndAllowWhileIdle(
             AlarmManager.RTC_WAKEUP,
             getAlarmTriggerTime(reminder),
-            getNotificationBroadcastIntent(context, reminder)
+            getNotificationBroadcastIntent(reminder)
         )
     }
 
-    private fun scheduleRepeatNotification(context: Context, reminder: Reminder) {
-        getAlarmManager(context).setRepeating(
+    private fun scheduleRepeatNotification(reminder: Reminder) {
+        alarmManager.setRepeating(
             AlarmManager.RTC_WAKEUP,
             getAlarmTriggerTime(reminder),
             getAlarmRepeatInterval(reminder),
-            getNotificationBroadcastIntent(context, reminder)
+            getNotificationBroadcastIntent(reminder)
         )
     }
 
-    private fun getNotificationBroadcastIntent(
-        context: Context,
-        reminder: Reminder
-    ): PendingIntent {
+    private fun getNotificationBroadcastIntent(reminder: Reminder): PendingIntent {
         return PendingIntent.getBroadcast(
             context,
             reminder.id.toInt(),
-            getAlarmIntent(context, reminder),
+            getAlarmIntent(reminder),
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_CANCEL_CURRENT,
         )
     }
 
-    fun cancelExistingReminderNotification(context: Context, reminder: Reminder) {
-        val alarmBroadcastIntent = getExistingBroadcastIntent(context, reminder)
+    fun cancelExistingReminderNotification(reminder: Reminder) {
+        val alarmBroadcastIntent = getExistingBroadcastIntent(reminder)
 
         alarmBroadcastIntent?.let {
-            getAlarmManager(context).cancel(alarmBroadcastIntent)
+            alarmManager.cancel(alarmBroadcastIntent)
         }
     }
 
-    private fun getExistingBroadcastIntent(
-        context: Context,
-        reminder: Reminder
-    ): PendingIntent? {
+    private fun getExistingBroadcastIntent(reminder: Reminder): PendingIntent? {
         return PendingIntent.getBroadcast(
             context,
             reminder.id.toInt(),
-            getAlarmIntent(context, reminder),
+            getAlarmIntent(reminder),
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_NO_CREATE
         )
     }
 
-    private fun getAlarmManager(context: Context): AlarmManager {
-        return context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-    }
-
-    private fun getAlarmIntent(context: Context, reminder: Reminder): Intent {
+    private fun getAlarmIntent(reminder: Reminder): Intent {
         return Intent(context, AlarmNotificationReceiver::class.java)
             .putExtra(
                 context.getString(R.string.intent_key_reminderId),

@@ -40,10 +40,6 @@ class AlarmNotificationReceiver : BroadcastReceiver() {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
 
-        val pendingIntent = PendingIntent.getActivity(
-            context, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE
-        )
-
         val reminderId =
             intent.getLongExtra(context.getString(R.string.intent_key_reminderId), -1L)
         val notificationTitle =
@@ -51,6 +47,10 @@ class AlarmNotificationReceiver : BroadcastReceiver() {
         val notificationText =
             intent.getStringExtra(context.getString(R.string.intent_key_notificationText))
         if (isIntentValuesInvalid(reminderId, notificationTitle, notificationText)) return null
+
+        val pendingIntent = PendingIntent.getActivity(
+            context, reminderId.toInt(), notificationIntent, PendingIntent.FLAG_IMMUTABLE
+        )
 
         return NotificationCompat.Builder(
             context,

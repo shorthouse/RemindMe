@@ -1,21 +1,24 @@
 package dev.shorthouse.remindme.viewmodel
 
-import androidx.lifecycle.*
-import dev.shorthouse.remindme.BaseApplication
-import dev.shorthouse.remindme.data.ReminderDatabase
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.utilities.DATE_PATTERN
+import dev.shorthouse.remindme.utilities.NotificationScheduler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.format.DateTimeFormatter
+import javax.inject.Inject
 
-class ReminderDetailsViewModel(
-    application: BaseApplication
+@HiltViewModel
+class ReminderDetailsViewModel @Inject constructor(
+    private val repository: ReminderRepository,
+    private val notificationScheduler: NotificationScheduler,
 ) : ViewModel() {
-    private val repository = ReminderRepository(
-        ReminderDatabase.getDatabase(application).reminderDao()
-    )
 
     fun getReminder(id: Long): LiveData<Reminder> {
         return repository.getReminder(id).asLiveData()
@@ -34,16 +37,8 @@ class ReminderDetailsViewModel(
             .format(DateTimeFormatter.ofPattern(DATE_PATTERN))
             .toString()
     }
-}
 
-class ReminderDetailsViewModelFactory(
-    private val application: BaseApplication,
-) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(ReminderDetailsViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return ReminderDetailsViewModel(application) as T
-        }
-        throw IllegalArgumentException("Unknown ViewModel class")
+    fun cancelReminderNotification(reminder: Reminder) {
+        notificationScheduler.cancelExistingReminderNotification(reminder)
     }
 }

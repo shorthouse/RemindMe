@@ -1,8 +1,10 @@
 package dev.shorthouse.remindme.viewmodel
 
-import androidx.lifecycle.*
-import dev.shorthouse.remindme.BaseApplication
-import dev.shorthouse.remindme.data.ReminderDatabase
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.data.RepeatInterval
 import dev.shorthouse.remindme.model.Reminder
@@ -14,14 +16,12 @@ import java.time.LocalDate
 import java.time.Period
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
+import javax.inject.Inject
 
-class ActiveReminderListViewModel(
-    val application: BaseApplication
+@HiltViewModel
+class ActiveReminderListViewModel @Inject constructor(
+    private val repository: ReminderRepository,
 ) : ViewModel() {
-
-    private val repository = ReminderRepository(
-        ReminderDatabase.getDatabase(application).reminderDao()
-    )
 
     fun getActiveReminders(): LiveData<List<Reminder>> {
         return repository.getActiveNonArchivedReminders(ZonedDateTime.now()).asLiveData()
@@ -120,17 +120,5 @@ class ActiveReminderListViewModel(
                 startDateTime.plusWeeks(weeksUntilNextStart)
             }
         }
-    }
-}
-
-class ActiveReminderListViewModelFactory(
-    private val application: BaseApplication
-) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(ActiveReminderListViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return ActiveReminderListViewModel(application) as T
-        }
-        throw IllegalArgumentException("Unknown ViewModel class")
     }
 }

@@ -9,7 +9,7 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.button.MaterialButton
@@ -18,18 +18,16 @@ import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
-import dev.shorthouse.remindme.BaseApplication
+import dagger.hilt.android.AndroidEntryPoint
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.databinding.FragmentAddEditReminderBinding
-import dev.shorthouse.remindme.viewmodel.AddEditReminderViewModelFactory
-import dev.shorthouse.remindme.viewmodel.AddReminderViewModel
+import dev.shorthouse.remindme.viewmodel.AddEditReminderViewModel
 
+@AndroidEntryPoint
 class AddEditReminderFragment : Fragment() {
     private lateinit var binding: FragmentAddEditReminderBinding
     private val navigationArgs: AddEditReminderFragmentArgs by navArgs()
-    private val viewModel: AddReminderViewModel by activityViewModels {
-        AddEditReminderViewModelFactory(activity?.application as BaseApplication)
-    }
+    private val viewModel: AddEditReminderViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,11 +54,13 @@ class AddEditReminderFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         if (navigationArgs.isEditReminder) {
-            viewModel.getReminder(navigationArgs.id).observe(this.viewLifecycleOwner) { reminder ->
-                binding.reminder = reminder
-                binding.repeatSwitch.isChecked = viewModel.getIsRepeatChecked(binding.reminder)
-                binding.notificationSwitch.isChecked = reminder.isNotificationSent
-            }
+            viewModel.getReminder(navigationArgs.id)
+                .observe(this.viewLifecycleOwner) { reminder ->
+                    binding.reminder = reminder
+                    binding.repeatSwitch.isChecked =
+                        viewModel.getIsRepeatChecked(binding.reminder)
+                    binding.notificationSwitch.isChecked = reminder.isNotificationSent
+                }
         }
     }
 
@@ -151,13 +151,13 @@ class AddEditReminderFragment : Fragment() {
             dropdownItems
         )
 
-        binding.intervalTimeUnitInput.setAdapter(adapter)
-
         val timeUnitInput = binding.intervalTimeUnitInput
         when (timeUnitInput.text.toString()) {
             in getString(R.string.time_unit_days) -> timeUnitInput.setText(dropdownItems[0])
             else -> timeUnitInput.setText(dropdownItems[1])
         }
+
+        binding.intervalTimeUnitInput.setAdapter(adapter)
     }
 
     private fun displayDatePicker() {

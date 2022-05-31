@@ -6,24 +6,22 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import dev.shorthouse.remindme.BaseApplication
+import dagger.hilt.android.AndroidEntryPoint
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.adapter.ActiveReminderListAdapter
 import dev.shorthouse.remindme.data.RepeatInterval
 import dev.shorthouse.remindme.databinding.FragmentActiveReminderListBinding
 import dev.shorthouse.remindme.viewmodel.ActiveReminderListViewModel
-import dev.shorthouse.remindme.viewmodel.ActiveReminderListViewModelFactory
 import java.time.ZonedDateTime
 
+@AndroidEntryPoint
 class ActiveReminderListFragment : Fragment() {
     private lateinit var binding: FragmentActiveReminderListBinding
 
-    private val viewModel: ActiveReminderListViewModel by activityViewModels {
-        ActiveReminderListViewModelFactory(activity?.application as BaseApplication)
-    }
+    private val viewModel: ActiveReminderListViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,

@@ -21,4 +21,6 @@ data class Reminder(
     val isArchived: Boolean,
 
     val isNotificationSent: Boolean,
-)
+) {
+    fun isRepeatReminder() = this.repeatInterval != null
+}

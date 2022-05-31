@@ -1,14 +1,17 @@
 package dev.shorthouse.remindme.viewmodel
 
-import androidx.lifecycle.*
-import dev.shorthouse.remindme.BaseApplication
-import dev.shorthouse.remindme.data.ReminderDatabase
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.data.RepeatInterval
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.utilities.DATE_INPUT_PATTERN
 import dev.shorthouse.remindme.utilities.DATE_TIME_INPUT_PATTERN
 import dev.shorthouse.remindme.utilities.NotificationScheduler
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.LocalDateTime
@@ -16,14 +19,13 @@ import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
+import javax.inject.Inject
 
-class AddReminderViewModel(
-    val application: BaseApplication
+@HiltViewModel
+class AddEditReminderViewModel @Inject constructor(
+    private val repository: ReminderRepository,
+    private val notificationScheduler: NotificationScheduler,
 ) : ViewModel() {
-
-    private val repository = ReminderRepository(
-        ReminderDatabase.getDatabase(application).reminderDao()
-    )
 
     fun getReminder(id: Long): LiveData<Reminder> {
         return repository.getReminder(id).asLiveData()
@@ -48,7 +50,7 @@ class AddReminderViewModel(
             isNotificationSent = isNotificationSent
         )
 
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             if (isUpdatedReminder(reminder)) {
                 repository.updateReminder(reminder)
                 cancelExistingReminderNotification(reminder)
@@ -61,12 +63,12 @@ class AddReminderViewModel(
 
     private fun scheduleReminderNotification(reminder: Reminder) {
         if (!reminder.isNotificationSent) return
-        NotificationScheduler().scheduleReminderNotification(application, reminder)
+        notificationScheduler.scheduleReminderNotification(reminder)
     }
 
     private fun cancelExistingReminderNotification(reminder: Reminder) {
         if (isUpdatedReminder(reminder)) return
-        NotificationScheduler().cancelExistingReminderNotification(application, reminder)
+        notificationScheduler.cancelExistingReminderNotification(reminder)
     }
 
     fun getStartDate(reminder: Reminder?): String {
@@ -127,22 +129,10 @@ class AddReminderViewModel(
         return RepeatInterval(timeValue, timeUnit)
     }
 
-    fun getReminderNotes(notes: String): String? = notes.ifBlank { null }
     private fun isUpdatedReminder(reminder: Reminder) = reminder.id != 0L
+    fun getReminderNotes(notes: String): String? = notes.ifBlank { null }
     fun isNameValid(name: String) = name.isNotBlank()
     fun isRepeatIntervalValid(repeatIntervalValue: Long) = repeatIntervalValue > 0
     fun isStartTimeValid(startDate: String, startTime: String) =
         convertDateTimeStringToDateTime(startDate, startTime).isAfter(ZonedDateTime.now())
-}
-
-class AddEditReminderViewModelFactory(
-    private val application: BaseApplication,
-) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(AddReminderViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return AddReminderViewModel(application) as T
-        }
-        throw IllegalArgumentException("Unknown ViewModel class")
-    }
 }
