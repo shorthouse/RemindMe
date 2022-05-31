@@ -24,6 +24,7 @@ class AlarmNotificationReceiver : BroadcastReceiver() {
         intent: Intent,
     ) {
         val reminderNotification = getReminderNotification(context, intent)
+
         reminderNotification?.let {
             NotificationManagerCompat.from(context).notify(
                 intent.getLongExtra(

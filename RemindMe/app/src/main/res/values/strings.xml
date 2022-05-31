@@ -20,7 +20,6 @@
     <string name="intent_key_reminderId">reminderId</string>
     <string name="intent_key_notificationTitle">notificationTitle</string>
     <string name="intent_key_notificationText">notificationText</string>
-
     <string name="intent_key_timeZone">"time-zone"</string>
 
     <string name="title_date_picker">Select reminder start date</string>

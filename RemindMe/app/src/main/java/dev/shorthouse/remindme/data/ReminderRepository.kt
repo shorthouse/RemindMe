@@ -18,15 +18,9 @@ class ReminderRepository @Inject constructor(
 
     fun getReminder(reminderId: Long) = reminderDao.getReminder(reminderId)
 
-    fun insertReminder(reminder: Reminder): Long {
-        return reminderDao.insert(reminder)
-    }
+    fun insertReminder(reminder: Reminder) = reminderDao.insert(reminder)
 
-    fun updateReminder(reminder: Reminder) {
-        reminderDao.update(reminder)
-    }
+    fun updateReminder(reminder: Reminder) = reminderDao.update(reminder)
 
-    fun deleteReminder(reminder: Reminder) {
-        reminderDao.delete(reminder)
-    }
+    fun deleteReminder(reminder: Reminder) = reminderDao.delete(reminder)
 }

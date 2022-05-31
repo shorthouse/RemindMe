@@ -21,6 +21,7 @@ class RescheduleNotificationsOnRebootService @Inject constructor(
     private val repository: ReminderRepository,
     private val notificationScheduler: NotificationScheduler,
 ) : Service() {
+
     override fun onCreate() {
         createNotificationChannel()
     }

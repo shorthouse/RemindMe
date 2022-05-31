@@ -6,7 +6,8 @@ import android.os.IBinder
 import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.asLiveData
-import dev.shorthouse.remindme.data.ReminderDatabase
+import dagger.hilt.android.AndroidEntryPoint
+import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.data.RepeatInterval
 import dev.shorthouse.remindme.model.Reminder
@@ -19,17 +20,16 @@ import java.time.LocalDate
 import java.time.Period
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
+import javax.inject.Inject
 
-class UpdateDoneReminderService : Service() {
-
-    private val repository = ReminderRepository(
-        ReminderDatabase.getDatabase(application).reminderDao()
-    )
+@AndroidEntryPoint
+class UpdateDoneReminderService @Inject constructor(
+    private val repository: ReminderRepository
+) : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        if (intent == null) return START_NOT_STICKY
-        val reminderId = intent.getLongExtra("reminderId", -1L)
-        if (reminderId == -1L) return START_NOT_STICKY
+        val reminderId = intent?.getLongExtra(getString(R.string.intent_key_reminderId), -1L)
+        if (reminderId == null || reminderId == -1L) return START_NOT_STICKY
 
         val reminderLiveData = repository.getReminder(reminderId).asLiveData()
 
