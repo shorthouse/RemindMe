@@ -22,8 +22,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ab5d6aff-0558-45f9-8e31-81952340e3db" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/dev/shorthouse/remindme/viewmodel/AllReminderListViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/dev/shorthouse/remindme/viewmodel/AllReminderListViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/settings.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/settings.gradle" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -89,7 +90,7 @@
     <option name="optimizeImportsOnTheFly" value="true" />
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedIndex" value="4" />
+    <option name="selectedIndex" value="2" />
   </component>
   <component name="ProjectId" id="24TtsAeFxluQqty40nsyP5bNyrP" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -114,7 +115,7 @@
     <property name="project.structure.proportion" value="0.17" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="MTConfigurable" />
+    <property name="settings.editor.selected.configurable" value="Errors" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
