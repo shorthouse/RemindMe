@@ -73,7 +73,7 @@ class AddEditReminderFragment : Fragment() {
                     saveReminder()
                     hideKeyboard()
                     displayToast(R.string.toast_reminder_saved)
-                    findNavController().navigateUp()
+                    findNavController().popBackStack()
                 }
             }
     }
