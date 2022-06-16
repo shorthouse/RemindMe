@@ -23,7 +23,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="file:/$USER_HOME$/AppData/Local/Android/Sdk/icons/material/materialicons/more_time/baseline_more_time_24.xml" />
+                                      <entry key="url" value="file:/$USER_HOME$/AppData/Local/Android/Sdk/icons/material/materialicons/more_vert/baseline_more_vert_24.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -33,7 +33,7 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="outputName" value="ic_clock_plus" />
+                            <entry key="outputName" value="ic_more_vert" />
                             <entry key="sourceFile" value="C:\Users\short\Documents\Files\Coding\Icons\solid\repeat.svg" />
                           </map>
                         </option>
