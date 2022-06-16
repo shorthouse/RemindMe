@@ -28,7 +28,9 @@
             app:destination="@id/reminder_details" />
         <action
             android:id="@+id/action_all_reminders_to_add_edit_reminder"
-            app:destination="@id/add_edit_reminder" />
+            app:destination="@id/add_edit_reminder"
+            app:enterAnim="@anim/slide_in"
+            app:popExitAnim="@transition/fade_out" />
     </fragment>
 
     <fragment
