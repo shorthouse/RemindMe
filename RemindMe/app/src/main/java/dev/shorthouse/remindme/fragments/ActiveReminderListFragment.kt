@@ -4,17 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import dev.shorthouse.remindme.adapter.ActiveReminderListAdapter
-import dev.shorthouse.remindme.data.RepeatInterval
 import dev.shorthouse.remindme.databinding.FragmentActiveReminderListBinding
 import dev.shorthouse.remindme.viewmodel.ActiveReminderListViewModel
-import java.time.ZonedDateTime
 
 @AndroidEntryPoint
 class ActiveReminderListFragment : Fragment() {
@@ -59,26 +56,5 @@ class ActiveReminderListFragment : Fragment() {
                 }
             })
         }
-    }
-    private fun updateDoneReminder(
-        id: Long,
-        name: String,
-        startDateTime: ZonedDateTime,
-        repeatInterval: RepeatInterval?,
-        notes: String?,
-        isNotificationSent: Boolean,
-    ) {
-        if (isNotificationSent) context?.let { context ->
-            NotificationManagerCompat.from(context).cancel(id.toInt())
-        }
-
-        viewModel.updateDoneReminder(
-            id,
-            name,
-            startDateTime,
-            repeatInterval,
-            notes,
-            isNotificationSent,
-        )
     }
 }
