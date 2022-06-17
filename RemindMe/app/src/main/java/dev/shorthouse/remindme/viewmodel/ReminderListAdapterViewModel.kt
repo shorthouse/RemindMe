@@ -20,8 +20,6 @@ class ReminderListAdapterViewModel(
     val reminder: Reminder,
     private val repository: ReminderRepository,
 ) : ViewModel() {
-    val reminderId get() = reminder.id
-
     val reminderStartDate = reminder.startDateTime
         .toLocalDate()
         .format(DateTimeFormatter.ofPattern(DATE_PATTERN))
