@@ -10,7 +10,6 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
-import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.adapter.ActiveReminderListAdapter
 import dev.shorthouse.remindme.data.RepeatInterval
 import dev.shorthouse.remindme.databinding.FragmentActiveReminderListBinding
@@ -35,7 +34,7 @@ class ActiveReminderListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val adapter = ActiveReminderListAdapter(getAdapterClickListener())
+        val adapter = ActiveReminderListAdapter()
 
         viewModel.getActiveReminders().observe(this.viewLifecycleOwner) { reminders ->
             adapter.submitList(reminders)
@@ -61,29 +60,6 @@ class ActiveReminderListFragment : Fragment() {
             })
         }
     }
-
-    private fun getAdapterClickListener(): ActiveReminderListAdapter.ClickListener {
-        return ActiveReminderListAdapter.ClickListener { reminder, itemId ->
-            when (itemId) {
-                R.id.active_reminder_container -> {
-                    val action = ActiveReminderListFragmentDirections
-                        .actionActiveRemindersToReminderDetails(reminder.id)
-                    findNavController().navigate(action)
-                }
-                R.id.reminder_done -> {
-                    updateDoneReminder(
-                        reminder.id,
-                        reminder.name,
-                        reminder.startDateTime,
-                        reminder.repeatInterval,
-                        reminder.notes,
-                        reminder.isNotificationSent,
-                    )
-                }
-            }
-        }
-    }
-
     private fun updateDoneReminder(
         id: Long,
         name: String,
