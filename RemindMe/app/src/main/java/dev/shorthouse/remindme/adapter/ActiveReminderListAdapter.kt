@@ -49,7 +49,7 @@ class ActiveReminderListAdapter :
 
                 setDoneClickListener { view ->
                     viewModel?.reminder?.let {
-                        cancelDisplayedReminderNotification(view.context, viewModel.reminder.id)
+                        cancelDisplayedReminderNotification(view.context, viewModel?.reminder?.id)
                     }
                     updateDoneReminder()
                 }
@@ -63,8 +63,8 @@ class ActiveReminderListAdapter :
 
         }
 
-        private fun cancelDisplayedReminderNotification(context: Context, reminderId: Long) {
-            NotificationManagerCompat.from(context).cancel(reminderId.toInt())
+        private fun cancelDisplayedReminderNotification(context: Context, reminderId: Long?) {
+            reminderId?.let { NotificationManagerCompat.from(context).cancel(it.toInt()) }
         }
 
         private fun updateDoneReminder() {
