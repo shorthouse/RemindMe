@@ -8,19 +8,7 @@
             <LayoutPositions>
               <option name="myPositions">
                 <map>
-                  <entry key="add_edit_reminder">
-                    <value>
-                      <LayoutPositions>
-                        <option name="myPosition">
-                          <Point>
-                            <option name="x" value="365" />
-                            <option name="y" value="26" />
-                          </Point>
-                        </option>
-                      </LayoutPositions>
-                    </value>
-                  </entry>
-                  <entry key="drawer_active_reminders">
+                  <entry key="active_reminders">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
@@ -46,13 +34,25 @@
                       </LayoutPositions>
                     </value>
                   </entry>
-                  <entry key="drawer_all_reminders">
+                  <entry key="add_edit_reminder">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="230" />
-                            <option name="y" value="12" />
+                            <option name="x" value="363" />
+                            <option name="y" value="26" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="all_reminders">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="16" />
+                            <option name="y" value="356" />
                           </Point>
                         </option>
                         <option name="myPositions">

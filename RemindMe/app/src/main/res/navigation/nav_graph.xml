@@ -11,6 +11,11 @@
         android:label="Active Reminders"
         tools:layout="@layout/fragment_active_reminder_list">
         <action
+            android:id="@+id/action_active_reminders_to_all_reminders"
+            app:destination="@id/all_reminders"
+            app:popUpTo="@+id/active_reminders"
+            app:popUpToInclusive="true" />
+        <action
             android:id="@+id/action_active_reminders_to_reminder_details"
             app:destination="@id/reminder_details"
             app:enterAnim="@anim/slide_in"
@@ -20,6 +25,7 @@
             app:destination="@id/add_edit_reminder"
             app:enterAnim="@anim/slide_in"
             app:popExitAnim="@anim/slide_out" />
+
     </fragment>
 
     <fragment
