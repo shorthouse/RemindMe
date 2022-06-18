@@ -31,11 +31,7 @@ class AllReminderListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val adapter = AllReminderListAdapter { reminder ->
-            val action = AllReminderListFragmentDirections
-                .actionAllRemindersToReminderDetails(reminder.id)
-            findNavController().navigate(action)
-        }
+        val adapter = AllReminderListAdapter()
 
         viewModel.reminders.observe(this.viewLifecycleOwner) { reminders ->
             adapter.submitList(reminders)
