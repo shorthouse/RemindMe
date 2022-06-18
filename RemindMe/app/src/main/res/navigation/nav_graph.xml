@@ -34,6 +34,11 @@
         android:label="All Reminders"
         tools:layout="@layout/fragment_all_reminder_list" >
         <action
+            android:id="@+id/action_all_reminders_to_active_reminders"
+            app:destination="@id/active_reminders"
+            app:popUpTo="@+id/all_reminders"
+            app:popUpToInclusive="true" />
+        <action
             android:id="@+id/action_all_reminders_to_reminder_details"
             app:destination="@id/reminder_details"
             app:enterAnim="@anim/slide_in"
@@ -43,6 +48,7 @@
             app:destination="@id/add_edit_reminder"
             app:enterAnim="@anim/slide_in"
             app:popExitAnim="@anim/slide_out" />
+
     </fragment>
 
     <fragment
