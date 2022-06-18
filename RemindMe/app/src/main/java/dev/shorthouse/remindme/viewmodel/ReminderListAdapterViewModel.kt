@@ -25,10 +25,6 @@ class ReminderListAdapterViewModel(
         .format(DateTimeFormatter.ofPattern(DATE_PATTERN))
         .toString()
 
-    val reminderStartTime = reminder.startDateTime
-        .toLocalTime()
-        .toString()
-
     fun updateDoneReminder() {
         val updatedDoneReminder = when (reminder.repeatInterval) {
             null -> getCompletedSingleReminder(
