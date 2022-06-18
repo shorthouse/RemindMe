@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import dev.shorthouse.remindme.R
-import dev.shorthouse.remindme.databinding.ListItemReminderBinding
+import dev.shorthouse.remindme.databinding.ListItemAllReminderBinding
 import dev.shorthouse.remindme.fragments.AllReminderListFragmentDirections
 import dev.shorthouse.remindme.model.Reminder
 
@@ -32,7 +32,7 @@ class AllReminderListAdapter :
     }
 
     class ViewHolder(
-        private var binding: ListItemReminderBinding
+        private var binding: ListItemAllReminderBinding
     ) : RecyclerView.ViewHolder(binding.root) {
         init {
             binding.apply {
