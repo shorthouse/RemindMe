@@ -8,13 +8,25 @@
             <LayoutPositions>
               <option name="myPositions">
                 <map>
-                  <entry key="active_reminders">
+                  <entry key="add_edit_reminder">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="49" />
-                            <option name="y" value="157" />
+                            <option name="x" value="365" />
+                            <option name="y" value="26" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="drawer_active_reminders">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="12" />
+                            <option name="y" value="12" />
                           </Point>
                         </option>
                         <option name="myPositions">
@@ -34,25 +46,13 @@
                       </LayoutPositions>
                     </value>
                   </entry>
-                  <entry key="add_edit_reminder">
+                  <entry key="drawer_all_reminders">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="365" />
-                            <option name="y" value="26" />
-                          </Point>
-                        </option>
-                      </LayoutPositions>
-                    </value>
-                  </entry>
-                  <entry key="all_reminders">
-                    <value>
-                      <LayoutPositions>
-                        <option name="myPosition">
-                          <Point>
-                            <option name="x" value="676" />
-                            <option name="y" value="162" />
+                            <option name="x" value="230" />
+                            <option name="y" value="12" />
                           </Point>
                         </option>
                         <option name="myPositions">
