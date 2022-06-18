@@ -1,6 +1,5 @@
 package dev.shorthouse.remindme.viewmodel
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
@@ -22,10 +21,7 @@ import javax.inject.Inject
 class ActiveReminderListViewModel @Inject constructor(
     private val repository: ReminderRepository,
 ) : ViewModel() {
-
-    fun getActiveReminders(): LiveData<List<Reminder>> {
-        return repository.getActiveNonArchivedReminders(ZonedDateTime.now()).asLiveData()
-    }
+    val activeReminders = repository.getActiveNonArchivedReminders(ZonedDateTime.now()).asLiveData()
 
     fun updateDoneReminder(
         id: Long,

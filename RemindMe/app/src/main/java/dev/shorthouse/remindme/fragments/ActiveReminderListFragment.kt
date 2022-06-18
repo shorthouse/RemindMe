@@ -33,7 +33,7 @@ class ActiveReminderListFragment : Fragment() {
 
         val adapter = ActiveReminderListAdapter()
 
-        viewModel.getActiveReminders().observe(this.viewLifecycleOwner) { reminders ->
+        viewModel.activeReminders.observe(this.viewLifecycleOwner) { reminders ->
             adapter.submitList(reminders)
         }
 
