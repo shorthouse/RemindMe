@@ -34,7 +34,6 @@
             android:layout_height="wrap_content"
             app:layout_behavior="@string/bottom_sheet_behavior"
             app:behavior_hideable="true"
-            android:fitsSystemWindows="true"
             app:menu="@menu/navigation_drawer"/>
 
         <com.google.android.material.bottomappbar.BottomAppBar
