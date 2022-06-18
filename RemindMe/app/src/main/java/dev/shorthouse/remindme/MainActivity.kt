@@ -1,14 +1,12 @@
 package dev.shorthouse.remindme
 
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
 import dagger.hilt.android.AndroidEntryPoint
 import dev.shorthouse.remindme.databinding.ActivityMainBinding
 
@@ -33,19 +31,8 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment_container) as NavHostFragment
         navController = navHostFragment.navController
 
-        val bottomNavigationView = binding.bottomNavigation
-        bottomNavigationView.setupWithNavController(navController)
-
         appBarConfiguration = AppBarConfiguration(setOf(R.id.active_reminders, R.id.all_reminders))
         setupActionBarWithNavController(navController, appBarConfiguration)
-
-        navController.addOnDestinationChangedListener { _, destination, _ ->
-            if (destination.id == R.id.active_reminders || destination.id == R.id.all_reminders) {
-                bottomNavigationView.visibility = View.VISIBLE
-            } else {
-                bottomNavigationView.visibility = View.GONE
-            }
-        }
     }
 
     override fun onSupportNavigateUp(): Boolean {
