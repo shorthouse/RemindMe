@@ -29,8 +29,6 @@
         <entry key="..\:/Users/short/Documents/Files/Coding/Git repos/Habit-Builder/HabitBuilder/app/src/main/res/menu/bottom_nav_menu.xml" value="0.1" />
         <entry key="..\:/Users/short/Documents/Files/Coding/Git repos/Habit-Builder/HabitBuilder/app/src/main/res/menu/bottom_navigation.xml" value="0.1" />
         <entry key="..\:/Users/short/Documents/Files/Coding/Git repos/RemindMe/RemindMe/app/src/main/res/drawable/ic_baseline_menu_24.xml" value="0.1" />
-        <entry key="..\:/Users/short/Documents/Files/Coding/Git repos/RemindMe/RemindMe/app/src/main/res/drawable/ic_calendar_range.xml" value="0.1" />
-        <entry key="..\:/Users/short/Documents/Files/Coding/Git repos/RemindMe/RemindMe/app/src/main/res/drawable/ic_calendar_today.xml" value="0.144" />
         <entry key="..\:/Users/short/Documents/Files/Coding/Git repos/RemindMe/RemindMe/app/src/main/res/drawable/ic_delete.xml" value="0.1" />
         <entry key="..\:/Users/short/Documents/Files/Coding/Git repos/RemindMe/RemindMe/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1" />
         <entry key="..\:/Users/short/Documents/Files/Coding/Git repos/RemindMe/RemindMe/app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.1" />
@@ -49,15 +47,12 @@
         <entry key="..\:/Users/short/Documents/Files/Coding/Git repos/RemindMe/RemindMe/app/src/main/res/layout/list_item_active_reminder.xml" value="0.5" />
         <entry key="..\:/Users/short/Documents/Files/Coding/Git repos/RemindMe/RemindMe/app/src/main/res/layout/list_item_dropdown_interval.xml" value="0.25" />
         <entry key="..\:/Users/short/Documents/Files/Coding/Git repos/RemindMe/RemindMe/app/src/main/res/layout/list_item_reminder.xml" value="0.2830269345874305" />
-        <entry key="..\:/Users/short/Documents/Files/Coding/Git repos/RemindMe/RemindMe/app/src/main/res/layout/reminder_list_bottom_sheet.xml" value="0.25" />
         <entry key="..\:/Users/short/Documents/Files/Coding/Git repos/RemindMe/RemindMe/app/src/main/res/menu/add_reminder_app_bar.xml" value="0.2830269345874305" />
         <entry key="..\:/Users/short/Documents/Files/Coding/Git repos/RemindMe/RemindMe/app/src/main/res/menu/add_reminder_app_bar_layout.xml" value="0.2830269345874305" />
         <entry key="..\:/Users/short/Documents/Files/Coding/Git repos/RemindMe/RemindMe/app/src/main/res/menu/bottom_app_bar.xml" value="0.27817644575770367" />
         <entry key="..\:/Users/short/Documents/Files/Coding/Git repos/RemindMe/RemindMe/app/src/main/res/menu/bottom_navigation.xml" value="0.2830269345874305" />
         <entry key="..\:/Users/short/Documents/Files/Coding/Git repos/RemindMe/RemindMe/app/src/main/res/menu/navigation_drawer.xml" value="0.27902068383284084" />
-        <entry key="..\:/Users/short/Documents/Files/Coding/Git repos/RemindMe/RemindMe/app/src/main/res/menu/reminder_list_bottom_sheet.xml" value="0.2830269345874305" />
         <entry key="..\:/Users/short/Documents/Files/Coding/Git repos/RemindMe/RemindMe/app/src/main/res/menu/repeat_interval_time_unit.xml" value="0.1" />
-        <entry key="..\:/Users/short/Documents/Files/Coding/Git repos/RemindMe/RemindMe/app/src/main/res/menu/toolbar_add_edit_reminder.xml" value="0.2830269345874305" />
         <entry key="..\:/Users/short/Documents/Files/Coding/Git repos/RemindMe/RemindMe/app/src/main/res/menu/toolbar_add_reminder.xml" value="0.1" />
         <entry key="..\:/Users/short/Documents/Files/Coding/Git repos/RemindMe/RemindMe/app/src/main/res/menu/toolbar_reminder_details.xml" value="0.2830269345874305" />
       </map>
