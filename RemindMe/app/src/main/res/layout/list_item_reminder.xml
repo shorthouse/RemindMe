@@ -8,6 +8,9 @@
         <variable
             name="reminder"
             type="dev.shorthouse.remindme.model.Reminder" />
+        <variable
+            name="detailsClickListener"
+            type="android.view.View.OnClickListener" />
     </data>
     
     <androidx.constraintlayout.widget.ConstraintLayout
