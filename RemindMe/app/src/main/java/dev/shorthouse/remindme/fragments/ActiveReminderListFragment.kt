@@ -4,18 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
-import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.adapter.ActiveReminderListAdapter
-import dev.shorthouse.remindme.data.RepeatInterval
 import dev.shorthouse.remindme.databinding.FragmentActiveReminderListBinding
 import dev.shorthouse.remindme.viewmodel.ActiveReminderListViewModel
-import java.time.ZonedDateTime
 
 @AndroidEntryPoint
 class ActiveReminderListFragment : Fragment() {
@@ -35,9 +31,9 @@ class ActiveReminderListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val adapter = ActiveReminderListAdapter(getAdapterClickListener())
+        val adapter = ActiveReminderListAdapter()
 
-        viewModel.getActiveReminders().observe(this.viewLifecycleOwner) { reminders ->
+        viewModel.activeReminders.observe(this.viewLifecycleOwner) { reminders ->
             adapter.submitList(reminders)
         }
 
@@ -45,9 +41,7 @@ class ActiveReminderListFragment : Fragment() {
             activeReminderRecycler.adapter = adapter
 
             addReminderFab.setOnClickListener {
-                val action = ActiveReminderListFragmentDirections
-                    .actionActiveRemindersToAddEditReminder()
-                findNavController().navigate(action)
+                navigateToReminderDetails()
             }
 
             activeReminderRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -62,47 +56,9 @@ class ActiveReminderListFragment : Fragment() {
         }
     }
 
-    private fun getAdapterClickListener(): ActiveReminderListAdapter.ClickListener {
-        return ActiveReminderListAdapter.ClickListener { reminder, itemId ->
-            when (itemId) {
-                R.id.active_reminder_container -> {
-                    val action = ActiveReminderListFragmentDirections
-                        .actionActiveRemindersToReminderDetails(reminder.id)
-                    findNavController().navigate(action)
-                }
-                R.id.reminder_done -> {
-                    updateDoneReminder(
-                        reminder.id,
-                        reminder.name,
-                        reminder.startDateTime,
-                        reminder.repeatInterval,
-                        reminder.notes,
-                        reminder.isNotificationSent,
-                    )
-                }
-            }
-        }
-    }
-
-    private fun updateDoneReminder(
-        id: Long,
-        name: String,
-        startDateTime: ZonedDateTime,
-        repeatInterval: RepeatInterval?,
-        notes: String?,
-        isNotificationSent: Boolean,
-    ) {
-        if (isNotificationSent) context?.let { context ->
-            NotificationManagerCompat.from(context).cancel(id.toInt())
-        }
-
-        viewModel.updateDoneReminder(
-            id,
-            name,
-            startDateTime,
-            repeatInterval,
-            notes,
-            isNotificationSent,
-        )
+    private fun navigateToReminderDetails() {
+        val action = ActiveReminderListFragmentDirections
+            .actionActiveRemindersToAddEditReminder()
+        findNavController().navigate(action)
     }
 }

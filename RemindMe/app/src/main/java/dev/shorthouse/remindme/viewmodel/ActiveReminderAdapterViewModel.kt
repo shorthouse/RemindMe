@@ -1,9 +1,7 @@
 package dev.shorthouse.remindme.viewmodel
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.data.RepeatInterval
 import dev.shorthouse.remindme.model.Reminder
@@ -15,43 +13,33 @@ import java.time.LocalDate
 import java.time.Period
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
-import javax.inject.Inject
 
-@HiltViewModel
-class ActiveReminderListViewModel @Inject constructor(
+class ActiveReminderAdapterViewModel(
+    val reminder: Reminder,
     private val repository: ReminderRepository,
 ) : ViewModel() {
-    val activeReminders = repository.getActiveNonArchivedReminders(ZonedDateTime.now()).asLiveData()
-
-    fun updateDoneReminder(
-        id: Long,
-        name: String,
-        startDateTime: ZonedDateTime,
-        repeatInterval: RepeatInterval?,
-        notes: String?,
-        isNotificationSent: Boolean,
-    ) {
-        val reminder = when (repeatInterval) {
+    fun updateDoneReminder() {
+        val updatedDoneReminder = when (reminder.repeatInterval) {
             null -> getCompletedSingleReminder(
-                id,
-                name,
-                startDateTime,
-                repeatInterval,
-                notes,
-                isNotificationSent
+                reminder.id,
+                reminder.name,
+                reminder.startDateTime,
+                reminder.repeatInterval,
+                reminder.notes,
+                reminder.isNotificationSent
             )
             else -> getUpdatedRepeatReminder(
-                id,
-                name,
-                startDateTime,
-                repeatInterval,
-                notes,
-                isNotificationSent
+                reminder.id,
+                reminder.name,
+                reminder.startDateTime,
+                reminder.repeatInterval,
+                reminder.notes,
+                reminder.isNotificationSent
             )
         }
 
         viewModelScope.launch(Dispatchers.IO) {
-            repository.updateReminder(reminder)
+            repository.updateReminder(updatedDoneReminder)
         }
     }
 

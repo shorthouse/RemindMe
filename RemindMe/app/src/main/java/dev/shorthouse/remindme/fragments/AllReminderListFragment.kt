@@ -31,11 +31,7 @@ class AllReminderListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val adapter = AllReminderListAdapter { reminder ->
-            val action = AllReminderListFragmentDirections
-                .actionAllRemindersToReminderDetails(reminder.id)
-            findNavController().navigate(action)
-        }
+        val adapter = AllReminderListAdapter()
 
         viewModel.reminders.observe(this.viewLifecycleOwner) { reminders ->
             adapter.submitList(reminders)
@@ -45,9 +41,7 @@ class AllReminderListFragment : Fragment() {
             allReminderRecycler.adapter = adapter
 
             addReminderFab.setOnClickListener {
-                val action = AllReminderListFragmentDirections
-                    .actionAllRemindersToAddEditReminder()
-                findNavController().navigate(action)
+                navigateToReminderDetails()
             }
 
             allReminderRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -60,5 +54,11 @@ class AllReminderListFragment : Fragment() {
                 }
             })
         }
+    }
+
+    private fun navigateToReminderDetails() {
+        val action = AllReminderListFragmentDirections
+            .actionAllRemindersToAddEditReminder()
+        findNavController().navigate(action)
     }
 }
