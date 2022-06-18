@@ -42,14 +42,14 @@ class ActiveReminderListAdapter :
         init {
             binding.apply {
                 setDetailsClickListener { view ->
-                    viewModel?.reminder?.id?.let { reminderId ->
-                        navigateToReminderDetails(reminderId, view)
+                    viewModel?.reminder?.let { reminder ->
+                        navigateToReminderDetails(reminder.id, view)
                     }
                 }
 
                 setDoneClickListener { view ->
                     viewModel?.reminder?.let {
-                        cancelDisplayedReminderNotification(view.context, viewModel?.reminder?.id)
+                        cancelDisplayedReminderNotification(view.context, viewModel.reminder.id)
                     }
                     updateDoneReminder()
                 }
@@ -60,11 +60,10 @@ class ActiveReminderListAdapter :
             val action = ActiveReminderListFragmentDirections
                 .actionActiveRemindersToReminderDetails(reminderId)
             view.findNavController().navigate(action)
-
         }
 
-        private fun cancelDisplayedReminderNotification(context: Context, reminderId: Long?) {
-            reminderId?.let { NotificationManagerCompat.from(context).cancel(it.toInt()) }
+        private fun cancelDisplayedReminderNotification(context: Context, reminderId: Long) {
+            NotificationManagerCompat.from(context).cancel(reminderId.toInt())
         }
 
         private fun updateDoneReminder() {
