@@ -80,7 +80,7 @@ class ActiveReminderListFragment : Fragment() {
 
             navigationView.setNavigationItemSelectedListener { menuItem ->
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-                if (menuItem.itemId == R.id.all_reminders) {
+                if (menuItem.itemId == R.id.drawer_all_reminders) {
                     navigateToAllReminders()
                 }
                 true

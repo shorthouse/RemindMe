@@ -24,6 +24,11 @@
                                 <LayoutPositions />
                               </value>
                             </entry>
+                            <entry key="action_active_reminders_to_all_reminders">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
                             <entry key="action_active_reminders_to_reminder_details">
                               <value>
                                 <LayoutPositions />
@@ -51,12 +56,17 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="16" />
+                            <option name="x" value="11" />
                             <option name="y" value="356" />
                           </Point>
                         </option>
                         <option name="myPositions">
                           <map>
+                            <entry key="action_all_reminders_to_active_reminders">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
                             <entry key="action_all_reminders_to_add_edit_reminder">
                               <value>
                                 <LayoutPositions />
