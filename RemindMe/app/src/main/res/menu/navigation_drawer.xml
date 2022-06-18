@@ -8,7 +8,7 @@
             android:icon="@drawable/ic_calendar_today"
             android:title="@string/active_reminders" />
         <item
-            android:id="@+id/all_reminders"
+            android:id="@+id/drawer_all_reminders"
             android:icon="@drawable/ic_calendar_range"
             android:title="@string/all_reminders" />
     </group>
