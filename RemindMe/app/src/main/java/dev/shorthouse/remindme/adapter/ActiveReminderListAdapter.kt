@@ -16,7 +16,7 @@ import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.databinding.ListItemActiveReminderBinding
 import dev.shorthouse.remindme.fragments.ActiveReminderListFragmentDirections
 import dev.shorthouse.remindme.model.Reminder
-import dev.shorthouse.remindme.viewmodel.ReminderListAdapterViewModel
+import dev.shorthouse.remindme.viewmodel.ActiveReminderAdapterViewModel
 
 class ActiveReminderListAdapter :
     ListAdapter<Reminder, ActiveReminderListAdapter.ViewHolder>(ActiveReminderDiffCallback()) {
@@ -73,7 +73,7 @@ class ActiveReminderListAdapter :
 
         fun bind(reminder: Reminder) {
             binding.apply {
-                viewModel = ReminderListAdapterViewModel(
+                viewModel = ActiveReminderAdapterViewModel(
                     reminder,
                     ReminderRepository(
                         ReminderDatabase.getDatabase(this@ViewHolder.itemView.context).reminderDao()

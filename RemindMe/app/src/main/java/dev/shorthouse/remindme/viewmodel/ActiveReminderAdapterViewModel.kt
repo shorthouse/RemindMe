@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.data.RepeatInterval
 import dev.shorthouse.remindme.model.Reminder
-import dev.shorthouse.remindme.utilities.DATE_PATTERN
 import dev.shorthouse.remindme.utilities.DAYS_IN_WEEK
 import dev.shorthouse.remindme.utilities.ONE_INTERVAL
 import kotlinx.coroutines.Dispatchers
@@ -13,18 +12,12 @@ import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.Period
 import java.time.ZonedDateTime
-import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
-class ReminderListAdapterViewModel(
+class ActiveReminderAdapterViewModel(
     val reminder: Reminder,
     private val repository: ReminderRepository,
 ) : ViewModel() {
-    val reminderStartDate = reminder.startDateTime
-        .toLocalDate()
-        .format(DateTimeFormatter.ofPattern(DATE_PATTERN))
-        .toString()
-
     fun updateDoneReminder() {
         val updatedDoneReminder = when (reminder.repeatInterval) {
             null -> getCompletedSingleReminder(
