@@ -11,11 +11,20 @@
         android:label="Active Reminders"
         tools:layout="@layout/fragment_active_reminder_list">
         <action
+            android:id="@+id/action_active_reminders_to_all_reminders"
+            app:destination="@id/all_reminders"
+            app:popUpTo="@+id/active_reminders"
+            app:popUpToInclusive="true" />
+        <action
             android:id="@+id/action_active_reminders_to_reminder_details"
-            app:destination="@id/reminder_details" />
+            app:destination="@id/reminder_details"
+            app:enterAnim="@anim/slide_in"
+            app:popExitAnim="@anim/slide_out" />
         <action
             android:id="@+id/action_active_reminders_to_add_edit_reminder"
-            app:destination="@id/add_edit_reminder" />
+            app:destination="@id/add_edit_reminder"
+            app:enterAnim="@anim/slide_in"
+            app:popExitAnim="@anim/slide_out" />
     </fragment>
 
     <fragment
@@ -24,13 +33,20 @@
         android:label="All Reminders"
         tools:layout="@layout/fragment_all_reminder_list" >
         <action
+            android:id="@+id/action_all_reminders_to_active_reminders"
+            app:destination="@id/active_reminders"
+            app:popUpTo="@+id/all_reminders"
+            app:popUpToInclusive="true" />
+        <action
             android:id="@+id/action_all_reminders_to_reminder_details"
-            app:destination="@id/reminder_details" />
+            app:destination="@id/reminder_details"
+            app:enterAnim="@anim/slide_in"
+            app:popExitAnim="@anim/slide_out"/>
         <action
             android:id="@+id/action_all_reminders_to_add_edit_reminder"
             app:destination="@id/add_edit_reminder"
             app:enterAnim="@anim/slide_in"
-            app:popExitAnim="@transition/fade_out" />
+            app:popExitAnim="@anim/slide_out" />
     </fragment>
 
     <fragment
@@ -59,7 +75,9 @@
             app:argType="long" />
         <action
             android:id="@+id/action_reminder_details_to_add_edit_reminder"
-            app:destination="@id/add_edit_reminder" />
+            app:destination="@id/add_edit_reminder"
+            app:enterAnim="@anim/slide_in"
+            app:popExitAnim="@anim/slide_out" />
     </fragment>
 
 

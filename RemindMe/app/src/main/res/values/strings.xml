@@ -73,5 +73,11 @@
     <string name="notification_channel_name_reboot_reschedule">NOTIFICATION_CHANNEL_NAME_REBOOT_RESCHEDULE</string>
     <string name="notification_channel_id_time_zone_update">NOTIFICATION_CHANNEL_ID_TIME_ZONE_UPDATE</string>
     <string name="notification_channel_name_time_zone_update">NOTIFICATION_CHANNEL_NAME_TIME_ZONE_UPDATE</string>
+    <string name="cd_add_reminder_fab">Add Reminder</string>
+    <string name="bottom_app_bar_search_title">Search</string>
+    <string name="cd_bottom_app_bar_search">Search reminders</string>
+    <string name="bottom_app_bar_more_title">More</string>
+    <string name="cd_bottom_app_bar_more">More options</string>
+    <string name="cd_active_reminders_icon">Active Reminders Icon</string>
 
 </resources>
