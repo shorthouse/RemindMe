@@ -6,8 +6,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import dev.shorthouse.remindme.data.ReminderDao
-import dev.shorthouse.remindme.data.ReminderDatabase
+import dev.shorthouse.remindme.data.source.local.ReminderDao
+import dev.shorthouse.remindme.data.source.local.ReminderDatabase
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)

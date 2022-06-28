@@ -1,4 +1,4 @@
-package dev.shorthouse.remindme.data
+package dev.shorthouse.remindme.data.source.local
 
 import androidx.room.*
 import dev.shorthouse.remindme.model.Reminder

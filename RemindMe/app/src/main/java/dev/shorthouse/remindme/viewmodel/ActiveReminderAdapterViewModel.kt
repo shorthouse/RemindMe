@@ -20,7 +20,7 @@ class ActiveReminderAdapterViewModel(
 ) : ViewModel() {
     fun updateDoneReminder() {
         val updatedDoneReminder = when (reminder.repeatInterval) {
-            null -> getCompletedSingleReminder(
+            null -> getCompletedOneOffReminder(
                 reminder.id,
                 reminder.name,
                 reminder.startDateTime,
@@ -43,7 +43,7 @@ class ActiveReminderAdapterViewModel(
         }
     }
 
-    private fun getCompletedSingleReminder(
+    private fun getCompletedOneOffReminder(
         id: Long,
         name: String,
         startDateTime: ZonedDateTime,

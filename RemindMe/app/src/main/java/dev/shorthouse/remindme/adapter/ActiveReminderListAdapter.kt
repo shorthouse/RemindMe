@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import dev.shorthouse.remindme.R
-import dev.shorthouse.remindme.data.ReminderDatabase
+import dev.shorthouse.remindme.data.source.local.ReminderDatabase
 import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.databinding.ListItemActiveReminderBinding
 import dev.shorthouse.remindme.fragments.ActiveReminderListFragmentDirections

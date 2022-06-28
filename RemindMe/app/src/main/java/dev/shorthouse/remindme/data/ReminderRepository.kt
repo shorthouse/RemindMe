@@ -1,5 +1,6 @@
 package dev.shorthouse.remindme.data
 
+import dev.shorthouse.remindme.data.source.local.ReminderDao
 import dev.shorthouse.remindme.model.Reminder
 import java.time.ZonedDateTime
 import javax.inject.Inject

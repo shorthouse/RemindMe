@@ -8,7 +8,7 @@ import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
 
-class ReminderModelTests {
+class ReminderTest {
     private lateinit var reminder: Reminder
     private lateinit var oneOffReminder: Reminder
 
