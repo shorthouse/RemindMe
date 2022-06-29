@@ -18,6 +18,8 @@ class ActiveReminderListViewModel @Inject constructor(
 ) : ViewModel() {
     val activeReminders = repository.getActiveNonArchivedReminders(ZonedDateTime.now()).asLiveData()
 
+    val allReminders = repository.getNonArchivedReminders().asLiveData()
+
     fun getScrimBackgroundColour(slideOffset: Float): Int {
         val baseColor = Color.BLACK
         val baseAlpha = 0.6f
