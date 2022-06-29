@@ -13,6 +13,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import dagger.hilt.android.AndroidEntryPoint
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.adapter.ActiveReminderListAdapter
+import dev.shorthouse.remindme.adapter.AllReminderListAdapter
 import dev.shorthouse.remindme.databinding.FragmentActiveReminderListBinding
 import dev.shorthouse.remindme.viewmodel.ActiveReminderListViewModel
 
@@ -36,7 +37,7 @@ class ActiveReminderListFragment : Fragment() {
 
         val adapter = ActiveReminderListAdapter()
 
-        viewModel.activeReminders.observe(this.viewLifecycleOwner) { reminders ->
+        viewModel.activeReminders.observe(viewLifecycleOwner) { reminders ->
             adapter.submitList(reminders)
         }
 
@@ -61,6 +62,24 @@ class ActiveReminderListFragment : Fragment() {
         setupBottomNavigationDrawer()
     }
 
+    private fun changeToActiveReminderAdapter() {
+        val adapter = ActiveReminderListAdapter()
+        viewModel.activeReminders.observe(viewLifecycleOwner) { reminders ->
+            adapter.submitList(reminders)
+        }
+
+        binding.activeReminderRecycler.adapter = adapter
+    }
+
+    private fun changeToAllReminderAdapter() {
+        val adapter = AllReminderListAdapter()
+        viewModel.allReminders.observe(viewLifecycleOwner) { reminders ->
+            adapter.submitList(reminders)
+        }
+
+        binding.activeReminderRecycler.adapter = adapter
+    }
+
     private fun setupBottomNavigationDrawer() {
         binding.apply {
             val bottomSheetBehavior = BottomSheetBehavior.from(navigationView)
@@ -74,8 +93,14 @@ class ActiveReminderListFragment : Fragment() {
 
             navigationView.setNavigationItemSelectedListener { menuItem ->
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-                if (menuItem.itemId == R.id.drawer_all_reminders) {
-                    navigateToAllReminders()
+                if (menuItem.itemId != navigationView.checkedItem?.itemId) {
+                    if (menuItem.itemId == R.id.drawer_active_reminders) {
+                        navigationView.setCheckedItem(R.id.drawer_active_reminders)
+                        changeToActiveReminderAdapter()
+                    } else if (menuItem.itemId == R.id.drawer_all_reminders) {
+                        navigationView.setCheckedItem(R.id.drawer_all_reminders)
+                        changeToAllReminderAdapter()
+                    }
                 }
                 true
             }
@@ -117,9 +142,10 @@ class ActiveReminderListFragment : Fragment() {
         findNavController().navigate(action)
     }
 
-    private fun navigateToAllReminders() {
-        val action = ActiveReminderListFragmentDirections
-            .actionActiveRemindersToAllReminders()
-        findNavController().navigate(action)
-    }
+//    private fun navigateToAllReminders() {
+//        changeAdapter()
+////        val action = ActiveReminderListFragmentDirections
+////            .actionActiveRemindersToAllReminders()
+////        findNavController().navigate(action)
+//    }
 }
