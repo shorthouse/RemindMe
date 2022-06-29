@@ -1,4 +1,4 @@
-package dev.shorthouse.remindme.data
+package dev.shorthouse.remindme.data.source.local
 
 import android.content.Context
 import androidx.room.Database
@@ -6,6 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import dev.shorthouse.remindme.R
+import dev.shorthouse.remindme.data.Converters
 import dev.shorthouse.remindme.model.Reminder
 
 @Database(version = 1, exportSchema = false, entities = [Reminder::class])

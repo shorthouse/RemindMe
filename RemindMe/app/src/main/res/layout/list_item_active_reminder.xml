@@ -24,7 +24,6 @@
         android:paddingEnd="16dp"
         android:onClick="@{detailsClickListener}">
 
-
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/reminder_name"
             android:layout_width="0dp"
