@@ -14,12 +14,12 @@ import dagger.hilt.android.AndroidEntryPoint
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.adapter.ActiveReminderListAdapter
 import dev.shorthouse.remindme.adapter.AllReminderListAdapter
-import dev.shorthouse.remindme.databinding.FragmentActiveReminderListBinding
+import dev.shorthouse.remindme.databinding.FragmentReminderListBinding
 import dev.shorthouse.remindme.viewmodel.ReminderListViewModel
 
 @AndroidEntryPoint
 class ReminderListFragment : Fragment() {
-    private lateinit var binding: FragmentActiveReminderListBinding
+    private lateinit var binding: FragmentReminderListBinding
 
     private val viewModel: ReminderListViewModel by viewModels()
 
@@ -28,7 +28,7 @@ class ReminderListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentActiveReminderListBinding.inflate(inflater, container, false)
+        binding = FragmentReminderListBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -138,7 +138,7 @@ class ReminderListFragment : Fragment() {
 
     private fun navigateToReminderDetails() {
         val action = ReminderListFragmentDirections
-            .actionActiveRemindersToAddEditReminder()
+            .actionReminderListToReminderDetails()
         findNavController().navigate(action)
     }
 
