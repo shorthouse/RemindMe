@@ -46,7 +46,7 @@ class AllReminderListAdapter :
 
         private fun navigateToReminderDetails(reminderId: Long, view: View) {
             val action = ReminderListFragmentDirections
-                .actionActiveRemindersToReminderDetails(reminderId)
+                .actionReminderListToReminderDetails(reminderId)
             view.findNavController().navigate(action)
         }
 
