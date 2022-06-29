@@ -14,7 +14,6 @@ import dev.shorthouse.remindme.data.source.local.ReminderDatabase
 import dev.shorthouse.remindme.data.source.local.ReminderLocalDataSource
 import javax.inject.Singleton
 
-
 @Module
 @InstallIn(SingletonComponent::class)
 class DatabaseModule {
