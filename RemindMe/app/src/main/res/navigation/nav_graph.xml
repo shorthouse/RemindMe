@@ -3,47 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/active_reminders">
+    app:startDestination="@id/reminder_list">
 
     <fragment
-        android:id="@+id/active_reminders"
+        android:id="@+id/reminder_list"
         android:name="dev.shorthouse.remindme.fragments.ReminderListFragment"
         android:label="Active Reminders"
         tools:layout="@layout/fragment_reminder_list">
         <action
-            android:id="@+id/action_active_reminders_to_all_reminders"
-            app:destination="@id/all_reminders"
-            app:popUpTo="@+id/active_reminders"
-            app:popUpToInclusive="true" />
-        <action
-            android:id="@+id/action_active_reminders_to_reminder_details"
+            android:id="@+id/action_reminder_list_to_reminder_details"
             app:destination="@id/reminder_details"
             app:enterAnim="@anim/slide_in"
             app:popExitAnim="@anim/slide_out" />
         <action
-            android:id="@+id/action_active_reminders_to_add_edit_reminder"
-            app:destination="@id/add_edit_reminder"
-            app:enterAnim="@anim/slide_in"
-            app:popExitAnim="@anim/slide_out" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/all_reminders"
-        android:name="dev.shorthouse.remindme.fragments.AllReminderListFragment"
-        android:label="All Reminders"
-        tools:layout="@layout/fragment_all_reminder_list" >
-        <action
-            android:id="@+id/action_all_reminders_to_active_reminders"
-            app:destination="@id/active_reminders"
-            app:popUpTo="@+id/all_reminders"
-            app:popUpToInclusive="true" />
-        <action
-            android:id="@+id/action_all_reminders_to_reminder_details"
-            app:destination="@id/reminder_details"
-            app:enterAnim="@anim/slide_in"
-            app:popExitAnim="@anim/slide_out"/>
-        <action
-            android:id="@+id/action_all_reminders_to_add_edit_reminder"
+            android:id="@+id/action_reminder_list_to_add_edit_reminder"
             app:destination="@id/add_edit_reminder"
             app:enterAnim="@anim/slide_in"
             app:popExitAnim="@anim/slide_out" />
@@ -79,7 +52,5 @@
             app:enterAnim="@anim/slide_in"
             app:popExitAnim="@anim/slide_out" />
     </fragment>
-
-
-
+    
 </navigation>
