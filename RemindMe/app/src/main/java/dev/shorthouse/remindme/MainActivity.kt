@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment_container) as NavHostFragment
         navController = navHostFragment.navController
 
-        appBarConfiguration = AppBarConfiguration(setOf(R.id.active_reminders, R.id.all_reminders))
+        appBarConfiguration = AppBarConfiguration(setOf(R.id.reminder_list, R.id.all_reminders))
         setupActionBarWithNavController(navController, appBarConfiguration)
     }
 
