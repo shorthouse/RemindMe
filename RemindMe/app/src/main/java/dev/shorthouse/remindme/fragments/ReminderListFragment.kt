@@ -18,7 +18,7 @@ import dev.shorthouse.remindme.databinding.FragmentActiveReminderListBinding
 import dev.shorthouse.remindme.viewmodel.ActiveReminderListViewModel
 
 @AndroidEntryPoint
-class ActiveReminderListFragment : Fragment() {
+class ReminderListFragment : Fragment() {
     private lateinit var binding: FragmentActiveReminderListBinding
 
     private val viewModel: ActiveReminderListViewModel by viewModels()
