@@ -15,7 +15,7 @@ import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.data.source.local.ReminderDatabase
 import dev.shorthouse.remindme.data.source.local.ReminderLocalDataSource
 import dev.shorthouse.remindme.databinding.ListItemActiveReminderBinding
-import dev.shorthouse.remindme.fragments.ActiveReminderListFragmentDirections
+import dev.shorthouse.remindme.fragments.ReminderListFragmentDirections
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.viewmodel.ActiveReminderAdapterViewModel
 
@@ -58,7 +58,7 @@ class ActiveReminderListAdapter :
         }
 
         private fun navigateToReminderDetails(reminderId: Long, view: View) {
-            val action = ActiveReminderListFragmentDirections
+            val action = ReminderListFragmentDirections
                 .actionActiveRemindersToReminderDetails(reminderId)
             view.findNavController().navigate(action)
         }
