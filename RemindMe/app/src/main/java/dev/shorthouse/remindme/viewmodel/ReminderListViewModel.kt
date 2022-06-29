@@ -13,7 +13,7 @@ import java.time.ZonedDateTime
 import javax.inject.Inject
 
 @HiltViewModel
-class ActiveReminderListViewModel @Inject constructor(
+class ReminderListViewModel @Inject constructor(
     repository: ReminderRepository,
 ) : ViewModel() {
     val activeReminders = repository.getActiveNonArchivedReminders(ZonedDateTime.now()).asLiveData()
