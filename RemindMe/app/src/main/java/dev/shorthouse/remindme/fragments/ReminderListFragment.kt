@@ -45,7 +45,7 @@ class ReminderListFragment : Fragment() {
             reminderRecycler.adapter = adapter
 
             addReminderFab.setOnClickListener {
-                navigateToReminderDetails()
+                navigateToAddEditReminder()
             }
 
             bottomAppBar.setOnMenuItemClickListener { menuItem ->
@@ -139,6 +139,12 @@ class ReminderListFragment : Fragment() {
     private fun navigateToReminderDetails() {
         val action = ReminderListFragmentDirections
             .actionReminderListToReminderDetails()
+        findNavController().navigate(action)
+    }
+
+    private fun navigateToAddEditReminder() {
+        val action = ReminderListFragmentDirections
+            .actionReminderListToAddEditReminder()
         findNavController().navigate(action)
     }
 
