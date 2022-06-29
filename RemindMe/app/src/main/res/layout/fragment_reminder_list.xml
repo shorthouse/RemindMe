@@ -16,7 +16,7 @@
             android:layout_marginBottom="?attr/actionBarSize">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/active_reminder_recycler"
+                android:id="@+id/reminder_recycler"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
