@@ -42,7 +42,7 @@ class ReminderListFragment : Fragment() {
         }
 
         binding.apply {
-            activeReminderRecycler.adapter = adapter
+            reminderRecycler.adapter = adapter
 
             addReminderFab.setOnClickListener {
                 navigateToReminderDetails()
@@ -68,7 +68,7 @@ class ReminderListFragment : Fragment() {
             adapter.submitList(reminders)
         }
 
-        binding.activeReminderRecycler.adapter = adapter
+        binding.reminderRecycler.adapter = adapter
     }
 
     private fun changeToAllReminderAdapter() {
@@ -77,7 +77,7 @@ class ReminderListFragment : Fragment() {
             adapter.submitList(reminders)
         }
 
-        binding.activeReminderRecycler.adapter = adapter
+        binding.reminderRecycler.adapter = adapter
     }
 
     private fun setupBottomNavigationDrawer() {
@@ -127,7 +127,7 @@ class ReminderListFragment : Fragment() {
                         backButtonCallback.isEnabled = true
                     } else if (newState == BottomSheetBehavior.STATE_HIDDEN) {
                         scrim.setOnClickListener(null)
-                        activeReminderRecycler.bringToFront()
+                        reminderRecycler.bringToFront()
                         backButtonCallback.isEnabled = false
                     }
                 }
