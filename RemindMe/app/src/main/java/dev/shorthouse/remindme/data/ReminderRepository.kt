@@ -1,27 +1,40 @@
 package dev.shorthouse.remindme.data
 
-import dev.shorthouse.remindme.data.source.local.ReminderDao
 import dev.shorthouse.remindme.model.Reminder
+import kotlinx.coroutines.flow.Flow
 import java.time.ZonedDateTime
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class ReminderRepository @Inject constructor(
-    private val reminderDao: ReminderDao
+    private val reminderLocalDataSource: ReminderDataSource
 ) {
-    fun getReminders() = reminderDao.getReminders()
+    fun getReminders(): Flow<List<Reminder>> {
+        return reminderLocalDataSource.getReminders()
+    }
 
-    fun getNonArchivedReminders() = reminderDao.getNonArchivedReminders()
+    fun getReminder(id: Long): Flow<Reminder> {
+        return reminderLocalDataSource.getReminder(id)
+    }
 
-    fun getActiveNonArchivedReminders(now: ZonedDateTime) =
-        reminderDao.getActiveNonArchivedReminders(now)
+    fun getActiveNonArchivedReminders(nowDateTime: ZonedDateTime): Flow<List<Reminder>> {
+        return reminderLocalDataSource.getActiveNonArchivedReminders(nowDateTime)
+    }
 
-    fun getReminder(reminderId: Long) = reminderDao.getReminder(reminderId)
+    fun getNonArchivedReminders(): Flow<List<Reminder>> {
+        return reminderLocalDataSource.getNonArchivedReminders()
+    }
 
-    fun insertReminder(reminder: Reminder) = reminderDao.insert(reminder)
+    fun insertReminder(reminder: Reminder): Long {
+        return reminderLocalDataSource.insertReminder(reminder)
+    }
 
-    fun updateReminder(reminder: Reminder) = reminderDao.update(reminder)
+    fun updateReminder(reminder: Reminder) {
+        return reminderLocalDataSource.updateReminder(reminder)
+    }
 
-    fun deleteReminder(reminder: Reminder) = reminderDao.delete(reminder)
+    fun deleteReminder(reminder: Reminder) {
+        return reminderLocalDataSource.deleteReminder(reminder)
+    }
 }
