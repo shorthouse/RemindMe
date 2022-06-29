@@ -15,13 +15,13 @@ import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.adapter.ActiveReminderListAdapter
 import dev.shorthouse.remindme.adapter.AllReminderListAdapter
 import dev.shorthouse.remindme.databinding.FragmentActiveReminderListBinding
-import dev.shorthouse.remindme.viewmodel.ActiveReminderListViewModel
+import dev.shorthouse.remindme.viewmodel.ReminderListViewModel
 
 @AndroidEntryPoint
 class ReminderListFragment : Fragment() {
     private lateinit var binding: FragmentActiveReminderListBinding
 
-    private val viewModel: ActiveReminderListViewModel by viewModels()
+    private val viewModel: ReminderListViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -137,15 +137,9 @@ class ReminderListFragment : Fragment() {
     }
 
     private fun navigateToReminderDetails() {
-        val action = ActiveReminderListFragmentDirections
+        val action = ReminderListFragmentDirections
             .actionActiveRemindersToAddEditReminder()
         findNavController().navigate(action)
     }
 
-//    private fun navigateToAllReminders() {
-//        changeAdapter()
-////        val action = ActiveReminderListFragmentDirections
-////            .actionActiveRemindersToAllReminders()
-////        findNavController().navigate(action)
-//    }
 }
