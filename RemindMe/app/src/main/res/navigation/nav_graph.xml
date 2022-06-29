@@ -9,7 +9,7 @@
         android:id="@+id/active_reminders"
         android:name="dev.shorthouse.remindme.fragments.ReminderListFragment"
         android:label="Active Reminders"
-        tools:layout="@layout/fragment_active_reminder_list">
+        tools:layout="@layout/fragment_reminder_list">
         <action
             android:id="@+id/action_active_reminders_to_all_reminders"
             app:destination="@id/all_reminders"
