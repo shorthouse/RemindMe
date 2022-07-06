@@ -6,8 +6,8 @@
 
     <data>
         <variable
-            name="viewModel"
-            type="dev.shorthouse.remindme.viewmodel.ActiveReminderAdapterViewModel" />
+            name="reminder"
+            type="dev.shorthouse.remindme.model.Reminder" />
         <variable
             name="detailsClickListener"
             type="android.view.View.OnClickListener" />
@@ -31,7 +31,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:maxLines="1"
-            android:text="@{viewModel.reminder.name}"
+            android:text="@{reminder.name}"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
             app:layout_constraintEnd_toStartOf="@+id/reminder_done"
             app:layout_constraintStart_toStartOf="parent"
@@ -56,7 +56,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
-            android:text="@{viewModel.reminder.getFormattedStartTime()}"
+            android:text="@{reminder.getFormattedStartTime()}"
             app:layout_constraintTop_toBottomOf="@id/reminder_name"
             app:layout_constraintStart_toStartOf="parent"
             tools:text="21:49" />
@@ -67,7 +67,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
-            android:text="@{viewModel.reminder.getFormattedStartDate()}"
+            android:text="@{reminder.getFormattedStartDate()}"
             app:layout_constraintStart_toEndOf="@+id/reminder_time"
             app:layout_constraintTop_toBottomOf="@+id/reminder_name"
             tools:text="2022-02-07" />
