@@ -1,7 +1,6 @@
 package dev.shorthouse.remindme.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -108,14 +107,10 @@ class ReminderListFragment : Fragment() {
             navigationViewListSort.setNavigationItemSelectedListener { menuItem ->
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
                 if (menuItem.itemId != navigationViewListSort.checkedItem?.itemId) {
-                    if (menuItem.itemId == R.id.drawer_active_reminders) {
-                        navigationViewListSort.setCheckedItem(R.id.drawer_active_reminders)
-                        setAdapterActiveReminder()
-                        viewModel.reminderAdapterState = STATE_ACTIVE_REMINDER_LIST
-                    } else if (menuItem.itemId == R.id.drawer_all_reminders) {
+                    if (menuItem.itemId == R.id.drawer_sort_newest_first) {
+                        navigationViewListSort.setCheckedItem(R.id.drawer_sort_newest_first)
+                    } else if (menuItem.itemId == R.id.drawer_sort_oldest_first) {
                         navigationViewListSort.setCheckedItem(R.id.drawer_all_reminders)
-                        setAdapterAllReminder()
-                        viewModel.reminderAdapterState = STATE_ALL_REMINDER_LIST
                     }
                 }
                 true
@@ -159,12 +154,6 @@ class ReminderListFragment : Fragment() {
 
             bottomAppBar.setNavigationOnClickListener {
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-            }
-
-            Log.d("HDS", "log working!")
-            bottomAppBar.setOnMenuItemClickListener {
-                Log.d("HDS", "menu item is: ${it.contentDescription}")
-                true
             }
 
             navigationViewListFilter.setNavigationItemSelectedListener { menuItem ->
