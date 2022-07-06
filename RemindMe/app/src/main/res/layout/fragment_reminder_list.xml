@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             app:layout_behavior="@string/bottom_sheet_behavior"
             app:behavior_hideable="true"
-            app:menu="@menu/navigation_drawer"/>
+            app:menu="@menu/bottom_drawer_reminder_list_type"/>
 
         <com.google.android.material.bottomappbar.BottomAppBar
             android:id="@+id/bottom_app_bar"
