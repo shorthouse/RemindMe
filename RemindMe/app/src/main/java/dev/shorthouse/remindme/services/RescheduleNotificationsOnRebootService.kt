@@ -17,17 +17,20 @@ import dev.shorthouse.remindme.utilities.NotificationScheduler
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class RescheduleNotificationsOnRebootService @Inject constructor(
-    private val repository: ReminderRepository,
-    private val notificationScheduler: NotificationScheduler,
-) : Service() {
+class RescheduleNotificationsOnRebootService : Service() {
+
+    @Inject
+    lateinit var repository: ReminderRepository
+
+    @Inject
+    lateinit var notificationScheduler: NotificationScheduler
 
     override fun onCreate() {
-        createNotificationChannel()
+        createServiceNotificationChannel()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        startForeground(System.currentTimeMillis().toInt(), getNotification())
+        startForeground(System.currentTimeMillis().toInt(), getServiceNotification())
 
         val remindersLiveData = repository.getNonArchivedReminders().asLiveData()
 
@@ -53,7 +56,7 @@ class RescheduleNotificationsOnRebootService @Inject constructor(
             }
     }
 
-    private fun createNotificationChannel() {
+    private fun createServiceNotificationChannel() {
         val notificationChannel = NotificationChannel(
             getString(R.string.notification_channel_id_reboot_reschedule),
             getString(R.string.notification_channel_name_reboot_reschedule),
@@ -63,7 +66,7 @@ class RescheduleNotificationsOnRebootService @Inject constructor(
         notificationManager.createNotificationChannel(notificationChannel)
     }
 
-    private fun getNotification(): Notification {
+    private fun getServiceNotification(): Notification {
         return NotificationCompat.Builder(
             this,
             getString(R.string.notification_channel_id_reboot_reschedule)
