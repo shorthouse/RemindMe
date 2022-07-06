@@ -1,6 +1,7 @@
 package dev.shorthouse.remindme.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -42,6 +43,7 @@ class ReminderListFragment : Fragment() {
         setupListeners()
         setupListAdapter()
         setupBottomNavigationDrawer()
+        setupBottomDrawerSort()
     }
 
     private fun setupListeners() {
@@ -50,7 +52,7 @@ class ReminderListFragment : Fragment() {
 
             bottomAppBar.setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
-                    R.id.sort -> {
+                    R.id.bottom_app_bar_sort -> {
                         Toast.makeText(context, "Sort icon clicked!", Toast.LENGTH_SHORT).show()
                         true
                     }
@@ -93,6 +95,63 @@ class ReminderListFragment : Fragment() {
         binding.navigationViewListFilter.setCheckedItem(R.id.drawer_all_reminders)
     }
 
+    private fun setupBottomDrawerSort() {
+        binding.apply {
+            val bottomSheetBehavior = BottomSheetBehavior.from(navigationViewListSort)
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+
+            bottomAppBar.setOnMenuItemClickListener {
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                true
+            }
+
+            navigationViewListSort.setNavigationItemSelectedListener { menuItem ->
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+                if (menuItem.itemId != navigationViewListSort.checkedItem?.itemId) {
+                    if (menuItem.itemId == R.id.drawer_active_reminders) {
+                        navigationViewListSort.setCheckedItem(R.id.drawer_active_reminders)
+                        setAdapterActiveReminder()
+                        viewModel.reminderAdapterState = STATE_ACTIVE_REMINDER_LIST
+                    } else if (menuItem.itemId == R.id.drawer_all_reminders) {
+                        navigationViewListSort.setCheckedItem(R.id.drawer_all_reminders)
+                        setAdapterAllReminder()
+                        viewModel.reminderAdapterState = STATE_ALL_REMINDER_LIST
+                    }
+                }
+                true
+            }
+
+            val backButtonCallback =
+                requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+                    if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_EXPANDED) {
+                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+                    }
+                }
+
+            bottomSheetBehavior.addBottomSheetCallback(object :
+                BottomSheetBehavior.BottomSheetCallback() {
+                override fun onSlide(bottomSheet: View, slideOffset: Float) {
+                    scrim.setBackgroundColor(viewModel.getScrimBackgroundColour(slideOffset))
+                }
+
+                override fun onStateChanged(bottomSheet: View, newState: Int) {
+                    if (newState == BottomSheetBehavior.STATE_EXPANDED) {
+                        scrim.setOnClickListener {
+                            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+                        }
+                        scrim.bringToFront()
+                        backButtonCallback.isEnabled = true
+                    } else if (newState == BottomSheetBehavior.STATE_HIDDEN) {
+                        scrim.setOnClickListener(null)
+                        reminderRecycler.bringToFront()
+                        backButtonCallback.isEnabled = false
+                    }
+                }
+            })
+
+        }
+    }
+
     private fun setupBottomNavigationDrawer() {
         binding.apply {
             val bottomSheetBehavior = BottomSheetBehavior.from(navigationViewListFilter)
@@ -100,6 +159,12 @@ class ReminderListFragment : Fragment() {
 
             bottomAppBar.setNavigationOnClickListener {
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+            }
+
+            Log.d("HDS", "log working!")
+            bottomAppBar.setOnMenuItemClickListener {
+                Log.d("HDS", "menu item is: ${it.contentDescription}")
+                true
             }
 
             navigationViewListFilter.setNavigationItemSelectedListener { menuItem ->
