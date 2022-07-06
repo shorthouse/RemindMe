@@ -9,13 +9,17 @@ import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import dagger.hilt.android.AndroidEntryPoint
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.adapter.ActiveReminderListAdapter
 import dev.shorthouse.remindme.adapter.AllReminderListAdapter
 import dev.shorthouse.remindme.databinding.FragmentReminderListBinding
+import dev.shorthouse.remindme.utilities.STATE_ACTIVE_REMINDER_LIST
+import dev.shorthouse.remindme.utilities.STATE_ALL_REMINDER_LIST
 import dev.shorthouse.remindme.viewmodel.ReminderListViewModel
+
 
 @AndroidEntryPoint
 class ReminderListFragment : Fragment() {
@@ -35,57 +39,64 @@ class ReminderListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val adapter = ActiveReminderListAdapter()
+        setupListeners()
+        setupListAdapter()
+        setupBottomNavigationDrawer()
+    }
 
-        viewModel.activeReminders.observe(viewLifecycleOwner) { reminders ->
-            adapter.submitList(reminders)
-        }
-
+    private fun setupListeners() {
         binding.apply {
-            reminderRecycler.adapter = adapter
-
-            addReminderFab.setOnClickListener {
-                navigateToAddEditReminder()
-            }
+            addReminderFab.setOnClickListener { navigateToAddEditReminder() }
 
             bottomAppBar.setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
-                    R.id.search -> {
-                        Toast.makeText(context, "Search icon clicked!", Toast.LENGTH_SHORT).show()
+                    R.id.sort -> {
+                        Toast.makeText(context, "Sort icon clicked!", Toast.LENGTH_SHORT).show()
                         true
                     }
                     else -> false
                 }
             }
-        }
 
-        setupBottomNavigationDrawer()
+            reminderRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    if (dy > 0) addReminderFab.hide() else if (dy < 0) addReminderFab.show()
+                }
+            })
+        }
     }
 
-    private fun changeToActiveReminderAdapter() {
-        val adapter = ActiveReminderListAdapter()
+    private fun setupListAdapter() {
+        when (viewModel.reminderAdapterState) {
+            STATE_ALL_REMINDER_LIST -> setAdapterAllReminder()
+            else -> setAdapterActiveReminder()
+        }
+    }
+
+    private fun setAdapterActiveReminder() {
+        val adapter = ActiveReminderListAdapter(viewModel)
         viewModel.activeReminders.observe(viewLifecycleOwner) { reminders ->
             adapter.submitList(reminders)
         }
 
         binding.reminderRecycler.adapter = adapter
+        binding.navigationView.setCheckedItem(R.id.drawer_active_reminders)
     }
 
-    private fun changeToAllReminderAdapter() {
+    private fun setAdapterAllReminder() {
         val adapter = AllReminderListAdapter()
         viewModel.allReminders.observe(viewLifecycleOwner) { reminders ->
             adapter.submitList(reminders)
         }
 
         binding.reminderRecycler.adapter = adapter
+        binding.navigationView.setCheckedItem(R.id.drawer_all_reminders)
     }
 
     private fun setupBottomNavigationDrawer() {
         binding.apply {
             val bottomSheetBehavior = BottomSheetBehavior.from(navigationView)
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-
-            navigationView.setCheckedItem(R.id.drawer_active_reminders)
 
             bottomAppBar.setNavigationOnClickListener {
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
@@ -96,10 +107,12 @@ class ReminderListFragment : Fragment() {
                 if (menuItem.itemId != navigationView.checkedItem?.itemId) {
                     if (menuItem.itemId == R.id.drawer_active_reminders) {
                         navigationView.setCheckedItem(R.id.drawer_active_reminders)
-                        changeToActiveReminderAdapter()
+                        setAdapterActiveReminder()
+                        viewModel.reminderAdapterState = STATE_ACTIVE_REMINDER_LIST
                     } else if (menuItem.itemId == R.id.drawer_all_reminders) {
                         navigationView.setCheckedItem(R.id.drawer_all_reminders)
-                        changeToAllReminderAdapter()
+                        setAdapterAllReminder()
+                        viewModel.reminderAdapterState = STATE_ALL_REMINDER_LIST
                     }
                 }
                 true
@@ -134,12 +147,6 @@ class ReminderListFragment : Fragment() {
             })
 
         }
-    }
-
-    private fun navigateToReminderDetails() {
-        val action = ReminderListFragmentDirections
-            .actionReminderListToReminderDetails()
-        findNavController().navigate(action)
     }
 
     private fun navigateToAddEditReminder() {
