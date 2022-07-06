@@ -80,7 +80,7 @@ class ReminderListFragment : Fragment() {
         }
 
         binding.reminderRecycler.adapter = adapter
-        binding.navigationView.setCheckedItem(R.id.drawer_active_reminders)
+        binding.navigationViewListFilter.setCheckedItem(R.id.drawer_active_reminders)
     }
 
     private fun setAdapterAllReminder() {
@@ -90,27 +90,27 @@ class ReminderListFragment : Fragment() {
         }
 
         binding.reminderRecycler.adapter = adapter
-        binding.navigationView.setCheckedItem(R.id.drawer_all_reminders)
+        binding.navigationViewListFilter.setCheckedItem(R.id.drawer_all_reminders)
     }
 
     private fun setupBottomNavigationDrawer() {
         binding.apply {
-            val bottomSheetBehavior = BottomSheetBehavior.from(navigationView)
+            val bottomSheetBehavior = BottomSheetBehavior.from(navigationViewListFilter)
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
 
             bottomAppBar.setNavigationOnClickListener {
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
             }
 
-            navigationView.setNavigationItemSelectedListener { menuItem ->
+            navigationViewListFilter.setNavigationItemSelectedListener { menuItem ->
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-                if (menuItem.itemId != navigationView.checkedItem?.itemId) {
+                if (menuItem.itemId != navigationViewListFilter.checkedItem?.itemId) {
                     if (menuItem.itemId == R.id.drawer_active_reminders) {
-                        navigationView.setCheckedItem(R.id.drawer_active_reminders)
+                        navigationViewListFilter.setCheckedItem(R.id.drawer_active_reminders)
                         setAdapterActiveReminder()
                         viewModel.reminderAdapterState = STATE_ACTIVE_REMINDER_LIST
                     } else if (menuItem.itemId == R.id.drawer_all_reminders) {
-                        navigationView.setCheckedItem(R.id.drawer_all_reminders)
+                        navigationViewListFilter.setCheckedItem(R.id.drawer_all_reminders)
                         setAdapterAllReminder()
                         viewModel.reminderAdapterState = STATE_ALL_REMINDER_LIST
                     }
