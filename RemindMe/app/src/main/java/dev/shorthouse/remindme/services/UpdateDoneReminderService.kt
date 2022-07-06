@@ -23,9 +23,10 @@ import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class UpdateDoneReminderService @Inject constructor(
-    private val repository: ReminderRepository
-) : Service() {
+class UpdateDoneReminderService : Service() {
+
+    @Inject
+    lateinit var repository: ReminderRepository
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val reminderId = intent?.getLongExtra(getString(R.string.intent_key_reminderId), -1L)
