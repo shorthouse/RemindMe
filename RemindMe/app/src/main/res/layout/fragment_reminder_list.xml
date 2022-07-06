@@ -28,12 +28,20 @@
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
         <com.google.android.material.navigation.NavigationView
-            android:id="@+id/navigation_view"
+            android:id="@+id/navigation_view_list_filter"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_behavior="@string/bottom_sheet_behavior"
             app:behavior_hideable="true"
             app:menu="@menu/bottom_drawer_reminder_list_type"/>
+
+        <com.google.android.material.navigation.NavigationView
+            android:id="@+id/navigation_view_list_sort"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_behavior="@string/bottom_sheet_behavior"
+            app:behavior_hideable="true"
+            app:menu="@menu/bottom_drawer_reminder_sort" />
 
         <com.google.android.material.bottomappbar.BottomAppBar
             android:id="@+id/bottom_app_bar"
