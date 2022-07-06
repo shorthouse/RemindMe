@@ -1,6 +1,5 @@
 package dev.shorthouse.remindme.adapter
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,15 +10,12 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import dev.shorthouse.remindme.R
-import dev.shorthouse.remindme.data.ReminderRepository
-import dev.shorthouse.remindme.data.source.local.ReminderDatabase
-import dev.shorthouse.remindme.data.source.local.ReminderLocalDataSource
 import dev.shorthouse.remindme.databinding.ListItemActiveReminderBinding
-import dev.shorthouse.remindme.fragments.ActiveReminderListFragmentDirections
+import dev.shorthouse.remindme.fragments.ReminderListFragmentDirections
 import dev.shorthouse.remindme.model.Reminder
-import dev.shorthouse.remindme.viewmodel.ActiveReminderAdapterViewModel
+import dev.shorthouse.remindme.viewmodel.ReminderListViewModel
 
-class ActiveReminderListAdapter :
+class ActiveReminderListAdapter(private val viewModel: ReminderListViewModel) :
     ListAdapter<Reminder, ActiveReminderListAdapter.ViewHolder>(ActiveReminderDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -37,65 +33,51 @@ class ActiveReminderListAdapter :
         holder.bind(getItem(position))
     }
 
-    class ViewHolder(
-        private var binding: ListItemActiveReminderBinding
+    inner class ViewHolder(
+        private val binding: ListItemActiveReminderBinding
     ) : RecyclerView.ViewHolder(binding.root) {
+
         init {
             binding.apply {
                 setDetailsClickListener { view ->
-                    viewModel?.reminder?.let { reminder ->
-                        navigateToReminderDetails(reminder.id, view)
-                    }
+                    navigateToReminderDetails(view, reminder)
                 }
 
                 setDoneClickListener { view ->
-                    viewModel?.reminder?.let {
-                        cancelDisplayedReminderNotification(view.context, viewModel?.reminder?.id)
-                    }
+                    cancelDisplayedReminderNotification(view, reminder)
                     updateDoneReminder()
                 }
             }
         }
 
-        private fun navigateToReminderDetails(reminderId: Long, view: View) {
-            val action = ActiveReminderListFragmentDirections
-                .actionActiveRemindersToReminderDetails(reminderId)
-            view.findNavController().navigate(action)
+        private fun navigateToReminderDetails(view: View, reminder: Reminder?) {
+            reminder?.id?.let { reminderId ->
+                val action = ReminderListFragmentDirections
+                    .actionReminderListToReminderDetails(reminderId)
+                view.findNavController().navigate(action)
+            }
         }
 
-        private fun cancelDisplayedReminderNotification(context: Context, reminderId: Long?) {
-            reminderId?.let { NotificationManagerCompat.from(context).cancel(it.toInt()) }
+        private fun cancelDisplayedReminderNotification(view: View, reminder: Reminder?) {
+            reminder?.id?.let { reminderId ->
+                NotificationManagerCompat.from(view.context).cancel(reminderId.toInt())
+            }
         }
 
         private fun updateDoneReminder() {
-            binding.viewModel?.updateDoneReminder()
+            binding.reminder?.let { reminder ->
+                viewModel.updateDoneReminder(reminder)
+            }
         }
 
         fun bind(reminder: Reminder) {
-            binding.apply {
-                viewModel = ActiveReminderAdapterViewModel(
-                    reminder,
-                    ReminderRepository(
-                        ReminderLocalDataSource(
-                            ReminderDatabase.getDatabase(this@ViewHolder.itemView.context)
-                                .reminderDao()
-                        )
-
-                    )
-                )
-                executePendingBindings()
-            }
+            binding.reminder = reminder
+            binding.executePendingBindings()
         }
     }
 }
 
 private class ActiveReminderDiffCallback : DiffUtil.ItemCallback<Reminder>() {
-
-    override fun areItemsTheSame(oldItem: Reminder, newItem: Reminder): Boolean {
-        return oldItem.id == newItem.id
-    }
-
-    override fun areContentsTheSame(oldItem: Reminder, newItem: Reminder): Boolean {
-        return oldItem == newItem
-    }
+    override fun areItemsTheSame(oldItem: Reminder, newItem: Reminder) = oldItem.id == newItem.id
+    override fun areContentsTheSame(oldItem: Reminder, newItem: Reminder) = oldItem == newItem
 }
