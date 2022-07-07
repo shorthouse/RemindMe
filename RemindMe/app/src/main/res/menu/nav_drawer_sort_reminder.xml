@@ -5,9 +5,11 @@
         android:checkableBehavior="single">
         <item
             android:id="@+id/drawer_sort_newest_first"
+            android:icon="@drawable/ic_sort_newest"
             android:title="@string/drawer_title_newest_first" />
         <item
             android:id="@+id/drawer_sort_oldest_first"
+            android:icon="@drawable/ic_sort_oldest"
             android:title="@string/drawer_title_oldest_first" />
     </group>
 </menu>
