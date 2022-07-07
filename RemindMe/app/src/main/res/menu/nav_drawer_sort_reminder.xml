@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group
         android:id="@+id/drawer_group"
         android:checkableBehavior="single">
         <item
             android:id="@+id/drawer_sort_newest_first"
-            android:title="@string/drawer_title_newest_first"
-            app:actionViewClass="android.widget.RadioButton"/>
+            android:title="@string/drawer_title_newest_first" />
         <item
             android:id="@+id/drawer_sort_oldest_first"
-            android:title="@string/drawer_title_oldest_first"
-            app:actionViewClass="android.widget.RadioButton"/>
+            android:title="@string/drawer_title_oldest_first" />
     </group>
 </menu>
