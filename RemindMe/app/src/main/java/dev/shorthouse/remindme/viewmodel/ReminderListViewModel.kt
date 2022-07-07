@@ -13,8 +13,8 @@ import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.data.RepeatInterval
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.utilities.DAYS_IN_WEEK
+import dev.shorthouse.remindme.utilities.FILTER_ACTIVE_REMINDER_LIST
 import dev.shorthouse.remindme.utilities.ONE_INTERVAL
-import dev.shorthouse.remindme.utilities.STATE_ACTIVE_REMINDER_LIST
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -27,11 +27,12 @@ import javax.inject.Inject
 class ReminderListViewModel @Inject constructor(
     val repository: ReminderRepository,
 ) : ViewModel() {
+
     val activeReminders = repository.getActiveNonArchivedReminders(ZonedDateTime.now()).asLiveData()
 
     val allReminders = repository.getNonArchivedReminders().asLiveData()
 
-    var reminderAdapterState = STATE_ACTIVE_REMINDER_LIST
+    var reminderAdapterState = FILTER_ACTIVE_REMINDER_LIST
 
     fun getScrimBackgroundColour(slideOffset: Float): Int {
         val baseColor = Color.BLACK

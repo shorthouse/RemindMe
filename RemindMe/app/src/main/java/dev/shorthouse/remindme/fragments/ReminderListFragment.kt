@@ -16,8 +16,8 @@ import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.adapter.ActiveReminderListAdapter
 import dev.shorthouse.remindme.adapter.AllReminderListAdapter
 import dev.shorthouse.remindme.databinding.FragmentReminderListBinding
-import dev.shorthouse.remindme.utilities.STATE_ACTIVE_REMINDER_LIST
-import dev.shorthouse.remindme.utilities.STATE_ALL_REMINDER_LIST
+import dev.shorthouse.remindme.utilities.FILTER_ACTIVE_REMINDER_LIST
+import dev.shorthouse.remindme.utilities.FILTER_ALL_REMINDER_LIST
 import dev.shorthouse.remindme.viewmodel.ReminderListViewModel
 
 
@@ -69,7 +69,7 @@ class ReminderListFragment : Fragment() {
 
     private fun setupListAdapter() {
         when (viewModel.reminderAdapterState) {
-            STATE_ALL_REMINDER_LIST -> setAdapterAllReminder()
+            FILTER_ALL_REMINDER_LIST -> setAdapterAllReminder()
             else -> setAdapterActiveReminder()
         }
     }
@@ -162,11 +162,11 @@ class ReminderListFragment : Fragment() {
                     if (menuItem.itemId == R.id.drawer_active_reminders) {
                         navigationViewListFilter.setCheckedItem(R.id.drawer_active_reminders)
                         setAdapterActiveReminder()
-                        viewModel.reminderAdapterState = STATE_ACTIVE_REMINDER_LIST
+                        viewModel.reminderAdapterState = FILTER_ACTIVE_REMINDER_LIST
                     } else if (menuItem.itemId == R.id.drawer_all_reminders) {
                         navigationViewListFilter.setCheckedItem(R.id.drawer_all_reminders)
                         setAdapterAllReminder()
-                        viewModel.reminderAdapterState = STATE_ALL_REMINDER_LIST
+                        viewModel.reminderAdapterState = FILTER_ALL_REMINDER_LIST
                     }
                 }
                 true
