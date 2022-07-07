@@ -33,8 +33,7 @@
             android:layout_height="wrap_content"
             app:layout_behavior="@string/bottom_sheet_behavior"
             app:behavior_hideable="true"
-            app:menu="@menu/nav_drawer_filter_reminder"
-            app:headerLayout="@layout/nav_drawer_sort_header" />
+            app:menu="@menu/nav_drawer_filter_reminder" />
 
         <com.google.android.material.navigation.NavigationView
             android:id="@+id/navigation_view_list_sort"
@@ -42,7 +41,8 @@
             android:layout_height="wrap_content"
             app:layout_behavior="@string/bottom_sheet_behavior"
             app:behavior_hideable="true"
-            app:menu="@menu/nav_drawer_sort_reminder" />
+            app:menu="@menu/nav_drawer_sort_reminder"
+            app:headerLayout="@layout/nav_drawer_sort_header" />
 
         <com.google.android.material.bottomappbar.BottomAppBar
             android:id="@+id/bottom_app_bar"
