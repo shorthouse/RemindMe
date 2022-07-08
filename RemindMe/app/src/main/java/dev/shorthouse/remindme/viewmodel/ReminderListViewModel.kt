@@ -4,6 +4,7 @@ import android.graphics.Color
 import androidx.core.graphics.blue
 import androidx.core.graphics.green
 import androidx.core.graphics.red
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
@@ -12,9 +13,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.data.RepeatInterval
 import dev.shorthouse.remindme.model.Reminder
-import dev.shorthouse.remindme.utilities.DAYS_IN_WEEK
-import dev.shorthouse.remindme.utilities.FILTER_ACTIVE_REMINDER_LIST
-import dev.shorthouse.remindme.utilities.ONE_INTERVAL
+import dev.shorthouse.remindme.utilities.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -28,11 +27,67 @@ class ReminderListViewModel @Inject constructor(
     val repository: ReminderRepository,
 ) : ViewModel() {
 
-    val activeReminders = repository.getActiveNonArchivedReminders(ZonedDateTime.now()).asLiveData()
+    private val activeReminders = repository
+        .getActiveNonArchivedReminders(ZonedDateTime.now())
+        .asLiveData()
 
-    val allReminders = repository.getNonArchivedReminders().asLiveData()
+    private val allReminders = repository
+        .getNonArchivedReminders()
+        .asLiveData()
 
-    var reminderAdapterState = FILTER_ACTIVE_REMINDER_LIST
+    var currentFilter = FILTER_ACTIVE_REMINDER_LIST
+    var currentSort = SORT_NEWEST_FIRST
+
+    val remindersList = MediatorLiveData<List<Reminder>>()
+
+    // Todo change sort to order?? Like order_newest
+
+    init {
+        remindersList.addSource(activeReminders) { reminders ->
+            if (currentFilter == FILTER_ACTIVE_REMINDER_LIST) {
+                if (currentSort == SORT_NEWEST_FIRST) {
+                    reminders?.let { reminders ->
+                        remindersList.value = reminders.sortedBy { it.startDateTime }
+                    }
+                } else if (currentSort == SORT_OLDEST_FIRST) {
+                    reminders?.let { reminders ->
+                        remindersList.value = reminders.sortedByDescending { it.startDateTime }
+                    }
+                }
+            }
+        }
+
+        remindersList.addSource(allReminders) { reminders ->
+            if (currentFilter == FILTER_ACTIVE_REMINDER_LIST) {
+                if (currentSort == SORT_NEWEST_FIRST) {
+                    reminders?.let { reminders ->
+                        remindersList.value = reminders.sortedBy { it.startDateTime }
+                    }
+                } else if (currentSort == SORT_OLDEST_FIRST) {
+                    reminders?.let { reminders ->
+                        remindersList.value = reminders.sortedByDescending { it.startDateTime }
+                    }
+                }
+            }
+        }
+    }
+
+    fun setReminderList(filter: Int, sort: Int) {
+        currentSort = sort
+        currentFilter = filter
+
+        val booksFiltered = when (currentFilter) {
+            FILTER_ACTIVE_REMINDER_LIST -> activeReminders.value
+            else -> allReminders.value
+        }
+
+        val booksSorted = when (currentSort) {
+            SORT_NEWEST_FIRST -> booksFiltered?.sortedBy { it.startDateTime }
+            else -> booksFiltered?.sortedByDescending { it.startDateTime }
+        }
+
+        remindersList.value = booksSorted
+    }
 
     fun getScrimBackgroundColour(slideOffset: Float): Int {
         val baseColor = Color.BLACK
