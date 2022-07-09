@@ -13,7 +13,10 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.data.RepeatInterval
 import dev.shorthouse.remindme.model.Reminder
-import dev.shorthouse.remindme.utilities.*
+import dev.shorthouse.remindme.utilities.DAYS_IN_WEEK
+import dev.shorthouse.remindme.utilities.FILTER_ACTIVE_REMINDER_LIST
+import dev.shorthouse.remindme.utilities.ONE_INTERVAL
+import dev.shorthouse.remindme.utilities.SORT_NEWEST_FIRST
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -43,33 +46,21 @@ class ReminderListViewModel @Inject constructor(
     // Todo change sort to order?? Like order_newest
 
     init {
-        remindersList.addSource(activeReminders) { reminders ->
-            if (currentFilter == FILTER_ACTIVE_REMINDER_LIST) {
-                if (currentSort == SORT_NEWEST_FIRST) {
-                    reminders?.let { reminders ->
-                        remindersList.value = reminders.sortedBy { it.startDateTime }
-                    }
-                } else if (currentSort == SORT_OLDEST_FIRST) {
-                    reminders?.let { reminders ->
-                        remindersList.value = reminders.sortedByDescending { it.startDateTime }
-                    }
-                }
-            }
+        remindersList.addSource(activeReminders) {
+            setReminderList(currentFilter, currentSort)
         }
 
-        remindersList.addSource(allReminders) { reminders ->
-            if (currentFilter == FILTER_ACTIVE_REMINDER_LIST) {
-                if (currentSort == SORT_NEWEST_FIRST) {
-                    reminders?.let { reminders ->
-                        remindersList.value = reminders.sortedBy { it.startDateTime }
-                    }
-                } else if (currentSort == SORT_OLDEST_FIRST) {
-                    reminders?.let { reminders ->
-                        remindersList.value = reminders.sortedByDescending { it.startDateTime }
-                    }
-                }
-            }
+        remindersList.addSource(allReminders) {
+            setReminderList(currentFilter, currentSort)
         }
+    }
+
+    fun setReminderListFilter(filter: Int) {
+        currentFilter = filter
+    }
+
+    fun setReminderListSort(sort: Int) {
+        
     }
 
     fun setReminderList(filter: Int, sort: Int) {
@@ -82,8 +73,8 @@ class ReminderListViewModel @Inject constructor(
         }
 
         val booksSorted = when (currentSort) {
-            SORT_NEWEST_FIRST -> booksFiltered?.sortedBy { it.startDateTime }
-            else -> booksFiltered?.sortedByDescending { it.startDateTime }
+            SORT_NEWEST_FIRST -> booksFiltered?.sortedByDescending { it.startDateTime }
+            else -> booksFiltered?.sortedBy { it.startDateTime }
         }
 
         remindersList.value = booksSorted

@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -42,25 +41,14 @@ class ReminderListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupListeners()
-        setupObservers()
-        //setupListAdapter()
-        setupBottomNavigationDrawer()
+        setupReminderListObserver()
+        setupBottomDrawerFilter()
         setupBottomDrawerSort()
     }
 
     private fun setupListeners() {
         binding.apply {
             addReminderFab.setOnClickListener { navigateToAddEditReminder() }
-
-            bottomAppBar.setOnMenuItemClickListener { menuItem ->
-                when (menuItem.itemId) {
-                    R.id.bottom_app_bar_sort -> {
-                        Toast.makeText(context, "Sort icon clicked!", Toast.LENGTH_SHORT).show()
-                        true
-                    }
-                    else -> false
-                }
-            }
 
             reminderRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -70,7 +58,7 @@ class ReminderListFragment : Fragment() {
         }
     }
 
-    private fun setupObservers() {
+    private fun setupReminderListObserver() {
         viewModel.remindersList.observe(viewLifecycleOwner) { reminders ->
             val recyclerAdapter = when (viewModel.currentFilter) {
                 FILTER_ACTIVE_REMINDER_LIST -> ActiveReminderListAdapter(viewModel)
@@ -78,40 +66,21 @@ class ReminderListFragment : Fragment() {
             }
 
             recyclerAdapter.submitList(reminders)
+            binding.reminderRecycler.adapter = recyclerAdapter
         }
     }
-
-//    private fun setupListAdapter() {
-//        when (viewModel.reminderAdapterState) {
-//            FILTER_ALL_REMINDER_LIST -> setAdapterAllReminder()
-//            else -> setAdapterActiveReminder()
-//        }
-//    }
-
-//    private fun setAdapterActiveReminder() {
-//        val adapter = ActiveReminderListAdapter(viewModel)
-//        viewModel.activeReminders.observe(viewLifecycleOwner) { reminders ->
-//            adapter.submitList(reminders)
-//        }
-//
-//        binding.reminderRecycler.adapter = adapter
-//        binding.navigationViewListFilter.setCheckedItem(R.id.drawer_active_reminders)
-//    }
-//
-//    private fun setAdapterAllReminder() {
-//        val adapter = AllReminderListAdapter()
-//        viewModel.allReminders.observe(viewLifecycleOwner) { reminders ->
-//            adapter.submitList(reminders)
-//        }
-//
-//        binding.reminderRecycler.adapter = adapter
-//        binding.navigationViewListFilter.setCheckedItem(R.id.drawer_all_reminders)
-//    }
 
     private fun setupBottomDrawerSort() {
         binding.apply {
             val bottomSheetBehavior = BottomSheetBehavior.from(navigationViewListSort)
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+
+            val selectedMenuItem = when (viewModel.currentSort) {
+                SORT_NEWEST_FIRST -> R.id.drawer_sort_newest_first
+                else -> R.id.drawer_sort_oldest_first
+            }
+            navigationViewListSort.setCheckedItem(selectedMenuItem)
+
 
             bottomAppBar.setOnMenuItemClickListener {
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
@@ -126,13 +95,17 @@ class ReminderListFragment : Fragment() {
                         viewModel.setReminderList(viewModel.currentFilter, SORT_NEWEST_FIRST)
                         navigationViewListSort.setCheckedItem(R.id.drawer_sort_newest_first)
                     } else if (menuItem.itemId == R.id.drawer_sort_oldest_first) {
-                        viewModel.setReminderList(viewModel.currentFilter, SORT_OLDEST_FIRST) //TODO combine this just set var to sort and have one call to set reminder list
+                        viewModel.setReminderList(
+                            viewModel.currentFilter,
+                            SORT_OLDEST_FIRST
+                        ) //TODO combine this just set var to sort and have one call to set reminder list
                         navigationViewListSort.setCheckedItem(R.id.drawer_sort_oldest_first)
                     }
                 }
 
                 true
             }
+
 
             val backButtonCallback =
                 requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
@@ -165,10 +138,16 @@ class ReminderListFragment : Fragment() {
         }
     }
 
-    private fun setupBottomNavigationDrawer() {
+    private fun setupBottomDrawerFilter() {
         binding.apply {
             val bottomSheetBehavior = BottomSheetBehavior.from(navigationViewListFilter)
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+
+            val selectedMenuItem = when (viewModel.currentFilter) {
+                FILTER_ACTIVE_REMINDER_LIST -> R.id.drawer_active_reminders
+                else -> R.id.drawer_all_reminders
+            }
+            navigationViewListFilter.setCheckedItem(selectedMenuItem)
 
             bottomAppBar.setNavigationOnClickListener {
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
@@ -179,7 +158,10 @@ class ReminderListFragment : Fragment() {
 
                 if (menuItem.itemId != navigationViewListFilter.checkedItem?.itemId) {
                     if (menuItem.itemId == R.id.drawer_active_reminders) {
-                        viewModel.setReminderList(FILTER_ACTIVE_REMINDER_LIST, viewModel.currentSort)
+                        viewModel.setReminderList(
+                            FILTER_ACTIVE_REMINDER_LIST,
+                            viewModel.currentSort
+                        )
                         navigationViewListFilter.setCheckedItem(R.id.drawer_active_reminders)
                     } else if (menuItem.itemId == R.id.drawer_all_reminders) {
                         viewModel.setReminderList(FILTER_ALL_REMINDER_LIST, viewModel.currentSort)
