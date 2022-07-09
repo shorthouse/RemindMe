@@ -14,9 +14,9 @@ import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.data.RepeatInterval
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.utilities.DAYS_IN_WEEK
-import dev.shorthouse.remindme.utilities.FILTER_ACTIVE_REMINDER_LIST
 import dev.shorthouse.remindme.utilities.ONE_INTERVAL
-import dev.shorthouse.remindme.utilities.SORT_NEWEST_FIRST
+import dev.shorthouse.remindme.utilities.RemindersFilter
+import dev.shorthouse.remindme.utilities.RemindersSort
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -38,46 +38,38 @@ class ReminderListViewModel @Inject constructor(
         .getNonArchivedReminders()
         .asLiveData()
 
-    var currentFilter = FILTER_ACTIVE_REMINDER_LIST
-    var currentSort = SORT_NEWEST_FIRST
-
     val remindersList = MediatorLiveData<List<Reminder>>()
 
-    // Todo change sort to order?? Like order_newest
+    var currentFilter = RemindersFilter.ACTIVE_REMINDERS
+    var currentSort = RemindersSort.NEWEST_FIRST
 
     init {
-        remindersList.addSource(activeReminders) {
-            setReminderList(currentFilter, currentSort)
-        }
-
-        remindersList.addSource(allReminders) {
-            setReminderList(currentFilter, currentSort)
-        }
+        remindersList.addSource(activeReminders) { updateReminderList() }
+        remindersList.addSource(allReminders) { updateReminderList() }
     }
 
-    fun setReminderListFilter(filter: Int) {
+    fun filterReminderList(filter: RemindersFilter) {
         currentFilter = filter
+        updateReminderList()
     }
 
-    fun setReminderListSort(sort: Int) {
-        
-    }
-
-    fun setReminderList(filter: Int, sort: Int) {
+    fun sortReminderList(sort: RemindersSort) {
         currentSort = sort
-        currentFilter = filter
+        updateReminderList()
+    }
 
-        val booksFiltered = when (currentFilter) {
-            FILTER_ACTIVE_REMINDER_LIST -> activeReminders.value
+    private fun updateReminderList() {
+        val remindersFiltered = when (currentFilter) {
+            RemindersFilter.ACTIVE_REMINDERS -> activeReminders.value
             else -> allReminders.value
         }
 
-        val booksSorted = when (currentSort) {
-            SORT_NEWEST_FIRST -> booksFiltered?.sortedByDescending { it.startDateTime }
-            else -> booksFiltered?.sortedBy { it.startDateTime }
+        val remindersFilteredSorted = when (currentSort) {
+            RemindersSort.NEWEST_FIRST -> remindersFiltered?.sortedByDescending { it.startDateTime }
+            else -> remindersFiltered?.sortedBy { it.startDateTime }
         }
 
-        remindersList.value = booksSorted
+        remindersList.value = remindersFilteredSorted
     }
 
     fun getScrimBackgroundColour(slideOffset: Float): Int {
