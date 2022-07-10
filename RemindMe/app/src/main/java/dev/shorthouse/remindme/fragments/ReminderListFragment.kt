@@ -20,9 +20,8 @@ import dev.shorthouse.remindme.utilities.RemindersFilter
 import dev.shorthouse.remindme.utilities.RemindersSort
 import dev.shorthouse.remindme.viewmodel.ReminderListViewModel
 
-
 @AndroidEntryPoint
-class ReminderListFragment : Fragment() {
+class ReminderListFragment(private val filter: RemindersFilter) : Fragment() {
     private lateinit var binding: FragmentReminderListBinding
 
     private val viewModel: ReminderListViewModel by viewModels()
@@ -39,6 +38,7 @@ class ReminderListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewModel.currentFilter = filter
         setupListeners()
         setupReminderListObserver()
         setupBottomDrawerFilter()
