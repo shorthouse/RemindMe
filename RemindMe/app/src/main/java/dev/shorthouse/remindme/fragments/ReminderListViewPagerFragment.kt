@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import dev.shorthouse.remindme.R
+import dev.shorthouse.remindme.adapter.ReminderListPagerAdapter
 import dev.shorthouse.remindme.databinding.FragmentViewPagerBinding
 import dev.shorthouse.remindme.utilities.RemindersFilter
 
