@@ -20,18 +20,6 @@
                       </LayoutPositions>
                     </value>
                   </entry>
-                  <entry key="reminderListViewPagerFragment">
-                    <value>
-                      <LayoutPositions>
-                        <option name="myPosition">
-                          <Point>
-                            <option name="x" value="-41" />
-                            <option name="y" value="376" />
-                          </Point>
-                        </option>
-                      </LayoutPositions>
-                    </value>
-                  </entry>
                   <entry key="reminder_details">
                     <value>
                       <LayoutPositions>
@@ -53,23 +41,23 @@
                       </LayoutPositions>
                     </value>
                   </entry>
-                  <entry key="reminder_list">
+                  <entry key="reminder_list_view_pager">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="12" />
-                            <option name="y" value="12" />
+                            <option name="x" value="17" />
+                            <option name="y" value="175" />
                           </Point>
                         </option>
                         <option name="myPositions">
                           <map>
-                            <entry key="action_reminder_list_to_add_edit_reminder">
+                            <entry key="action_reminder_list_view_pager_to_add_edit_reminder">
                               <value>
                                 <LayoutPositions />
                               </value>
                             </entry>
-                            <entry key="action_reminder_list_to_reminder_details">
+                            <entry key="action_reminder_list_view_pager_to_reminder_details">
                               <value>
                                 <LayoutPositions />
                               </value>
