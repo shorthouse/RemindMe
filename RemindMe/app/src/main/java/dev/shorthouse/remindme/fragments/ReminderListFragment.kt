@@ -38,23 +38,13 @@ class ReminderListFragment(private val filter: RemindersFilter) : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.currentFilter = filter
-        setupListeners()
+        setReminderFilter()
         setupReminderListObserver()
-        setupBottomDrawerFilter()
         setupBottomDrawerSort()
     }
 
-    private fun setupListeners() {
-        binding.apply {
-//            addReminderFab.setOnClickListener { navigateToAddEditReminder() }
-//
-//            reminderRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-//                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-//                    if (dy > 0) addReminderFab.hide() else if (dy < 0) addReminderFab.show()
-//                }
-//            })
-        }
+    private fun setReminderFilter() {
+        viewModel.currentFilter = filter
     }
 
     private fun setupReminderListObserver() {
@@ -143,11 +133,4 @@ class ReminderListFragment(private val filter: RemindersFilter) : Fragment() {
     fun BottomSheetBehavior<NavigationView>.show() {
         this.state = BottomSheetBehavior.STATE_EXPANDED
     }
-
-    private fun navigateToAddEditReminder() {
-        val action = ReminderListViewPagerFragmentDirections
-            .actionReminderListViewPagerToAddEditReminder()
-        findNavController().navigate(action)
-    }
-
 }
