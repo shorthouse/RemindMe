@@ -3,34 +3,42 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/reminderListViewPagerFragment">
+    app:startDestination="@id/reminder_list_view_pager">
 
     <fragment
-        android:id="@+id/reminderListViewPagerFragment"
+        android:id="@+id/reminder_list_view_pager"
         android:name="dev.shorthouse.remindme.fragments.ReminderListViewPagerFragment"
         android:label="ReminderListViewPagerFragment"
         tools:layout="@layout/fragment_view_pager">
-        <action
-            android:id="@+id/action_reminderListViewPagerFragment_to_add_edit_reminder"
-            app:destination="@id/add_edit_reminder" />
-    </fragment>
 
-    <fragment
-        android:id="@+id/reminder_list"
-        android:name="dev.shorthouse.remindme.fragments.ReminderListFragment"
-        android:label="Active Reminders"
-        tools:layout="@layout/fragment_reminder_list">
         <action
-            android:id="@+id/action_reminder_list_to_reminder_details"
+            android:id="@+id/action_reminder_list_view_pager_to_add_edit_reminder"
+            app:destination="@id/add_edit_reminder"
+            app:enterAnim="@anim/slide_in"
+            app:popExitAnim="@anim/slide_out"/>
+        <action
+            android:id="@+id/action_reminder_list_view_pager_to_reminder_details"
             app:destination="@id/reminder_details"
             app:enterAnim="@anim/slide_in"
             app:popExitAnim="@anim/slide_out" />
-        <action
-            android:id="@+id/action_reminder_list_to_add_edit_reminder"
-            app:destination="@id/add_edit_reminder"
-            app:enterAnim="@anim/slide_in"
-            app:popExitAnim="@anim/slide_out" />
     </fragment>
+
+<!--    <fragment-->
+<!--        android:id="@+id/reminder_list"-->
+<!--        android:name="dev.shorthouse.remindme.fragments.ReminderListFragment"-->
+<!--        android:label="Active Reminders"-->
+<!--        tools:layout="@layout/fragment_reminder_list">-->
+<!--        <action-->
+<!--            android:id="@+id/action_reminder_list_to_reminder_details"-->
+<!--            app:destination="@id/reminder_details"-->
+<!--            app:enterAnim="@anim/slide_in"-->
+<!--            app:popExitAnim="@anim/slide_out" />-->
+<!--        <action-->
+<!--            android:id="@+id/action_reminder_list_to_add_edit_reminder"-->
+<!--            app:destination="@id/add_edit_reminder"-->
+<!--            app:enterAnim="@anim/slide_in"-->
+<!--            app:popExitAnim="@anim/slide_out" />-->
+<!--    </fragment>-->
 
     <fragment
         android:id="@+id/add_edit_reminder"
