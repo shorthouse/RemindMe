@@ -6,22 +6,25 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.adapter.ReminderListPagerAdapter
+import dev.shorthouse.remindme.databinding.FragmentReminderListBinding
 import dev.shorthouse.remindme.databinding.FragmentViewPagerBinding
 import dev.shorthouse.remindme.utilities.RemindersFilter
 
 @AndroidEntryPoint
 class ReminderListViewPagerFragment : Fragment() {
+    private lateinit var binding: FragmentViewPagerBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val binding = FragmentViewPagerBinding.inflate(inflater, container, false)
+    ): View {
+        binding = FragmentViewPagerBinding.inflate(inflater, container, false)
         val tabLayout = binding.tabLayout
         val viewPager = binding.viewPager
 
@@ -33,9 +36,22 @@ class ReminderListViewPagerFragment : Fragment() {
             tab.text = getTabTitle(position)
         }.attach()
 
-        (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
+        setupListeners()
+        //(activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
 
         return binding.root
+    }
+
+    private fun setupListeners() {
+        binding.apply {
+            addReminderFab.setOnClickListener { navigateToAddEditReminder() }
+        }
+    }
+
+    private fun navigateToAddEditReminder() {
+        val action = ReminderListViewPagerFragmentDirections
+            .actionReminderListViewPagerToAddEditReminder()
+        findNavController().navigate(action)
     }
 
     private fun getTabIcon(position: Int): Int {
