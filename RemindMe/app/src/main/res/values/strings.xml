@@ -79,5 +79,8 @@
     <string name="bottom_app_bar_more_title">More</string>
     <string name="cd_bottom_app_bar_more">More options</string>
     <string name="cd_active_reminders_icon">Active Reminders Icon</string>
+    <string name="drawer_title_newest_first">Newest first</string>
+    <string name="drawer_title_oldest_first">Oldest first</string>
+    <string name="nav_drawer_sort_title">Sort by</string>
 
 </resources>
