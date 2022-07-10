@@ -47,13 +47,13 @@ class ReminderListFragment(private val filter: RemindersFilter) : Fragment() {
 
     private fun setupListeners() {
         binding.apply {
-            addReminderFab.setOnClickListener { navigateToAddEditReminder() }
-
-            reminderRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                    if (dy > 0) addReminderFab.hide() else if (dy < 0) addReminderFab.show()
-                }
-            })
+//            addReminderFab.setOnClickListener { navigateToAddEditReminder() }
+//
+//            reminderRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+//                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+//                    if (dy > 0) addReminderFab.hide() else if (dy < 0) addReminderFab.show()
+//                }
+//            })
         }
     }
 
@@ -82,10 +82,10 @@ class ReminderListFragment(private val filter: RemindersFilter) : Fragment() {
             }
             navigationViewListSort.setCheckedItem(selectedMenuItem)
 
-            bottomAppBar.setOnMenuItemClickListener {
-                bottomSheetSort.show()
-                true
-            }
+//            bottomAppBar.setOnMenuItemClickListener {
+//                bottomSheetSort.show()
+//                true
+//            }
 
             navigationViewListSort.setNavigationItemSelectedListener { menuItem ->
                 bottomSheetSort.hide()
@@ -136,70 +136,6 @@ class ReminderListFragment(private val filter: RemindersFilter) : Fragment() {
         }
     }
 
-    private fun setupBottomDrawerFilter() {
-        binding.apply {
-            val bottomSheetBehavior = BottomSheetBehavior.from(navigationViewListFilter)
-            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-
-            val selectedMenuItem = when (viewModel.currentFilter) {
-                RemindersFilter.ACTIVE_REMINDERS -> R.id.drawer_active_reminders
-                else -> R.id.drawer_all_reminders
-            }
-            navigationViewListFilter.setCheckedItem(selectedMenuItem)
-
-            bottomAppBar.setNavigationOnClickListener {
-                bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-            }
-
-            navigationViewListFilter.setNavigationItemSelectedListener { menuItem ->
-                bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-
-                if (menuItem.itemId == navigationViewListFilter.checkedItem?.itemId) {
-                    return@setNavigationItemSelectedListener true
-                }
-
-                val filterType = when (menuItem.itemId) {
-                    R.id.drawer_active_reminders -> RemindersFilter.ACTIVE_REMINDERS
-                    else -> RemindersFilter.ALL_REMINDERS
-                }
-
-                viewModel.filterReminderList(filterType)
-                navigationViewListSort.setCheckedItem(menuItem.itemId)
-
-                true
-            }
-
-            val backButtonCallback =
-                requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
-                    if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_EXPANDED) {
-                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-                    }
-                }
-
-            bottomSheetBehavior.addBottomSheetCallback(object :
-                BottomSheetBehavior.BottomSheetCallback() {
-                override fun onSlide(bottomSheet: View, slideOffset: Float) {
-                    scrim.setBackgroundColor(viewModel.getScrimBackgroundColour(slideOffset))
-                }
-
-                override fun onStateChanged(bottomSheet: View, newState: Int) {
-                    if (newState == BottomSheetBehavior.STATE_EXPANDED) {
-                        scrim.setOnClickListener {
-                            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-                        }
-                        scrim.bringToFront()
-                        backButtonCallback.isEnabled = true
-                    } else if (newState == BottomSheetBehavior.STATE_HIDDEN) {
-                        scrim.setOnClickListener(null)
-                        reminderRecycler.bringToFront()
-                        backButtonCallback.isEnabled = false
-                    }
-                }
-            })
-
-        }
-    }
-
     fun BottomSheetBehavior<NavigationView>.hide() {
         this.state = BottomSheetBehavior.STATE_HIDDEN
     }
@@ -209,8 +145,8 @@ class ReminderListFragment(private val filter: RemindersFilter) : Fragment() {
     }
 
     private fun navigateToAddEditReminder() {
-        val action = ReminderListFragmentDirections
-            .actionReminderListToAddEditReminder()
+        val action = ReminderListViewPagerFragmentDirections
+            .actionReminderListViewPagerToAddEditReminder()
         findNavController().navigate(action)
     }
 
