@@ -19,6 +19,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tab_layout"
+                style="@style/Widget.MaterialComponents.TabLayout.Colored"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:tabTextColor="?attr/colorPrimaryDark"/>
+
 <!--            <com.google.android.material.appbar.CollapsingToolbarLayout-->
 <!--                android:id="@+id/toolbar_layout"-->
 <!--                android:layout_width="match_parent"-->
@@ -46,14 +53,23 @@
 <!--            </com.google.android.material.appbar.CollapsingToolbarLayout>-->
 
             <!-- Override tabIconTint attribute of style with selector -->
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/tab_layout"
-                style="@style/Widget.MaterialComponents.TabLayout.Colored"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:tabTextColor="?attr/colorPrimaryDark"/>
+
 
         </com.google.android.material.appbar.AppBarLayout>
+
+        <FrameLayout
+            android:id="@+id/scrim"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <com.google.android.material.navigation.NavigationView
+            android:id="@+id/navigation_view_list_sort"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_behavior="@string/bottom_sheet_behavior"
+            app:behavior_hideable="true"
+            app:menu="@menu/nav_drawer_sort_reminder"
+            app:headerLayout="@layout/nav_drawer_sort_header" />
 
         <com.google.android.material.bottomappbar.BottomAppBar
             android:id="@+id/bottom_app_bar"
@@ -61,7 +77,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             style="@style/Widget.MaterialComponents.BottomAppBar.PrimarySurface"
-            app:navigationIcon="@drawable/ic_menu"
             app:menu="@menu/bottom_app_bar"
             app:hideOnScroll="true" />
 
