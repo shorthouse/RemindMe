@@ -3,7 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/reminder_list">
+    app:startDestination="@id/reminderListViewPagerFragment">
+
+    <fragment
+        android:id="@+id/reminderListViewPagerFragment"
+        android:name="dev.shorthouse.remindme.fragments.ReminderListViewPagerFragment"
+        android:label="ReminderListViewPagerFragment"
+        tools:layout="@layout/fragment_view_pager">
+        <action
+            android:id="@+id/action_reminderListViewPagerFragment_to_add_edit_reminder"
+            app:destination="@id/add_edit_reminder" />
+    </fragment>
 
     <fragment
         android:id="@+id/reminder_list"
@@ -52,5 +62,6 @@
             app:enterAnim="@anim/slide_in"
             app:popExitAnim="@anim/slide_out" />
     </fragment>
+
 
 </navigation>
