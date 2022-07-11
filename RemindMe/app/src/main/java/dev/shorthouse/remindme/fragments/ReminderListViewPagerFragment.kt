@@ -39,15 +39,12 @@ class ReminderListViewPagerFragment : Fragment() {
 
         viewPager.adapter = ReminderListPagerAdapter(this)
 
-        // Set the icon and text for each tab
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-            tab.setIcon(getTabIcon(position))
             tab.text = getTabTitle(position)
         }.attach()
 
         setupListeners()
         setupBottomDrawerSort()
-        //(activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
 
         return binding.root
     }
@@ -62,13 +59,6 @@ class ReminderListViewPagerFragment : Fragment() {
         val action = ReminderListViewPagerFragmentDirections
             .actionReminderListViewPagerToAddEditReminder()
         findNavController().navigate(action)
-    }
-
-    private fun getTabIcon(position: Int): Int {
-        return when (RemindersFilter.values()[position]) {
-            RemindersFilter.ACTIVE_REMINDERS -> R.drawable.ic_calendar_today
-            RemindersFilter.ALL_REMINDERS -> R.drawable.ic_calendar_range
-        }
     }
 
     private fun getTabTitle(position: Int): String {
