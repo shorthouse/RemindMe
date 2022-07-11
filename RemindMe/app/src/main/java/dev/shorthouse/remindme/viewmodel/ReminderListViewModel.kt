@@ -40,17 +40,12 @@ class ReminderListViewModel @Inject constructor(
 
     val remindersList = MediatorLiveData<List<Reminder>>()
 
-    var currentFilter = RemindersFilter.ACTIVE_REMINDERS
+    var remindersFilter = RemindersFilter.ACTIVE_REMINDERS
     var currentSort = RemindersSort.NEWEST_FIRST
 
     init {
         remindersList.addSource(activeReminders) { updateReminderList() }
         remindersList.addSource(allReminders) { updateReminderList() }
-    }
-
-    fun filterReminderList(filter: RemindersFilter) {
-        currentFilter = filter
-        updateReminderList()
     }
 
     fun sortReminderList(sort: RemindersSort) {
@@ -59,7 +54,7 @@ class ReminderListViewModel @Inject constructor(
     }
 
     private fun updateReminderList() {
-        val remindersFiltered = when (currentFilter) {
+        val remindersFiltered = when (remindersFilter) {
             RemindersFilter.ACTIVE_REMINDERS -> activeReminders.value
             else -> allReminders.value
         }
