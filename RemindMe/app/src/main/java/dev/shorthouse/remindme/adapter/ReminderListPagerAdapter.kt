@@ -16,7 +16,7 @@ class ReminderListPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragme
     }
 
     override fun createFragment(position: Int): Fragment {
-        return tabFragmentsCreators[RemindersFilter.values()[position]]?.invoke()
-            ?: throw IndexOutOfBoundsException()
+        val remindersFilter = RemindersFilter.values()[position]
+        return tabFragmentsCreators[remindersFilter]?.invoke() ?: throw IndexOutOfBoundsException()
     }
 }
