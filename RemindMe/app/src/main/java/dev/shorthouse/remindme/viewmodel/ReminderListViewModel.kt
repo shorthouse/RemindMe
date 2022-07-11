@@ -4,7 +4,7 @@ import android.graphics.Color
 import androidx.core.graphics.blue
 import androidx.core.graphics.green
 import androidx.core.graphics.red
-import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
@@ -30,23 +30,17 @@ class ReminderListViewModel @Inject constructor(
     val repository: ReminderRepository,
 ) : ViewModel() {
 
-    private val activeReminders = repository
+    val activeReminders = repository
         .getActiveNonArchivedReminders(ZonedDateTime.now())
         .asLiveData()
 
-    private val allReminders = repository
+    val allReminders = repository
         .getNonArchivedReminders()
         .asLiveData()
 
-    val remindersList = MediatorLiveData<List<Reminder>>()
+    lateinit var remindersList: LiveData<List<Reminder>>
 
-    var remindersFilter = RemindersFilter.ACTIVE_REMINDERS
     var currentSort = RemindersSort.NEWEST_FIRST
-
-    init {
-        remindersList.addSource(activeReminders) { updateReminderList() }
-        remindersList.addSource(allReminders) { updateReminderList() }
-    }
 
     fun sortReminderList(sort: RemindersSort) {
         currentSort = sort
@@ -54,17 +48,17 @@ class ReminderListViewModel @Inject constructor(
     }
 
     private fun updateReminderList() {
-        val remindersFiltered = when (remindersFilter) {
-            RemindersFilter.ACTIVE_REMINDERS -> activeReminders.value
-            else -> allReminders.value
-        }
+//        val remindersFiltered = when (remindersFilter) {
+//            RemindersFilter.ACTIVE_REMINDERS -> activeReminders.value
+//            else -> allReminders.value
+//        }
 
-        val remindersFilteredSorted = when (currentSort) {
-            RemindersSort.NEWEST_FIRST -> remindersFiltered?.sortedByDescending { it.startDateTime }
+        val remindersSorted = when (currentSort) {
+            RemindersSort.NEWEST_FIRST -> remindersList.v { it.startDateTime }
             else -> remindersFiltered?.sortedBy { it.startDateTime }
         }
 
-        remindersList.value = remindersFilteredSorted
+        remindersList.value = remindersSorted
     }
 
     fun getScrimBackgroundColour(slideOffset: Float): Int {

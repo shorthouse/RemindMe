@@ -31,25 +31,24 @@ class ReminderListFragment(private val filter: RemindersFilter) : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setReminderFilter()
-        setupReminderListObserver()
+        setListAdapter()
     }
 
-    private fun setReminderFilter() {
-        viewModel.remindersFilter = filter
-    }
+    private fun setListAdapter() {
+        val recyclerAdapter = when (filter) {
+            RemindersFilter.ACTIVE_REMINDERS -> ActiveReminderListAdapter(viewModel)
+            else -> AllReminderListAdapter()
+        }
 
-    private fun setupReminderListObserver() {
+        viewModel.remindersList = when (filter) {
+            RemindersFilter.ACTIVE_REMINDERS -> viewModel.activeReminders
+            else -> viewModel.allReminders
+        }
+
         viewModel.remindersList.observe(viewLifecycleOwner) { reminders ->
-            val recyclerAdapter = when (viewModel.remindersFilter) {
-                RemindersFilter.ACTIVE_REMINDERS -> ActiveReminderListAdapter(viewModel)
-                else -> AllReminderListAdapter()
-            }
-
+            viewModel.remindersList.removeObservers(viewLifecycleOwner)
             recyclerAdapter.submitList(reminders)
             binding.reminderRecycler.adapter = recyclerAdapter
         }
     }
-
-
 }
