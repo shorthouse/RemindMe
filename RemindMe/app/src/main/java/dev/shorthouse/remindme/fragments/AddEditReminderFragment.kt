@@ -64,20 +64,23 @@ class AddEditReminderFragment : Fragment() {
     }
 
     private fun setupTopAppBar() {
-        binding.topAppBar.setupWithNavController(findNavController())
+        binding.apply {
+            topAppBar.setupWithNavController(findNavController())
 
-        binding.topAppBar.setNavigationOnClickListener {
-            findNavController().navigateUp()
-        }
+            topAppBar.setNavigationOnClickListener {
+                findNavController().navigateUp()
+            }
 
-        binding.saveReminder.setOnClickListener {
-            if (isReminderValid()) {
-                saveReminder()
-                hideKeyboard()
-                displayToast(R.string.toast_reminder_saved)
-                findNavController().popBackStack()
+            saveReminder.setOnClickListener {
+                if (isReminderValid()) {
+                    saveReminder()
+                    hideKeyboard()
+                    displayToast(R.string.toast_reminder_saved)
+                    findNavController().popBackStack()
+                }
             }
         }
+
     }
 
     private fun saveReminder() {
