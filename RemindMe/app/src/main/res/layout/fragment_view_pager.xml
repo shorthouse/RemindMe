@@ -8,11 +8,29 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/topAppBar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:title="@string/app_name"
+                app:menu="@menu/top_app_bar"
+                style="@style/Widget.MaterialComponents.Toolbar.Primary">
+
+            </com.google.android.material.appbar.MaterialToolbar>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tab_layout"
             style="@style/Widget.MaterialComponents.TabLayout.Colored"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="?attr/actionBarSize"
             app:tabTextColor="?attr/colorOnPrimary"/>
 
         <androidx.viewpager2.widget.ViewPager2

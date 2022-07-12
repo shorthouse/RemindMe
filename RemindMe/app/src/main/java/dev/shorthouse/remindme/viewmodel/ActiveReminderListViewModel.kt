@@ -1,21 +1,12 @@
 package dev.shorthouse.remindme.viewmodel
 
-import android.graphics.Color
-import androidx.core.graphics.blue
-import androidx.core.graphics.green
-import androidx.core.graphics.red
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.viewModelScope
-import com.google.android.material.math.MathUtils
+import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.data.RepeatInterval
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.utilities.DAYS_IN_WEEK
 import dev.shorthouse.remindme.utilities.ONE_INTERVAL
-import dev.shorthouse.remindme.utilities.RemindersFilter
 import dev.shorthouse.remindme.utilities.RemindersSort
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -26,47 +17,40 @@ import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 
 @HiltViewModel
-class ReminderListViewModel @Inject constructor(
+class ActiveReminderListViewModel @Inject constructor(
     val repository: ReminderRepository,
 ) : ViewModel() {
 
-    val activeReminders = repository
-        .getActiveNonArchivedReminders(ZonedDateTime.now())
-        .asLiveData()
+    fun getSortedReminders(currentSort: MutableLiveData<RemindersSort>): LiveData<List<Reminder>> {
+        val activeReminders = repository
+            .getActiveNonArchivedReminders(ZonedDateTime.now())
+            .asLiveData()
 
-    val allReminders = repository
-        .getNonArchivedReminders()
-        .asLiveData()
+        val sortedReminders = MediatorLiveData<List<Reminder>>()
 
-    lateinit var remindersList: LiveData<List<Reminder>>
-
-    var currentSort = RemindersSort.NEWEST_FIRST
-
-    fun sortReminderList(sort: RemindersSort) {
-        currentSort = sort
-        updateReminderList()
-    }
-
-    private fun updateReminderList() {
-//        val remindersFiltered = when (remindersFilter) {
-//            RemindersFilter.ACTIVE_REMINDERS -> activeReminders.value
-//            else -> allReminders.value
-//        }
-
-        val remindersSorted = when (currentSort) {
-            RemindersSort.NEWEST_FIRST -> remindersList.v { it.startDateTime }
-            else -> remindersFiltered?.sortedBy { it.startDateTime }
+        sortedReminders.addSource(activeReminders) {
+            sortedReminders.value = sortReminders(activeReminders, currentSort)
+        }
+        sortedReminders.addSource(currentSort) {
+            sortedReminders.value = sortReminders(activeReminders, currentSort)
         }
 
-        remindersList.value = remindersSorted
+        return sortedReminders
     }
 
-    fun getScrimBackgroundColour(slideOffset: Float): Int {
-        val baseColor = Color.BLACK
-        val baseAlpha = 0.6f
-        val offset = (slideOffset - (-1f)) / (1f - (-1f)) * (1f - 0f) + 0f
-        val alpha = MathUtils.lerp(0f, 255f, offset * baseAlpha).toInt()
-        return Color.argb(alpha, baseColor.red, baseColor.green, baseColor.blue)
+    private fun sortReminders(
+        activeReminders: LiveData<List<Reminder>>,
+        currentSort: MutableLiveData<RemindersSort>
+    ): List<Reminder>? {
+        val reminders = activeReminders.value
+        val sort = currentSort.value
+
+        if (reminders == null || sort == null) return null
+
+        return when (sort) {
+            RemindersSort.NEWEST_FIRST -> reminders.sortedByDescending { it.startDateTime }
+            else -> reminders.sortedBy { it.startDateTime }
+        }
     }
 
     fun updateDoneReminder(reminder: Reminder) {

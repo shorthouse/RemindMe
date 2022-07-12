@@ -13,203 +13,237 @@
         <import type="java.time.Instant" />
     </data>
 
-    <androidx.core.widget.NestedScrollView
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent" >
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraintLayout"
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="16dp"
-            tools:context=".fragments.AddEditReminderFragment">
+            android:layout_height="wrap_content">
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/name_label"
-                style="@style/ThemeOverlay.Material3.AutoCompleteTextView"
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/topAppBar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/hint_reminder_name"
-                app:errorEnabled="true"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                android:layout_height="?attr/actionBarSize"
+                style="@style/Widget.MaterialComponents.Toolbar.Primary">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/name_input"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textAutoComplete"
-                    android:singleLine="true"
-                    android:maxLength="200"
-                    android:imeOptions="actionDone"
-                    android:text='@{reminder.name}'
-                    tools:text="Brush teeth" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/start_date_label"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                app:errorEnabled="true"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/name_label"
-                app:startIconDrawable="@drawable/ic_calendar_today">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/start_date_input"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:clickable="false"
-                    android:cursorVisible="false"
-                    android:focusable="false"
-                    android:focusableInTouchMode="false"
-                    android:hint="@string/hint_reminder_date"
-                    android:inputType="none"
-                    android:text="@{viewmodel.getStartDate(reminder)}"
-                    tools:text="Fri 17 Jun 2024" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/start_time_label"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                app:errorEnabled="true"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/start_date_label"
-                app:startIconDrawable="@drawable/ic_clock">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/start_time_input"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:clickable="false"
-                    android:cursorVisible="false"
-                    android:focusable="false"
-                    android:focusableInTouchMode="false"
-                    android:hint="@string/hint_reminder_time"
-                    android:text="@{viewmodel.getStartTime(reminder)}"
-                    android:inputType="none"
-                    tools:text="16:37 PM" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/notes_label"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/start_time_label"
-                app:startIconDrawable="@drawable/ic_notes">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/notes_input"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/hint_reminder_notes"
-                    android:text='@{reminder.notes}'
-                    tools:text="Make sure scrubbed" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/notification_switch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="@+id/notification_header"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/notification_header"
-                tools:checked="true" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/notification_header"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/title_send_notification"
-                android:textColor="@android:color/black"
-                android:textSize="20sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/notes_label" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/repeat_header"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/title_repeat_reminder"
-                android:textColor="@android:color/black"
-                android:textSize="20sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/notification_header" />
-
-            <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/repeat_switch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="@+id/repeat_header"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/repeat_header"
-                tools:checked="true" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/repeats_every_header"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/title_repeats_every"
-                android:textColor="@android:color/black"
-                android:textSize="20sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/repeat_header"
-                app:showIfRepeatChecked="@{repeatSwitch.checked}" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/interval_time_value_label"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/repeats_every_header"
-                app:showIfRepeatChecked="@{repeatSwitch.checked}" >
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/interval_time_value_input"
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/save_reminder"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:maxLength="2"
-                    android:inputType="number"
-                    android:text='@{Long.toString(viewmodel.getRepeatIntervalValue(reminder))}'
-                    tools:text="2" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_gravity="end"
+                    android:backgroundTint="@color/black"
+                    android:text="@string/btn_save_reminder"
+                    />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/interval_time_unit_label"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="@+id/interval_time_value_label"
-                app:layout_constraintStart_toEndOf="@+id/interval_time_value_label"
-                app:layout_constraintTop_toTopOf="@+id/interval_time_value_label"
-                app:showIfRepeatChecked="@{repeatSwitch.checked}" >
+            </com.google.android.material.appbar.MaterialToolbar>
 
-                <AutoCompleteTextView
-                    android:id="@+id/interval_time_unit_input"
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="?attr/actionBarSize" >
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="16dp"
+                tools:context=".fragments.AddEditReminderFragment">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/name_label"
+                    style="@style/ThemeOverlay.Material3.AutoCompleteTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="none"
-                    app:dropDownText="@{reminder.repeatInterval}"
-                    tools:text="day"
-                    tools:ignore="LabelFor" />
+                    android:hint="@string/hint_reminder_name"
+                    app:errorEnabled="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
-            </com.google.android.material.textfield.TextInputLayout>
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.core.widget.NestedScrollView>
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/name_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textAutoComplete"
+                        android:singleLine="true"
+                        android:maxLength="200"
+                        android:imeOptions="actionDone"
+                        android:text='@{reminder.name}'
+                        tools:text="Brush teeth" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/start_date_label"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    app:errorEnabled="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/name_label"
+                    app:startIconDrawable="@drawable/ic_calendar_today">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/start_date_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="false"
+                        android:cursorVisible="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:hint="@string/hint_reminder_date"
+                        android:inputType="none"
+                        android:text="@{viewmodel.getStartDate(reminder)}"
+                        tools:text="Fri 17 Jun 2024" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/start_time_label"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    app:errorEnabled="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/start_date_label"
+                    app:startIconDrawable="@drawable/ic_clock">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/start_time_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="false"
+                        android:cursorVisible="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:hint="@string/hint_reminder_time"
+                        android:text="@{viewmodel.getStartTime(reminder)}"
+                        android:inputType="none"
+                        tools:text="16:37 PM" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/notes_label"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/start_time_label"
+                    app:startIconDrawable="@drawable/ic_notes">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/notes_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/hint_reminder_notes"
+                        android:text='@{reminder.notes}'
+                        tools:text="Make sure scrubbed" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/notification_switch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="@+id/notification_header"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/notification_header"
+                    tools:checked="true" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/notification_header"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/title_send_notification"
+                    android:textColor="@android:color/black"
+                    android:textSize="20sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/notes_label" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/repeat_header"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/title_repeat_reminder"
+                    android:textColor="@android:color/black"
+                    android:textSize="20sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/notification_header" />
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/repeat_switch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="@+id/repeat_header"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/repeat_header"
+                    tools:checked="true" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/repeats_every_header"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/title_repeats_every"
+                    android:textColor="@android:color/black"
+                    android:textSize="20sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/repeat_header"
+                    app:showIfRepeatChecked="@{repeatSwitch.checked}" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/interval_time_value_label"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/repeats_every_header"
+                    app:showIfRepeatChecked="@{repeatSwitch.checked}" >
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/interval_time_value_input"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:maxLength="2"
+                        android:inputType="number"
+                        android:text='@{Long.toString(viewmodel.getRepeatIntervalValue(reminder))}'
+                        tools:text="2" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/interval_time_unit_label"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="@+id/interval_time_value_label"
+                    app:layout_constraintStart_toEndOf="@+id/interval_time_value_label"
+                    app:layout_constraintTop_toTopOf="@+id/interval_time_value_label"
+                    app:showIfRepeatChecked="@{repeatSwitch.checked}" >
+
+                    <AutoCompleteTextView
+                        android:id="@+id/interval_time_unit_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="none"
+                        app:dropDownText="@{reminder.repeatInterval}"
+                        tools:text="day"
+                        tools:ignore="LabelFor" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
+
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+
 </layout>

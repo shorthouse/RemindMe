@@ -23,23 +23,6 @@
             app:popExitAnim="@anim/slide_out" />
     </fragment>
 
-<!--    <fragment-->
-<!--        android:id="@+id/reminder_list"-->
-<!--        android:name="dev.shorthouse.remindme.fragments.ReminderListFragment"-->
-<!--        android:label="Active Reminders"-->
-<!--        tools:layout="@layout/fragment_reminder_list">-->
-<!--        <action-->
-<!--            android:id="@+id/action_reminder_list_to_reminder_details"-->
-<!--            app:destination="@id/reminder_details"-->
-<!--            app:enterAnim="@anim/slide_in"-->
-<!--            app:popExitAnim="@anim/slide_out" />-->
-<!--        <action-->
-<!--            android:id="@+id/action_reminder_list_to_add_edit_reminder"-->
-<!--            app:destination="@id/add_edit_reminder"-->
-<!--            app:enterAnim="@anim/slide_in"-->
-<!--            app:popExitAnim="@anim/slide_out" />-->
-<!--    </fragment>-->
-
     <fragment
         android:id="@+id/add_edit_reminder"
         android:name="dev.shorthouse.remindme.fragments.AddEditReminderFragment"
@@ -70,6 +53,5 @@
             app:enterAnim="@anim/slide_in"
             app:popExitAnim="@anim/slide_out" />
     </fragment>
-
 
 </navigation>

@@ -2,13 +2,16 @@ package dev.shorthouse.remindme.adapter
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import dev.shorthouse.remindme.fragments.ReminderListFragment
-import dev.shorthouse.remindme.utilities.RemindersFilter
+import dev.shorthouse.remindme.fragments.ActiveReminderListFragment
+import dev.shorthouse.remindme.fragments.AllReminderListFragment
+
+const val ACTIVE_REMINDERS_PAGE_INDEX = 0
+const val ALL_REMINDERS_PAGE_INDEX = 1
 
 class ReminderListPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
-    private val tabFragmentsCreators: Map<RemindersFilter, () -> Fragment> = mapOf(
-        RemindersFilter.ACTIVE_REMINDERS to { ReminderListFragment(RemindersFilter.ACTIVE_REMINDERS) },
-        RemindersFilter.ALL_REMINDERS to { ReminderListFragment(RemindersFilter.ALL_REMINDERS) }
+    private val tabFragmentsCreators: Map<Int, () -> Fragment> = mapOf(
+        ACTIVE_REMINDERS_PAGE_INDEX to { ActiveReminderListFragment() },
+        ALL_REMINDERS_PAGE_INDEX to { AllReminderListFragment() }
     )
 
     override fun getItemCount(): Int {
@@ -16,7 +19,6 @@ class ReminderListPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragme
     }
 
     override fun createFragment(position: Int): Fragment {
-        val remindersFilter = RemindersFilter.values()[position]
-        return tabFragmentsCreators[remindersFilter]?.invoke() ?: throw IndexOutOfBoundsException()
+        return tabFragmentsCreators[position]?.invoke() ?: throw IndexOutOfBoundsException()
     }
 }

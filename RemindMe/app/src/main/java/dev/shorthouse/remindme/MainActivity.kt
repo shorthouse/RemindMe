@@ -1,6 +1,7 @@
 package dev.shorthouse.remindme
 
 import android.os.Bundle
+import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -20,21 +21,10 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        setSupportActionBar(binding.toolbar)
-
-        setupNavBar()
+        setContentView(binding.root) //TODO is this needed?=
     }
 
-    private fun setupNavBar() {
-        val navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.nav_host_fragment_container) as NavHostFragment
-        navController = navHostFragment.navController
-
-        appBarConfiguration = AppBarConfiguration(setOf(R.id.reminder_list_view_pager))
-        setupActionBarWithNavController(navController)
-    }
-
+    // TODO is this needed?
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
