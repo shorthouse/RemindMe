@@ -34,6 +34,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
                     android:backgroundTint="@color/black"
+                    android:paddingEnd="16dp"
                     android:text="@string/btn_save_reminder"
                     />
 
