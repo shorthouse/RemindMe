@@ -44,7 +44,6 @@ class AddEditReminderFragment : Fragment() {
                 startTimeInput.setOnClickListener { displayTimePicker() }
                 intervalTimeValueInput.doAfterTextChanged { updateRepeatIntervalDropdown(it) }
             }
-        setHasOptionsMenu(true) //TODO needed?
         return binding.root
     }
 
@@ -62,11 +61,6 @@ class AddEditReminderFragment : Fragment() {
         }
 
         setupTopAppBar()
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.toolbar_add_edit_reminder, menu)
-        super.onCreateOptionsMenu(menu, inflater)
     }
 
     private fun setupTopAppBar() {
