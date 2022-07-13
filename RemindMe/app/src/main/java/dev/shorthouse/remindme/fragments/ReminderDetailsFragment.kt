@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.navigation.ui.setupWithNavController
 import dagger.hilt.android.AndroidEntryPoint
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.databinding.FragmentReminderDetailsBinding
@@ -20,11 +21,6 @@ class ReminderDetailsFragment : Fragment() {
     private lateinit var reminder: Reminder
 
     private val viewModel: ReminderDetailsViewModel by viewModels()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -56,19 +52,27 @@ class ReminderDetailsFragment : Fragment() {
                 findNavController().navigate(action)
             }
         }
+
+        setupToolbar()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.toolbar_reminder_details, menu)
-    }
+    private fun setupToolbar() {
+        binding.apply {
+            toolbar.setupWithNavController(findNavController())
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.action_delete -> {
-                deleteReminder()
-                true
+            toolbar.setNavigationOnClickListener {
+                findNavController().navigateUp()
             }
-            else -> super.onOptionsItemSelected(item)
+        }
+
+        binding.toolbar.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.action_delete -> {
+                    deleteReminder()
+                    true
+                }
+                else -> false
+            }
         }
     }
 

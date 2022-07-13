@@ -3,14 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/search"
+        android:id="@+id/action_search"
         android:icon="@drawable/ic_search"
         android:title="@string/top_app_bar_search"
         android:contentDescription="@string/cd_top_app_bar_search"
         app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/sort"
+        android:id="@+id/action_sort"
         android:icon="@drawable/ic_sort"
         android:title="@string/top_app_bar_sort"
         android:contentDescription="@string/cd_top_app_bar_sort"
