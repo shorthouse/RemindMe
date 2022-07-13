@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
@@ -50,18 +51,15 @@ class ReminderListViewPagerFragment : Fragment() {
         setupObservers()
         setupBottomDrawerSort()
 
-        // TODO is this needed? If not is in many other files
-        setHasOptionsMenu(true)
-
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupTopAppBar()
+        setupToolbar()
     }
 
-    private fun setupTopAppBar() {
+    private fun setupToolbar() {
         binding.topAppBar.setupWithNavController(findNavController())
 
         //TODO Needed?
@@ -71,26 +69,25 @@ class ReminderListViewPagerFragment : Fragment() {
 
         binding.topAppBar.title = getString(R.string.app_name)
 
-//        binding.topAppBar.setOnMenuItemClickListener { item ->
-//            when (item.itemId) {
-//                R.id.action_share -> {
-//                    createShareIntent()
-//                    true
-//                }
-//                else -> false
-//            }
-//        }
+        binding.topAppBar.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.action_search -> {
+                    displayToast(R.string.toast_search_icon_clicked)
+                    true
+                }
+                R.id.action_sort -> {
+                    getBottomSheetSort().show()
+                    true
+                }
+                else -> false
+            }
+        }
     }
 
     private fun setupListeners() {
         binding.apply {
             addReminderFab.setOnClickListener {
                 navigateToAddEditReminder()
-            }
-
-            bottomAppBar.setOnMenuItemClickListener {
-                getBottomSheetSort().show()
-                true
             }
 
             navigationViewListSort.setNavigationItemSelectedListener { menuItem ->
@@ -178,5 +175,13 @@ class ReminderListViewPagerFragment : Fragment() {
 
     private fun isDifferentMenuItemClicked(menuItem: MenuItem): Boolean {
         return menuItem.itemId != binding.navigationViewListSort.checkedItem?.itemId
+    }
+
+    private fun displayToast(stringResId: Int) {
+        Toast.makeText(
+            context,
+            getString(stringResId),
+            Toast.LENGTH_SHORT
+        ).show()
     }
 }
