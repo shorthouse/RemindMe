@@ -2,7 +2,9 @@ package dev.shorthouse.remindme.fragments
 
 import android.content.Context
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT
 import android.widget.ArrayAdapter
@@ -68,7 +70,7 @@ class AddEditReminderFragment : Fragment() {
 
             repeatValueInput.doAfterTextChanged {
                 val dropdownRepeatUnit =
-                    viewModel.repeatPeriodChronoUnitMap[repeatPeriodInput.text.toString()]
+                    viewModel.repeatPeriodChronoUnitMap[repeatUnitInput.text.toString()]
                 dropdownRepeatUnit?.let { setDropdownList(it) }
             }
         }
@@ -140,7 +142,7 @@ class AddEditReminderFragment : Fragment() {
             resources.getQuantityString(R.plurals.dropdown_weeks, repeatValue)
         )
 
-        binding.repeatPeriodInput.setAdapter(
+        binding.repeatUnitInput.setAdapter(
             ArrayAdapter(
                 requireContext(),
                 R.layout.list_item_dropdown_interval,
@@ -153,7 +155,7 @@ class AddEditReminderFragment : Fragment() {
             else -> dropdownItems[1]
         }
 
-        binding.repeatPeriodInput.setText(selectedItem, false)
+        binding.repeatUnitInput.setText(selectedItem, false)
     }
 
 
@@ -168,7 +170,7 @@ class AddEditReminderFragment : Fragment() {
 
             val repeatInterval = viewModel.getRepeatInterval(
                 repeatValueInput.text.toString().toLong(),
-                repeatPeriodInput.text.toString()
+                repeatUnitInput.text.toString()
             )
 
             val reminderNotes = viewModel.getReminderNotes(notesInput.text.toString())

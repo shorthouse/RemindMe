@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
-import dev.shorthouse.remindme.adapter.ActiveReminderListAdapter
 import dev.shorthouse.remindme.adapter.AllReminderListAdapter
 import dev.shorthouse.remindme.databinding.FragmentAllReminderListBinding
 import dev.shorthouse.remindme.viewmodel.AllReminderListViewModel

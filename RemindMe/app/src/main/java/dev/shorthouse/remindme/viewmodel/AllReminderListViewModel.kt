@@ -5,7 +5,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.utilities.RemindersSort
-import java.time.ZonedDateTime
 import javax.inject.Inject
 
 @HiltViewModel
