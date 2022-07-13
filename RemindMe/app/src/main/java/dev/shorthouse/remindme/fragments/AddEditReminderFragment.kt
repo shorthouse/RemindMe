@@ -3,6 +3,7 @@ package dev.shorthouse.remindme.fragments
 import android.content.Context
 import android.os.Bundle
 import android.text.Editable
+import android.util.Log
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
@@ -12,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointForward
@@ -28,11 +30,6 @@ class AddEditReminderFragment : Fragment() {
     private lateinit var binding: FragmentAddEditReminderBinding
     private val navigationArgs: AddEditReminderFragmentArgs by navArgs()
     private val viewModel: AddEditReminderViewModel by viewModels()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -62,13 +59,19 @@ class AddEditReminderFragment : Fragment() {
                     binding.notificationSwitch.isChecked = reminder.isNotificationSent
                 }
         }
+
+        setupTopAppBar()
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu) {
-        super.onPrepareOptionsMenu(menu)
-        menu.findItem(R.id.action_done).actionView
-            .findViewById<MaterialButton>(R.id.save_reminder)
-            .setOnClickListener {
+    private fun setupTopAppBar() {
+        binding.apply {
+            topAppBar.setupWithNavController(findNavController())
+
+            topAppBar.setNavigationOnClickListener {
+                findNavController().navigateUp()
+            }
+
+            saveReminder.setOnClickListener {
                 if (isReminderValid()) {
                     saveReminder()
                     hideKeyboard()
@@ -76,10 +79,8 @@ class AddEditReminderFragment : Fragment() {
                     findNavController().popBackStack()
                 }
             }
-    }
+        }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.toolbar_add_edit_reminder, menu)
     }
 
     private fun saveReminder() {

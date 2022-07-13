@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.databinding.ListItemAllReminderBinding
-import dev.shorthouse.remindme.fragments.ReminderListFragmentDirections
+import dev.shorthouse.remindme.fragments.ReminderListViewPagerFragmentDirections
 import dev.shorthouse.remindme.model.Reminder
 
 class AllReminderListAdapter :
@@ -45,8 +45,8 @@ class AllReminderListAdapter :
         }
 
         private fun navigateToReminderDetails(reminderId: Long, view: View) {
-            val action = ReminderListFragmentDirections
-                .actionReminderListToReminderDetails(reminderId)
+            val action = ReminderListViewPagerFragmentDirections
+                .actionReminderListViewPagerToReminderDetails(reminderId)
             view.findNavController().navigate(action)
         }
 

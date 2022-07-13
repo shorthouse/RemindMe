@@ -82,5 +82,9 @@
     <string name="drawer_title_newest_first">Newest first</string>
     <string name="drawer_title_oldest_first">Oldest first</string>
     <string name="nav_drawer_sort_title">Sort by</string>
+    <string name="top_app_bar_search">Search</string>
+    <string name="cd_top_app_bar_search">Search reminders</string>
+    <string name="top_app_bar_sort">Sort</string>
+    <string name="cd_top_app_bar_sort">Sort reminders</string>
 
 </resources>
