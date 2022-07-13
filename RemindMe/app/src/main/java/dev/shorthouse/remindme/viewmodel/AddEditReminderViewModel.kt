@@ -13,10 +13,7 @@ import dev.shorthouse.remindme.utilities.DATE_TIME_INPUT_PATTERN
 import dev.shorthouse.remindme.utilities.NotificationScheduler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.time.Instant
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.ZonedDateTime
+import java.time.*
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject
@@ -29,6 +26,9 @@ class AddEditReminderViewModel @Inject constructor(
 
     var isEditReminder = false
     var isAddReminder = isEditReminder.not()
+
+    val defaultRepeatValue = "1"
+    val defaultRepeatUnit = ChronoUnit.DAYS
 
     val repeatPeriodChronoUnitMap = mapOf(
         "day" to ChronoUnit.DAYS,
@@ -61,30 +61,36 @@ class AddEditReminderViewModel @Inject constructor(
         )
 
         viewModelScope.launch(Dispatchers.IO) {
-            if (isEditReminder) {
+            if (isAddReminder) {
+                repository.insertReminder(reminder)
+            } else if (isEditReminder) {
                 repository.updateReminder(reminder)
                 cancelExistingReminderNotification(reminder)
-            } else {
-                repository.insertReminder(reminder)
             }
+        }
+
+        if (reminder.isNotificationSent) {
             scheduleReminderNotification(reminder)
         }
     }
 
-
     private fun scheduleReminderNotification(reminder: Reminder) {
-        if (reminder.isNotificationSent) {
-            notificationScheduler.scheduleReminderNotification(reminder)
-        }
+        notificationScheduler.scheduleReminderNotification(reminder)
     }
 
     private fun cancelExistingReminderNotification(reminder: Reminder) {
         notificationScheduler.cancelExistingReminderNotification(reminder)
     }
 
-
     fun formatReminderStartDate(reminder: Reminder): String {
         return reminder.startDateTime
+            .toLocalDate()
+            .format(DateTimeFormatter.ofPattern(DATE_INPUT_PATTERN))
+            .toString()
+    }
+
+    fun getStartDateNow(): String {
+        return ZonedDateTime.now()
             .toLocalDate()
             .format(DateTimeFormatter.ofPattern(DATE_INPUT_PATTERN))
             .toString()
@@ -96,17 +102,6 @@ class AddEditReminderViewModel @Inject constructor(
             .toString()
     }
 
-    fun getReminderNotes(reminder: Reminder): String {
-        return reminder.notes ?: ""
-    }
-
-    fun getStartDateNow(): String {
-        return ZonedDateTime.now()
-            .toLocalDate()
-            .format(DateTimeFormatter.ofPattern(DATE_INPUT_PATTERN))
-            .toString()
-    }
-
     fun getStartTimeNextHour(): String {
         return ZonedDateTime.now()
             .truncatedTo(ChronoUnit.HOURS)
@@ -115,12 +110,16 @@ class AddEditReminderViewModel @Inject constructor(
             .toString()
     }
 
-    fun getIsNotificationSent(reminder: Reminder?): Boolean {
-        return reminder?.isNotificationSent ?: false
+    fun getReminderNotes(reminder: Reminder): String {
+        return reminder.notes ?: ""
     }
 
     fun getRepeatValue(reminder: Reminder): String {
         return if (reminder.repeatInterval == null) "1" else reminder.repeatInterval.timeValue.toString()
+    }
+
+    fun getIsNotificationSent(reminder: Reminder?): Boolean {
+        return reminder?.isNotificationSent ?: false
     }
 
     fun getRepeatUnit(reminder: Reminder): ChronoUnit {
@@ -135,25 +134,25 @@ class AddEditReminderViewModel @Inject constructor(
             .atZone(ZoneId.systemDefault())
     }
 
-    fun convertTimestampToDateString(dateTimestamp: Long): String {
+    fun formatDatePickerDate(dateTimestamp: Long): String {
         return Instant.ofEpochMilli(dateTimestamp)
             .atZone(ZoneId.systemDefault())
             .format(DateTimeFormatter.ofPattern(DATE_INPUT_PATTERN))
     }
 
-    fun getRepeatInterval(
-        timeValue: Long,
-        repeatUnitString: String
-    ): RepeatInterval? {
-        val repeatUnit = repeatPeriodChronoUnitMap[repeatUnitString]
-        return if (repeatUnit == null) {
-            null
-        } else {
-            RepeatInterval(timeValue, repeatUnit)
-        }
+    fun formatTimePickerTime(hour: Int, minute: Int): String {
+        return LocalTime.of(hour, minute).toString()
     }
 
-    fun getReminderNotes(notes: String): String? = notes.ifBlank { null }
+    fun getRepeatInterval(timeValue: Long, repeatUnitString: String): RepeatInterval? {
+        val repeatUnit = repeatPeriodChronoUnitMap[repeatUnitString]
+        return if (repeatUnit == null) null else RepeatInterval(timeValue, repeatUnit)
+    }
+
+    fun getReminderNotes(notes: String): String? {
+        return notes.ifBlank { null }
+    }
+
     fun isNameValid(name: String) = name.isNotBlank()
     fun isRepeatIntervalValid(repeatIntervalValue: Long) = repeatIntervalValue > 0
     fun isStartTimeValid(startDate: String, startTime: String) =

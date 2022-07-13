@@ -21,6 +21,7 @@ import com.google.android.material.timepicker.TimeFormat
 import dagger.hilt.android.AndroidEntryPoint
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.databinding.FragmentAddEditReminderBinding
+import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.viewmodel.AddEditReminderViewModel
 import java.time.temporal.ChronoUnit
 
@@ -47,7 +48,7 @@ class AddEditReminderFragment : Fragment() {
         setupToolbar()
         populateData()
         if (viewModel.isAddReminder) {
-            focusKeyboard()
+            focusKeyboardOnReminderName()
         }
     }
 
@@ -66,56 +67,11 @@ class AddEditReminderFragment : Fragment() {
             }
 
             repeatValueInput.doAfterTextChanged {
-                val repeatPeriod =
+                val dropdownRepeatUnit =
                     viewModel.repeatPeriodChronoUnitMap[repeatPeriodInput.text.toString()]
-                repeatPeriod?.let { setRepeatUnit(it) }
+                dropdownRepeatUnit?.let { setDropdownList(it) }
             }
         }
-    }
-
-
-    private fun populateData() {
-        if (viewModel.isEditReminder) {
-            viewModel.getReminder(navigationArgs.id).observe(viewLifecycleOwner) { reminder ->
-                binding.apply {
-                    nameInput.setText(reminder.name)
-                    startDateInput.setText(viewModel.formatReminderStartDate(reminder))
-                    startTimeInput.setText(viewModel.formatReminderStartTime(reminder))
-                    notesInput.setText(viewModel.getReminderNotes(reminder))
-                    notificationSwitch.isChecked = reminder.isNotificationSent
-                    repeatSwitch.isChecked = reminder.isRepeatReminder()
-                    repeatValueInput.setText(viewModel.getRepeatValue(reminder))
-                    setRepeatUnit(viewModel.getRepeatUnit(reminder))
-                }
-            }
-        } else {
-            binding.apply {
-                startDateInput.setText(viewModel.getStartDateNow())
-                startTimeInput.setText(viewModel.getStartTimeNextHour())
-                repeatValueInput.setText("1")
-                setRepeatUnit(ChronoUnit.DAYS)
-            }
-        }
-    }
-
-    private fun setRepeatUnit(repeatUnit: ChronoUnit) {
-        val repeatValue = binding.repeatValueInput.text.toString().toInt()
-
-        val dropdownItems = listOf(
-            resources.getQuantityString(R.plurals.dropdown_days, repeatValue),
-            resources.getQuantityString(R.plurals.dropdown_weeks, repeatValue)
-        )
-
-        binding.repeatPeriodInput.setAdapter(
-            ArrayAdapter(requireContext(), R.layout.list_item_dropdown_interval, dropdownItems)
-        )
-
-        val selectedItem = when (repeatUnit) {
-            ChronoUnit.DAYS -> dropdownItems[0]
-            else -> dropdownItems[1]
-        }
-
-        binding.repeatPeriodInput.setText(selectedItem, false)
     }
 
     private fun setupToolbar() {
@@ -138,40 +94,99 @@ class AddEditReminderFragment : Fragment() {
                     saveReminder()
                     hideKeyboard()
                     displayToast(R.string.toast_reminder_saved)
-                    findNavController().popBackStack()
+                    findNavController().navigateUp()
                 }
             }
         }
     }
 
+    private fun populateData() {
+        if (viewModel.isEditReminder) {
+            viewModel.getReminder(navigationArgs.id).observe(viewLifecycleOwner) { reminder ->
+                populateEditData(reminder)
+            }
+        } else {
+            populateAddData()
+        }
+    }
+
+    private fun populateEditData(reminder: Reminder) {
+        binding.apply {
+            nameInput.setText(reminder.name)
+            startDateInput.setText(viewModel.formatReminderStartDate(reminder))
+            startTimeInput.setText(viewModel.formatReminderStartTime(reminder))
+            notesInput.setText(viewModel.getReminderNotes(reminder))
+            notificationSwitch.isChecked = reminder.isNotificationSent
+            repeatSwitch.isChecked = reminder.isRepeatReminder()
+            repeatValueInput.setText(viewModel.getRepeatValue(reminder))
+            setDropdownList(viewModel.getRepeatUnit(reminder))
+        }
+    }
+
+    private fun populateAddData() {
+        binding.apply {
+            startDateInput.setText(viewModel.getStartDateNow())
+            startTimeInput.setText(viewModel.getStartTimeNextHour())
+            repeatValueInput.setText(viewModel.defaultRepeatValue)
+            setDropdownList(viewModel.defaultRepeatUnit)
+        }
+    }
+
+    private fun setDropdownList(repeatUnit: ChronoUnit) {
+        val repeatValue = binding.repeatValueInput.text.toString().toInt()
+
+        val dropdownItems = listOf(
+            resources.getQuantityString(R.plurals.dropdown_days, repeatValue),
+            resources.getQuantityString(R.plurals.dropdown_weeks, repeatValue)
+        )
+
+        binding.repeatPeriodInput.setAdapter(
+            ArrayAdapter(
+                requireContext(),
+                R.layout.list_item_dropdown_interval,
+                dropdownItems
+            )
+        )
+
+        val selectedItem = when (repeatUnit) {
+            ChronoUnit.DAYS -> dropdownItems[0]
+            else -> dropdownItems[1]
+        }
+
+        binding.repeatPeriodInput.setText(selectedItem, false)
+    }
+
+
     private fun saveReminder() {
-        val reminderName = binding.nameInput.text.toString()
+        binding.apply {
+            val reminderName = nameInput.text.toString()
 
-        val reminderStartDateTime = viewModel.convertDateTimeStringToDateTime(
-            binding.startDateInput.text.toString(),
-            binding.startTimeInput.text.toString()
-        )
+            val reminderStartDateTime = viewModel.convertDateTimeStringToDateTime(
+                startDateInput.text.toString(),
+                startTimeInput.text.toString()
+            )
 
-        val repeatInterval = viewModel.getRepeatInterval(
-            binding.repeatValueInput.text.toString().toLong(),
-            binding.repeatPeriodInput.text.toString()
-        )
+            val repeatInterval = viewModel.getRepeatInterval(
+                repeatValueInput.text.toString().toLong(),
+                repeatPeriodInput.text.toString()
+            )
 
-        val reminderNotes = viewModel.getReminderNotes(binding.notesInput.text.toString())
+            val reminderNotes = viewModel.getReminderNotes(notesInput.text.toString())
 
-        val isArchived = false
+            val isArchived = false
 
-        val isNotificationSent = binding.notificationSwitch.isChecked
+            val isNotificationSent = notificationSwitch.isChecked
 
-        viewModel.saveReminder(
-            navigationArgs.id,
-            reminderName,
-            reminderStartDateTime,
-            repeatInterval,
-            reminderNotes,
-            isArchived,
-            isNotificationSent
-        )
+            viewModel.saveReminder(
+                navigationArgs.id,
+                reminderName,
+                reminderStartDateTime,
+                repeatInterval,
+                reminderNotes,
+                isArchived,
+                isNotificationSent
+            )
+        }
     }
 
     private fun isReminderValid(): Boolean {
@@ -209,7 +224,7 @@ class AddEditReminderFragment : Fragment() {
 
         datePicker.addOnPositiveButtonClickListener { dateTimestamp ->
             binding.startDateInput.setText(
-                viewModel.convertTimestampToDateString(dateTimestamp)
+                viewModel.formatDatePickerDate(dateTimestamp)
             )
         }
 
@@ -224,11 +239,7 @@ class AddEditReminderFragment : Fragment() {
 
         timePicker.addOnPositiveButtonClickListener {
             binding.startTimeInput.setText(
-                getString(
-                    R.string.format_reminder_time,
-                    timePicker.hour.toString().padStart(2, '0'),
-                    timePicker.minute.toString().padStart(2, '0'),
-                )
+                viewModel.formatTimePickerTime(timePicker.hour, timePicker.minute)
             )
         }
 
@@ -252,7 +263,7 @@ class AddEditReminderFragment : Fragment() {
         )
     }
 
-    private fun focusKeyboard() {
+    private fun focusKeyboardOnReminderName() {
         if (binding.nameInput.requestFocus()) {
             showKeyboard()
         }
