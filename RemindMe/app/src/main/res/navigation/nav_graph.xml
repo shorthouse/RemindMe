@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/reminder_list_view_pager"
         android:name="dev.shorthouse.remindme.fragments.ReminderListViewPagerFragment"
-        android:label="ReminderListViewPagerFragment"
+        android:label="@string/app_name"
         tools:layout="@layout/fragment_view_pager">
 
         <action
@@ -26,7 +26,6 @@
     <fragment
         android:id="@+id/add_edit_reminder"
         android:name="dev.shorthouse.remindme.fragments.AddEditReminderFragment"
-        android:label="Add Edit Reminder"
         tools:layout="@layout/fragment_add_edit_reminder" >
         <argument
             android:name="id"
