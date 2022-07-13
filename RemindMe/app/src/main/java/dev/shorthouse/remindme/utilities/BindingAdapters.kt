@@ -41,27 +41,3 @@ fun formatRepeatInterval(view: MaterialTextView, repeatInterval: RepeatInterval?
             view.resources.getQuantityString(R.plurals.interval_weeks, timeValue, timeValue)
     }
 }
-
-@BindingAdapter("dropDownText")
-fun dropDownText(view: AutoCompleteTextView, repeatInterval: RepeatInterval?) {
-    if (repeatInterval == null) {
-        view.setText(view.resources.getQuantityString(R.plurals.dropdown_days, 1, 1), false)
-    } else {
-        when (repeatInterval.timeUnit) {
-            ChronoUnit.DAYS -> view.setText(
-                view.resources.getQuantityString(
-                    R.plurals.dropdown_days,
-                    repeatInterval.timeValue.toInt(),
-                    repeatInterval.timeValue,
-                ), false
-            )
-            else -> view.setText(
-                view.resources.getQuantityString(
-                    R.plurals.dropdown_weeks,
-                    repeatInterval.timeValue.toInt(),
-                    repeatInterval.timeValue,
-                ), false
-            )
-        }
-    }
-}
