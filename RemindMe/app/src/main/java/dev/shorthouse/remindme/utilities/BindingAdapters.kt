@@ -1,7 +1,6 @@
 package dev.shorthouse.remindme.utilities
 
 import android.view.View
-import android.widget.AutoCompleteTextView
 import androidx.databinding.BindingAdapter
 import com.google.android.material.textview.MaterialTextView
 import dev.shorthouse.remindme.R
