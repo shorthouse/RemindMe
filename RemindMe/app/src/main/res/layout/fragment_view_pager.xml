@@ -11,14 +11,15 @@
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBarLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            app:elevation="0dp">
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/topAppBar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:title="@string/app_name"
-                app:menu="@menu/top_app_bar"
+                app:menu="@menu/toolbar_reminder_list"
                 style="@style/Widget.MaterialComponents.Toolbar.Primary">
 
             </com.google.android.material.appbar.MaterialToolbar>
@@ -29,7 +30,7 @@
             android:id="@+id/tab_layout"
             style="@style/Widget.MaterialComponents.TabLayout.Colored"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="?attr/actionBarSize"
             android:layout_marginTop="?attr/actionBarSize"
             app:tabTextColor="?attr/colorOnPrimary"/>
 
@@ -54,23 +55,14 @@
             app:menu="@menu/nav_drawer_sort_reminder"
             app:headerLayout="@layout/nav_drawer_sort_header" />
 
-        <com.google.android.material.bottomappbar.BottomAppBar
-            android:id="@+id/bottom_app_bar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            style="@style/Widget.MaterialComponents.BottomAppBar.PrimarySurface"
-            app:menu="@menu/bottom_app_bar"
-            app:hideOnScroll="true" />
-
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/add_reminder_fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="@string/cd_fab_add_reminder"
-            android:tint="@color/white"
-            app:srcCompat="@drawable/ic_add"
-            app:layout_anchor="@id/bottom_app_bar" />
+            android:layout_margin="16dp"
+            android:layout_gravity="bottom|end"
+            app:srcCompat="@drawable/ic_add"/>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
