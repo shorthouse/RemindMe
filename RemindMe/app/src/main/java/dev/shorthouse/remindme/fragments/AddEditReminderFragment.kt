@@ -46,8 +46,8 @@ class AddEditReminderFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setAddOrEdit()
-        setupClickListeners()
         setupToolbar()
+        setupClickListeners()
         populateData()
         if (viewModel.isAddReminder) {
             focusKeyboardOnReminderName()
@@ -56,6 +56,28 @@ class AddEditReminderFragment : Fragment() {
 
     private fun setAddOrEdit() {
         viewModel.isEditReminder = navigationArgs.isEditReminder
+    }
+
+    private fun setupToolbar() {
+        binding.apply {
+            toolbar.setupWithNavController(findNavController())
+
+            toolbar.setNavigationIcon(R.drawable.ic_close)
+
+            toolbar.title = when (navigationArgs.isEditReminder) {
+                true -> getString(R.string.toolbar_title_edit_reminder)
+                else -> getString(R.string.toolbar_title_add_reminder)
+            }
+
+            saveReminder.setOnClickListener {
+                if (isReminderValid()) {
+                    saveReminder()
+                    hideKeyboard()
+                    displayToast(R.string.toast_reminder_saved)
+                    findNavController().navigateUp()
+                }
+            }
+        }
     }
 
     private fun setupClickListeners() {
@@ -72,32 +94,6 @@ class AddEditReminderFragment : Fragment() {
                 val dropdownRepeatUnit =
                     viewModel.repeatPeriodChronoUnitMap[repeatUnitInput.text.toString()]
                 dropdownRepeatUnit?.let { setDropdownList(it) }
-            }
-        }
-    }
-
-    private fun setupToolbar() {
-        binding.apply {
-            toolbar.setupWithNavController(findNavController())
-
-            toolbar.setNavigationIcon(R.drawable.ic_close)
-
-            toolbar.setNavigationOnClickListener {
-                findNavController().navigateUp()
-            }
-
-            toolbar.title = when (navigationArgs.isEditReminder) {
-                true -> getString(R.string.toolbar_title_edit_reminder)
-                else -> getString(R.string.toolbar_title_add_reminder)
-            }
-
-            saveReminder.setOnClickListener {
-                if (isReminderValid()) {
-                    saveReminder()
-                    hideKeyboard()
-                    displayToast(R.string.toast_reminder_saved)
-                    findNavController().navigateUp()
-                }
             }
         }
     }
