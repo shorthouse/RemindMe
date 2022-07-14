@@ -1,6 +1,7 @@
 package dev.shorthouse.remindme.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -8,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.addCallback
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -38,40 +40,25 @@ class ReminderListViewPagerFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentViewPagerBinding.inflate(inflater, container, false)
-        val tabLayout = binding.tabLayout
-        val viewPager = binding.viewPager
-
-        viewPager.adapter = ReminderListPagerAdapter(this)
-
-        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-            tab.text = getTabTitle(position)
-        }.attach()
-
-        setupListeners()
-        setupObservers()
-        setupBottomDrawerSort()
-
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupTabLayout()
         setupToolbar()
+        setupListeners()
+        setupObservers()
+        setupBottomDrawerSort()
     }
 
     private fun setupToolbar() {
-        binding.topAppBar.setupWithNavController(findNavController())
+        binding.toolbar.setupWithNavController(findNavController())
 
-        //TODO Needed?
-        binding.topAppBar.setNavigationOnClickListener {
-            findNavController().navigateUp()
-        }
-
-        binding.topAppBar.title = getString(R.string.app_name)
-
-        binding.topAppBar.setOnMenuItemClickListener { item ->
+        binding.toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.action_search -> {
+                    Log.d("HDS", "search clicked")
                     displayToast(R.string.toast_search_icon_clicked)
                     true
                 }
@@ -82,6 +69,39 @@ class ReminderListViewPagerFragment : Fragment() {
                 else -> false
             }
         }
+
+        val searchMenuItem = binding.toolbar.menu.findItem(R.id.action_search)
+        val searchActionView = searchMenuItem.actionView as SearchView
+
+        searchActionView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                Log.d("HDS", "text submit, query is: $query")
+
+                // Close draw (close to an icon instead of being expanded)
+                if (!searchActionView.isIconified) {
+                    searchActionView.isIconified = true
+                }
+
+                searchMenuItem.collapseActionView() // Collapse action view? Is this needed
+                return false
+            }
+
+            override fun onQueryTextChange(s: String): Boolean {
+                Log.d("HDS", "new text, string is: $s")
+                return false
+            }
+        })
+    }
+
+    private fun setupTabLayout() {
+        val tabLayout = binding.tabLayout
+        val viewPager = binding.viewPager
+
+        viewPager.adapter = ReminderListPagerAdapter(this)
+
+        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+            tab.text = getTabTitle(position)
+        }.attach()
     }
 
     private fun setupListeners() {
