@@ -2,9 +2,6 @@ package dev.shorthouse.remindme
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.NavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
 import dagger.hilt.android.AndroidEntryPoint
 import dev.shorthouse.remindme.databinding.ActivityMainBinding
 
@@ -12,19 +9,9 @@ import dev.shorthouse.remindme.databinding.ActivityMainBinding
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
-    private lateinit var navController: NavController
-    private lateinit var appBarConfiguration: AppBarConfiguration
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root) //TODO is this needed?=
+        setContentView(binding.root)
     }
-
-    // TODO is this needed?
-    override fun onSupportNavigateUp(): Boolean {
-        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
-    }
-
-
 }
