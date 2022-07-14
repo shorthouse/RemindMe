@@ -5,13 +5,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.data.ReminderRepository
+import dev.shorthouse.remindme.data.RepeatInterval
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.utilities.DATE_PATTERN
 import dev.shorthouse.remindme.utilities.NotificationScheduler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 
 @HiltViewModel
@@ -20,14 +23,20 @@ class ReminderDetailsViewModel @Inject constructor(
     private val notificationScheduler: NotificationScheduler,
 ) : ViewModel() {
 
+    lateinit var reminder: Reminder
+
     fun getReminder(id: Long): LiveData<Reminder> {
         return repository.getReminder(id).asLiveData()
     }
 
-    fun deleteReminder(reminder: Reminder) {
+    fun deleteReminder() {
         viewModelScope.launch(Dispatchers.IO) {
             repository.deleteReminder(reminder)
         }
+    }
+
+    fun cancelReminderNotification() {
+        notificationScheduler.cancelExistingReminderNotification(reminder)
     }
 
     fun getFormattedStartDate(reminder: Reminder?): String {
@@ -38,7 +47,14 @@ class ReminderDetailsViewModel @Inject constructor(
             .toString()
     }
 
-    fun cancelReminderNotification(reminder: Reminder) {
-        notificationScheduler.cancelExistingReminderNotification(reminder)
+    fun getFormattedStartTime(reminder: Reminder): String {
+        return reminder.startDateTime.toLocalTime().toString()
+    }
+
+    fun getRepeatIntervalId(repeatInterval: RepeatInterval): Int {
+        return when (repeatInterval.timeUnit) {
+            ChronoUnit.DAYS -> R.plurals.interval_days
+            else -> R.plurals.interval_weeks
+        }
     }
 }
