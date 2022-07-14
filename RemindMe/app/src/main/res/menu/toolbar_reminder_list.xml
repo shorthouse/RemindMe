@@ -7,7 +7,9 @@
         android:icon="@drawable/ic_search"
         android:title="@string/top_app_bar_search"
         android:contentDescription="@string/cd_top_app_bar_search"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="ifRoom"
+        app:actionLayout="@layout/toolbar_search_expanded"
+        />
 
     <item
         android:id="@+id/action_sort"
