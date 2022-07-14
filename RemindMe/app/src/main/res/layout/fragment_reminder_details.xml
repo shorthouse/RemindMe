@@ -7,9 +7,6 @@
         <variable
             name="reminder"
             type="dev.shorthouse.remindme.model.Reminder" />
-        <variable
-            name="viewmodel"
-            type="dev.shorthouse.remindme.viewmodel.ReminderDetailsViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -36,7 +33,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
-                android:text="@{reminder.name}"
                 android:textAppearance="?attr/textAppearanceHeadline6"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -59,7 +55,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="@{viewmodel.getFormattedStartDate(reminder)}"
                 android:textAppearance="?attr/textAppearanceBody2"
                 app:layout_constraintBottom_toBottomOf="@+id/ic_calendar"
                 app:layout_constraintStart_toEndOf="@+id/ic_calendar"
@@ -90,7 +85,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="@{reminder.startDateTime.toLocalTime().toString()}"
                 android:textAppearance="?attr/textAppearanceBody2"
                 app:layout_constraintBottom_toBottomOf="@+id/ic_clock"
                 app:layout_constraintStart_toEndOf="@+id/ic_clock"
@@ -124,7 +118,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:textAppearance="?attr/textAppearanceBody2"
-                app:formattedRepeatInterval="@{reminder.repeatInterval}"
                 app:layout_constraintBottom_toBottomOf="@+id/ic_repeat"
                 app:layout_constraintStart_toEndOf="@+id/ic_repeat"
                 app:layout_constraintTop_toTopOf="@+id/ic_repeat"
@@ -154,18 +147,17 @@
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/notes"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="16dp"
-                android:text="@{reminder.notes}"
+                android:layout_marginEnd="16dp"
                 android:textAppearance="?attr/textAppearanceBody2"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@+id/ic_notes"
                 app:layout_constraintTop_toBottomOf="@+id/divider_interval"
-                tools:text="Remember to floss!"
-                app:showIfNotesExist="@{reminder.notes}"/>
+                app:showIfNotesExist="@{reminder.notes}"
+                tools:text="Don't forget mouthwash!" />
 
             <View
                 android:id="@+id/divider_notification"
@@ -174,7 +166,7 @@
                 android:layout_margin="16dp"
                 android:background="?attr/dividerHorizontal"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ic_notes"
+                app:layout_constraintTop_toBottomOf="@+id/notes"
                 app:showIfNotificationEnabled="@{reminder.notificationSent}" />
 
             <ImageView

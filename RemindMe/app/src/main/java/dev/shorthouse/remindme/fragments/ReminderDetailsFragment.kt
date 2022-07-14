@@ -1,7 +1,9 @@
 package dev.shorthouse.remindme.fragments
 
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -18,7 +20,6 @@ import dev.shorthouse.remindme.viewmodel.ReminderDetailsViewModel
 class ReminderDetailsFragment : Fragment() {
     private lateinit var binding: FragmentReminderDetailsBinding
     private val navigationArgs: ReminderDetailsFragmentArgs by navArgs()
-    private lateinit var reminder: Reminder
 
     private val viewModel: ReminderDetailsViewModel by viewModels()
 
@@ -34,63 +35,87 @@ class ReminderDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val id = navigationArgs.id
-        viewModel.getReminder(id).observe(this.viewLifecycleOwner) {
-            reminder = it
-            binding.reminder = it
+        getReminder(navigationArgs.id)
+        setupToolbar()
+        setupClickListeners()
+    }
+
+    private fun getReminder(reminderId: Long) {
+        val reminderLiveData = viewModel.getReminder(reminderId)
+
+        reminderLiveData.observe(viewLifecycleOwner) { reminder ->
+            reminderLiveData.removeObservers(this)
+            viewModel.reminder = reminder
+            binding.reminder = reminder
+            populateData(reminder)
         }
+    }
 
+    private fun populateData(reminder: Reminder) {
         binding.apply {
-            viewmodel = viewModel
+            name.text = reminder.name
+            startDate.text = viewModel.getFormattedStartDate(reminder)
+            startTime.text = viewModel.getFormattedStartTime(reminder)
+            notes.text = reminder.notes
 
-            editReminderFab.setOnClickListener {
-                val action = ReminderDetailsFragmentDirections
-                    .actionReminderDetailsToAddEditReminder(
-                        navigationArgs.id,
-                        isEditReminder = true
-                    )
-                findNavController().navigate(action)
+            reminder.repeatInterval?.let {
+                repeatInterval.text = resources.getQuantityString(
+                    viewModel.getRepeatIntervalId(it),
+                    it.timeValue.toInt()
+                )
             }
         }
-
-        setupToolbar()
     }
 
     private fun setupToolbar() {
-        binding.apply {
-            toolbar.setupWithNavController(findNavController())
+        binding.toolbar.apply {
+            setupWithNavController(findNavController())
 
-            toolbar.setNavigationOnClickListener {
-                findNavController().navigateUp()
-            }
-        }
-
-        binding.toolbar.setOnMenuItemClickListener { item ->
-            when (item.itemId) {
-                R.id.action_delete -> {
-                    deleteReminder()
-                    true
+            setOnMenuItemClickListener { item ->
+                when (item.itemId) {
+                    R.id.action_delete -> {
+                        deleteReminder()
+                        cancelReminderNotification()
+                        displayToast(R.string.toast_reminder_deleted)
+                        findNavController().navigateUp()
+                        true
+                    }
+                    else -> false
                 }
-                else -> false
             }
         }
+    }
+
+    private fun setupClickListeners() {
+        binding.editReminderFab.setOnClickListener {
+            navigateToEditReminder()
+        }
+    }
+
+    private fun navigateToEditReminder() {
+        val action = ReminderDetailsFragmentDirections
+            .actionReminderDetailsToAddEditReminder(
+                navigationArgs.id,
+                isEditReminder = true
+            )
+        findNavController().navigate(action)
     }
 
     private fun deleteReminder() {
-        viewModel.deleteReminder(reminder)
-
-        if (reminder.isNotificationSent) cancelReminderNotification(reminder)
-
-        Toast.makeText(
-            context,
-            getString(R.string.toast_reminder_deleted),
-            Toast.LENGTH_SHORT
-        ).show()
-
-        findNavController().navigateUp()
+        viewModel.deleteReminder()
     }
 
-    private fun cancelReminderNotification(reminder: Reminder) {
-        viewModel.cancelReminderNotification(reminder)
+    private fun cancelReminderNotification() {
+        if (viewModel.reminder.isNotificationSent) {
+            viewModel.cancelReminderNotification()
+        }
+    }
+
+    private fun displayToast(stringResId: Int) {
+        Toast.makeText(
+            context,
+            getString(stringResId),
+            Toast.LENGTH_SHORT
+        ).show()
     }
 }
