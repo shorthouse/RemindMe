@@ -92,4 +92,6 @@
 
     <string name="toolbar_title_edit_reminder">Edit reminder</string>
     <string name="toolbar_title_add_reminder">Add reminder</string>
+    <string name="snackbar_reminder_completed">Reminder completed</string>
+    <string name="snackbar_reminder_completed_undo">Undo</string>
 </resources>

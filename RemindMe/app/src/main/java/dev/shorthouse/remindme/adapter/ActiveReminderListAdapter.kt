@@ -9,6 +9,7 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.databinding.ListItemActiveReminderBinding
 import dev.shorthouse.remindme.fragments.ReminderListViewPagerFragmentDirections
@@ -45,8 +46,15 @@ class ActiveReminderListAdapter(private val viewModel: ActiveReminderListViewMod
 
                 setDoneClickListener { view ->
                     cancelDisplayedReminderNotification(view, reminder)
-                    updateDoneReminder()
+                    updateDoneReminder(view)
                 }
+            }
+        }
+
+        private fun updateDoneReminder(view: View) {
+            binding.reminder?.let { reminder ->
+                viewModel.updateDoneReminder(reminder)
+                showUndoSnackbar(view, reminder)
             }
         }
 
@@ -64,10 +72,17 @@ class ActiveReminderListAdapter(private val viewModel: ActiveReminderListViewMod
             }
         }
 
-        private fun updateDoneReminder() {
-            binding.reminder?.let { reminder ->
-                viewModel.updateDoneReminder(reminder)
-            }
+        private fun showUndoSnackbar(view: View, reminder: Reminder) {
+            val context = view.context
+            val reminderCompletedText = context.getString(R.string.snackbar_reminder_completed)
+            val undoActionText = context.getString(R.string.snackbar_reminder_completed_undo)
+
+            Snackbar.make(view, reminderCompletedText, Snackbar.LENGTH_SHORT)
+                .setAction(undoActionText) {
+                    viewModel.undoDoneReminder(reminder)
+                }
+                .setAnchorView(view.rootView.findViewById(R.id.add_reminder_fab))
+                .show()
         }
 
         fun bind(reminder: Reminder) {
