@@ -1,12 +1,12 @@
 package dev.shorthouse.remindme.fragments
 
+import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import android.view.inputmethod.InputMethodManager
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.addCallback
 import androidx.appcompat.widget.SearchView
@@ -22,7 +22,7 @@ import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.adapter.ACTIVE_REMINDERS_PAGE_INDEX
 import dev.shorthouse.remindme.adapter.ALL_REMINDERS_PAGE_INDEX
 import dev.shorthouse.remindme.adapter.ReminderListPagerAdapter
-import dev.shorthouse.remindme.databinding.FragmentViewPagerBinding
+import dev.shorthouse.remindme.databinding.FragmentReminderListViewPagerBinding
 import dev.shorthouse.remindme.utilities.hide
 import dev.shorthouse.remindme.utilities.isShown
 import dev.shorthouse.remindme.utilities.show
@@ -30,7 +30,7 @@ import dev.shorthouse.remindme.viewmodel.ReminderListViewPagerViewModel
 
 @AndroidEntryPoint
 class ReminderListViewPagerFragment : Fragment() {
-    private lateinit var binding: FragmentViewPagerBinding
+    private lateinit var binding: FragmentReminderListViewPagerBinding
 
     private val viewModel: ReminderListViewPagerViewModel by activityViewModels()
 
@@ -39,7 +39,7 @@ class ReminderListViewPagerFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentViewPagerBinding.inflate(inflater, container, false)
+        binding = FragmentReminderListViewPagerBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -57,11 +57,6 @@ class ReminderListViewPagerFragment : Fragment() {
 
         binding.toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
-                R.id.action_search -> {
-                    Log.d("HDS", "search clicked")
-                    displayToast(R.string.toast_search_icon_clicked)
-                    true
-                }
                 R.id.action_sort -> {
                     getBottomSheetSort().show()
                     true
@@ -70,28 +65,46 @@ class ReminderListViewPagerFragment : Fragment() {
             }
         }
 
-        val searchMenuItem = binding.toolbar.menu.findItem(R.id.action_search)
-        val searchActionView = searchMenuItem.actionView as SearchView
+        val sortViewItem = binding.toolbar.menu.findItem(R.id.action_sort)
+        val searchViewItem = binding.toolbar.menu.findItem(R.id.action_search)
 
-        searchActionView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String): Boolean {
-                Log.d("HDS", "text submit, query is: $query")
-
-                // Close draw (close to an icon instead of being expanded)
-                if (!searchActionView.isIconified) {
-                    searchActionView.isIconified = true
-                }
-
-                searchMenuItem.collapseActionView() // Collapse action view? Is this needed
-                return false
+        val backButtonCallback =
+            requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, false) {
+                searchViewItem.collapseActionView()
             }
 
-            override fun onQueryTextChange(s: String): Boolean {
-                Log.d("HDS", "new text, string is: $s")
-                return false
+        val expandListener = object : MenuItem.OnActionExpandListener {
+            override fun onMenuItemActionExpand(item: MenuItem): Boolean {
+                binding.addReminderFab.hide()
+                sortViewItem.isVisible = false
+                backButtonCallback.isEnabled = true
+                return true
+            }
+
+            override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
+                binding.addReminderFab.show()
+                sortViewItem.isVisible = true
+                backButtonCallback.isEnabled = false
+                return true
+            }
+        }
+
+        searchViewItem?.setOnActionExpandListener(expandListener)
+
+        val searchView = searchViewItem.actionView as SearchView
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextChange(filter: String): Boolean {
+                viewModel.currentFilter.value = filter
+                return true
+            }
+
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                hideKeyboard()
+                return true
             }
         })
     }
+
 
     private fun setupTabLayout() {
         val tabLayout = binding.tabLayout
@@ -138,7 +151,7 @@ class ReminderListViewPagerFragment : Fragment() {
             bottomSheetSort.hide()
 
             val backButtonCallback =
-                requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+                requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, false) {
                     if (bottomSheetSort.isShown()) {
                         bottomSheetSort.hide()
                     }
@@ -197,11 +210,13 @@ class ReminderListViewPagerFragment : Fragment() {
         return menuItem.itemId != binding.navigationViewListSort.checkedItem?.itemId
     }
 
-    private fun displayToast(stringResId: Int) {
-        Toast.makeText(
-            context,
-            getString(stringResId),
-            Toast.LENGTH_SHORT
-        ).show()
+    private fun hideKeyboard() {
+        val inputManager =
+            activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+
+        inputManager.hideSoftInputFromWindow(
+            view?.windowToken,
+            InputMethodManager.HIDE_NOT_ALWAYS
+        )
     }
 }
