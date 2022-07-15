@@ -21,7 +21,10 @@ class ActiveReminderListViewModel @Inject constructor(
     val repository: ReminderRepository,
 ) : ViewModel() {
 
-    fun getSortedReminders(currentSort: MutableLiveData<RemindersSort>): LiveData<List<Reminder>> {
+    fun getReminders(
+        currentSort: MutableLiveData<RemindersSort>,
+        currentFilter: MutableLiveData<String>
+    ): LiveData<List<Reminder>> {
         val activeReminders = repository
             .getActiveNonArchivedReminders(ZonedDateTime.now())
             .asLiveData()
@@ -29,27 +32,44 @@ class ActiveReminderListViewModel @Inject constructor(
         val sortedReminders = MediatorLiveData<List<Reminder>>()
 
         sortedReminders.addSource(activeReminders) {
-            sortedReminders.value = sortReminders(activeReminders, currentSort)
+            sortedReminders.value = sortFilterReminders(activeReminders, currentSort, currentFilter)
         }
         sortedReminders.addSource(currentSort) {
-            sortedReminders.value = sortReminders(activeReminders, currentSort)
+            sortedReminders.value = sortFilterReminders(activeReminders, currentSort, currentFilter)
+        }
+        sortedReminders.addSource(currentFilter) {
+            sortedReminders.value = sortFilterReminders(activeReminders, currentSort, currentFilter)
         }
 
         return sortedReminders
     }
 
-    private fun sortReminders(
+    private fun sortFilterReminders(
         activeReminders: LiveData<List<Reminder>>,
-        currentSort: MutableLiveData<RemindersSort>
+        currentSort: MutableLiveData<RemindersSort>,
+        currentFilter: MutableLiveData<String>
     ): List<Reminder>? {
         val reminders = activeReminders.value
         val sort = currentSort.value
+        val filter = currentFilter.value
 
         if (reminders == null || sort == null) return null
 
-        return when (sort) {
+        val sortedReminders = when (sort) {
             RemindersSort.NEWEST_FIRST -> reminders.sortedByDescending { it.startDateTime }
             else -> reminders.sortedBy { it.startDateTime }
+        }
+
+        return if (filter == null || filter.isBlank()) {
+            sortedReminders
+        } else {
+            sortedReminders.filter { reminder -> reminder.name.contains(filter, true) }
+        }
+    }
+
+    fun undoDoneReminder(reminder: Reminder) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.updateReminder(reminder)
         }
     }
 
