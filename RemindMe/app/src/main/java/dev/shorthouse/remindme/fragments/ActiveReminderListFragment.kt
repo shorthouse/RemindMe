@@ -36,8 +36,7 @@ class ActiveReminderListFragment : Fragment() {
     }
 
     private fun observeListData() {
-        viewModel
-            .getSortedReminders(viewPagerViewModel.currentSort)
+        viewModel.getReminders(viewPagerViewModel.currentSort, viewPagerViewModel.currentFilter)
             .observe(viewLifecycleOwner) { reminders ->
                 val listAdapter = ActiveReminderListAdapter(viewModel)
                 listAdapter.submitList(reminders)
