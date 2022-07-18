@@ -48,6 +48,9 @@
     <string name="cd_button_edit_reminder">Edit reminder</string>
     <string name="toolbar_delete_action_title">Delete</string>
     <string name="toast_reminder_deleted">Reminder deleted</string>
+    <string name="alert_dialog_delete_reminder_message">Delete this reminder?</string>
+    <string name="alert_dialog_delete_reminder_cancel">Cancel</string>
+    <string name="alert_dialog_delete_reminder_delete">Delete</string>
     <plurals name="interval_days">
         <item quantity="one">%d day</item>
         <item quantity="other">%d days</item>
@@ -94,4 +97,6 @@
     <string name="toolbar_title_add_reminder">Add reminder</string>
     <string name="snackbar_reminder_completed">Reminder completed</string>
     <string name="snackbar_reminder_completed_undo">Undo</string>
+
+
 </resources>
