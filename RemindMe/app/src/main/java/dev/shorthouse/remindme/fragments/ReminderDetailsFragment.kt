@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.databinding.FragmentReminderDetailsBinding
@@ -74,10 +75,7 @@ class ReminderDetailsFragment : Fragment() {
             setOnMenuItemClickListener { item ->
                 when (item.itemId) {
                     R.id.action_delete -> {
-                        deleteReminder()
-                        cancelReminderNotification()
-                        displayToast(R.string.toast_reminder_deleted)
-                        findNavController().navigateUp()
+                        getDeleteAlertDialog().show()
                         true
                     }
                     else -> false
@@ -90,6 +88,21 @@ class ReminderDetailsFragment : Fragment() {
         binding.editReminderFab.setOnClickListener {
             navigateToEditReminder()
         }
+    }
+
+    private fun getDeleteAlertDialog(): MaterialAlertDialogBuilder {
+        return MaterialAlertDialogBuilder(requireContext())
+            .setMessage(getString(R.string.alert_dialog_delete_reminder_message))
+            .setNegativeButton(getString(R.string.alert_dialog_delete_reminder_cancel)) { dialog, _ ->
+                dialog.cancel()
+            }
+            .setPositiveButton(getString(R.string.alert_dialog_delete_reminder_delete)) { dialog, _ ->
+                deleteReminder()
+                cancelReminderNotification()
+                displayToast(R.string.toast_reminder_deleted)
+                dialog.dismiss()
+                findNavController().navigateUp()
+            }
     }
 
     private fun navigateToEditReminder() {
