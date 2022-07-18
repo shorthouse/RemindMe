@@ -44,7 +44,7 @@ class ReminderDetailsFragment : Fragment() {
         val reminderLiveData = viewModel.getReminder(reminderId)
 
         reminderLiveData.observe(viewLifecycleOwner) { reminder ->
-            reminderLiveData.removeObservers(this)
+            reminderLiveData.removeObservers(viewLifecycleOwner)
             viewModel.reminder = reminder
             binding.reminder = reminder
             populateData(reminder)
