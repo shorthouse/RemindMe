@@ -154,7 +154,6 @@ class AddEditReminderFragment : Fragment() {
         binding.repeatUnitInput.setText(selectedItem, false)
     }
 
-
     private fun saveReminder() {
         binding.apply {
             val reminderName = nameInput.text.toString()
@@ -175,15 +174,27 @@ class AddEditReminderFragment : Fragment() {
 
             val isNotificationSent = notificationSwitch.isChecked
 
-            viewModel.saveReminder(
-                navigationArgs.id,
-                reminderName,
-                reminderStartDateTime,
-                repeatInterval,
-                reminderNotes,
-                isArchived,
-                isNotificationSent
-            )
+
+            if (viewModel.isAddReminder) {
+                viewModel.addReminder(
+                    reminderName,
+                    reminderStartDateTime,
+                    repeatInterval,
+                    reminderNotes,
+                    isArchived,
+                    isNotificationSent
+                )
+            } else if (viewModel.isEditReminder) {
+                viewModel.editReminder(
+                    navigationArgs.id,
+                    reminderName,
+                    reminderStartDateTime,
+                    repeatInterval,
+                    reminderNotes,
+                    isArchived,
+                    isNotificationSent
+                )
+            }
         }
     }
 

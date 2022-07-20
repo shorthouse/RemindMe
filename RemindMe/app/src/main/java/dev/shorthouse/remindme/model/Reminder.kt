@@ -10,7 +10,7 @@ import java.time.format.DateTimeFormatter
 @Entity
 data class Reminder(
     @PrimaryKey(autoGenerate = true)
-    var id: Long = 0,
+    var id: Long = 0L,
 
     val name: String,
 

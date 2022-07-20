@@ -12,17 +12,14 @@ import androidx.core.app.NotificationManagerCompat
 import dev.shorthouse.remindme.MainActivity
 import dev.shorthouse.remindme.R
 
-class AlarmNotificationReceiver : BroadcastReceiver() {
+class DisplayReminderNotificationReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         if (context == null || intent == null) return
         createNotificationChannel(context)
         displayReminderNotification(context, intent)
     }
 
-    private fun displayReminderNotification(
-        context: Context,
-        intent: Intent,
-    ) {
+    private fun displayReminderNotification(context: Context, intent: Intent) {
         val reminderNotification = getReminderNotification(context, intent)
 
         reminderNotification?.let {
@@ -47,7 +44,8 @@ class AlarmNotificationReceiver : BroadcastReceiver() {
             intent.getStringExtra(context.getString(R.string.intent_key_notificationTitle))
         val notificationText =
             intent.getStringExtra(context.getString(R.string.intent_key_notificationText))
-        if (isIntentValuesInvalid(reminderId, notificationTitle, notificationText)) return null
+
+        if (!areIntentValuesValid(reminderId, notificationTitle, notificationText)) return null
 
         val pendingIntent = PendingIntent.getActivity(
             context, reminderId.toInt(), notificationIntent, PendingIntent.FLAG_IMMUTABLE
@@ -91,11 +89,11 @@ class AlarmNotificationReceiver : BroadcastReceiver() {
         notificationManager?.createNotificationChannel(channel)
     }
 
-    private fun isIntentValuesInvalid(
+    private fun areIntentValuesValid(
         reminderId: Long,
         notificationTitle: String?,
         notificationText: String?
     ): Boolean {
-        return reminderId == -1L || notificationTitle == null || notificationText == null
+        return reminderId != -1L && notificationTitle != null && notificationText != null
     }
 }

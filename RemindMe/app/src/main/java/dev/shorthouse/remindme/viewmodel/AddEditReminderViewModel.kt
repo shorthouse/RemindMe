@@ -41,7 +41,34 @@ class AddEditReminderViewModel @Inject constructor(
         return repository.getReminder(id).asLiveData()
     }
 
-    fun saveReminder(
+    fun addReminder(
+        name: String,
+        startDateTime: ZonedDateTime,
+        repeatInterval: RepeatInterval?,
+        notes: String?,
+        isArchived: Boolean,
+        isNotificationSent: Boolean
+    ) {
+        val reminder = Reminder(
+            name = name,
+            startDateTime = startDateTime,
+            repeatInterval = repeatInterval,
+            notes = notes,
+            isArchived = isArchived,
+            isNotificationSent = isNotificationSent
+        )
+
+        viewModelScope.launch(Dispatchers.IO) {
+            val reminderId = repository.insertReminder(reminder)
+
+            if (reminder.isNotificationSent) {
+                reminder.id = reminderId
+                scheduleReminderNotification(reminder)
+            }
+        }
+    }
+
+    fun editReminder(
         id: Long,
         name: String,
         startDateTime: ZonedDateTime,
@@ -61,16 +88,12 @@ class AddEditReminderViewModel @Inject constructor(
         )
 
         viewModelScope.launch(Dispatchers.IO) {
-            if (isAddReminder) {
-                repository.insertReminder(reminder)
-            } else if (isEditReminder) {
-                repository.updateReminder(reminder)
-                cancelExistingReminderNotification(reminder)
-            }
-        }
+            repository.updateReminder(reminder)
+            cancelExistingReminderNotification(reminder)
 
-        if (reminder.isNotificationSent) {
-            scheduleReminderNotification(reminder)
+            if (reminder.isNotificationSent) {
+                scheduleReminderNotification(reminder)
+            }
         }
     }
 
