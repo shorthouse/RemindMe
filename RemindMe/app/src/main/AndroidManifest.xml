@@ -33,7 +33,7 @@
             android:exported="false" />
 
         <receiver
-            android:name=".receivers.AlarmNotificationReceiver" />
+            android:name=".receivers.DisplayReminderNotificationReceiver" />
         <receiver
             android:name=".receivers.BootCompleteReceiver"
             android:exported="true">
