@@ -7,7 +7,7 @@ import android.content.Intent
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.model.Reminder
-import dev.shorthouse.remindme.receivers.AlarmNotificationReceiver
+import dev.shorthouse.remindme.receivers.DisplayReminderNotificationReceiver
 import java.time.Duration
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject
@@ -68,7 +68,7 @@ class NotificationScheduler @Inject constructor(
     }
 
     private fun getAlarmIntent(reminder: Reminder): Intent {
-        return Intent(context, AlarmNotificationReceiver::class.java)
+        return Intent(context, DisplayReminderNotificationReceiver::class.java)
             .putExtra(
                 context.getString(R.string.intent_key_reminderId),
                 reminder.id
