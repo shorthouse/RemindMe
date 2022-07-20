@@ -20,6 +20,8 @@ class AllReminderListFragment : Fragment() {
     private val viewModel: AllReminderListViewModel by viewModels()
     private val viewPagerViewModel: ReminderListViewPagerViewModel by activityViewModels()
 
+    private lateinit var listAdapter: AllReminderListAdapter
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -31,16 +33,19 @@ class AllReminderListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        setListAdapter()
         observeListData()
+    }
+
+    private fun setListAdapter() {
+        listAdapter = AllReminderListAdapter()
+        binding.allReminderRecycler.adapter = listAdapter
     }
 
     private fun observeListData() {
         viewModel.getReminders(viewPagerViewModel.currentSort, viewPagerViewModel.currentFilter)
             .observe(viewLifecycleOwner) { reminders ->
-                val listAdapter = AllReminderListAdapter()
                 listAdapter.submitList(reminders)
-                binding.allReminderRecycler.adapter = listAdapter
             }
     }
 }
