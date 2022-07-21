@@ -9,15 +9,12 @@ import androidx.lifecycle.asLiveData
 import dagger.hilt.android.AndroidEntryPoint
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.data.ReminderRepository
-import dev.shorthouse.remindme.data.RepeatInterval
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.utilities.DAYS_IN_WEEK
-import dev.shorthouse.remindme.utilities.ONE_INTERVAL
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.time.LocalDate
-import java.time.Period
+import java.time.Duration
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject
@@ -32,127 +29,68 @@ class UpdateDoneReminderService : Service() {
         val reminderId = intent?.getLongExtra(getString(R.string.intent_key_reminderId), -1L)
         if (reminderId == null || reminderId == -1L) return START_NOT_STICKY
 
+        observeReminder(reminderId)
+
+        return super.onStartCommand(intent, flags, startId)
+    }
+
+    private fun observeReminder(reminderId: Long) {
         val reminderLiveData = repository.getReminder(reminderId).asLiveData()
 
         reminderLiveData.observeForever(object : Observer<Reminder> {
             override fun onChanged(reminder: Reminder?) {
                 reminder?.let {
                     reminderLiveData.removeObserver(this)
-                    insertUpdatedDoneReminder(
-                        getUpdatedDoneReminder(
-                            reminder.id,
-                            reminder.name,
-                            reminder.startDateTime,
-                            reminder.repeatInterval,
-                            reminder.notes,
-                            reminder.isNotificationSent
-                        )
-                    )
+                    updateDoneReminder(reminder)
                 }
             }
         })
-
-        return super.onStartCommand(intent, flags, startId)
     }
 
-    private fun insertUpdatedDoneReminder(updatedDoneReminder: Reminder) {
+    private fun updateDoneReminder(reminder: Reminder) {
+        val updatedDoneReminder = getUpdatedDoneReminder(reminder)
+
         CoroutineScope(Dispatchers.IO).launch {
-            repository.insertReminder(updatedDoneReminder)
-
-            NotificationManagerCompat.from(this@UpdateDoneReminderService)
-                .cancel(updatedDoneReminder.id.toInt())
-
-            this@UpdateDoneReminderService.stopSelf()
+            repository.updateReminder(updatedDoneReminder)
         }
+
+        cancelReminderNotification(updatedDoneReminder.id)
+        stopSelf()
     }
 
-    fun getUpdatedDoneReminder(
-        id: Long,
-        name: String,
-        startDateTime: ZonedDateTime,
-        repeatInterval: RepeatInterval?,
-        notes: String?,
-        isNotificationSent: Boolean,
-    ): Reminder {
-        return when (repeatInterval) {
-            null -> getCompletedSingleReminder(
-                id,
-                name,
-                startDateTime,
-                notes,
-                isNotificationSent,
-            )
-            else -> getUpdatedRepeatReminder(
-                id,
-                name,
-                startDateTime,
-                repeatInterval,
-                notes,
-                isNotificationSent,
-            )
-        }
+    private fun cancelReminderNotification(reminderId: Long) {
+        NotificationManagerCompat.from(this@UpdateDoneReminderService)
+            .cancel(reminderId.toInt())
     }
 
-    private fun getCompletedSingleReminder(
-        id: Long,
-        name: String,
-        startDateTime: ZonedDateTime,
-        notes: String?,
-        isNotificationSent: Boolean,
-    ): Reminder {
+    private fun getUpdatedDoneReminder(reminder: Reminder): Reminder {
         return Reminder(
-            id = id,
-            name = name,
-            startDateTime = startDateTime,
-            repeatInterval = null,
-            notes = notes,
-            isArchived = true,
-            isNotificationSent = isNotificationSent,
+            id = reminder.id,
+            name = reminder.name,
+            startDateTime = getUpdatedStartDateTime(reminder),
+            repeatInterval = reminder.repeatInterval,
+            notes = reminder.notes,
+            isArchived = !reminder.isRepeatReminder(),
+            isNotificationSent = reminder.isNotificationSent,
         )
     }
 
-    private fun getUpdatedRepeatReminder(
-        id: Long,
-        name: String,
-        startDateTime: ZonedDateTime,
-        repeatInterval: RepeatInterval,
-        notes: String?,
-        isNotificationSent: Boolean,
-    ): Reminder {
-        return Reminder(
-            id = id,
-            name = name,
-            startDateTime = getUpdatedStartDateTime(startDateTime, repeatInterval),
-            repeatInterval = repeatInterval,
-            notes = notes,
-            isArchived = false,
-            isNotificationSent = isNotificationSent,
-        )
-    }
+    private fun getUpdatedStartDateTime(reminder: Reminder): ZonedDateTime {
+        val repeatInterval = reminder.repeatInterval ?: return reminder.startDateTime
 
-    private fun getUpdatedStartDateTime(
-        startDateTime: ZonedDateTime,
-        repeatInterval: RepeatInterval,
-    ): ZonedDateTime {
-        val period = Period.between(startDateTime.toLocalDate(), LocalDate.now())
-        val timeValue = repeatInterval.timeValue
-
-        return when (repeatInterval.timeUnit) {
-            ChronoUnit.DAYS -> {
-                val passedDays = period.days
-                val passedIntervals = passedDays.div(timeValue)
-                val nextInterval = passedIntervals.plus(ONE_INTERVAL)
-                val daysUntilNextStart = timeValue * nextInterval
-                startDateTime.plusDays(daysUntilNextStart)
-            }
-            else -> {
-                val passedWeeks = period.days.div(DAYS_IN_WEEK)
-                val passedIntervals = passedWeeks.div(timeValue)
-                val nextInterval = passedIntervals.plus(ONE_INTERVAL)
-                val weeksUntilNextStart = timeValue * nextInterval
-                startDateTime.plusWeeks(weeksUntilNextStart)
-            }
+        val repeatDuration = when (repeatInterval.timeUnit) {
+            ChronoUnit.DAYS -> Duration.ofDays(repeatInterval.timeValue)
+            else -> Duration.ofDays(repeatInterval.timeValue * DAYS_IN_WEEK)
         }
+
+        val passedDuration = Duration.between(reminder.startDateTime, ZonedDateTime.now())
+
+        return reminder.startDateTime
+            .plusSeconds(passedDuration
+                .dividedBy(repeatDuration)
+                .plus(1)
+                .times(repeatDuration.toSeconds())
+            )
     }
 
     override fun onBind(intent: Intent?): IBinder? = null
