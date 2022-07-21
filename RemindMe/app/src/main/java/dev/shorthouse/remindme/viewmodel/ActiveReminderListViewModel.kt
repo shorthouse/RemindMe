@@ -3,15 +3,13 @@ package dev.shorthouse.remindme.viewmodel
 import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.shorthouse.remindme.data.ReminderRepository
-import dev.shorthouse.remindme.data.RepeatInterval
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.utilities.DAYS_IN_WEEK
-import dev.shorthouse.remindme.utilities.ONE_INTERVAL
 import dev.shorthouse.remindme.utilities.RemindersSort
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.time.LocalDate
-import java.time.Period
+import java.time.Duration
+import java.time.LocalDateTime
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject
@@ -20,51 +18,75 @@ import javax.inject.Inject
 class ActiveReminderListViewModel @Inject constructor(
     val repository: ReminderRepository,
 ) : ViewModel() {
+    private val currentAllReminders = repository
+        .getNonArchivedReminders()
+        .asLiveData()
 
-    fun getReminders(
+    private val currentTime = MutableLiveData(ZonedDateTime.now())
+
+    fun remindersListData(
         currentSort: MutableLiveData<RemindersSort>,
         currentFilter: MutableLiveData<String>
     ): LiveData<List<Reminder>> {
-        val activeReminders = repository
-            .getActiveNonArchivedReminders(ZonedDateTime.now())
-            .asLiveData()
+        val remindersListData = MediatorLiveData<List<Reminder>>()
 
-        val sortedReminders = MediatorLiveData<List<Reminder>>()
+        remindersListData.addSource(currentAllReminders) {
+            remindersListData.value = getRemindersListData(currentSort, currentFilter)
+        }
+        remindersListData.addSource(currentSort) {
+            remindersListData.value = getRemindersListData(currentSort, currentFilter)
+        }
+        remindersListData.addSource(currentFilter) {
+            remindersListData.value = getRemindersListData(currentSort, currentFilter)
+        }
+        remindersListData.addSource(currentTime) {
+            remindersListData.value = getRemindersListData(currentSort, currentFilter)
+        }
 
-        sortedReminders.addSource(activeReminders) {
-            sortedReminders.value = sortFilterReminders(activeReminders, currentSort, currentFilter)
-        }
-        sortedReminders.addSource(currentSort) {
-            sortedReminders.value = sortFilterReminders(activeReminders, currentSort, currentFilter)
-        }
-        sortedReminders.addSource(currentFilter) {
-            sortedReminders.value = sortFilterReminders(activeReminders, currentSort, currentFilter)
-        }
-
-        return sortedReminders
+        return remindersListData
     }
 
-    private fun sortFilterReminders(
-        activeReminders: LiveData<List<Reminder>>,
+    private fun getRemindersListData(
         currentSort: MutableLiveData<RemindersSort>,
         currentFilter: MutableLiveData<String>
     ): List<Reminder>? {
-        val reminders = activeReminders.value
+        val allReminders = currentAllReminders.value
+        val time = currentTime.value
         val sort = currentSort.value
         val filter = currentFilter.value
 
-        if (reminders == null || sort == null) return null
+        if (allReminders == null || time == null || sort == null || filter == null) return null
 
-        val sortedReminders = when (sort) {
-            RemindersSort.NEWEST_FIRST -> reminders.sortedByDescending { it.startDateTime }
-            else -> reminders.sortedBy { it.startDateTime }
+        val activeReminders = allReminders.filter { reminder ->
+            reminder.startDateTime.isBefore(time)
         }
 
-        return if (filter == null || filter.isBlank()) {
-            sortedReminders
+        val activeSortedReminders = when (sort) {
+            RemindersSort.NEWEST_FIRST -> activeReminders.sortedByDescending { it.startDateTime }
+            else -> activeReminders.sortedBy { it.startDateTime }
+        }
+
+        return if (filter.isBlank()) {
+            activeSortedReminders
         } else {
-            sortedReminders.filter { reminder -> reminder.name.contains(filter, true) }
+            activeSortedReminders.filter { reminder ->
+                reminder.name.contains(filter, true)
+            }
         }
+    }
+
+    fun updateCurrentTime() {
+        currentTime.value = ZonedDateTime.now()
+    }
+
+    fun getMillisUntilNextMinute(): Long {
+        val now = LocalDateTime.now()
+
+        return Duration.between(
+            now,
+            now.plusMinutes(1).truncatedTo(ChronoUnit.MINUTES)
+        )
+            .toMillis()
     }
 
     fun undoDoneReminder(reminder: Reminder) {
@@ -74,91 +96,38 @@ class ActiveReminderListViewModel @Inject constructor(
     }
 
     fun updateDoneReminder(reminder: Reminder) {
-        val updatedDoneReminder = if (reminder.isRepeatReminder()) {
-            getUpdatedRepeatReminder(
-                reminder.id,
-                reminder.name,
-                reminder.startDateTime,
-                reminder.repeatInterval!!,
-                reminder.notes,
-                reminder.isNotificationSent
-            )
-        } else {
-            getCompletedOneOffReminder(
-                reminder.id,
-                reminder.name,
-                reminder.startDateTime,
-                reminder.repeatInterval,
-                reminder.notes,
-                reminder.isNotificationSent
-            )
-        }
-
         viewModelScope.launch(Dispatchers.IO) {
-            repository.updateReminder(updatedDoneReminder)
+            repository.updateReminder(getUpdatedDoneReminder(reminder))
         }
     }
 
-    private fun getCompletedOneOffReminder(
-        id: Long,
-        name: String,
-        startDateTime: ZonedDateTime,
-        repeatInterval: RepeatInterval?,
-        notes: String?,
-        isNotificationSent: Boolean,
-    ): Reminder {
+    private fun getUpdatedDoneReminder(reminder: Reminder): Reminder {
         return Reminder(
-            id = id,
-            name = name,
-            startDateTime = startDateTime,
-            repeatInterval = repeatInterval,
-            notes = notes,
-            isArchived = true,
-            isNotificationSent = isNotificationSent,
+            id = reminder.id,
+            name = reminder.name,
+            startDateTime = getUpdatedStartDateTime(reminder),
+            repeatInterval = reminder.repeatInterval,
+            notes = reminder.notes,
+            isArchived = !reminder.isRepeatReminder(),
+            isNotificationSent = reminder.isNotificationSent,
         )
     }
 
-    private fun getUpdatedRepeatReminder(
-        id: Long,
-        name: String,
-        startDateTime: ZonedDateTime,
-        repeatInterval: RepeatInterval,
-        notes: String?,
-        isNotificationSent: Boolean,
-    ): Reminder {
-        return Reminder(
-            id = id,
-            name = name,
-            startDateTime = getUpdatedStartDateTime(startDateTime, repeatInterval),
-            repeatInterval = repeatInterval,
-            notes = notes,
-            isArchived = false,
-            isNotificationSent = isNotificationSent,
-        )
-    }
+    private fun getUpdatedStartDateTime(reminder: Reminder): ZonedDateTime {
+        val repeatInterval = reminder.repeatInterval ?: return reminder.startDateTime
 
-    private fun getUpdatedStartDateTime(
-        startDateTime: ZonedDateTime,
-        repeatInterval: RepeatInterval,
-    ): ZonedDateTime {
-        val period = Period.between(startDateTime.toLocalDate(), LocalDate.now())
-        val timeValue = repeatInterval.timeValue
-
-        return when (repeatInterval.timeUnit) {
-            ChronoUnit.DAYS -> {
-                val passedDays = period.days
-                val passedIntervals = passedDays.div(timeValue)
-                val nextInterval = passedIntervals.plus(ONE_INTERVAL)
-                val daysUntilNextStart = timeValue * nextInterval
-                startDateTime.plusDays(daysUntilNextStart)
-            }
-            else -> {
-                val passedWeeks = period.days.div(DAYS_IN_WEEK)
-                val passedIntervals = passedWeeks.div(timeValue)
-                val nextInterval = passedIntervals.plus(ONE_INTERVAL)
-                val weeksUntilNextStart = timeValue * nextInterval
-                startDateTime.plusWeeks(weeksUntilNextStart)
-            }
+        val repeatDuration = when (repeatInterval.timeUnit) {
+            ChronoUnit.DAYS -> Duration.ofDays(repeatInterval.timeValue)
+            else -> Duration.ofDays(repeatInterval.timeValue * DAYS_IN_WEEK)
         }
+
+        val passedDuration = Duration.between(reminder.startDateTime, ZonedDateTime.now())
+
+        return reminder.startDateTime
+            .plusSeconds(passedDuration
+                .dividedBy(repeatDuration)
+                .plus(1)
+                .times(repeatDuration.toSeconds())
+            )
     }
 }
