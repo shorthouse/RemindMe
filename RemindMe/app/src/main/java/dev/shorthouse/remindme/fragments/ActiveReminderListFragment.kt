@@ -7,11 +7,16 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import dev.shorthouse.remindme.adapter.ActiveReminderListAdapter
 import dev.shorthouse.remindme.databinding.FragmentActiveReminderListBinding
 import dev.shorthouse.remindme.viewmodel.ActiveReminderListViewModel
 import dev.shorthouse.remindme.viewmodel.ReminderListViewPagerViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import java.time.Duration
+
 
 @AndroidEntryPoint
 class ActiveReminderListFragment : Fragment() {
@@ -35,6 +40,7 @@ class ActiveReminderListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setListAdapter()
         observeListData()
+        startReminderRefreshCoroutine()
     }
 
     private fun setListAdapter() {
@@ -43,9 +49,22 @@ class ActiveReminderListFragment : Fragment() {
     }
 
     private fun observeListData() {
-        viewModel.getReminders(viewPagerViewModel.currentSort, viewPagerViewModel.currentFilter)
+        viewModel.remindersListData(viewPagerViewModel.currentSort, viewPagerViewModel.currentFilter)
             .observe(viewLifecycleOwner) { reminders ->
                 listAdapter.submitList(reminders)
             }
+    }
+
+    private fun startReminderRefreshCoroutine() {
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            delay(viewModel.getMillisUntilNextMinute())
+
+            while (true) {
+                launch {
+                    viewModel.updateCurrentTime()
+                }
+                delay(Duration.ofMinutes(1).toMillis())
+            }
+        }.start()
     }
 }
