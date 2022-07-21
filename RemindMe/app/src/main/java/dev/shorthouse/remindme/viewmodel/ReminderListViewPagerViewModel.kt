@@ -12,7 +12,7 @@ import dev.shorthouse.remindme.utilities.RemindersSort
 
 class ReminderListViewPagerViewModel : ViewModel() {
     val currentSort = MutableLiveData(RemindersSort.NEWEST_FIRST)
-    val currentFilter = MutableLiveData<String>("")
+    val currentFilter = MutableLiveData("")
 
     val sortToMenuItemMap = mapOf(
         RemindersSort.NEWEST_FIRST to R.id.drawer_sort_newest_first,
