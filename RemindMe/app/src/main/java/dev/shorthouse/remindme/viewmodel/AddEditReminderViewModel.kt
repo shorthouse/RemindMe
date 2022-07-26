@@ -176,7 +176,10 @@ class AddEditReminderViewModel @Inject constructor(
         return notes.ifBlank { null }
     }
 
-    fun isNameValid(name: String) = name.isNotBlank()
+    fun isNameValid(name: String): Boolean {
+        return name.isNotBlank()
+    }
+
     fun isRepeatIntervalValid(repeatIntervalValue: Long) = repeatIntervalValue > 0
     fun isStartTimeValid(startDate: String, startTime: String) =
         convertDateTimeStringToDateTime(startDate, startTime).isAfter(ZonedDateTime.now())
