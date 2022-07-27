@@ -180,7 +180,10 @@ class AddEditReminderViewModel @Inject constructor(
         return name.isNotBlank()
     }
 
-    fun isRepeatIntervalValid(repeatIntervalValue: Long) = repeatIntervalValue > 0
+    fun isRepeatIntervalValid(repeatIntervalValue: Long): Boolean {
+        return repeatIntervalValue > 0
+    }
+
     fun isStartTimeValid(startDate: String, startTime: String) =
         convertDateTimeStringToDateTime(startDate, startTime).isAfter(ZonedDateTime.now())
 
