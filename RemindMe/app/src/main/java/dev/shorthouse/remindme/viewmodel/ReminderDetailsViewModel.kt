@@ -39,8 +39,7 @@ class ReminderDetailsViewModel @Inject constructor(
         notificationScheduler.cancelExistingReminderNotification(reminder)
     }
 
-    fun getFormattedStartDate(reminder: Reminder?): String {
-        if (reminder == null) return ""
+    fun getFormattedStartDate(reminder: Reminder): String {
         return reminder.startDateTime
             .toLocalDate()
             .format(DateTimeFormatter.ofPattern(DATE_PATTERN))
