@@ -2,7 +2,6 @@ package dev.shorthouse.remindme.data
 
 import dev.shorthouse.remindme.model.Reminder
 import kotlinx.coroutines.flow.Flow
-import java.time.ZonedDateTime
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -16,10 +15,6 @@ class ReminderRepository @Inject constructor(
 
     fun getReminder(id: Long): Flow<Reminder> {
         return reminderLocalDataSource.getReminder(id)
-    }
-
-    fun getActiveNonArchivedReminders(nowDateTime: ZonedDateTime): Flow<List<Reminder>> {
-        return reminderLocalDataSource.getActiveNonArchivedReminders(nowDateTime)
     }
 
     fun getNonArchivedReminders(): Flow<List<Reminder>> {
