@@ -1,5 +1,6 @@
 package dev.shorthouse.remindme.viewmodel
 
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.shorthouse.remindme.data.ReminderRepository
@@ -22,9 +23,10 @@ class ActiveReminderListViewModel @Inject constructor(
         .getNonArchivedReminders()
         .asLiveData()
 
-    private val currentTime = MutableLiveData(ZonedDateTime.now())
+    @VisibleForTesting
+    val currentTime = MutableLiveData(ZonedDateTime.now())
 
-    fun remindersListData(
+    fun getReminders(
         currentSort: MutableLiveData<RemindersSort>,
         currentFilter: MutableLiveData<String>
     ): LiveData<List<Reminder>> {
@@ -79,9 +81,7 @@ class ActiveReminderListViewModel @Inject constructor(
         currentTime.value = ZonedDateTime.now()
     }
 
-    fun getMillisUntilNextMinute(): Long {
-        val now = LocalDateTime.now()
-
+    fun getMillisUntilNextMinute(now: LocalDateTime = LocalDateTime.now()): Long {
         return Duration.between(
             now,
             now.plusMinutes(1).truncatedTo(ChronoUnit.MINUTES)
@@ -101,7 +101,8 @@ class ActiveReminderListViewModel @Inject constructor(
         }
     }
 
-    private fun getUpdatedDoneReminder(reminder: Reminder): Reminder {
+    @VisibleForTesting
+    fun getUpdatedDoneReminder(reminder: Reminder): Reminder {
         return Reminder(
             id = reminder.id,
             name = reminder.name,

@@ -105,28 +105,21 @@ class AddEditReminderViewModel @Inject constructor(
         notificationScheduler.cancelExistingReminderNotification(reminder)
     }
 
-    fun formatReminderStartDate(reminder: Reminder): String {
-        return reminder.startDateTime
+    fun getFormattedDate(zonedDateTime: ZonedDateTime): String {
+        return zonedDateTime
             .toLocalDate()
             .format(DateTimeFormatter.ofPattern(DATE_INPUT_PATTERN))
             .toString()
     }
 
-    fun getStartDateNow(): String {
-        return ZonedDateTime.now()
-            .toLocalDate()
-            .format(DateTimeFormatter.ofPattern(DATE_INPUT_PATTERN))
-            .toString()
-    }
-
-    fun formatReminderStartTime(reminder: Reminder): String {
-        return reminder.startDateTime
+    fun getFormattedTime(zonedDateTime: ZonedDateTime): String {
+        return zonedDateTime
             .toLocalTime()
             .toString()
     }
 
-    fun getStartTimeNextHour(): String {
-        return ZonedDateTime.now()
+    fun getFormattedTimeNextHour(zonedDateTime: ZonedDateTime): String {
+        return zonedDateTime
             .truncatedTo(ChronoUnit.HOURS)
             .plusHours(1)
             .toLocalTime()
@@ -141,12 +134,12 @@ class AddEditReminderViewModel @Inject constructor(
         return if (reminder.repeatInterval == null) "1" else reminder.repeatInterval.timeValue.toString()
     }
 
-    fun getIsNotificationSent(reminder: Reminder?): Boolean {
-        return reminder?.isNotificationSent ?: false
-    }
-
     fun getRepeatUnit(reminder: Reminder): ChronoUnit {
         return if (reminder.repeatInterval == null) ChronoUnit.DAYS else reminder.repeatInterval.timeUnit
+    }
+
+    fun getIsNotificationSent(reminder: Reminder?): Boolean {
+        return reminder?.isNotificationSent ?: false
     }
 
     fun convertDateTimeStringToDateTime(dateText: String, timeText: String): ZonedDateTime {
@@ -184,7 +177,7 @@ class AddEditReminderViewModel @Inject constructor(
         return repeatIntervalValue > 0
     }
 
-    fun isStartTimeValid(startDate: String, startTime: String) =
-        convertDateTimeStringToDateTime(startDate, startTime).isAfter(ZonedDateTime.now())
-
+    fun isStartTimeValid(startDate: String, startTime: String): Boolean {
+        return convertDateTimeStringToDateTime(startDate, startTime).isAfter(ZonedDateTime.now())
+    }
 }

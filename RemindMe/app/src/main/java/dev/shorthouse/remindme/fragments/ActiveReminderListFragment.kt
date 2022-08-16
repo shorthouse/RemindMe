@@ -17,7 +17,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.Duration
 
-
 @AndroidEntryPoint
 class ActiveReminderListFragment : Fragment() {
     private lateinit var binding: FragmentActiveReminderListBinding
@@ -49,7 +48,7 @@ class ActiveReminderListFragment : Fragment() {
     }
 
     private fun observeListData() {
-        viewModel.remindersListData(viewPagerViewModel.currentSort, viewPagerViewModel.currentFilter)
+        viewModel.getReminders(viewPagerViewModel.currentSort, viewPagerViewModel.currentFilter)
             .observe(viewLifecycleOwner) { reminders ->
                 listAdapter.submitList(reminders)
             }

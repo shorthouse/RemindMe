@@ -118,22 +118,6 @@ class ReminderRepositoryTest {
     }
 
     @Test
-    fun `Get active non archived reminders returns active non archived reminders`() {
-        val activeNonArchivedReminders = reminderRepository
-            .getActiveNonArchivedReminders(ZonedDateTime.now())
-            .asLiveData()
-            .getOrAwaitValue()
-
-        assertThat(activeNonArchivedReminders.forEach {
-            it.isArchived.not() && !it.startDateTime.isBefore(
-                ZonedDateTime.now()
-            )
-        })
-        assertThat(activeNonArchivedReminders).contains(reminder1)
-        assertThat(activeNonArchivedReminders.first()).isEqualTo(localReminders.first())
-    }
-
-    @Test
     fun `Insert reminder inserts specified reminder`() {
         val insertedReminderId = reminderRepository.insertReminder(reminder3)
         val allReminders = reminderRepository.getReminders().asLiveData().getOrAwaitValue()

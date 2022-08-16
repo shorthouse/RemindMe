@@ -25,6 +25,7 @@ import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.databinding.FragmentAddEditReminderBinding
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.viewmodel.AddEditReminderViewModel
+import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
 
 @AndroidEntryPoint
@@ -111,8 +112,8 @@ class AddEditReminderFragment : Fragment() {
     private fun populateEditData(reminder: Reminder) {
         binding.apply {
             nameInput.setText(reminder.name)
-            startDateInput.setText(viewModel.formatReminderStartDate(reminder))
-            startTimeInput.setText(viewModel.formatReminderStartTime(reminder))
+            startDateInput.setText(viewModel.getFormattedDate(reminder.startDateTime))
+            startTimeInput.setText(viewModel.getFormattedTime(reminder.startDateTime))
             notesInput.setText(viewModel.getReminderNotes(reminder))
             notificationSwitch.isChecked = reminder.isNotificationSent
             repeatSwitch.isChecked = reminder.isRepeatReminder()
@@ -123,8 +124,8 @@ class AddEditReminderFragment : Fragment() {
 
     private fun populateAddData() {
         binding.apply {
-            startDateInput.setText(viewModel.getStartDateNow())
-            startTimeInput.setText(viewModel.getStartTimeNextHour())
+            startDateInput.setText(viewModel.getFormattedDate(ZonedDateTime.now()))
+            startTimeInput.setText(viewModel.getFormattedTimeNextHour(ZonedDateTime.now()))
             repeatValueInput.setText(viewModel.defaultRepeatValue)
             setDropdownList(viewModel.defaultRepeatUnit)
         }
@@ -163,10 +164,13 @@ class AddEditReminderFragment : Fragment() {
                 startTimeInput.text.toString()
             )
 
-            val repeatInterval = viewModel.getRepeatInterval(
-                repeatValueInput.text.toString().toLong(),
-                repeatUnitInput.text.toString()
-            )
+            val repeatInterval = null
+            if (binding.repeatSwitch.isChecked) {
+                viewModel.getRepeatInterval(
+                    repeatValueInput.text.toString().toLong(),
+                    repeatUnitInput.text.toString()
+                )
+            }
 
             val reminderNotes = viewModel.getReminderNotes(notesInput.text.toString())
 

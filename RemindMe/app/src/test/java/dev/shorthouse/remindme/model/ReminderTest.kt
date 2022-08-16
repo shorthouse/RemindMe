@@ -1,7 +1,7 @@
 package dev.shorthouse.remindme.model
 
+import com.google.common.truth.Truth.assertThat
 import dev.shorthouse.remindme.data.RepeatInterval
-import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import java.time.ZoneId
@@ -45,22 +45,34 @@ class ReminderTest {
     }
 
     @Test
-    fun reminderModel_OneOffReminder_ReturnsFalse() {
-        assertFalse(oneOffReminder.isRepeatReminder())
+    fun `is repeat reminder on repeat reminder, returns true`() {
+        val isRepeatReminder = reminder.isRepeatReminder()
+
+        assertThat(isRepeatReminder).isTrue()
     }
 
     @Test
-    fun reminderModel_RepeatReminder_ReturnsTrue() {
-        assertTrue(reminder.isRepeatReminder())
+    fun `is repeat reminder on one off reminder, returns false`() {
+        val isRepeatReminder = oneOffReminder.isRepeatReminder()
+
+        assertThat(isRepeatReminder).isFalse()
     }
 
     @Test
-    fun reminderModel_FormattedStartDate_FormatsCorrectly() {
-        assertEquals(reminder.getFormattedStartDate(), "15 Jun 2000")
+    fun `get formatted start date, returns expected formatted start date`() {
+        val expectedDate = "15 Jun 2000"
+
+        val date = reminder.getFormattedStartDate()
+
+        assertThat(date).isEqualTo(expectedDate)
     }
 
     @Test
-    fun reminderModel_FormattedStartTime_FormatsCorrectly() {
-        assertEquals(reminder.getFormattedStartTime(), "19:01")
+    fun `get formatted start time, returns expected formatted start time`() {
+        val expectedTime = "19:01"
+
+        val time = reminder.getFormattedStartTime()
+
+        assertThat(time).isEqualTo(expectedTime)
     }
 }

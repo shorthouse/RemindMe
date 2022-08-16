@@ -70,8 +70,10 @@
     <string name="notification_body_text_reboot_reschedule">Scheduling reminder notifications</string>
     <string name="notification_body_text_time_zone_update">Updating reminder timezones</string>
     <string name="reminder_notification_action_done_text">Done</string>
+
     <string name="notification_channel_id_reminder">NOTIFICATION_CHANNEL_ID_REMINDER</string>
-    <string name="notification_channel_name_reminder">NOTIFICATION_CHANNEL_NAME_REMINDER</string>
+    <string name="notification_channel_name_reminder">Reminders</string>
+
     <string name="notification_channel_id_reboot_reschedule">NOTIFICATION_CHANNEL_ID_REBOOT_RESCHEDULE</string>
     <string name="notification_channel_name_reboot_reschedule">NOTIFICATION_CHANNEL_NAME_REBOOT_RESCHEDULE</string>
     <string name="notification_channel_id_time_zone_update">NOTIFICATION_CHANNEL_ID_TIME_ZONE_UPDATE</string>

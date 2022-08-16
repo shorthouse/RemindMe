@@ -4,6 +4,7 @@ import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.app.PendingIntent.FLAG_ONE_SHOT
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -20,24 +21,17 @@ class DisplayReminderNotificationReceiver : BroadcastReceiver() {
     }
 
     private fun displayReminderNotification(context: Context, intent: Intent) {
+        val intentKeyReminderId = context.getString(R.string.intent_key_reminderId)
+        val reminderNotificationId = intent.getLongExtra(intentKeyReminderId, -1L).toInt()
         val reminderNotification = getReminderNotification(context, intent)
 
-        reminderNotification?.let {
-            NotificationManagerCompat.from(context).notify(
-                intent.getLongExtra(
-                    context.getString(R.string.intent_key_reminderId),
-                    -1L
-                ).toInt(),
-                reminderNotification
-            )
+        if (reminderNotification != null) {
+            NotificationManagerCompat.from(context)
+                .notify(reminderNotificationId, reminderNotification)
         }
     }
 
     private fun getReminderNotification(context: Context, intent: Intent): Notification? {
-        val notificationIntent = Intent(context, MainActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        }
-
         val reminderId =
             intent.getLongExtra(context.getString(R.string.intent_key_reminderId), -1L)
         val notificationTitle =
@@ -47,8 +41,15 @@ class DisplayReminderNotificationReceiver : BroadcastReceiver() {
 
         if (!areIntentValuesValid(reminderId, notificationTitle, notificationText)) return null
 
-        val pendingIntent = PendingIntent.getActivity(
-            context, reminderId.toInt(), notificationIntent, PendingIntent.FLAG_IMMUTABLE
+        val contentIntent = Intent(context, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+
+        val contentPendingIntent = PendingIntent.getActivity(
+            context,
+            reminderId.toInt(),
+            contentIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT
         )
 
         return NotificationCompat.Builder(
@@ -59,25 +60,25 @@ class DisplayReminderNotificationReceiver : BroadcastReceiver() {
             .setContentTitle(notificationTitle)
             .setContentText(notificationText)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setContentIntent(pendingIntent)
+            .setContentIntent(contentPendingIntent)
             .addAction(
                 R.drawable.ic_clock,
                 context.getString(R.string.reminder_notification_action_done_text),
-                getDoneActionIntent(context, reminderId)
+                getDonePendingIntent(context, reminderId)
             )
             .setAutoCancel(true)
             .build()
     }
 
-    private fun getDoneActionIntent(context: Context, reminderId: Long): PendingIntent {
+    private fun getDonePendingIntent(context: Context, reminderId: Long): PendingIntent {
         val doneIntent = Intent(context, NotificationActionDoneReceiver::class.java)
             .putExtra(context.getString(R.string.intent_key_reminderId), reminderId)
 
-        return PendingIntent.getBroadcast(context, reminderId.toInt(), doneIntent, 0)
+        return PendingIntent.getBroadcast(context, reminderId.toInt(), doneIntent, FLAG_ONE_SHOT)
     }
 
     private fun createNotificationChannel(context: Context) {
-        val channel = NotificationChannel(
+        val notificationChannel = NotificationChannel(
             context.getString(R.string.notification_channel_id_reminder),
             context.getString(R.string.notification_channel_name_reminder),
             NotificationManager.IMPORTANCE_HIGH
@@ -86,7 +87,7 @@ class DisplayReminderNotificationReceiver : BroadcastReceiver() {
         val notificationManager =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
 
-        notificationManager?.createNotificationChannel(channel)
+        notificationManager?.createNotificationChannel(notificationChannel)
     }
 
     private fun areIntentValuesValid(
