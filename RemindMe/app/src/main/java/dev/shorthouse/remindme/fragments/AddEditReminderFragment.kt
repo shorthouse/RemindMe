@@ -64,6 +64,7 @@ class AddEditReminderFragment : Fragment() {
             toolbar.setupWithNavController(findNavController())
 
             toolbar.setNavigationIcon(R.drawable.ic_close)
+            toolbar.setNavigationContentDescription(R.string.cd_close_navigate_up)
 
             toolbar.title = when (navigationArgs.isEditReminder) {
                 true -> getString(R.string.toolbar_title_edit_reminder)
@@ -245,6 +246,8 @@ class AddEditReminderFragment : Fragment() {
     }
 
     private fun displayTimePicker() {
+        hideKeyboard()
+
         val timePicker = MaterialTimePicker.Builder()
             .setTimeFormat(TimeFormat.CLOCK_24H)
             .setTitleText(getString(R.string.title_time_picker))
