@@ -40,12 +40,12 @@ class AddEditReminderFragmentTest {
     fun setup() {
         val navigationArgs = AddEditReminderFragmentArgs(isEditReminder = false).toBundle()
 
-        val navController = TestNavHostController(
+        val navHostController = TestNavHostController(
             ApplicationProvider.getApplicationContext()
         )
 
         launchFragmentInHiltContainer<AddEditReminderFragment>(
-            navHostController = navController,
+            navHostController = navHostController,
             fragmentArgs = navigationArgs,
         ) {
             this.activity?.window?.decorView?.let {
@@ -57,7 +57,7 @@ class AddEditReminderFragmentTest {
     }
 
     @Test
-    fun when_add_reminder_fragment_created_should_display_toolbar()  {
+    fun when_add_reminder_fragment_created_should_display_toolbar() {
         onView(withId(R.id.toolbar)).check(matches(isDisplayed()))
         onView(withContentDescription("Close")).check(matches(isClickable()))
         onView(withId(R.id.save_reminder)).check(matches(isClickable()))
