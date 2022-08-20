@@ -122,6 +122,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/hint_reminder_notes"
+                        android:maxLength="10000"
                         tools:text="Make sure scrubbed" />
                 </com.google.android.material.textfield.TextInputLayout>
 
