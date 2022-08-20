@@ -13,12 +13,12 @@ import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.UninstallModules
 import dagger.hilt.components.SingletonComponent
 import dev.shorthouse.remindme.FakeDataSource
+import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.data.ReminderDataSource
 import dev.shorthouse.remindme.data.RepeatInterval
 import dev.shorthouse.remindme.di.DataSourceModule
 import dev.shorthouse.remindme.launchFragmentInHiltContainer
 import dev.shorthouse.remindme.util.TestUtil
-import dev.shorthouse.remindme.R
 import org.hamcrest.core.AllOf.allOf
 import org.hamcrest.core.IsNot.not
 import org.junit.Before
@@ -68,9 +68,19 @@ class ReminderDetailsFragmentTest {
                 TestUtil.createReminder(
                     id = 5L,
                     name = "Test Reminder Details with Everything",
+                    startDateTime = ZonedDateTime.parse("2000-01-01T14:02:00Z"),
                     repeatInterval = RepeatInterval(2, ChronoUnit.WEEKS),
                     isNotificationSent = true,
                     notes = "notes"
+                ),
+                TestUtil.createReminder(
+                    id = 6L,
+                    name = "m".repeat(200),
+                ),
+                TestUtil.createReminder(
+                    id = 7L,
+                    name = "Test Reminder Large Notes",
+                    notes = "m".repeat(5000)
                 ),
             )
             return FakeDataSource(reminders)
@@ -123,16 +133,167 @@ class ReminderDetailsFragmentTest {
         onView(withId(R.id.name)).check(matches(isDisplayed()))
         onView(withId(R.id.ic_calendar)).check(matches(isDisplayed()))
         onView(withId(R.id.start_date)).check(matches(isDisplayed()))
-        onView(withId(R.id.divider_start_date)).check(matches(isDisplayed()))
+        onView(withId(R.id.divider_start_time)).check(matches(isDisplayed()))
+        onView(withId(R.id.ic_clock)).check(matches(isDisplayed()))
+        onView(withId(R.id.start_time)).check(matches(isDisplayed()))
+        onView(withId(R.id.edit_reminder_fab)).check(matches(isDisplayed()))
+        onView(withId(R.id.edit_reminder_fab)).check(matches(isClickable()))
+
+        onView(withId(R.id.divider_repeat_interval)).check(matches(not(isDisplayed())))
+        onView(withId(R.id.ic_repeat)).check(matches(not(isDisplayed())))
+        onView(withId(R.id.repeat_interval)).check(matches(not(isDisplayed())))
+        onView(withId(R.id.divider_notes)).check(matches(not(isDisplayed())))
+        onView(withId(R.id.ic_notes)).check(matches(not(isDisplayed())))
+        onView(withId(R.id.notes)).check(matches(not(isDisplayed())))
+        onView(withId(R.id.divider_notification)).check(matches(not(isDisplayed())))
+        onView(withId(R.id.ic_notification)).check(matches(not(isDisplayed())))
+        onView(withId(R.id.notification)).check(matches(not(isDisplayed())))
+
+        onView(withId(R.id.name)).check(matches(withText("Test Reminder Details")))
+        onView(withId(R.id.start_date)).check(matches(withText("01 Jan 2000")))
+        onView(withId(R.id.start_time)).check(matches(withText("14:02")))
+    }
+
+    @Test
+    fun when_reminder_has_repeat_interval_should_display_repeat_interval_section() {
+        val navigationArgs = ReminderDetailsFragmentArgs(id = 2L).toBundle()
+
+        launchFragmentInHiltContainer<ReminderDetailsFragment>(
+            navHostController = navHostController,
+            fragmentArgs = navigationArgs
+        )
+
+        onView(withId(R.id.divider_repeat_interval)).check(matches(isDisplayed()))
+        onView(withId(R.id.ic_repeat)).check(matches(isDisplayed()))
+        onView(withId(R.id.repeat_interval)).check(matches(isDisplayed()))
+
+        onView(withId(R.id.divider_notes)).check(matches(not(isDisplayed())))
+        onView(withId(R.id.ic_notes)).check(matches(not(isDisplayed())))
+        onView(withId(R.id.notes)).check(matches(not(isDisplayed())))
+        onView(withId(R.id.divider_notification)).check(matches(not(isDisplayed())))
+        onView(withId(R.id.ic_notification)).check(matches(not(isDisplayed())))
+        onView(withId(R.id.notification)).check(matches(not(isDisplayed())))
+
+        onView(withId(R.id.name)).check(matches(withText("Test Reminder Details with Repeat Interval")))
+        onView(withId(R.id.repeat_interval)).check(matches(withText("2 weeks")))
+    }
+
+    @Test
+    fun when_reminder_has_notes_should_display_notes_section() {
+        val navigationArgs = ReminderDetailsFragmentArgs(id = 3L).toBundle()
+
+        launchFragmentInHiltContainer<ReminderDetailsFragment>(
+            navHostController = navHostController,
+            fragmentArgs = navigationArgs
+        )
+
+        onView(withId(R.id.divider_notes)).check(matches(isDisplayed()))
+        onView(withId(R.id.ic_notes)).check(matches(isDisplayed()))
+        onView(withId(R.id.notes)).check(matches(isDisplayed()))
+
+        onView(withId(R.id.divider_repeat_interval)).check(matches(not(isDisplayed())))
+        onView(withId(R.id.ic_repeat)).check(matches(not(isDisplayed())))
+        onView(withId(R.id.repeat_interval)).check(matches(not(isDisplayed())))
+        onView(withId(R.id.divider_notification)).check(matches(not(isDisplayed())))
+        onView(withId(R.id.ic_notification)).check(matches(not(isDisplayed())))
+        onView(withId(R.id.notification)).check(matches(not(isDisplayed())))
+
+        onView(withId(R.id.name)).check(matches(withText("Test Reminder Details with Notes")))
+        onView(withId(R.id.notes)).check(matches(withText("notes")))
+    }
+
+    @Test
+    fun when_reminder_has_notification_enabled_should_display_notification_section() {
+        val navigationArgs = ReminderDetailsFragmentArgs(id = 4L).toBundle()
+
+        launchFragmentInHiltContainer<ReminderDetailsFragment>(
+            navHostController = navHostController,
+            fragmentArgs = navigationArgs
+        )
+
+        onView(withId(R.id.divider_notification)).check(matches(isDisplayed()))
+        onView(withId(R.id.ic_notification)).check(matches(isDisplayed()))
+        onView(withId(R.id.notification)).check(matches(isDisplayed()))
+
+        onView(withId(R.id.divider_repeat_interval)).check(matches(not(isDisplayed())))
+        onView(withId(R.id.ic_repeat)).check(matches(not(isDisplayed())))
+        onView(withId(R.id.repeat_interval)).check(matches(not(isDisplayed())))
+        onView(withId(R.id.divider_notes)).check(matches(not(isDisplayed())))
+        onView(withId(R.id.ic_notes)).check(matches(not(isDisplayed())))
+        onView(withId(R.id.notes)).check(matches(not(isDisplayed())))
+
+        onView(withId(R.id.name)).check(matches(withText("Test Reminder Details with Notification Enabled")))
+        onView(withId(R.id.notification)).check(matches(withText("Notifications enabled")))
+    }
+
+    @Test
+    fun when_reminder_has_all_optional_parts_enabled_should_display_all_optional_parts() {
+        val navigationArgs = ReminderDetailsFragmentArgs(id = 5L).toBundle()
+
+        launchFragmentInHiltContainer<ReminderDetailsFragment>(
+            navHostController = navHostController,
+            fragmentArgs = navigationArgs
+        )
+
+        onView(withId(R.id.name)).check(matches(isDisplayed()))
+        onView(withId(R.id.ic_calendar)).check(matches(isDisplayed()))
+        onView(withId(R.id.start_date)).check(matches(isDisplayed()))
+
+        onView(withId(R.id.divider_start_time)).check(matches(isDisplayed()))
         onView(withId(R.id.ic_clock)).check(matches(isDisplayed()))
         onView(withId(R.id.start_time)).check(matches(isDisplayed()))
 
-        onView(withId(R.id.divider_start_time)).check(matches(not(isDisplayed())))
+        onView(withId(R.id.divider_repeat_interval)).check(matches(isDisplayed()))
+        onView(withId(R.id.ic_repeat)).check(matches(isDisplayed()))
+        onView(withId(R.id.repeat_interval)).check(matches(isDisplayed()))
 
+        onView(withId(R.id.divider_notes)).check(matches(isDisplayed()))
+        onView(withId(R.id.ic_notes)).check(matches(isDisplayed()))
+        onView(withId(R.id.notes)).check(matches(isDisplayed()))
 
-        onView(withId(R.id.name)).check(matches(withText("Test Reminder Details")))
-        onView(withId(R.id.notes)).check(matches(withText("")))
-//        onView(withText("Test Reminder Details")).check(matches(isDisplayed()))
-//        onView(withText("01 Jan 2000"))
+        onView(withId(R.id.divider_notification)).check(matches(isDisplayed()))
+        onView(withId(R.id.ic_notification)).check(matches(isDisplayed()))
+        onView(withId(R.id.notification)).check(matches(isDisplayed()))
+
+        onView(withId(R.id.edit_reminder_fab)).check(matches(isDisplayed()))
+        onView(withId(R.id.edit_reminder_fab)).check(matches(isClickable()))
+
+        onView(withId(R.id.name)).check(matches(withText("Test Reminder Details with Everything")))
+        onView(withId(R.id.start_date)).check(matches(withText("01 Jan 2000")))
+        onView(withId(R.id.start_time)).check(matches(withText("14:02")))
+        onView(withId(R.id.repeat_interval)).check(matches(withText("2 weeks")))
+        onView(withId(R.id.notes)).check(matches(withText("notes")))
+        onView(withId(R.id.notification)).check(matches(withText("Notifications enabled")))
     }
+
+    @Test
+    fun when_reminder_with_largest_possible_name_should_display_correctly() {
+        val navigationArgs = ReminderDetailsFragmentArgs(id = 6L).toBundle()
+
+        launchFragmentInHiltContainer<ReminderDetailsFragment>(
+            navHostController = navHostController,
+            fragmentArgs = navigationArgs
+        )
+
+        onView(withId(R.id.name)).check(matches(isCompletelyDisplayed()))
+        onView(withText("m".repeat(200))).check(matches(isCompletelyDisplayed()))
+    }
+
+    // This will still fail even with scrollview
+    // Put the entire details bit in a scrollview
+    // Need to like check for scrollable
+    // And then enable notifications below it, try to scroll to it, see if is displayed
+    @Test
+    fun when_reminder_with_largest_possible_notes_should_display_correctly() {
+        val navigationArgs = ReminderDetailsFragmentArgs(id = 7L).toBundle()
+
+        launchFragmentInHiltContainer<ReminderDetailsFragment>(
+            navHostController = navHostController,
+            fragmentArgs = navigationArgs
+        )
+
+        onView(withId(R.id.notes)).check(matches(isCompletelyDisplayed()))
+        onView(withText("m".repeat(5000))).check(matches(isCompletelyDisplayed()))
+    }
+
 }
