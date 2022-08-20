@@ -63,7 +63,7 @@
                 tools:text="22 Mar 2022" />
 
             <View
-                android:id="@+id/divider_start_date"
+                android:id="@+id/divider_start_time"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_margin="16dp"
@@ -79,7 +79,7 @@
                 android:contentDescription="@string/cd_icon_clock"
                 android:src="@drawable/ic_clock"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider_start_date" />
+                app:layout_constraintTop_toBottomOf="@+id/divider_start_time" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/start_time"
@@ -93,7 +93,7 @@
                 tools:text="14:30" />
 
             <View
-                android:id="@+id/divider_start_time"
+                android:id="@+id/divider_repeat_interval"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_margin="16dp"
@@ -110,7 +110,7 @@
                 android:contentDescription="@string/cd_icon_repeat"
                 android:src="@drawable/ic_loop"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider_start_time"
+                app:layout_constraintTop_toBottomOf="@+id/divider_repeat_interval"
                 app:showIfRepeatReminder="@{reminder.repeatInterval}"/>
 
             <com.google.android.material.textview.MaterialTextView
@@ -126,7 +126,7 @@
                 tools:text="3 days" />
 
             <View
-                android:id="@+id/divider_interval"
+                android:id="@+id/divider_notes"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_margin="16dp"
@@ -143,7 +143,7 @@
                 android:contentDescription="@string/cd_icon_notes"
                 android:src="@drawable/ic_notes"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider_interval"
+                app:layout_constraintTop_toBottomOf="@+id/divider_notes"
                 app:showIfNotesExist="@{reminder.notes}"/>
 
             <com.google.android.material.textview.MaterialTextView
@@ -156,7 +156,7 @@
                 android:textAppearance="?attr/textAppearanceBody2"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/ic_notes"
-                app:layout_constraintTop_toBottomOf="@+id/divider_interval"
+                app:layout_constraintTop_toBottomOf="@+id/divider_notes"
                 app:showIfNotesExist="@{reminder.notes}"
                 tools:text="Don't forget mouthwash!" />
 
