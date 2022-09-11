@@ -133,7 +133,7 @@ class AddEditReminderFragment : Fragment() {
     }
 
     private fun setDropdownList(repeatUnit: ChronoUnit) {
-        val repeatValue = binding.repeatValueInput.text.toString().toInt()
+        val repeatValue = binding.repeatValueInput.text.toString().toIntOrNull() ?: 0
 
         val dropdownItems = listOf(
             resources.getQuantityString(R.plurals.dropdown_days, repeatValue),
