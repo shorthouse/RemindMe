@@ -11,6 +11,8 @@ import androidx.test.espresso.PerformException
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.typeText
+import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.BoundedMatcher
 import androidx.test.espresso.matcher.ViewMatchers.*
@@ -109,6 +111,95 @@ class ReminderListViewPagerTest {
     }
 
     @Test
+    fun when_search_icon_clicked_should_display_search() {
+        onView(withId(R.id.action_search)).perform(click())
+
+        onView(withId(R.id.search_view)).check(matches(isDisplayed()))
+        onView(withHint("Search")).check(matches(isDisplayed()))
+        onView(withText("RemindMe")).check(doesNotExist())
+        onView(withId(R.id.action_sort)).check(doesNotExist())
+    }
+
+    @Test
+    fun when_reminders_searched_with_some_matching_names_should_display_expected_reminders() {
+        onView(withId(R.id.tab_layout)).perform(selectTabAtPosition(0))
+        onView(withId(R.id.action_search)).perform(click())
+        onView(withId(R.id.search_src_text)).perform(typeText("Newer"))
+
+        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+        val reminder = device.findObject( UiSelector().text("Test Older Reminder"))
+        try {
+            reminder.waitUntilGone(3000)
+
+            onView(
+                allOf(
+                    isDescendantOfA(withId(R.id.active_reminder_recycler)),
+                    withText("Test Newer Reminder")
+                )
+            ).check(matches(isDisplayed()))
+
+            onView(
+                allOf(
+                    isDescendantOfA(withId(R.id.active_reminder_recycler)),
+                    withText("Test Older Reminder")
+                )
+            ).check(doesNotExist())
+        } catch (error: UiObjectNotFoundException) {
+            Log.e("ReminderListViewPagerTest", "Exception", error)
+        }
+    }
+
+    @Test
+    fun when_reminders_searched_with_zero_matching_names_should_display_zero_reminders() {
+        onView(withId(R.id.tab_layout)).perform(selectTabAtPosition(0))
+        onView(withId(R.id.action_search)).perform(click())
+        onView(withId(R.id.search_src_text)).perform(typeText("x"))
+
+        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+        val reminder = device.findObject( UiSelector().text("Test Newer Reminder"))
+        try {
+            reminder.waitUntilGone(3000)
+
+            onView(
+                allOf(
+                    isDescendantOfA(withId(R.id.active_reminder_recycler)),
+                    withText("Test Newer Reminder")
+                )
+            ).check(doesNotExist())
+
+            onView(
+                allOf(
+                    isDescendantOfA(withId(R.id.active_reminder_recycler)),
+                    withText("Test Older Reminder")
+                )
+            ).check(doesNotExist())
+        } catch (error: UiObjectNotFoundException) {
+            Log.e("ReminderListViewPagerTest", "Exception", error)
+        }
+    }
+
+    @Test
+    fun when_reminders_searched_with_all_matching_names_should_display_all_reminders() {
+        onView(withId(R.id.tab_layout)).perform(selectTabAtPosition(0))
+        onView(withId(R.id.action_search)).perform(click())
+        onView(withId(R.id.search_src_text)).perform(typeText("Reminder"))
+
+        onView(
+            allOf(
+                isDescendantOfA(withId(R.id.active_reminder_recycler)),
+                withText("Test Newer Reminder")
+            )
+        ).check(matches(isDisplayed()))
+
+        onView(
+            allOf(
+                isDescendantOfA(withId(R.id.active_reminder_recycler)),
+                withText("Test Older Reminder")
+            )
+        ).check(matches(isDisplayed()))
+    }
+
+    @Test
     fun when_sort_icon_clicked_should_display_bottom_sheet() {
         onView(withId(R.id.action_sort)).perform(click())
         onView(withId(R.id.navigation_view_list_sort)).check(matches(isDisplayed()))
@@ -147,27 +238,19 @@ class ReminderListViewPagerTest {
         onView(withId(R.id.action_sort)).perform(click())
         onView(withId(R.id.drawer_sort_oldest_first)).perform(click())
 
-        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-        val reminder = device.findObject( UiSelector().text("Test Older Reminder"))
-        try {
-            reminder.waitForExists(3000);
+        onView(
+            allOf(
+                withId(R.id.active_reminder_recycler),
+                hasItemAtPosition(hasDescendant(withText("Test Older Reminder")), 0)
+            )
+        ).check(matches(isDisplayed()))
 
-            onView(
-                allOf(
-                    withId(R.id.active_reminder_recycler),
-                    hasItemAtPosition(hasDescendant(withText("Test Older Reminder")), 0)
-                )
-            ).check(matches(isDisplayed()))
-
-            onView(
-                allOf(
-                    withId(R.id.active_reminder_recycler),
-                    hasItemAtPosition(hasDescendant(withText("Test Newer Reminder")), 1)
-                )
-            ).check(matches(isDisplayed()))
-        } catch (error: UiObjectNotFoundException) {
-            Log.e("Test", "Exception", error);
-        }
+        onView(
+            allOf(
+                withId(R.id.active_reminder_recycler),
+                hasItemAtPosition(hasDescendant(withText("Test Newer Reminder")), 1)
+            )
+        ).check(matches(isDisplayed()))
     }
 
     @Test
@@ -179,7 +262,7 @@ class ReminderListViewPagerTest {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
         val reminder = device.findObject( UiSelector().text("Test Older Reminder"))
         try {
-            reminder.waitForExists(3000);
+            reminder.waitForExists(3000)
 
             onView(
                 allOf(
@@ -195,7 +278,7 @@ class ReminderListViewPagerTest {
                 )
             ).check(matches(isDisplayed()))
         } catch (error: UiObjectNotFoundException) {
-            Log.e("Test", "Exception", error);
+            Log.e("ReminderListViewPagerTest", "Exception", error)
         }
     }
 
