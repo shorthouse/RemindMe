@@ -1,27 +1,20 @@
 package dev.shorthouse.remindme.fragments
 
 import android.view.View
-import android.widget.TextView
-import androidx.core.widget.NestedScrollView
 import androidx.navigation.testing.TestNavHostController
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.UiController
-import androidx.test.espresso.ViewAction
-import androidx.test.espresso.action.ScrollToAction
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.RootMatchers.withDecorView
 import androidx.test.espresso.matcher.ViewMatchers.*
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.launchFragmentInHiltContainer
+import dev.shorthouse.remindme.util.checkToastDisplayed
+import dev.shorthouse.remindme.util.setTextInTextView
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import org.hamcrest.Matcher
-import org.hamcrest.Matchers
-import org.hamcrest.core.AllOf.allOf
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -89,18 +82,12 @@ class AddEditReminderFragmentTest {
     }
 
     @Test
-    fun when_saving_reminder_with_empty_name_should_display_error_toast() {
-        onView(withId(R.id.save_reminder)).perform(click())
-        checkToastDisplayed("The name cannot be empty.")
-    }
-
-    @Test
     fun when_saving_reminder_with_time_in_the_past_should_display_error_toast() {
         onView(withId(R.id.name_input)).perform(typeText("Reminder name"))
         onView(withId(R.id.start_date_input)).perform(setTextInTextView("Sat, 01 Jan 2000"))
         onView(withId(R.id.start_time_input)).perform(setTextInTextView("00:00"))
         onView(withId(R.id.save_reminder)).perform(click())
-        checkToastDisplayed("The start time cannot be in the past.")
+        checkToastDisplayed("The start time cannot be in the past.", decorView)
     }
 
     @Test
@@ -138,55 +125,17 @@ class AddEditReminderFragmentTest {
     fun when_valid_reminder_entered_should_display_toast() {
         onView(withId(R.id.name_input)).perform(typeText("Reminder name"))
         onView(withId(R.id.save_reminder)).perform(click())
-        checkToastDisplayed("Reminder saved")
+        checkToastDisplayed("Reminder saved", decorView)
     }
 
     @Test
     fun when_large_notes_input_should_expand_to_scrollable_view() {
         onView(withId(R.id.notes_input)).perform(setTextInTextView("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum"))
         Espresso.closeSoftKeyboard()
-        onView(withId(R.id.repeat_header)).perform(customScrollTo)
+        onView(withId(R.id.add_edit_scroll_view)).perform(swipeUp())
         onView(withId(R.id.repeat_header)).check(matches(isDisplayed()))
     }
 
-    private fun checkToastDisplayed(message: String) {
-        onView(withText(message))
-            .inRoot(withDecorView(Matchers.not(decorView)))
-            .check(matches(isDisplayed()))
-    }
 
-    private fun setTextInTextView(value: String?): ViewAction {
-        return object : ViewAction {
-            override fun getConstraints(): Matcher<View> {
-                return allOf(isDisplayed(), isAssignableFrom(TextView::class.java))
-            }
-
-            override fun perform(uiController: UiController?, view: View) {
-                (view as TextView).text = value
-            }
-
-            override fun getDescription(): String {
-                return "replace text"
-            }
-        }
-    }
-
-    private val customScrollTo: ViewAction = object : ViewAction {
-        override fun getConstraints(): Matcher<View> {
-            return allOf(
-                withEffectiveVisibility(Visibility.VISIBLE), isDescendantOfA(
-                    isAssignableFrom(NestedScrollView::class.java)
-                )
-            )
-        }
-
-        override fun getDescription(): String? {
-            return null
-        }
-
-        override fun perform(uiController: UiController, view: View) {
-            ScrollToAction().perform(uiController, view)
-        }
-    }
 }
 
