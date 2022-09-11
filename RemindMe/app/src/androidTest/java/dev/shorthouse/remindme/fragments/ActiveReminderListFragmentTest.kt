@@ -1,9 +1,9 @@
 package dev.shorthouse.remindme.fragments
 
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.test.espresso.matcher.ViewMatchers.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -57,5 +57,15 @@ class ActiveReminderListFragmentTest {
         onView(withId(R.id.reminder_name)).check(matches(withText("Test Active Reminder")))
         onView(withId(R.id.reminder_date)).check(matches(withText("01 Jan 2000")))
         onView(withId(R.id.reminder_time)).check(matches(withText("14:02")))
+    }
+
+    @Test
+    fun when_reminder_done_button_clicked_should_display_snackbar() {
+        launchFragmentInHiltContainer<ActiveReminderListFragment>(
+            themeResId = R.style.Theme_RemindMe
+        )
+
+        onView(withText("Done")).perform(click())
+        onView(withText("Reminder completed")).check(matches(isDisplayed()))
     }
 }
