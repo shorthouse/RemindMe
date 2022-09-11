@@ -165,13 +165,15 @@ class AddEditReminderFragment : Fragment() {
                 startTimeInput.text.toString()
             )
 
-            val repeatInterval = null
-            if (binding.repeatSwitch.isChecked) {
-                viewModel.getRepeatInterval(
+            val repeatInterval = if (binding.repeatSwitch.isChecked) {
+                 viewModel.getRepeatInterval(
                     repeatValueInput.text.toString().toLong(),
                     repeatUnitInput.text.toString()
                 )
+            } else {
+                null
             }
+
 
             val reminderNotes = viewModel.getReminderNotes(notesInput.text.toString())
 
