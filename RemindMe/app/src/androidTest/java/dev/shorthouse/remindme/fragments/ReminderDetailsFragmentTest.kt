@@ -1,8 +1,12 @@
 package dev.shorthouse.remindme.fragments
 
+import android.view.View
 import androidx.navigation.testing.TestNavHostController
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.swipeUp
+import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import dagger.Module
@@ -19,6 +23,7 @@ import dev.shorthouse.remindme.data.RepeatInterval
 import dev.shorthouse.remindme.di.DataSourceModule
 import dev.shorthouse.remindme.launchFragmentInHiltContainer
 import dev.shorthouse.remindme.util.TestUtil
+import dev.shorthouse.remindme.util.checkToastDisplayed
 import org.hamcrest.core.AllOf.allOf
 import org.hamcrest.core.IsNot.not
 import org.junit.Before
@@ -36,6 +41,7 @@ class ReminderDetailsFragmentTest {
     var hiltRule = HiltAndroidRule(this)
 
     private lateinit var navHostController: TestNavHostController
+    private lateinit var decorView: View
 
     @Module
     @InstallIn(SingletonComponent::class)
@@ -75,12 +81,13 @@ class ReminderDetailsFragmentTest {
                 ),
                 TestUtil.createReminder(
                     id = 6L,
-                    name = "m".repeat(200),
+                    name = "m".repeat(200)
                 ),
                 TestUtil.createReminder(
                     id = 7L,
                     name = "Test Reminder Large Notes",
-                    notes = "m".repeat(5000)
+                    notes = "m".repeat(1000),
+                    isNotificationSent = true
                 ),
             )
             return FakeDataSource(reminders)
@@ -91,16 +98,6 @@ class ReminderDetailsFragmentTest {
     fun setup() {
         navHostController = TestNavHostController(ApplicationProvider.getApplicationContext())
     }
-
-    // Test case of massive reminder name
-    // Check is fully and properly displayed
-    // Also check the limit on this, should have a limit
-
-    // TODO
-    // same for notes, do mega notes
-    // check this has a limit cos i could just put a massive amount in
-    // check if goes off screen that it can scroll down
-    // TODO currently doesn't scroll so isn't visible, make failing test for this
 
     @Test
     fun when_reminder_details_fragment_created_should_display_toolbar() {
@@ -279,10 +276,6 @@ class ReminderDetailsFragmentTest {
         onView(withText("m".repeat(200))).check(matches(isCompletelyDisplayed()))
     }
 
-    // This will still fail even with scrollview
-    // Put the entire details bit in a scrollview
-    // Need to like check for scrollable
-    // And then enable notifications below it, try to scroll to it, see if is displayed
     @Test
     fun when_reminder_with_largest_possible_notes_should_display_correctly() {
         val navigationArgs = ReminderDetailsFragmentArgs(id = 7L).toBundle()
@@ -292,8 +285,63 @@ class ReminderDetailsFragmentTest {
             fragmentArgs = navigationArgs
         )
 
-        onView(withId(R.id.notes)).check(matches(isCompletelyDisplayed()))
-        onView(withText("m".repeat(5000))).check(matches(isCompletelyDisplayed()))
+        onView(withId(R.id.details_scroll_view)).perform(swipeUp())
+        onView(withId(R.id.ic_notification)).check(matches(isCompletelyDisplayed()))
+        onView(withId(R.id.notification)).check(matches(isCompletelyDisplayed()))
     }
 
+    @Test
+    fun when_delete_icon_clicked_should_show_alert_dialog() {
+        val navigationArgs = ReminderDetailsFragmentArgs(id = 1L).toBundle()
+
+        launchFragmentInHiltContainer<ReminderDetailsFragment>(
+            navHostController = navHostController,
+            fragmentArgs = navigationArgs
+        )
+
+        onView(withId(R.id.action_delete)).perform(click())
+        onView(withText("Delete this reminder?")).check(matches(isDisplayed()))
+        onView(withText("Cancel")).check(matches(isDisplayed()))
+        onView(withText("Delete")).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun when_delete_dialog_cancel_button_clicked_should_dismiss_delete_dialog() {
+        val navigationArgs = ReminderDetailsFragmentArgs(id = 1L).toBundle()
+
+        launchFragmentInHiltContainer<ReminderDetailsFragment>(
+            navHostController = navHostController,
+            fragmentArgs = navigationArgs
+        )
+
+        onView(withId(R.id.action_delete)).perform(click())
+        onView(withText("Cancel")).perform(click())
+
+        onView(withText("Delete this reminder?")).check(doesNotExist())
+        onView(withText("Cancel")).check(doesNotExist())
+        onView(withText("Delete")).check(doesNotExist())
+    }
+
+    @Test
+    fun when_delete_dialog_delete_button_clicked_should_dismiss_delete_dialog_and_show_toast() {
+        val navigationArgs = ReminderDetailsFragmentArgs(id = 1L).toBundle()
+
+        launchFragmentInHiltContainer<ReminderDetailsFragment>(
+            navHostController = navHostController,
+            fragmentArgs = navigationArgs
+        ) {
+            this.activity?.window?.decorView?.let {
+                decorView = it
+            }
+        }
+
+        onView(withId(R.id.action_delete)).perform(click())
+        onView(withText("Delete")).perform(click())
+
+        onView(withText("Delete this reminder?")).check(doesNotExist())
+        onView(withText("Cancel")).check(doesNotExist())
+        onView(withText("Delete")).check(doesNotExist())
+
+        checkToastDisplayed("Reminder deleted", decorView)
+    }
 }
