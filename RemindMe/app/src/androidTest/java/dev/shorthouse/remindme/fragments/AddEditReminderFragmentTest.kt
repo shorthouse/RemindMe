@@ -135,7 +135,5 @@ class AddEditReminderFragmentTest {
         onView(withId(R.id.add_edit_scroll_view)).perform(swipeUp())
         onView(withId(R.id.repeat_header)).check(matches(isDisplayed()))
     }
-
-
 }
 
