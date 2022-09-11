@@ -62,7 +62,8 @@ class ReminderDetailsFragment : Fragment() {
             reminder.repeatInterval?.let {
                 repeatInterval.text = resources.getQuantityString(
                     viewModel.getRepeatIntervalId(it),
-                    it.timeValue.toInt()
+                    it.timeValue.toInt(),
+                    it.timeValue
                 )
             }
         }
@@ -103,6 +104,7 @@ class ReminderDetailsFragment : Fragment() {
                 dialog.dismiss()
                 findNavController().navigateUp()
             }
+
     }
 
     private fun navigateToEditReminder() {
