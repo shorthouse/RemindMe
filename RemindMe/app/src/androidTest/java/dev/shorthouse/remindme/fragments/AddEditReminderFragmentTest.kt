@@ -122,6 +122,24 @@ class AddEditReminderFragmentTest {
     }
 
     @Test
+    fun when_saving_reminder_with_empty_repeat_interval_should_display_error_toast() {
+        onView(withId(R.id.name_input)).perform(typeText("Reminder name"))
+        onView(withId(R.id.repeat_switch)).perform(click())
+        onView(withId(R.id.repeat_value_input)).perform(replaceText(""))
+        onView(withId(R.id.save_reminder)).perform(click())
+        checkToastDisplayed("The repeat interval cannot be empty.", decorView)
+    }
+
+    @Test
+    fun when_saving_reminder_with_zero_repeat_interval_should_display_error_toast() {
+        onView(withId(R.id.name_input)).perform(typeText("Reminder name"))
+        onView(withId(R.id.repeat_switch)).perform(click())
+        onView(withId(R.id.repeat_value_input)).perform(replaceText("0"))
+        onView(withId(R.id.save_reminder)).perform(click())
+        checkToastDisplayed("The repeat interval cannot be empty.", decorView)
+    }
+
+    @Test
     fun when_valid_reminder_entered_should_display_toast() {
         onView(withId(R.id.name_input)).perform(typeText("Reminder name"))
         onView(withId(R.id.save_reminder)).perform(click())
