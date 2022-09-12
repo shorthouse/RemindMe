@@ -57,6 +57,7 @@ class AddEditReminderFragment : Fragment() {
 
     private fun setAddOrEdit() {
         viewModel.isEditReminder = navigationArgs.isEditReminder
+        viewModel.isAddReminder = viewModel.isEditReminder.not()
     }
 
     private fun setupToolbar() {
@@ -219,9 +220,9 @@ class AddEditReminderFragment : Fragment() {
             return false
         }
 
-        val repeatIntervalValue = binding.repeatValueInput.text.toString().toLong()
-        if (!viewModel.isRepeatIntervalValid(repeatIntervalValue)) {
-            displayToast(R.string.error_interval_zero)
+        val repeatIntervalValue = binding.repeatValueInput.text.toString().toLongOrNull() ?: 0L
+        if (viewModel.isRepeatIntervalEmpty(repeatIntervalValue)) {
+            displayToast(R.string.error_interval_empty)
             return false
         }
 
