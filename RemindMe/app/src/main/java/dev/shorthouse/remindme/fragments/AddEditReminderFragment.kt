@@ -64,6 +64,7 @@ class AddEditReminderFragment : Fragment() {
             toolbar.setupWithNavController(findNavController())
 
             toolbar.setNavigationIcon(R.drawable.ic_close)
+            toolbar.setNavigationContentDescription(R.string.cd_close_navigate_up)
 
             toolbar.title = when (navigationArgs.isEditReminder) {
                 true -> getString(R.string.toolbar_title_edit_reminder)
@@ -132,7 +133,7 @@ class AddEditReminderFragment : Fragment() {
     }
 
     private fun setDropdownList(repeatUnit: ChronoUnit) {
-        val repeatValue = binding.repeatValueInput.text.toString().toInt()
+        val repeatValue = binding.repeatValueInput.text.toString().toIntOrNull() ?: 0
 
         val dropdownItems = listOf(
             resources.getQuantityString(R.plurals.dropdown_days, repeatValue),
@@ -164,13 +165,15 @@ class AddEditReminderFragment : Fragment() {
                 startTimeInput.text.toString()
             )
 
-            val repeatInterval = null
-            if (binding.repeatSwitch.isChecked) {
-                viewModel.getRepeatInterval(
+            val repeatInterval = if (binding.repeatSwitch.isChecked) {
+                 viewModel.getRepeatInterval(
                     repeatValueInput.text.toString().toLong(),
                     repeatUnitInput.text.toString()
                 )
+            } else {
+                null
             }
+
 
             val reminderNotes = viewModel.getReminderNotes(notesInput.text.toString())
 
@@ -245,6 +248,8 @@ class AddEditReminderFragment : Fragment() {
     }
 
     private fun displayTimePicker() {
+        hideKeyboard()
+
         val timePicker = MaterialTimePicker.Builder()
             .setTimeFormat(TimeFormat.CLOCK_24H)
             .setTitleText(getString(R.string.title_time_picker))

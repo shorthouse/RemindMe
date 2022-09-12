@@ -20,12 +20,12 @@
                 android:layout_gravity="end"
                 android:backgroundTint="@color/black"
                 android:layout_marginEnd="16dp"
-                android:text="@string/btn_save_reminder"
-                />
+                android:text="@string/btn_save_reminder" />
 
         </com.google.android.material.appbar.MaterialToolbar>
 
         <androidx.core.widget.NestedScrollView
+            android:id="@+id/add_edit_scroll_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="?attr/actionBarSize" >
@@ -122,6 +122,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/hint_reminder_notes"
+                        android:maxLength="10000"
                         tools:text="Make sure scrubbed" />
                 </com.google.android.material.textfield.TextInputLayout>
 

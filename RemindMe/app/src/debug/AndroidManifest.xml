@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="dev.shorthouse.remindme">
+
+    <application>
+        <activity android:name="dev.shorthouse.remindme.HiltTestActivity"
+            android:exported="false" />
+    </application>
+
+</manifest>

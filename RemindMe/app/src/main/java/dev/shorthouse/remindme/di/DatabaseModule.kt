@@ -1,7 +1,6 @@
 package dev.shorthouse.remindme.di
 
 import android.content.Context
-import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -11,7 +10,6 @@ import dev.shorthouse.remindme.data.ReminderDataSource
 import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.data.source.local.ReminderDao
 import dev.shorthouse.remindme.data.source.local.ReminderDatabase
-import dev.shorthouse.remindme.data.source.local.ReminderLocalDataSource
 import javax.inject.Singleton
 
 @Module
@@ -34,12 +32,5 @@ class DatabaseModule {
     fun provideReminderRepository(reminderDataSource: ReminderDataSource): ReminderRepository {
         return ReminderRepository(reminderDataSource)
     }
-}
-
-@Module
-@InstallIn(SingletonComponent::class)
-interface RepositoriesModule {
-    @Binds
-    fun reminderDataSource(reminderLocalDataSource: ReminderLocalDataSource): ReminderDataSource
 }
 

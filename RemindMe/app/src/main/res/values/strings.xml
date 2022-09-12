@@ -22,6 +22,7 @@
     <string name="title_send_notification">Send Notification</string>
     <string name="toolbar_save_action_title">Save</string>
     <string name="btn_save_reminder">Save</string>
+    <string name="cd_close_navigate_up">Close</string>
 
     <plurals name="dropdown_days">
         <item quantity="one">day</item>
