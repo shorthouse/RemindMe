@@ -11,7 +11,7 @@
     <string name="title_repeat_reminder">Repeat Reminder</string>
     <string name="error_name_empty">The name cannot be empty.</string>
     <string name="error_time_past">The start time cannot be in the past.</string>
-    <string name="error_interval_zero">The repeat interval cannot be 0.</string>
+    <string name="error_interval_empty">The repeat interval cannot be empty.</string>
     <string name="title_date_picker">Select reminder start date</string>
     <string name="title_time_picker">Select reminder start time</string>
     <string name="tag_reminder_date_picker">reminder_date_picker</string>
@@ -100,6 +100,7 @@
     <string name="toolbar_title_add_reminder">Add reminder</string>
     <string name="snackbar_reminder_completed">Reminder completed</string>
     <string name="snackbar_reminder_completed_undo">Undo</string>
+    <string name="cd_reminder_tabs">Reminder tabs</string>
 
 
 </resources>
