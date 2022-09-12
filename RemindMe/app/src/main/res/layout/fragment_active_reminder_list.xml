@@ -17,6 +17,7 @@
                 android:id="@+id/active_reminder_recycler"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
