@@ -11,8 +11,7 @@
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBarLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:elevation="0dp">
+            android:layout_height="wrap_content">
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"
@@ -20,25 +19,23 @@
                 android:layout_height="?attr/actionBarSize"
                 app:title="@string/app_name"
                 app:menu="@menu/toolbar_reminder_list"
-                style="@style/Widget.MaterialComponents.Toolbar.Primary">
+                style="@style/Widget.MaterialComponents.Toolbar.Primary" />
 
-            </com.google.android.material.appbar.MaterialToolbar>
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tab_layout"
+                style="@style/Widget.MaterialComponents.TabLayout.Colored"
+                android:layout_width="match_parent"
+                android:elevation="4dp"
+                android:contentDescription="@string/cd_reminder_tabs"
+                android:layout_height="?attr/actionBarSize"
+                app:tabTextColor="?attr/colorOnPrimary"/>
 
         </com.google.android.material.appbar.AppBarLayout>
-
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tab_layout"
-            style="@style/Widget.MaterialComponents.TabLayout.Colored"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:layout_marginTop="?attr/actionBarSize"
-            app:tabTextColor="?attr/colorOnPrimary"/>
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/view_pager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="?attr/actionBarSize"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
         <FrameLayout
