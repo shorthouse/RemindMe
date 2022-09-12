@@ -25,7 +25,7 @@ class AddEditReminderViewModel @Inject constructor(
 ) : ViewModel() {
 
     var isEditReminder = false
-    var isAddReminder = isEditReminder.not()
+    var isAddReminder = false
 
     val defaultRepeatValue = "1"
     val defaultRepeatUnit = ChronoUnit.DAYS
@@ -173,8 +173,8 @@ class AddEditReminderViewModel @Inject constructor(
         return name.isNotBlank()
     }
 
-    fun isRepeatIntervalValid(repeatIntervalValue: Long): Boolean {
-        return repeatIntervalValue > 0
+    fun isRepeatIntervalEmpty(repeatIntervalValue: Long): Boolean {
+        return repeatIntervalValue == 0L
     }
 
     fun isStartTimeValid(startDate: String, startTime: String): Boolean {
