@@ -52,7 +52,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="16dp"
                     android:contentDescription="@string/cd_icon_calendar"
-                    android:src="@drawable/ic_calendar_today"
+                    android:src="@drawable/ic_calendar"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/name" />
 
@@ -113,7 +113,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="16dp"
                     android:contentDescription="@string/cd_icon_repeat"
-                    android:src="@drawable/ic_loop"
+                    android:src="@drawable/ic_repeat"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/divider_repeat_interval"
                     app:showIfRepeatReminder="@{reminder.repeatInterval}"/>
