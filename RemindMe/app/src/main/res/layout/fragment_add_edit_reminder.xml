@@ -40,10 +40,10 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/name_label"
                     style="@style/ThemeOverlay.Material3.AutoCompleteTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_height="60dp"
                     android:hint="@string/hint_reminder_name"
-                    app:errorEnabled="true"
+                    app:boxStrokeWidth="0dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
@@ -52,28 +52,29 @@
                         android:id="@+id/name_input"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="textAutoComplete"
-                        android:singleLine="true"
-                        android:maxLength="200"
+                        android:backgroundTint="@android:color/transparent"
                         android:imeOptions="actionDone"
+                        android:inputType="textAutoComplete"
+                        android:maxLength="200"
+                        android:singleLine="true"
                         tools:text="Brush teeth" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/start_date_label"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    app:errorEnabled="true"
+                    android:layout_height="60dp"
+                    android:background="@android:color/transparent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/name_label"
-                    app:startIconDrawable="@drawable/ic_calendar_today">
+                    app:startIconDrawable="@drawable/ic_calendar">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/start_date_input"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:backgroundTint="@android:color/transparent"
                         android:clickable="false"
                         android:cursorVisible="false"
                         android:focusable="false"
@@ -86,9 +87,7 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/start_time_label"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    app:errorEnabled="true"
+                    android:layout_height="60dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/start_date_label"
@@ -98,6 +97,7 @@
                         android:id="@+id/start_time_input"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:backgroundTint="@android:color/transparent"
                         android:clickable="false"
                         android:cursorVisible="false"
                         android:focusable="false"
@@ -110,8 +110,7 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/notes_label"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:layout_height="60dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/start_time_label"
@@ -121,6 +120,7 @@
                         android:id="@+id/notes_input"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:backgroundTint="@android:color/transparent"
                         android:hint="@string/hint_reminder_notes"
                         android:maxLength="10000"
                         tools:text="Make sure scrubbed" />
@@ -141,7 +141,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:text="@string/title_send_notification"
-                    android:textColor="@android:color/black"
+                    android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
                     android:textSize="20sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/notes_label" />
@@ -152,6 +152,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:text="@string/title_repeat_reminder"
+                    android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
                     android:textColor="@android:color/black"
                     android:textSize="20sp"
                     app:layout_constraintStart_toStartOf="parent"
@@ -166,36 +167,25 @@
                     app:layout_constraintTop_toTopOf="@+id/repeat_header"
                     tools:checked="true" />
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/repeats_every_header"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="@string/title_repeats_every"
-                    android:textColor="@android:color/black"
-                    android:textSize="20sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/repeat_header"
-                    app:showIfRepeatChecked="@{repeatSwitch.checked}" />
-
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/repeat_value_label"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="8dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/repeats_every_header"
-                    app:showIfRepeatChecked="@{repeatSwitch.checked}" >
+                    app:layout_constraintTop_toBottomOf="@+id/repeat_header"
+                    app:showIfRepeatChecked="@{repeatSwitch.checked}">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/repeat_value_input"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:maxLength="2"
+                        android:layout_height="55dp"
+                        android:gravity="center"
                         android:inputType="number"
+                        android:maxLength="2"
                         tools:text="2" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -204,25 +194,22 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintBottom_toBottomOf="@+id/repeat_value_label"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
                     app:layout_constraintStart_toEndOf="@+id/repeat_value_label"
-                    app:layout_constraintTop_toTopOf="@+id/repeat_value_label"
-                    app:showIfRepeatChecked="@{repeatSwitch.checked}" >
+                    app:layout_constraintTop_toBottomOf="@+id/repeat_header"
+                    app:showIfRepeatChecked="@{repeatSwitch.checked}">
 
                     <AutoCompleteTextView
                         android:id="@+id/repeat_unit_input"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:inputType="none"
-                        tools:text="day"
-                        tools:ignore="LabelFor" />
+                        tools:ignore="LabelFor"
+                        tools:text="day" />
 
                 </com.google.android.material.textfield.TextInputLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
-
-
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
-
 </layout>
