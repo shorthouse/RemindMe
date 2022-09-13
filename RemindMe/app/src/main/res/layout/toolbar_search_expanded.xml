@@ -5,7 +5,10 @@
     android:id="@+id/search_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:theme="@style/searchViewStyle"
+    android:background="@drawable/rounded_corner"
+    app:closeIcon="@drawable/ic_close_search"
     app:defaultQueryHint="@string/top_app_bar_search"
     app:searchHintIcon="@null" />
+
+
 
