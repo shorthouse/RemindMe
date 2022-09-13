@@ -14,12 +14,6 @@
         <!-- Customize your theme here. -->
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="searchViewStyle">@style/searchViewStyle</item>
-    </style>
-
-    <style name="searchViewStyle" parent="Widget.AppCompat.SearchView">
-        <item name="android:textColorHint">@color/grey_hint</item>
-        <item name="android:editTextColor">@color/design_default_color_on_primary</item>
     </style>
 
 </resources>
