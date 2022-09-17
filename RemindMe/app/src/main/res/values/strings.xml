@@ -8,7 +8,7 @@
     <string name="hint_reminder_time">Reminder start time</string>
     <string name="hint_reminder_notes">Notes</string>
     <string name="format_reminder_time">%1$s:%2$s</string>
-    <string name="title_repeat_reminder">Repeat Reminder</string>
+    <string name="title_repeat_reminder">Repeat reminder</string>
     <string name="error_name_empty">The name cannot be empty.</string>
     <string name="error_time_past">The start time cannot be in the past.</string>
     <string name="error_interval_empty">The repeat interval cannot be empty.</string>
@@ -19,7 +19,7 @@
     <string name="time_unit_days">days</string>
     <string name="title_repeats_every">Repeats every</string>
     <string name="toast_reminder_saved">Reminder saved</string>
-    <string name="title_send_notification">Notification</string>
+    <string name="title_send_notification">Send notification</string>
     <string name="toolbar_save_action_title">Save</string>
     <string name="btn_save_reminder">Save</string>
     <string name="cd_close_navigate_up">Close</string>
