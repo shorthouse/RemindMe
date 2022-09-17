@@ -19,7 +19,7 @@
     <string name="time_unit_days">days</string>
     <string name="title_repeats_every">Repeats every</string>
     <string name="toast_reminder_saved">Reminder saved</string>
-    <string name="title_send_notification">Send Notification</string>
+    <string name="title_send_notification">Notification</string>
     <string name="toolbar_save_action_title">Save</string>
     <string name="btn_save_reminder">Save</string>
     <string name="cd_close_navigate_up">Close</string>
@@ -101,6 +101,13 @@
     <string name="snackbar_reminder_completed">Reminder completed</string>
     <string name="snackbar_reminder_completed_undo">Undo</string>
     <string name="cd_reminder_tabs">Reminder tabs</string>
+    <string name="empty_state_active_title">No active reminders</string>
+    <string name="empty_state_active_subtitle">You\'re all caught up</string>
+    <string name="empty_state_search_title">No reminders found</string>
+    <string name="empty_state_search_subtitle">Try adjusting your search</string>
+    <string name="empty_state_all_title">No reminders</string>
+    <string name="empty_state_all_subtitle">Add a reminder to get started</string>
+    <string name="cd_save_reminder">Save reminder</string>
 
 
 </resources>
