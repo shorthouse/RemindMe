@@ -1,5 +1,6 @@
 package dev.shorthouse.remindme.fragments
 
+import android.app.TimePickerDialog
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT
-import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
@@ -222,13 +222,13 @@ class AddEditReminderFragment : Fragment() {
             .build()
 
         val datePicker = MaterialDatePicker.Builder.datePicker()
-            .setTitleText(getString(R.string.title_date_picker))
             .setCalendarConstraints(constraints)
+            .setTitleText("")
             .build()
 
         datePicker.addOnPositiveButtonClickListener { dateTimestamp ->
             binding.startDateInput.setText(
-                viewModel.formatDatePickerDate(dateTimestamp)
+                viewModel.convertEpochMilliToDate(dateTimestamp)
             )
         }
 
@@ -236,20 +236,15 @@ class AddEditReminderFragment : Fragment() {
     }
 
     private fun displayTimePicker() {
-        hideKeyboard()
-
-        val timePicker = MaterialTimePicker.Builder()
-            .setTimeFormat(TimeFormat.CLOCK_24H)
-            .setTitleText(getString(R.string.title_time_picker))
-            .build()
-
-        timePicker.addOnPositiveButtonClickListener {
+        val onTimeSetListener = TimePickerDialog.OnTimeSetListener { timePicker, selectedHour, selectedMinute ->
             binding.startTimeInput.setText(
-                viewModel.formatTimePickerTime(timePicker.hour, timePicker.minute)
+                viewModel.formatTimePickerTime(selectedHour, selectedMinute)
             )
         }
 
-        timePicker.show(parentFragmentManager, getString(R.string.tag_reminder_time_picker))
+        val timePickerDialog = TimePickerDialog(context, onTimeSetListener, 0, 0, true)
+
+        timePickerDialog.show()
     }
 
     private fun showKeyboard() {
