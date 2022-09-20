@@ -35,36 +35,44 @@
                 android:id="@+id/constraintLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="8dp"
                 android:paddingBottom="32dp"
                 tools:context=".fragments.AddEditReminderFragment">
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/name_label"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    app:boxStrokeWidth="0dp"
+                    app:boxStrokeWidthFocused="0dp"
+                    app:hintEnabled="false"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" >
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/name_input"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:paddingStart="0dp"
+                        android:paddingEnd="0dp"
+                        android:hint="@string/hint_reminder_name"
                         android:imeOptions="actionDone"
                         android:inputType="textAutoComplete"
                         android:maxLength="200"
+                        android:textStyle="bold"
                         android:singleLine="true"
-                        android:textSize="18sp"
-                        tools:text="Brush teeth" />
+                        android:paddingBottom="8dp"
+                        android:textSize="20sp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/start_date_icon"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:layout_marginTop="4dp"
                     android:src="@drawable/ic_calendar"
                     app:layout_constraintBottom_toBottomOf="@+id/start_date_label"
                     app:layout_constraintStart_toStartOf="parent"
@@ -72,14 +80,15 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/start_date_label"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="16dp"
+                    app:boxStrokeWidth="0dp"
+                    app:boxStrokeWidthFocused="0dp"
+                    app:hintEnabled="false"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/start_date_icon"
-                    app:layout_constraintTop_toBottomOf="@+id/name_label"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" >
+                    app:layout_constraintTop_toBottomOf="@+id/name_label">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/start_date_input"
@@ -98,7 +107,6 @@
                     android:id="@+id/start_time_icon"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:layout_marginTop="4dp"
                     android:src="@drawable/ic_clock"
                     app:layout_constraintBottom_toBottomOf="@+id/start_time_label"
                     app:layout_constraintStart_toStartOf="parent"
@@ -106,14 +114,15 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/start_time_label"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="16dp"
+                    app:boxStrokeWidth="0dp"
+                    app:boxStrokeWidthFocused="0dp"
+                    app:hintEnabled="false"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/start_time_icon"
-                    app:layout_constraintTop_toBottomOf="@+id/start_date_label"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" >
+                    app:layout_constraintTop_toBottomOf="@+id/start_date_label">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/start_time_input"
@@ -123,39 +132,38 @@
                         android:cursorVisible="false"
                         android:focusable="false"
                         android:focusableInTouchMode="false"
-                        android:inputType="time"
                         android:textSize="18sp"
-                        tools:text="16:37 PM" />
+                        tools:text="16:30" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/notes_icon"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="18dp"
                     android:src="@drawable/ic_notes"
-                    app:layout_constraintBottom_toBottomOf="@+id/notes_label"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/notes_label" />
+                    app:layout_constraintTop_toBottomOf="@+id/start_time_label" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/notes_label"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="16dp"
+                    app:boxStrokeWidth="0dp"
+                    app:boxStrokeWidthFocused="0dp"
+                    app:hintEnabled="false"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/notes_icon"
-                    app:layout_constraintTop_toBottomOf="@+id/start_time_label"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" >
+                    app:layout_constraintTop_toBottomOf="@+id/start_time_label">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/notes_input"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:hint="@string/hint_reminder_notes"
                         android:maxLength="10000"
-                        android:textSize="18sp"
-                        tools:text="Make sure scrubbed" />
+                        android:textSize="18sp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.imageview.ShapeableImageView
@@ -171,8 +179,8 @@
                     android:id="@+id/notification_header"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="24dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="12dp"
                     android:text="@string/title_send_notification"
                     android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
                     android:textSize="18sp"
@@ -201,8 +209,8 @@
                     android:id="@+id/repeat_header"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="24dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="28dp"
                     android:text="@string/title_repeat_reminder"
                     android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
                     android:textColor="@android:color/black"
