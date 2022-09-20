@@ -3,10 +3,10 @@
     <string name="reminder_database_name">reminder_database</string>
 
     <!-- Add edit reminder -->
-    <string name="hint_reminder_name">Name</string>
+    <string name="hint_reminder_name">RemindMe to...</string>
     <string name="hint_reminder_date">Reminder start date</string>
     <string name="hint_reminder_time">Reminder start time</string>
-    <string name="hint_reminder_notes">Notes</string>
+    <string name="hint_reminder_notes">Add notes</string>
     <string name="format_reminder_time">%1$s:%2$s</string>
     <string name="title_repeat_reminder">Repeat reminder</string>
     <string name="error_name_empty">The name cannot be empty.</string>
@@ -23,6 +23,7 @@
     <string name="toolbar_save_action_title">Save</string>
     <string name="btn_save_reminder">Save</string>
     <string name="cd_close_navigate_up">Close</string>
+
 
     <plurals name="dropdown_days">
         <item quantity="one">day</item>
@@ -108,6 +109,6 @@
     <string name="empty_state_all_title">No reminders</string>
     <string name="empty_state_all_subtitle">Add a reminder to get started</string>
     <string name="cd_save_reminder">Save reminder</string>
-
+    <string name="cd_details_delete">Delete</string>
 
 </resources>
