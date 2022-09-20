@@ -150,7 +150,7 @@ class AddEditReminderViewModel @Inject constructor(
             .atZone(ZoneId.systemDefault())
     }
 
-    fun formatDatePickerDate(dateTimestamp: Long): String {
+    fun convertEpochMilliToDate(dateTimestamp: Long): String {
         return Instant.ofEpochMilli(dateTimestamp)
             .atZone(ZoneId.systemDefault())
             .format(DateTimeFormatter.ofPattern(DATE_INPUT_PATTERN))
