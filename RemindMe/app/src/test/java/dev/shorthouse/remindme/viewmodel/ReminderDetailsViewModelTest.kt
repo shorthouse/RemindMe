@@ -110,13 +110,13 @@ class ReminderDetailsViewModelTest {
 
     @Test
     fun `get repeat interval id on days, returns days`() {
-        val repeatIntervalId = viewModel.getRepeatIntervalId(reminder1.repeatInterval!!)
+        val repeatIntervalId = viewModel.getRepeatIntervalStringId(reminder1.repeatInterval!!)
         assertThat(repeatIntervalId).isEqualTo(R.plurals.interval_days)
     }
 
     @Test
     fun `get repeat interval id on weeks, returns weeks`() {
-        val repeatIntervalId = viewModel.getRepeatIntervalId(reminder2.repeatInterval!!)
+        val repeatIntervalId = viewModel.getRepeatIntervalStringId(reminder2.repeatInterval!!)
         assertThat(repeatIntervalId).isEqualTo(R.plurals.interval_weeks)
     }
 }

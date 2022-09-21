@@ -27,4 +27,7 @@ interface ReminderDao {
 
     @Delete
     fun delete(reminder: Reminder)
+
+    @Query("UPDATE reminder SET isArchived = 1 WHERE id = :id")
+    fun archive(id: Long)
 }

@@ -11,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import dev.shorthouse.remindme.adapter.ActiveReminderListAdapter
 import dev.shorthouse.remindme.databinding.FragmentActiveReminderListBinding
+import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.viewmodel.ActiveReminderListViewModel
 import dev.shorthouse.remindme.viewmodel.ReminderListViewPagerViewModel
 import kotlinx.coroutines.delay
@@ -38,7 +39,7 @@ class ActiveReminderListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setListAdapter()
-        observeListData()
+        setListData()
         startReminderRefreshCoroutine()
     }
 
@@ -47,10 +48,13 @@ class ActiveReminderListFragment : Fragment() {
         binding.activeReminderRecycler.adapter = listAdapter
     }
 
-    private fun observeListData() {
+    private fun setListData() {
         viewModel.getReminders(viewPagerViewModel.currentSort, viewPagerViewModel.currentFilter)
             .observe(viewLifecycleOwner) { reminders ->
-                listAdapter.submitList(reminders)
+                reminders?.let {
+                    listAdapter.submitList(reminders)
+                    displayListState(reminders)
+                }
             }
     }
 
@@ -65,5 +69,36 @@ class ActiveReminderListFragment : Fragment() {
                 delay(Duration.ofMinutes(1).toMillis())
             }
         }.start()
+    }
+
+    private fun displayListState(reminders: List<Reminder>) {
+        if (reminders.isNotEmpty()) {
+            displayReminderList()
+        } else {
+            if (viewPagerViewModel.currentFilter.value?.isNotEmpty() == true) {
+                displaySearchEmptyState()
+            } else {
+                displayEmptyState()
+            }
+        }
+    }
+
+    private fun displayEmptyState() {
+        binding.emptyStateGroup.visibility = View.VISIBLE
+        binding.emptyStateSearchGroup.visibility = View.GONE
+        binding.activeReminderRecycler.visibility = View.GONE
+
+    }
+
+    private fun displaySearchEmptyState() {
+        binding.emptyStateSearchGroup.visibility = View.VISIBLE
+        binding.emptyStateGroup.visibility = View.GONE
+        binding.activeReminderRecycler.visibility = View.GONE
+    }
+
+    private fun displayReminderList() {
+        binding.activeReminderRecycler.visibility = View.VISIBLE
+        binding.emptyStateGroup.visibility = View.GONE
+        binding.emptyStateSearchGroup.visibility = View.GONE
     }
 }

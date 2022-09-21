@@ -20,65 +20,87 @@
         android:id="@+id/active_reminder_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
         android:onClick="@{detailsClickListener}">
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/reminder_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="14dp"
             android:layout_marginEnd="16dp"
+            android:ellipsize="end"
             android:maxLines="1"
             android:text="@{reminder.name}"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-            app:layout_constraintEnd_toStartOf="@+id/reminder_done"
+            android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+            android:textSize="17sp"
+            app:layout_constraintEnd_toStartOf="@+id/done_checkbox"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:ellipsize="end"
-            tools:text="Brush teethBrush teethBrush teeth" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/reminder_done"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/btn_reminder_done"
-            android:onClick="@{doneClickListener}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-        </com.google.android.material.button.MaterialButton>
-
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/reminder_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
-            android:text="@{reminder.getFormattedStartTime()}"
-            app:layout_constraintTop_toBottomOf="@id/reminder_name"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:text="21:49" />
+            tools:text="Brush teeth and don't forget to mouthwash and swill" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/reminder_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="14dp"
             android:text="@{reminder.getFormattedStartDate()}"
-            app:layout_constraintStart_toEndOf="@+id/reminder_time"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+            android:textColor="@color/subtitle_grey"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/reminder_name"
-            tools:text="2022-02-07" />
+            tools:text="14 Aug 2022" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="?attr/dividerHorizontal"
-            android:layout_marginTop="16dp"
-            app:layout_constraintTop_toBottomOf="@id/reminder_time"
-            app:layout_constraintStart_toStartOf="parent" />
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/reminder_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@{reminder.getFormattedStartTime()}"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+            android:textColor="@color/subtitle_grey"
+            app:layout_constraintBottom_toBottomOf="@+id/reminder_date"
+            app:layout_constraintStart_toEndOf="@+id/reminder_date"
+            app:layout_constraintTop_toTopOf="@+id/reminder_date"
+            tools:text="21:49" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/repeat_icon"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginStart="8dp"
+            android:src="@drawable/ic_repeat"
+            android:tint="@color/subtitle_grey"
+            app:layout_constraintBottom_toBottomOf="@+id/notification_icon"
+            app:layout_constraintStart_toEndOf="@+id/notification_icon"
+            app:layout_constraintTop_toTopOf="@+id/notification_icon"
+            app:showIfRepeatReminder="@{reminder.repeatInterval}" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/notification_icon"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_marginStart="8dp"
+            android:src="@drawable/ic_notification"
+            android:tint="@color/subtitle_grey"
+            app:layout_constraintBottom_toBottomOf="@+id/reminder_time"
+            app:layout_constraintStart_toEndOf="@+id/reminder_time"
+            app:layout_constraintTop_toTopOf="@+id/reminder_time"
+            app:showIfNotificationEnabled="@{reminder.notificationSent}" />
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/done_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:button="@drawable/checkbox_reminder_done"
+            android:onClick="@{doneClickListener}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -40,6 +40,14 @@ class ActiveReminderListAdapter(private val viewModel: ActiveReminderListViewMod
 
         init {
             binding.apply {
+                if (this.reminder?.isRepeatReminder() == true) {
+                    this.repeatIcon.visibility = View.VISIBLE
+                }
+
+                if (this.reminder?.isNotificationSent == true) {
+                    this.notificationIcon.visibility = View.VISIBLE
+                }
+
                 setDetailsClickListener { view ->
                     navigateToReminderDetails(view, reminder)
                 }
@@ -79,6 +87,7 @@ class ActiveReminderListAdapter(private val viewModel: ActiveReminderListViewMod
 
             Snackbar.make(view, reminderCompletedText, Snackbar.LENGTH_SHORT)
                 .setAction(undoActionText) {
+                    binding.doneCheckbox.isChecked = false
                     viewModel.undoDoneReminder(reminder)
                 }
                 .setAnchorView(view.rootView.findViewById(R.id.add_reminder_fab))

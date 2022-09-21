@@ -25,7 +25,7 @@ class AddEditReminderViewModel @Inject constructor(
 ) : ViewModel() {
 
     var isEditReminder = false
-    var isAddReminder = isEditReminder.not()
+    var isAddReminder = false
 
     val defaultRepeatValue = "1"
     val defaultRepeatUnit = ChronoUnit.DAYS
@@ -150,7 +150,7 @@ class AddEditReminderViewModel @Inject constructor(
             .atZone(ZoneId.systemDefault())
     }
 
-    fun formatDatePickerDate(dateTimestamp: Long): String {
+    fun convertEpochMilliToDate(dateTimestamp: Long): String {
         return Instant.ofEpochMilli(dateTimestamp)
             .atZone(ZoneId.systemDefault())
             .format(DateTimeFormatter.ofPattern(DATE_INPUT_PATTERN))
@@ -173,8 +173,8 @@ class AddEditReminderViewModel @Inject constructor(
         return name.isNotBlank()
     }
 
-    fun isRepeatIntervalValid(repeatIntervalValue: Long): Boolean {
-        return repeatIntervalValue > 0
+    fun isRepeatIntervalEmpty(repeatIntervalValue: Long): Boolean {
+        return repeatIntervalValue == 0L
     }
 
     fun isStartTimeValid(startDate: String, startTime: String): Boolean {

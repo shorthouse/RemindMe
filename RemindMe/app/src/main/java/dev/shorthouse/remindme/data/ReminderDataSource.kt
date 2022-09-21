@@ -19,4 +19,6 @@ interface ReminderDataSource {
     fun updateReminder(reminder: Reminder)
 
     fun deleteReminder(reminder: Reminder)
+
+    fun archiveReminder(id: Long)
 }

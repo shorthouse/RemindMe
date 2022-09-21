@@ -172,7 +172,7 @@ class AddEditReminderViewModelTest {
         val timeStampMillis = 100_000_000L
         val expectedDate = "Fri, 02 Jan 1970"
 
-        val date = viewModel.formatDatePickerDate(timeStampMillis)
+        val date = viewModel.convertEpochMilliToDate(timeStampMillis)
 
         assertThat(date).isEqualTo(expectedDate)
     }

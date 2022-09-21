@@ -1,5 +1,6 @@
 package dev.shorthouse.remindme.fragments
 
+import android.app.TimePickerDialog
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,23 +8,20 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT
-import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
-import com.google.android.material.timepicker.MaterialTimePicker
-import com.google.android.material.timepicker.TimeFormat
 import dagger.hilt.android.AndroidEntryPoint
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.databinding.FragmentAddEditReminderBinding
 import dev.shorthouse.remindme.model.Reminder
+import dev.shorthouse.remindme.utilities.SpinnerArrayAdapter
 import dev.shorthouse.remindme.viewmodel.AddEditReminderViewModel
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
@@ -46,10 +44,11 @@ class AddEditReminderFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setAddOrEdit()
         setupToolbar()
-        setupClickListeners()
+        setAddOrEdit()
         populateData()
+        setupClickListeners()
+
         if (viewModel.isAddReminder) {
             focusKeyboardOnReminderName()
         }
@@ -57,19 +56,17 @@ class AddEditReminderFragment : Fragment() {
 
     private fun setAddOrEdit() {
         viewModel.isEditReminder = navigationArgs.isEditReminder
+        viewModel.isAddReminder = viewModel.isEditReminder.not()
     }
 
     private fun setupToolbar() {
         binding.apply {
-            toolbar.setupWithNavController(findNavController())
-
+            binding.toolbar.setNavigationOnClickListener {
+                hideKeyboard()
+                findNavController().navigateUp()
+            }
             toolbar.setNavigationIcon(R.drawable.ic_close)
             toolbar.setNavigationContentDescription(R.string.cd_close_navigate_up)
-
-            toolbar.title = when (navigationArgs.isEditReminder) {
-                true -> getString(R.string.toolbar_title_edit_reminder)
-                else -> getString(R.string.toolbar_title_add_reminder)
-            }
 
             saveReminder.setOnClickListener {
                 if (isReminderValid()) {
@@ -140,13 +137,8 @@ class AddEditReminderFragment : Fragment() {
             resources.getQuantityString(R.plurals.dropdown_weeks, repeatValue)
         )
 
-        binding.repeatUnitInput.setAdapter(
-            ArrayAdapter(
-                requireContext(),
-                R.layout.list_item_dropdown_interval,
-                dropdownItems
-            )
-        )
+        val spinnerAdapter = SpinnerArrayAdapter(requireContext(), dropdownItems)
+        binding.repeatUnitInput.setAdapter(spinnerAdapter)
 
         val selectedItem = when (repeatUnit) {
             ChronoUnit.DAYS -> dropdownItems[0]
@@ -174,13 +166,11 @@ class AddEditReminderFragment : Fragment() {
                 null
             }
 
-
             val reminderNotes = viewModel.getReminderNotes(notesInput.text.toString())
 
             val isArchived = false
 
             val isNotificationSent = notificationSwitch.isChecked
-
 
             if (viewModel.isAddReminder) {
                 viewModel.addReminder(
@@ -219,9 +209,9 @@ class AddEditReminderFragment : Fragment() {
             return false
         }
 
-        val repeatIntervalValue = binding.repeatValueInput.text.toString().toLong()
-        if (!viewModel.isRepeatIntervalValid(repeatIntervalValue)) {
-            displayToast(R.string.error_interval_zero)
+        val repeatIntervalValue = binding.repeatValueInput.text.toString().toLongOrNull() ?: 0L
+        if (viewModel.isRepeatIntervalEmpty(repeatIntervalValue)) {
+            displayToast(R.string.error_interval_empty)
             return false
         }
 
@@ -234,13 +224,13 @@ class AddEditReminderFragment : Fragment() {
             .build()
 
         val datePicker = MaterialDatePicker.Builder.datePicker()
-            .setTitleText(getString(R.string.title_date_picker))
             .setCalendarConstraints(constraints)
+            .setTitleText("")
             .build()
 
         datePicker.addOnPositiveButtonClickListener { dateTimestamp ->
             binding.startDateInput.setText(
-                viewModel.formatDatePickerDate(dateTimestamp)
+                viewModel.convertEpochMilliToDate(dateTimestamp)
             )
         }
 
@@ -248,20 +238,15 @@ class AddEditReminderFragment : Fragment() {
     }
 
     private fun displayTimePicker() {
-        hideKeyboard()
-
-        val timePicker = MaterialTimePicker.Builder()
-            .setTimeFormat(TimeFormat.CLOCK_24H)
-            .setTitleText(getString(R.string.title_time_picker))
-            .build()
-
-        timePicker.addOnPositiveButtonClickListener {
+        val onTimeSetListener = TimePickerDialog.OnTimeSetListener { timePicker, selectedHour, selectedMinute ->
             binding.startTimeInput.setText(
-                viewModel.formatTimePickerTime(timePicker.hour, timePicker.minute)
+                viewModel.formatTimePickerTime(selectedHour, selectedMinute)
             )
         }
 
-        timePicker.show(parentFragmentManager, getString(R.string.tag_reminder_time_picker))
+        val timePickerDialog = TimePickerDialog(context, onTimeSetListener, 0, 0, true)
+
+        timePickerDialog.show()
     }
 
     private fun showKeyboard() {

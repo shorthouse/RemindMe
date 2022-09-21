@@ -5,7 +5,7 @@
 
     <item
         android:id="@+id/action_sort"
-        android:icon="@drawable/ic_sort"
+        android:icon="@drawable/ic_swap"
         android:title="@string/top_app_bar_sort"
         android:contentDescription="@string/cd_top_app_bar_sort"
         app:showAsAction="always"
