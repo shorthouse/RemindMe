@@ -29,16 +29,16 @@
             android:id="@+id/add_edit_scroll_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="?attr/actionBarSize" >
+            android:layout_marginTop="?attr/actionBarSize">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
                 android:layout_marginTop="8dp"
-                android:paddingBottom="32dp"
+                android:layout_marginEnd="16dp"
+                android:paddingBottom="24dp"
                 tools:context=".fragments.AddEditReminderFragment">
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -57,16 +57,16 @@
                         android:id="@+id/name_input"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingStart="0dp"
-                        android:paddingEnd="0dp"
                         android:hint="@string/hint_reminder_name"
                         android:imeOptions="actionDone"
                         android:inputType="textAutoComplete"
                         android:maxLength="200"
-                        android:textStyle="bold"
-                        android:singleLine="true"
+                        android:paddingStart="0dp"
+                        android:paddingEnd="0dp"
                         android:paddingBottom="8dp"
-                        android:textSize="20sp" />
+                        android:singleLine="true"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.imageview.ShapeableImageView
@@ -76,7 +76,7 @@
                     android:src="@drawable/ic_calendar"
                     app:layout_constraintBottom_toBottomOf="@+id/start_date_label"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/start_date_label" />
+                    app:layout_constraintTop_toBottomOf="@+id/name_label" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/start_date_label"
@@ -110,7 +110,7 @@
                     android:src="@drawable/ic_clock"
                     app:layout_constraintBottom_toBottomOf="@+id/start_time_label"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/start_time_label" />
+                    app:layout_constraintTop_toBottomOf="@+id/start_date_label" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/start_time_label"
@@ -143,7 +143,7 @@
                     android:layout_marginTop="18dp"
                     android:src="@drawable/ic_notes"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/start_time_label" />
+                    app:layout_constraintTop_toTopOf="@+id/notes_label" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/notes_label"
@@ -234,7 +234,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/repeat_header"
+                    app:layout_constraintTop_toBottomOf="@+id/repeat_icon"
                     app:showIfRepeatChecked="@{repeatSwitch.checked}">
 
                     <com.google.android.material.textfield.TextInputEditText
