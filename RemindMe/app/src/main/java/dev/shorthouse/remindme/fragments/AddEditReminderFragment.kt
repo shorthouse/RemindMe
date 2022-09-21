@@ -14,7 +14,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -45,10 +44,11 @@ class AddEditReminderFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setAddOrEdit()
         setupToolbar()
-        setupClickListeners()
+        setAddOrEdit()
         populateData()
+        setupClickListeners()
+
         if (viewModel.isAddReminder) {
             focusKeyboardOnReminderName()
         }
@@ -61,8 +61,10 @@ class AddEditReminderFragment : Fragment() {
 
     private fun setupToolbar() {
         binding.apply {
-            toolbar.setupWithNavController(findNavController())
-
+            binding.toolbar.setNavigationOnClickListener {
+                hideKeyboard()
+                findNavController().navigateUp()
+            }
             toolbar.setNavigationIcon(R.drawable.ic_close)
             toolbar.setNavigationContentDescription(R.string.cd_close_navigate_up)
 
