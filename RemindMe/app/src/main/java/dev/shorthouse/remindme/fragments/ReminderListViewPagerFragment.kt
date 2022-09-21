@@ -13,10 +13,10 @@ import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.android.material.transition.MaterialElevationScale
 import dagger.hilt.android.AndroidEntryPoint
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.adapter.ACTIVE_REMINDERS_PAGE_INDEX
@@ -53,8 +53,6 @@ class ReminderListViewPagerFragment : Fragment() {
     }
 
     private fun setupToolbar() {
-        binding.toolbar.setupWithNavController(findNavController())
-
         binding.toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.action_sort -> {
@@ -104,7 +102,6 @@ class ReminderListViewPagerFragment : Fragment() {
             }
         })
     }
-
 
     private fun setupTabLayout() {
         val tabLayout = binding.tabLayout
