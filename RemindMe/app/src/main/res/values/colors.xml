@@ -11,4 +11,5 @@
 
     <color name="grey_hint">#9e9e9e</color>
     <color name="subtitle_grey">#777d7f</color>
+    <color name="off_black">#212121</color>
 </resources>
