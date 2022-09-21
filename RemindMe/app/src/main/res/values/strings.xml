@@ -110,5 +110,14 @@
     <string name="empty_state_all_subtitle">Add a reminder to get started</string>
     <string name="cd_save_reminder">Save reminder</string>
     <string name="cd_details_delete">Delete</string>
+    <string name="alert_dialog_complete_reminder_complete">Complete</string>
+    <string name="toast_reminder_completed">Reminder completed</string>
+    <string name="alert_dialog_complete_reminder_message">Complete this reminder?</string>
+    <string name="cd_edit_reminder">Edit reminder</string>
+    <string name="reminder_details_complete">Complete</string>
+    <string name="cd_complete_reminder">Complete reminder</string>
+    <string name="reminder_details_edit">Edit</string>
+    <string name="reminder_details_delete">Delete</string>
+    <string name="cd_delete_reminder">Delete reminder</string>
 
 </resources>
