@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import dev.shorthouse.remindme.R
@@ -61,7 +60,7 @@ class ReminderDetailsFragment : Fragment() {
 
             reminder.repeatInterval?.let {
                 repeatInterval.text = resources.getQuantityString(
-                    viewModel.getRepeatIntervalId(it),
+                    viewModel.getRepeatIntervalStringId(it),
                     it.timeValue.toInt(),
                     it.timeValue
                 )
@@ -70,25 +69,38 @@ class ReminderDetailsFragment : Fragment() {
     }
 
     private fun setupToolbar() {
-        binding.toolbar.apply {
-            setupWithNavController(findNavController())
+        binding.toolbar.setNavigationOnClickListener { findNavController().navigateUp() }
+        binding.toolbar.setNavigationIcon(R.drawable.ic_back)
+    }
 
-            setOnMenuItemClickListener { item ->
-                when (item.itemId) {
-                    R.id.action_delete -> {
-                        getDeleteAlertDialog().show()
-                        true
-                    }
-                    else -> false
-                }
+    private fun setupClickListeners() {
+        binding.apply {
+            completeButton.setOnClickListener {
+                getCompleteAlertDialog().show()
+            }
+
+            editButton.setOnClickListener {
+                navigateToEditReminder()
+            }
+
+            deleteButton.setOnClickListener {
+                getDeleteAlertDialog().show()
             }
         }
     }
 
-    private fun setupClickListeners() {
-        binding.editReminderFab.setOnClickListener {
-            navigateToEditReminder()
-        }
+    private fun getCompleteAlertDialog(): MaterialAlertDialogBuilder {
+        return MaterialAlertDialogBuilder(requireContext())
+            .setMessage(getString(R.string.alert_dialog_complete_reminder_message))
+            .setNegativeButton(getString(R.string.alert_dialog_delete_reminder_cancel)) { dialog, _ ->
+                dialog.cancel()
+            }
+            .setPositiveButton(getString(R.string.alert_dialog_complete_reminder_complete)) { dialog, _ ->
+                viewModel.completeReminder()
+                displayToast(R.string.toast_reminder_completed)
+                dialog.dismiss()
+                findNavController().navigateUp()
+            }
     }
 
     private fun getDeleteAlertDialog(): MaterialAlertDialogBuilder {
@@ -98,13 +110,11 @@ class ReminderDetailsFragment : Fragment() {
                 dialog.cancel()
             }
             .setPositiveButton(getString(R.string.alert_dialog_delete_reminder_delete)) { dialog, _ ->
-                deleteReminder()
-                cancelReminderNotification()
+                viewModel.deleteReminder()
                 displayToast(R.string.toast_reminder_deleted)
                 dialog.dismiss()
                 findNavController().navigateUp()
             }
-
     }
 
     private fun navigateToEditReminder() {
@@ -113,24 +123,12 @@ class ReminderDetailsFragment : Fragment() {
                 navigationArgs.id,
                 isEditReminder = true
             )
+
         findNavController().navigate(action)
     }
 
-    private fun deleteReminder() {
-        viewModel.deleteReminder()
-    }
-
-    private fun cancelReminderNotification() {
-        if (viewModel.reminder.isNotificationSent) {
-            viewModel.cancelReminderNotification()
-        }
-    }
-
     private fun displayToast(stringResId: Int) {
-        Toast.makeText(
-            context,
-            getString(stringResId),
-            Toast.LENGTH_SHORT
-        ).show()
+        Toast.makeText(context, getString(stringResId), Toast.LENGTH_SHORT)
+            .show()
     }
 }
