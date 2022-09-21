@@ -30,13 +30,23 @@ class ReminderDetailsViewModel @Inject constructor(
     }
 
     fun deleteReminder() {
+        if (reminder.isNotificationSent) {
+            cancelReminderNotification()
+        }
+
         viewModelScope.launch(Dispatchers.IO) {
             repository.deleteReminder(reminder)
         }
     }
 
-    fun cancelReminderNotification() {
-        notificationScheduler.cancelExistingReminderNotification(reminder)
+    fun completeReminder() {
+        if (reminder.isNotificationSent) {
+            cancelReminderNotification()
+        }
+
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.archiveReminder(reminder.id)
+        }
     }
 
     fun getFormattedStartDate(reminder: Reminder): String {
@@ -50,10 +60,14 @@ class ReminderDetailsViewModel @Inject constructor(
         return reminder.startDateTime.toLocalTime().toString()
     }
 
-    fun getRepeatIntervalId(repeatInterval: RepeatInterval): Int {
+    fun getRepeatIntervalStringId(repeatInterval: RepeatInterval): Int {
         return when (repeatInterval.timeUnit) {
             ChronoUnit.DAYS -> R.plurals.interval_days
             else -> R.plurals.interval_weeks
         }
+    }
+
+    private fun cancelReminderNotification() {
+        notificationScheduler.cancelExistingReminderNotification(reminder)
     }
 }
