@@ -32,4 +32,8 @@ class ReminderRepository @Inject constructor(
     fun deleteReminder(reminder: Reminder) {
         return reminderLocalDataSource.deleteReminder(reminder)
     }
+
+    fun archiveReminder(id: Long) {
+        return reminderLocalDataSource.archiveReminder(id)
+    }
 }

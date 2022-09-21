@@ -37,4 +37,7 @@ class ReminderLocalDataSource @Inject constructor(
         return reminderDao.delete(reminder)
     }
 
+    override fun archiveReminder(id: Long) {
+        return reminderDao.archive(id)
+    }
 }
