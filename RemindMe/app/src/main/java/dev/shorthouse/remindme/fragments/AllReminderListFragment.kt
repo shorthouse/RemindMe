@@ -66,6 +66,12 @@ class AllReminderListFragment : Fragment() {
         }
     }
 
+    private fun displayReminderList() {
+        binding.allReminderRecycler.visibility = View.VISIBLE
+        binding.emptyStateGroup.visibility = View.GONE
+        binding.emptyStateSearchGroup.visibility = View.GONE
+    }
+
     private fun displayEmptyState() {
         binding.emptyStateGroup.visibility = View.VISIBLE
         binding.emptyStateSearchGroup.visibility = View.GONE
@@ -79,9 +85,5 @@ class AllReminderListFragment : Fragment() {
         binding.allReminderRecycler.visibility = View.GONE
     }
 
-    private fun displayReminderList() {
-        binding.allReminderRecycler.visibility = View.VISIBLE
-        binding.emptyStateGroup.visibility = View.GONE
-        binding.emptyStateSearchGroup.visibility = View.GONE
-    }
+
 }

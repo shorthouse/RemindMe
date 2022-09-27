@@ -20,19 +20,19 @@ class AllReminderListViewModel @Inject constructor(
             .getNonArchivedReminders()
             .asLiveData()
 
-        val sortedReminders = MediatorLiveData<List<Reminder>>()
+        val remindersListData = MediatorLiveData<List<Reminder>>()
 
-        sortedReminders.addSource(allReminders) {
-            sortedReminders.value = sortFilterReminders(allReminders, currentSort, currentFilter)
+        remindersListData.addSource(allReminders) {
+            remindersListData.value = sortFilterReminders(allReminders, currentSort, currentFilter)
         }
-        sortedReminders.addSource(currentSort) {
-            sortedReminders.value = sortFilterReminders(allReminders, currentSort, currentFilter)
+        remindersListData.addSource(currentSort) {
+            remindersListData.value = sortFilterReminders(allReminders, currentSort, currentFilter)
         }
-        sortedReminders.addSource(currentFilter) {
-            sortedReminders.value = sortFilterReminders(allReminders, currentSort, currentFilter)
+        remindersListData.addSource(currentFilter) {
+            remindersListData.value = sortFilterReminders(allReminders, currentSort, currentFilter)
         }
 
-        return sortedReminders
+        return remindersListData
     }
 
     private fun sortFilterReminders(
@@ -47,8 +47,8 @@ class AllReminderListViewModel @Inject constructor(
         if (reminders == null || sort == null) return null
 
         val sortedReminders = when (sort) {
-            RemindersSort.NEWEST_FIRST -> reminders.sortedByDescending { it.startDateTime }
-            else -> reminders.sortedBy { it.startDateTime }
+            RemindersSort.EARLIEST_DATE_FIRST -> reminders.sortedBy { it.startDateTime }
+            else -> reminders.sortedByDescending { it.startDateTime }
         }
 
         return if (filter == null || filter.isBlank()) {
