@@ -37,7 +37,6 @@ class ReminderDetailsFragment : Fragment() {
 
         getReminder(navigationArgs.id)
         setupToolbar()
-        setupClickListeners()
     }
 
     private fun getReminder(reminderId: Long) {
@@ -69,29 +68,36 @@ class ReminderDetailsFragment : Fragment() {
     }
 
     private fun setupToolbar() {
-        binding.toolbar.setNavigationOnClickListener { findNavController().navigateUp() }
-        binding.toolbar.setNavigationIcon(R.drawable.ic_back)
-    }
+        binding.toolbar.apply {
+            setNavigationOnClickListener { findNavController().navigateUp() }
+            setNavigationIcon(R.drawable.ic_back)
 
-    private fun setupClickListeners() {
-        binding.apply {
-            completeButton.setOnClickListener {
-                getCompleteAlertDialog().show()
-            }
-
-            editButton.setOnClickListener {
-                navigateToEditReminder()
-            }
-
-            deleteButton.setOnClickListener {
-                getDeleteAlertDialog().show()
+            setOnMenuItemClickListener { menuItem ->
+                when (menuItem.itemId) {
+                    R.id.action_edit -> {
+                        navigateToEditReminder()
+                        true
+                    }
+                    R.id.action_delete -> {
+                        getDeleteAlertDialog().show()
+                        true
+                    }
+                    R.id.action_complete -> {
+                        getCompleteAlertDialog().show()
+                        true
+                    }
+                    else -> false
+                }
             }
         }
     }
 
     private fun getCompleteAlertDialog(): MaterialAlertDialogBuilder {
-        return MaterialAlertDialogBuilder(requireContext())
-            .setMessage(getString(R.string.alert_dialog_complete_reminder_message))
+        return MaterialAlertDialogBuilder(
+            requireContext(),
+            R.style.Theme_RemindMe_MaterialComponents_MaterialAlertDialog
+        )
+            .setTitle(getString(R.string.alert_dialog_complete_reminder_message))
             .setNegativeButton(getString(R.string.alert_dialog_delete_reminder_cancel)) { dialog, _ ->
                 dialog.cancel()
             }
@@ -104,8 +110,11 @@ class ReminderDetailsFragment : Fragment() {
     }
 
     private fun getDeleteAlertDialog(): MaterialAlertDialogBuilder {
-        return MaterialAlertDialogBuilder(requireContext())
-            .setMessage(getString(R.string.alert_dialog_delete_reminder_message))
+        return MaterialAlertDialogBuilder(
+            requireContext(),
+            R.style.Theme_RemindMe_MaterialComponents_MaterialAlertDialog
+        )
+            .setTitle(getString(R.string.alert_dialog_delete_reminder_message))
             .setNegativeButton(getString(R.string.alert_dialog_delete_reminder_cancel)) { dialog, _ ->
                 dialog.cancel()
             }
