@@ -1,5 +1,5 @@
 package dev.shorthouse.remindme.utilities
 
 enum class RemindersSort {
-    NEWEST_FIRST, OLDEST_FIRST
+    EARLIEST_DATE_FIRST, LATEST_DATE_FIRST
 }

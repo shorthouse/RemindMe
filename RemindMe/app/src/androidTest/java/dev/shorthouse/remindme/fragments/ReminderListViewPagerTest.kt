@@ -205,9 +205,9 @@ class ReminderListViewPagerTest {
         onView(withId(R.id.navigation_view_list_sort)).check(matches(isDisplayed()))
         onView(withText("Sort by")).check(matches(isDisplayed()))
 
-        onView(withId(R.id.drawer_sort_newest_first)).check(matches(isDisplayed()))
+        onView(withId(R.id.drawer_sort_earliest_date_first)).check(matches(isDisplayed()))
         onView(withText("Newest first")).check(matches(isDisplayed()))
-        onView(withId(R.id.drawer_sort_oldest_first)).check(matches(isDisplayed()))
+        onView(withId(R.id.drawer_sort_latest_date_first)).check(matches(isDisplayed()))
         onView(withText("Oldest first")).check(matches(isDisplayed()))
     }
 
@@ -215,7 +215,7 @@ class ReminderListViewPagerTest {
     fun when_sorting_active_reminders_by_newest_first_should_display_reminder_list_sorted_by_newest_first() {
         onView(withId(R.id.tab_layout)).perform(selectTabAtPosition(0))
         onView(withId(R.id.action_sort)).perform(click())
-        onView(withId(R.id.drawer_sort_newest_first)).perform(click())
+        onView(withId(R.id.drawer_sort_earliest_date_first)).perform(click())
 
         onView(
             allOf(
@@ -236,7 +236,7 @@ class ReminderListViewPagerTest {
     fun when_sorting_active_reminders_by_oldest_first_should_display_reminder_list_sorted_by_oldest_first() {
         onView(withId(R.id.tab_layout)).perform(selectTabAtPosition(0))
         onView(withId(R.id.action_sort)).perform(click())
-        onView(withId(R.id.drawer_sort_oldest_first)).perform(click())
+        onView(withId(R.id.drawer_sort_latest_date_first)).perform(click())
 
         onView(
             allOf(
@@ -257,7 +257,7 @@ class ReminderListViewPagerTest {
     fun when_sorting_all_reminders_by_newest_first_should_display_reminder_list_sorted_by_newest_first() {
         onView(withId(R.id.tab_layout)).perform(selectTabAtPosition(1))
         onView(withId(R.id.action_sort)).perform(click())
-        onView(withId(R.id.drawer_sort_newest_first)).perform(click())
+        onView(withId(R.id.drawer_sort_earliest_date_first)).perform(click())
 
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
         val reminder = device.findObject( UiSelector().text("Test Older Reminder"))
@@ -286,7 +286,7 @@ class ReminderListViewPagerTest {
     fun when_sorting_all_reminders_by_oldest_first_should_display_reminder_list_sorted_by_oldest_first() {
         onView(withId(R.id.tab_layout)).perform(selectTabAtPosition(1))
         onView(withId(R.id.action_sort)).perform(click())
-        onView(withId(R.id.drawer_sort_oldest_first)).perform(click())
+        onView(withId(R.id.drawer_sort_latest_date_first)).perform(click())
 
         onView(
             allOf(

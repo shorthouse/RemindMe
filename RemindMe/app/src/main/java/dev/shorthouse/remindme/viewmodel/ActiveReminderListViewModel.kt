@@ -64,8 +64,8 @@ class ActiveReminderListViewModel @Inject constructor(
         }
 
         val activeSortedReminders = when (sort) {
-            RemindersSort.NEWEST_FIRST -> activeReminders.sortedByDescending { it.startDateTime }
-            else -> activeReminders.sortedBy { it.startDateTime }
+            RemindersSort.EARLIEST_DATE_FIRST -> activeReminders.sortedBy { it.startDateTime }
+            else -> activeReminders.sortedByDescending { it.startDateTime }
         }
 
         return if (filter.isBlank()) {
