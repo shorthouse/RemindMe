@@ -22,6 +22,7 @@ import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.databinding.FragmentAddEditReminderBinding
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.utilities.SpinnerArrayAdapter
+import dev.shorthouse.remindme.utilities.setOnClickThrottleListener
 import dev.shorthouse.remindme.viewmodel.AddEditReminderViewModel
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
@@ -44,8 +45,8 @@ class AddEditReminderFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupToolbar()
         setAddOrEdit()
+        setupToolbar()
         populateData()
         setupClickListeners()
 
@@ -60,32 +61,42 @@ class AddEditReminderFragment : Fragment() {
     }
 
     private fun setupToolbar() {
-        binding.apply {
-            binding.toolbar.setNavigationOnClickListener {
+        binding.toolbar.apply {
+            setNavigationOnClickListener {
                 hideKeyboard()
                 findNavController().navigateUp()
             }
-            toolbar.setNavigationIcon(R.drawable.ic_close)
-            toolbar.setNavigationContentDescription(R.string.cd_close_navigate_up)
 
-            saveReminder.setOnClickListener {
-                if (isReminderValid()) {
-                    saveReminder()
-                    hideKeyboard()
-                    displayToast(R.string.toast_reminder_saved)
-                    findNavController().navigateUp()
+            setOnMenuItemClickListener { menuItem ->
+                when (menuItem.itemId) {
+                    R.id.action_save -> {
+                        if (isReminderValid()) {
+                            saveReminder()
+                            hideKeyboard()
+                            displayToast(R.string.toast_reminder_saved)
+                            findNavController().navigateUp()
+                        }
+                        true
+                    }
+                    else -> false
                 }
+            }
+
+            title = if (viewModel.isAddReminder) {
+                getString(R.string.toolbar_title_add_reminder)
+            } else {
+                getString(R.string.toolbar_title_edit_reminder)
             }
         }
     }
 
     private fun setupClickListeners() {
         binding.apply {
-            startDateInput.setOnClickListener {
+            startDateInput.setOnClickThrottleListener {
                 displayDatePicker()
             }
 
-            startTimeInput.setOnClickListener {
+            startTimeInput.setOnClickThrottleListener {
                 displayTimePicker()
             }
 
@@ -98,12 +109,21 @@ class AddEditReminderFragment : Fragment() {
     }
 
     private fun populateData() {
-        if (viewModel.isEditReminder) {
+        if (viewModel.isAddReminder) {
+            populateAddData()
+        } else {
             viewModel.getReminder(navigationArgs.id).observe(viewLifecycleOwner) { reminder ->
                 populateEditData(reminder)
             }
-        } else {
-            populateAddData()
+        }
+    }
+
+    private fun populateAddData() {
+        binding.apply {
+            startDateInput.setText(viewModel.getFormattedDate(ZonedDateTime.now()))
+            startTimeInput.setText(viewModel.getFormattedTimeNextHour(ZonedDateTime.now()))
+            repeatValueInput.setText(viewModel.defaultRepeatValue)
+            setDropdownList(viewModel.defaultRepeatUnit)
         }
     }
 
@@ -117,15 +137,6 @@ class AddEditReminderFragment : Fragment() {
             repeatSwitch.isChecked = reminder.isRepeatReminder()
             repeatValueInput.setText(viewModel.getRepeatValue(reminder))
             setDropdownList(viewModel.getRepeatUnit(reminder))
-        }
-    }
-
-    private fun populateAddData() {
-        binding.apply {
-            startDateInput.setText(viewModel.getFormattedDate(ZonedDateTime.now()))
-            startTimeInput.setText(viewModel.getFormattedTimeNextHour(ZonedDateTime.now()))
-            repeatValueInput.setText(viewModel.defaultRepeatValue)
-            setDropdownList(viewModel.defaultRepeatUnit)
         }
     }
 
@@ -238,7 +249,7 @@ class AddEditReminderFragment : Fragment() {
     }
 
     private fun displayTimePicker() {
-        val onTimeSetListener = TimePickerDialog.OnTimeSetListener { timePicker, selectedHour, selectedMinute ->
+        val onTimeSetListener = TimePickerDialog.OnTimeSetListener { _, selectedHour, selectedMinute ->
             binding.startTimeInput.setText(
                 viewModel.formatTimePickerTime(selectedHour, selectedMinute)
             )
