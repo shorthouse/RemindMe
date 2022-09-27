@@ -166,7 +166,7 @@ class AddEditReminderViewModel @Inject constructor(
     }
 
     fun getReminderNotes(notes: String): String? {
-        return notes.ifBlank { null }
+        return notes.trim().ifBlank { null }
     }
 
     fun isNameValid(name: String): Boolean {
