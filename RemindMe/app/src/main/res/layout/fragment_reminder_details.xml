@@ -14,19 +14,26 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
+        <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            style="@style/Widget.MaterialComponents.Toolbar.Primary" />
+            android:layout_height="wrap_content"
+            app:liftOnScroll="true" >
 
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:title="@string/toolbar_title_details"
+                app:menu="@menu/toolbar_reminder_details"
+                tools:navigationIcon="@drawable/ic_back"
+                style="@style/Widget.MaterialComponents.Toolbar.Primary" />
+
+        </com.google.android.material.appbar.AppBarLayout>
 
         <ScrollView
             android:id="@+id/details_scroll_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="60dp"
-            android:clipToPadding="true"
             android:layout_marginTop="?attr/actionBarSize">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -43,7 +50,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:textColor="@color/text_off_black"
+                    android:textColor="@color/on_primary"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -68,7 +75,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="24dp"
-                    android:textColor="@color/text_off_black"
+                    android:textColor="@color/on_primary"
                     android:textSize="18sp"
                     app:layout_constraintStart_toEndOf="@+id/ic_calendar"
                     app:layout_constraintTop_toBottomOf="@+id/name"
@@ -90,7 +97,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="32dp"
-                    android:textColor="@color/text_off_black"
+                    android:textColor="@color/on_primary"
                     android:textSize="18sp"
                     app:layout_constraintStart_toEndOf="@+id/ic_clock"
                     app:layout_constraintTop_toBottomOf="@+id/start_date"
@@ -113,7 +120,7 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="32dp"
                     android:layout_marginEnd="16dp"
-                    android:textColor="@color/text_off_black"
+                    android:textColor="@color/on_primary"
                     android:textSize="18sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/ic_notes"
@@ -139,7 +146,7 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="32dp"
                     android:text="@string/notifications_on"
-                    android:textColor="@color/text_off_black"
+                    android:textColor="@color/on_primary"
                     android:textSize="18sp"
                     app:layout_constraintStart_toEndOf="@+id/ic_notification"
                     app:layout_constraintTop_toBottomOf="@+id/notes"
@@ -163,7 +170,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="32dp"
-                    android:textColor="@color/text_off_black"
+                    android:textColor="@color/on_primary"
                     android:textSize="18sp"
                     app:layout_constraintStart_toEndOf="@+id/ic_repeat"
                     app:layout_constraintTop_toBottomOf="@+id/notification"
@@ -172,113 +179,5 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:paddingVertical="8dp"
-            android:background="@color/design_default_color_primary" >
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/complete_button"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/edit_button"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent">
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/complete"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/reminder_details_complete"
-                    android:textColor="@color/text_off_black"
-                    android:textSize="16sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
-
-                <ImageView
-                    android:id="@+id/complete_icon"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_marginBottom="4dp"
-                    android:src="@drawable/ic_tick"
-                    app:layout_anchor="@id/complete"
-                    app:layout_constraintBottom_toTopOf="@+id/complete"
-                    app:layout_constraintEnd_toEndOf="@+id/complete"
-                    app:layout_constraintStart_toStartOf="@+id/complete"
-                    android:contentDescription="@string/cd_complete_reminder" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/edit_button"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/delete_button"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/complete_button">
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/edit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/reminder_details_edit"
-                    android:textColor="@color/text_off_black"
-                    android:textSize="16sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
-
-                <ImageView
-                    android:id="@+id/edit_icon"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_marginBottom="4dp"
-                    android:contentDescription="@string/cd_edit_reminder"
-                    android:src="@drawable/ic_edit"
-                    app:layout_constraintBottom_toTopOf="@+id/edit"
-                    app:layout_constraintEnd_toEndOf="@+id/edit"
-                    app:layout_constraintStart_toStartOf="@+id/edit" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/delete_button"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/edit_button">
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/delete"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/reminder_details_delete"
-                    android:textColor="@color/text_off_black"
-                    android:textSize="16sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
-
-                <ImageView
-                    android:id="@+id/delete_icon"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_marginBottom="4dp"
-                    android:contentDescription="@string/cd_delete_reminder"
-                    android:src="@drawable/ic_delete"
-                    app:layout_constraintBottom_toTopOf="@+id/delete"
-                    app:layout_constraintEnd_toEndOf="@+id/delete"
-                    app:layout_constraintStart_toStartOf="@+id/delete" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
 </layout>

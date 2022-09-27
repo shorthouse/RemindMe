@@ -9,17 +9,17 @@
         android:layout_height="match_parent">
 
         <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/appBarLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content" >
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
+                app:theme="@style/Theme.RemindMe.Toolbar"
+                style="@style/Widget.MaterialComponents.Toolbar.Primary"
                 app:title="@string/app_name"
-                app:menu="@menu/toolbar_reminder_list"
-                style="@style/Widget.MaterialComponents.Toolbar.Primary" />
+                app:menu="@menu/toolbar_reminder_list" />
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tab_layout"
@@ -59,6 +59,7 @@
             android:contentDescription="@string/cd_fab_add_reminder"
             android:layout_margin="16dp"
             android:layout_gravity="bottom|end"
+            app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
             app:srcCompat="@drawable/ic_add"/>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
