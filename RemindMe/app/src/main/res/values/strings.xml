@@ -86,8 +86,8 @@
     <string name="bottom_app_bar_more_title">More</string>
     <string name="cd_bottom_app_bar_more">More options</string>
     <string name="cd_active_reminders_icon">Active Reminders Icon</string>
-    <string name="drawer_title_newest_first">Newest first</string>
-    <string name="drawer_title_oldest_first">Oldest first</string>
+    <string name="drawer_title_earliest_date_first">Earliest date first</string>
+    <string name="drawer_title_latest_date_first">Latest date first</string>
     <string name="nav_drawer_sort_title">Sort by</string>
     <string name="top_app_bar_search">Search</string>
     <string name="cd_top_app_bar_search">Search reminders</string>
@@ -98,7 +98,7 @@
     <string name="toast_sort_icon_clicked">Sort icon clicked!</string>
 
     <string name="toolbar_title_edit_reminder">Edit reminder</string>
-    <string name="toolbar_title_add_reminder">Add reminder</string>
+
     <string name="snackbar_reminder_completed">Reminder completed</string>
     <string name="snackbar_reminder_completed_undo">Undo</string>
     <string name="cd_reminder_tabs">Reminder tabs</string>
@@ -119,5 +119,16 @@
     <string name="reminder_details_edit">Edit</string>
     <string name="reminder_details_delete">Delete</string>
     <string name="cd_delete_reminder">Delete reminder</string>
+    <string name="menu_item_edit">Edit</string>
+    <string name="menu_item_complete">Complete</string>
+    <string name="menu_item_delete">Delete</string>
+    <string name="cd_menu_item_edit">Edit</string>
+    <string name="cd_menu_item_complete">Complete</string>
+    <string name="cd_menu_item_delete">Delete</string>
+    <string name="toolbar_title_details">Details</string>
+    <string name="toolbar_title_add_reminder">Add reminder</string>
+    <string name="toolbar_title_save">Save</string>
+    <string name="cd_toolbar_item_save_reminder">Save reminder</string>
+    <string name="repeats_every_header">Repeats every</string>
 
 </resources>
