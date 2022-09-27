@@ -14,6 +14,8 @@
             android:id="@+id/active_reminder_recycler"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:visibility="gone"
+            tools:visibility="visible"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
@@ -45,12 +47,13 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/empty_state_title"
-            style="@style/TextAppearance.Material3.TitleMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="@string/empty_state_active_title"
             android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/on_primary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
@@ -58,11 +61,11 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/empty_state_subtitle"
-            style="@style/TextAppearance.Material3.TitleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/empty_state_active_subtitle"
             android:textColor="@color/subtitle_grey"
+            android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
@@ -74,6 +77,8 @@
         android:id="@+id/empty_state_search_group"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:visibility="gone"
+        tools:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -94,12 +99,13 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/empty_state_search_title"
-            style="@style/TextAppearance.Material3.TitleMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="@string/empty_state_search_title"
             android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/on_primary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
@@ -112,6 +118,7 @@
             android:layout_height="wrap_content"
             android:text="@string/empty_state_search_subtitle"
             android:textColor="@color/subtitle_grey"
+            android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"

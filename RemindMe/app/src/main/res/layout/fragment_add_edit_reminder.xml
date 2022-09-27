@@ -7,23 +7,23 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
+        <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            style="@style/Widget.MaterialComponents.Toolbar.Primary">
+            android:layout_height="wrap_content"
+            app:liftOnScroll="true" >
 
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/save_reminder"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:srcCompat="@drawable/ic_tick"
-                android:contentDescription="@string/cd_save_reminder"
-                android:layout_gravity="end"
-                android:paddingStart="32dp"
-                android:padding="16dp"
-                tools:ignore="RtlSymmetry" />
-        </com.google.android.material.appbar.MaterialToolbar>
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:menu="@menu/toolbar_add_edit_reminder"
+                app:navigationIcon="@drawable/ic_close"
+                tools:title="Add reminder"
+                style="@style/Widget.MaterialComponents.Toolbar.Primary">
+
+            </com.google.android.material.appbar.MaterialToolbar>
+
+        </com.google.android.material.appbar.AppBarLayout>
 
         <ScrollView
             android:id="@+id/add_edit_scroll_view"
@@ -65,6 +65,7 @@
                         android:paddingEnd="0dp"
                         android:paddingBottom="8dp"
                         android:singleLine="true"
+                        android:textColorHint="@color/subtitle_grey"
                         android:textSize="20sp"
                         android:textStyle="bold" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -163,6 +164,7 @@
                         android:layout_height="wrap_content"
                         android:hint="@string/hint_reminder_notes"
                         android:maxLength="10000"
+                        android:textColorHint="@color/subtitle_grey"
                         android:textSize="18sp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -213,7 +215,6 @@
                     android:layout_marginTop="28dp"
                     android:text="@string/title_repeat_reminder"
                     android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
-                    android:textColor="@android:color/black"
                     android:textSize="18sp"
                     app:layout_constraintStart_toEndOf="@+id/repeat_icon"
                     app:layout_constraintTop_toBottomOf="@+id/notification_header" />
@@ -227,14 +228,26 @@
                     app:layout_constraintTop_toTopOf="@+id/repeat_header"
                     tools:checked="true" />
 
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/materialTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/repeats_every_header"
+                    android:textColor="@color/subtitle_grey"
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toStartOf="@+id/repeat_value_label"
+                    app:layout_constraintTop_toBottomOf="@+id/repeat_header"
+                    app:showIfRepeatChecked="@{repeatSwitch.checked}" />
+
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/repeat_value_label"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="8dp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/repeat_icon"
+                    app:layout_constraintTop_toBottomOf="@+id/materialTextView"
                     app:showIfRepeatChecked="@{repeatSwitch.checked}">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -249,14 +262,15 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/repeat_unit_label"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     app:layout_constraintBottom_toBottomOf="@+id/repeat_value_label"
                     app:layout_constraintStart_toEndOf="@+id/repeat_value_label"
                     app:layout_constraintTop_toTopOf="@+id/repeat_value_label"
-                    app:showIfRepeatChecked="@{repeatSwitch.checked}">
+                    app:showIfRepeatChecked="@{repeatSwitch.checked}"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu" >
 
                     <AutoCompleteTextView
                         android:id="@+id/repeat_unit_input"

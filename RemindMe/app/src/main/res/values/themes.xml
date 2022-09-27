@@ -1,19 +1,23 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+<resources>
     <style name="Theme.RemindMe" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_500</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryVariant">@color/primary_variant</item>
+        <item name="colorSecondary">@color/primary_variant</item>
+
         <item name="colorOnPrimary">@color/white</item>
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_700</item>
-        <item name="colorOnSecondary">@color/black</item>
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
+        <item name="colorOnSecondary">@color/white</item>
+
+        <item name="android:statusBarColor">?attr/colorPrimary</item>
+
+        <item name="searchViewStyle">@style/Theme.RemindMe.SearchView</item>
     </style>
 
+    <!-- Search View -->
+    <style name="Theme.RemindMe.SearchView" parent="Widget.AppCompat.SearchView">
+        <item name="closeIcon">@drawable/ic_close_search</item>
+        <item name="searchHintIcon">@null</item>
+        <item name="queryHint">@string/top_app_bar_search</item>
+        <item name="queryBackground">@color/white</item>
+        <item name="android:background">@drawable/search_rounded_corner</item>
+    </style>
 </resources>
