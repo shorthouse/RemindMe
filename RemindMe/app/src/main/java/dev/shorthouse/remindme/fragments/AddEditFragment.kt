@@ -17,28 +17,43 @@ import androidx.navigation.fragment.navArgs
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.transition.MaterialSharedAxis
 import dagger.hilt.android.AndroidEntryPoint
 import dev.shorthouse.remindme.R
-import dev.shorthouse.remindme.databinding.FragmentAddEditReminderBinding
+import dev.shorthouse.remindme.databinding.FragmentAddEditBinding
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.utilities.SpinnerArrayAdapter
 import dev.shorthouse.remindme.utilities.setOnClickThrottleListener
-import dev.shorthouse.remindme.viewmodel.AddEditReminderViewModel
+import dev.shorthouse.remindme.viewmodel.AddEditViewModel
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
 
 @AndroidEntryPoint
-class AddEditReminderFragment : Fragment() {
-    private lateinit var binding: FragmentAddEditReminderBinding
-    private val navigationArgs: AddEditReminderFragmentArgs by navArgs()
-    private val viewModel: AddEditReminderViewModel by viewModels()
+class AddEditFragment : Fragment() {
+    private lateinit var binding: FragmentAddEditBinding
+    private val navigationArgs: AddEditFragmentArgs by navArgs()
+    private val viewModel: AddEditViewModel by viewModels()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        enterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, true).apply {
+            duration = resources.getInteger(R.integer.transition_duration_medium).toLong()
+            excludeTarget(R.id.app_bar, true)
+        }
+
+        returnTransition =  MaterialSharedAxis(MaterialSharedAxis.Z, false).apply {
+            duration = resources.getInteger(R.integer.transition_duration_medium).toLong()
+            excludeTarget(R.id.app_bar, true)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentAddEditReminderBinding.inflate(inflater, container, false)
+        binding = FragmentAddEditBinding.inflate(inflater, container, false)
         return binding.root
     }
 
