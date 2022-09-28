@@ -12,11 +12,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.databinding.ListItemActiveReminderBinding
-import dev.shorthouse.remindme.fragments.ReminderListViewPagerFragmentDirections
+import dev.shorthouse.remindme.fragments.ListViewPagerFragmentDirections
 import dev.shorthouse.remindme.model.Reminder
-import dev.shorthouse.remindme.viewmodel.ActiveReminderListViewModel
+import dev.shorthouse.remindme.viewmodel.ActiveListViewModel
 
-class ActiveReminderListAdapter(private val viewModel: ActiveReminderListViewModel) :
+class ActiveReminderListAdapter(private val viewModel: ActiveListViewModel) :
     ListAdapter<Reminder, ActiveReminderListAdapter.ViewHolder>(ActiveReminderDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -68,8 +68,8 @@ class ActiveReminderListAdapter(private val viewModel: ActiveReminderListViewMod
 
         private fun navigateToReminderDetails(view: View, reminder: Reminder?) {
             reminder?.id?.let { reminderId ->
-                val action = ReminderListViewPagerFragmentDirections
-                    .actionReminderListViewPagerToReminderDetails(reminderId)
+                val action = ListViewPagerFragmentDirections
+                    .actionListViewPagerToDetails(reminderId)
                 view.findNavController().navigate(action)
             }
         }
