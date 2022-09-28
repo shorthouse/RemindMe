@@ -22,12 +22,12 @@ import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
 
 @RunWith(AndroidJUnit4::class)
-class ReminderDetailsViewModelTest {
+class DetailsViewModelTest {
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
 
     // Class under test
-    private lateinit var viewModel: ReminderDetailsViewModel
+    private lateinit var viewModel: DetailsViewModel
 
     @MockK
     private lateinit var notificationScheduler: NotificationScheduler
@@ -79,7 +79,7 @@ class ReminderDetailsViewModelTest {
         val dataSource = FakeDataSource(reminders)
         val reminderRepository = ReminderRepository(dataSource)
 
-        viewModel = ReminderDetailsViewModel(reminderRepository, notificationScheduler)
+        viewModel = DetailsViewModel(reminderRepository, notificationScheduler)
     }
 
     @Test

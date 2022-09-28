@@ -80,7 +80,7 @@ class ReminderListViewPagerTest {
             ApplicationProvider.getApplicationContext()
         )
 
-        launchFragmentInHiltContainer<ReminderListViewPagerFragment>(
+        launchFragmentInHiltContainer<ListViewPagerFragment>(
             navHostController = navController,
         )
     }

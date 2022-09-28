@@ -9,17 +9,17 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import dev.shorthouse.remindme.adapter.AllReminderListAdapter
-import dev.shorthouse.remindme.databinding.FragmentAllReminderListBinding
+import dev.shorthouse.remindme.databinding.FragmentAllListBinding
 import dev.shorthouse.remindme.model.Reminder
-import dev.shorthouse.remindme.viewmodel.AllReminderListViewModel
-import dev.shorthouse.remindme.viewmodel.ReminderListViewPagerViewModel
+import dev.shorthouse.remindme.viewmodel.AllListViewModel
+import dev.shorthouse.remindme.viewmodel.ListViewPagerViewModel
 
 @AndroidEntryPoint
-class AllReminderListFragment : Fragment() {
-    private lateinit var binding: FragmentAllReminderListBinding
+class AllListFragment : Fragment() {
+    private lateinit var binding: FragmentAllListBinding
 
-    private val viewModel: AllReminderListViewModel by viewModels()
-    private val viewPagerViewModel: ReminderListViewPagerViewModel by activityViewModels()
+    private val viewModel: AllListViewModel by viewModels()
+    private val viewPagerViewModel: ListViewPagerViewModel by activityViewModels()
 
     private lateinit var listAdapter: AllReminderListAdapter
 
@@ -28,7 +28,7 @@ class AllReminderListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentAllReminderListBinding.inflate(inflater, container, false)
+        binding = FragmentAllListBinding.inflate(inflater, container, false)
         return binding.root
     }
 

@@ -10,20 +10,20 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import dev.shorthouse.remindme.adapter.ActiveReminderListAdapter
-import dev.shorthouse.remindme.databinding.FragmentActiveReminderListBinding
+import dev.shorthouse.remindme.databinding.FragmentActiveListBinding
 import dev.shorthouse.remindme.model.Reminder
-import dev.shorthouse.remindme.viewmodel.ActiveReminderListViewModel
-import dev.shorthouse.remindme.viewmodel.ReminderListViewPagerViewModel
+import dev.shorthouse.remindme.viewmodel.ActiveListViewModel
+import dev.shorthouse.remindme.viewmodel.ListViewPagerViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.Duration
 
 @AndroidEntryPoint
-class ActiveReminderListFragment : Fragment() {
-    private lateinit var binding: FragmentActiveReminderListBinding
+class ActiveListFragment : Fragment() {
+    private lateinit var binding: FragmentActiveListBinding
 
-    private val viewModel: ActiveReminderListViewModel by viewModels()
-    private val viewPagerViewModel: ReminderListViewPagerViewModel by activityViewModels()
+    private val viewModel: ActiveListViewModel by viewModels()
+    private val viewPagerViewModel: ListViewPagerViewModel by activityViewModels()
 
     private lateinit var listAdapter: ActiveReminderListAdapter
 
@@ -32,7 +32,7 @@ class ActiveReminderListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentActiveReminderListBinding.inflate(inflater, container, false)
+        binding = FragmentActiveListBinding.inflate(inflater, container, false)
         return binding.root
     }
 

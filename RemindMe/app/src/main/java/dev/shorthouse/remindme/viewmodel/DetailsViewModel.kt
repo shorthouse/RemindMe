@@ -18,7 +18,7 @@ import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 
 @HiltViewModel
-class ReminderDetailsViewModel @Inject constructor(
+class DetailsViewModel @Inject constructor(
     private val repository: ReminderRepository,
     private val notificationScheduler: NotificationScheduler,
 ) : ViewModel() {

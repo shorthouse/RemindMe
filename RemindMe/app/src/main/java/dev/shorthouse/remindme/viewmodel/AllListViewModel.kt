@@ -8,7 +8,7 @@ import dev.shorthouse.remindme.utilities.RemindersSort
 import javax.inject.Inject
 
 @HiltViewModel
-class AllReminderListViewModel @Inject constructor(
+class AllListViewModel @Inject constructor(
     val repository: ReminderRepository,
 ) : ViewModel() {
 

@@ -9,6 +9,7 @@
         android:layout_height="match_parent">
 
         <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/app_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" >
 
@@ -19,7 +20,7 @@
                 app:theme="@style/Theme.RemindMe.Toolbar"
                 style="@style/Widget.MaterialComponents.Toolbar.Primary"
                 app:title="@string/app_name"
-                app:menu="@menu/toolbar_reminder_list" />
+                app:menu="@menu/toolbar_list_view_pager" />
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tab_layout"
@@ -28,7 +29,7 @@
                 android:elevation="4dp"
                 android:contentDescription="@string/cd_reminder_tabs"
                 android:layout_height="?attr/actionBarSize"
-                app:tabTextColor="?attr/colorOnPrimary"/>
+                app:tabTextColor="?attr/colorOnPrimary" />
 
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -36,7 +37,8 @@
             android:id="@+id/view_pager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:transitionGroup="true"/>
 
         <FrameLayout
             android:id="@+id/scrim"
@@ -49,8 +51,8 @@
             android:layout_height="wrap_content"
             app:layout_behavior="@string/bottom_sheet_behavior"
             app:behavior_hideable="true"
-            app:menu="@menu/nav_drawer_sort_reminder"
-            app:headerLayout="@layout/nav_drawer_sort_header" />
+            app:menu="@menu/bottom_nav_drawer_sort"
+            app:headerLayout="@layout/bottom_nav_drawer_sort_header" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/add_reminder_fab"

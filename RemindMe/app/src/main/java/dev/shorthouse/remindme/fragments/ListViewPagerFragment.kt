@@ -16,30 +16,29 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayoutMediator
-import com.google.android.material.transition.MaterialElevationScale
 import dagger.hilt.android.AndroidEntryPoint
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.adapter.ACTIVE_REMINDERS_PAGE_INDEX
 import dev.shorthouse.remindme.adapter.ALL_REMINDERS_PAGE_INDEX
 import dev.shorthouse.remindme.adapter.ReminderListPagerAdapter
-import dev.shorthouse.remindme.databinding.FragmentReminderListViewPagerBinding
+import dev.shorthouse.remindme.databinding.FragmentListViewPagerBinding
 import dev.shorthouse.remindme.utilities.hide
 import dev.shorthouse.remindme.utilities.isShown
 import dev.shorthouse.remindme.utilities.show
-import dev.shorthouse.remindme.viewmodel.ReminderListViewPagerViewModel
+import dev.shorthouse.remindme.viewmodel.ListViewPagerViewModel
 
 @AndroidEntryPoint
-class ReminderListViewPagerFragment : Fragment() {
-    private lateinit var binding: FragmentReminderListViewPagerBinding
+class ListViewPagerFragment : Fragment() {
+    private lateinit var binding: FragmentListViewPagerBinding
 
-    private val viewModel: ReminderListViewPagerViewModel by activityViewModels()
+    private val viewModel: ListViewPagerViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentReminderListViewPagerBinding.inflate(inflater, container, false)
+        binding = FragmentListViewPagerBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -180,8 +179,8 @@ class ReminderListViewPagerFragment : Fragment() {
     }
 
     private fun navigateToAddEditReminder() {
-        val action = ReminderListViewPagerFragmentDirections
-            .actionReminderListViewPagerToAddEditReminder()
+        val action = ListViewPagerFragmentDirections
+            .actionListViewPagerToAddEdit()
         findNavController().navigate(action)
     }
 
