@@ -10,25 +10,50 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.transition.MaterialSharedAxis
 import dagger.hilt.android.AndroidEntryPoint
 import dev.shorthouse.remindme.R
-import dev.shorthouse.remindme.databinding.FragmentReminderDetailsBinding
+import dev.shorthouse.remindme.databinding.FragmentDetailsBinding
 import dev.shorthouse.remindme.model.Reminder
-import dev.shorthouse.remindme.viewmodel.ReminderDetailsViewModel
+import dev.shorthouse.remindme.viewmodel.DetailsViewModel
 
 @AndroidEntryPoint
-class ReminderDetailsFragment : Fragment() {
-    private lateinit var binding: FragmentReminderDetailsBinding
-    private val navigationArgs: ReminderDetailsFragmentArgs by navArgs()
+class DetailsFragment : Fragment() {
+    private lateinit var binding: FragmentDetailsBinding
+    private val navigationArgs: DetailsFragmentArgs by navArgs()
 
-    private val viewModel: ReminderDetailsViewModel by viewModels()
+    private val viewModel: DetailsViewModel by viewModels()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        enterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, true).apply {
+            duration = resources.getInteger(R.integer.transition_duration_medium).toLong()
+            excludeTarget(R.id.app_bar, true)
+        }
+
+        returnTransition =  MaterialSharedAxis(MaterialSharedAxis.Z, false).apply {
+            duration = resources.getInteger(R.integer.transition_duration_medium).toLong()
+            excludeTarget(R.id.app_bar, true)
+        }
+
+        exitTransition = MaterialSharedAxis(MaterialSharedAxis.Z, true).apply {
+            duration = resources.getInteger(R.integer.transition_duration_medium).toLong()
+            excludeTarget(R.id.app_bar, true)
+        }
+
+        reenterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false).apply {
+            duration = resources.getInteger(R.integer.transition_duration_medium).toLong()
+            excludeTarget(R.id.app_bar, true)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentReminderDetailsBinding.inflate(inflater, container, false)
+        binding = FragmentDetailsBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -127,8 +152,8 @@ class ReminderDetailsFragment : Fragment() {
     }
 
     private fun navigateToEditReminder() {
-        val action = ReminderDetailsFragmentDirections
-            .actionReminderDetailsToAddEditReminder(
+        val action = DetailsFragmentDirections
+            .actionDetailsToAddEdit(
                 navigationArgs.id,
                 isEditReminder = true
             )
