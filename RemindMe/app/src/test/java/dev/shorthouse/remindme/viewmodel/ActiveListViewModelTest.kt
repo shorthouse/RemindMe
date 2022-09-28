@@ -21,12 +21,12 @@ import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
 
 @RunWith(AndroidJUnit4::class)
-class ActiveReminderListViewModelTest {
+class ActiveListViewModelTest {
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
 
     // Class under test
-    private lateinit var viewModel: ActiveReminderListViewModel
+    private lateinit var viewModel: ActiveListViewModel
 
     private lateinit var reminders: MutableList<Reminder>
 
@@ -84,12 +84,12 @@ class ActiveReminderListViewModelTest {
 
         val dataSource = FakeDataSource(reminders)
         val reminderRepository = ReminderRepository(dataSource)
-        viewModel = ActiveReminderListViewModel(reminderRepository)
+        viewModel = ActiveListViewModel(reminderRepository)
     }
 
     @Test
     fun `filter on current time, returns only active reminders`() {
-        val sort = MutableLiveData(RemindersSort.NEWEST_FIRST)
+        val sort = MutableLiveData(RemindersSort.EARLIEST_DATE_FIRST)
         val filter = MutableLiveData("")
 
         val filterTimeReminders = viewModel.getReminders(sort, filter).getOrAwaitValue()

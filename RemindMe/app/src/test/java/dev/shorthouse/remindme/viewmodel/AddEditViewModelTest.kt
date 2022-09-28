@@ -14,9 +14,9 @@ import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
 
-class AddEditReminderViewModelTest {
+class AddEditViewModelTest {
     // Class under test
-    private lateinit var viewModel: AddEditReminderViewModel
+    private lateinit var viewModel: AddEditViewModel
 
     @MockK
     private lateinit var notificationScheduler: NotificationScheduler
@@ -67,7 +67,7 @@ class AddEditReminderViewModelTest {
 
         val dataSource = FakeDataSource()
         val reminderRepository = ReminderRepository(dataSource)
-        viewModel = AddEditReminderViewModel(reminderRepository, notificationScheduler)
+        viewModel = AddEditViewModel(reminderRepository, notificationScheduler)
     }
 
     @Test
