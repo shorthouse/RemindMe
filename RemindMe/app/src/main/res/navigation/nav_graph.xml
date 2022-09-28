@@ -3,25 +3,24 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/reminder_list_view_pager">
+    app:startDestination="@id/list_view_pager">
 
     <fragment
-        android:id="@+id/reminder_list_view_pager"
-        android:name="dev.shorthouse.remindme.fragments.ReminderListViewPagerFragment"
-        tools:layout="@layout/fragment_reminder_list_view_pager">
-
+        android:id="@+id/list_view_pager"
+        android:name="dev.shorthouse.remindme.fragments.ListViewPagerFragment"
+        tools:layout="@layout/fragment_list_view_pager">
         <action
-            android:id="@+id/action_reminder_list_view_pager_to_add_edit_reminder"
-            app:destination="@id/add_edit_reminder" />
+            android:id="@+id/action_list_view_pager_to_add_edit"
+            app:destination="@id/add_edit" />
         <action
-            android:id="@+id/action_reminder_list_view_pager_to_reminder_details"
-            app:destination="@id/reminder_details" />
+            android:id="@+id/action_list_view_pager_to_details"
+            app:destination="@id/details" />
     </fragment>
 
     <fragment
-        android:id="@+id/add_edit_reminder"
-        android:name="dev.shorthouse.remindme.fragments.AddEditReminderFragment"
-        tools:layout="@layout/fragment_add_edit_reminder" >
+        android:id="@+id/add_edit"
+        android:name="dev.shorthouse.remindme.fragments.AddEditFragment"
+        tools:layout="@layout/fragment_add_edit" >
         <argument
             android:name="id"
             android:defaultValue="0L"
@@ -33,17 +32,17 @@
     </fragment>
 
     <fragment
-        android:id="@+id/reminder_details"
-        android:name="dev.shorthouse.remindme.fragments.ReminderDetailsFragment"
+        android:id="@+id/details"
+        android:name="dev.shorthouse.remindme.fragments.DetailsFragment"
         android:label="Reminder Details"
-        tools:layout="@layout/fragment_reminder_details" >
+        tools:layout="@layout/fragment_details" >
         <argument
             android:name="id"
             android:defaultValue="0L"
             app:argType="long" />
         <action
-            android:id="@+id/action_reminder_details_to_add_edit_reminder"
-            app:destination="@id/add_edit_reminder" />
+            android:id="@+id/action_details_to_add_edit"
+            app:destination="@id/add_edit" />
     </fragment>
 
 </navigation>
