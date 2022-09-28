@@ -22,7 +22,7 @@ import org.junit.Test
 
 @ExperimentalCoroutinesApi
 @HiltAndroidTest
-class AddEditReminderFragmentTest {
+class AddEditFragmentTest {
 
     @get:Rule
     var hiltRule = HiltAndroidRule(this)
@@ -31,13 +31,13 @@ class AddEditReminderFragmentTest {
 
     @Before
     fun setup() {
-        val navigationArgs = AddEditReminderFragmentArgs(isEditReminder = false).toBundle()
+        val navigationArgs = AddEditFragmentArgs(isEditReminder = false).toBundle()
 
         val navHostController = TestNavHostController(
             ApplicationProvider.getApplicationContext()
         )
 
-        launchFragmentInHiltContainer<AddEditReminderFragment>(
+        launchFragmentInHiltContainer<AddEditFragment>(
             navHostController = navHostController,
             fragmentArgs = navigationArgs,
         ) {

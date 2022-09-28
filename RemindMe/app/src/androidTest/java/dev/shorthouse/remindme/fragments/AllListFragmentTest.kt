@@ -26,7 +26,7 @@ import javax.inject.Singleton
 @ExperimentalCoroutinesApi
 @HiltAndroidTest
 @UninstallModules(DataSourceModule::class)
-class AllReminderListFragmentTest {
+class AllListFragmentTest {
 
     @get:Rule
     var hiltRule = HiltAndroidRule(this)
@@ -50,7 +50,7 @@ class AllReminderListFragmentTest {
 
     @Test
     fun when_all_reminder_exists_should_display_correctly()  {
-        launchFragmentInHiltContainer<AllReminderListFragment>(
+        launchFragmentInHiltContainer<AllListFragment>(
             themeResId = R.style.Theme_RemindMe
         )
 

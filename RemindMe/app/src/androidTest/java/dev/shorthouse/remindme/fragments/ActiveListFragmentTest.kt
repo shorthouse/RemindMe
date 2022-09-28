@@ -26,7 +26,7 @@ import javax.inject.Singleton
 @ExperimentalCoroutinesApi
 @HiltAndroidTest
 @UninstallModules(DataSourceModule::class)
-class ActiveReminderListFragmentTest {
+class ActiveListFragmentTest {
 
     @get:Rule
     var hiltRule = HiltAndroidRule(this)
@@ -50,7 +50,7 @@ class ActiveReminderListFragmentTest {
 
     @Test
     fun when_active_reminder_exists_should_display_correctly()  {
-        launchFragmentInHiltContainer<ActiveReminderListFragment>(
+        launchFragmentInHiltContainer<ActiveListFragment>(
             themeResId = R.style.Theme_RemindMe
         )
 
@@ -61,7 +61,7 @@ class ActiveReminderListFragmentTest {
 
     @Test
     fun when_reminder_done_button_clicked_should_display_snackbar() {
-        launchFragmentInHiltContainer<ActiveReminderListFragment>(
+        launchFragmentInHiltContainer<ActiveListFragment>(
             themeResId = R.style.Theme_RemindMe
         )
 

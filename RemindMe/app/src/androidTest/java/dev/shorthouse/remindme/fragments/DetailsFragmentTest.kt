@@ -35,7 +35,7 @@ import javax.inject.Singleton
 
 @UninstallModules(DataSourceModule::class)
 @HiltAndroidTest
-class ReminderDetailsFragmentTest {
+class DetailsFragmentTest {
 
     @get:Rule
     var hiltRule = HiltAndroidRule(this)
@@ -101,9 +101,9 @@ class ReminderDetailsFragmentTest {
 
     @Test
     fun when_reminder_details_fragment_created_should_display_toolbar() {
-        val navigationArgs = ReminderDetailsFragmentArgs(id = 1L).toBundle()
+        val navigationArgs = DetailsFragmentArgs(id = 1L).toBundle()
 
-        launchFragmentInHiltContainer<ReminderDetailsFragment>(
+        launchFragmentInHiltContainer<DetailsFragment>(
             navHostController = navHostController,
             fragmentArgs = navigationArgs
         )
@@ -120,9 +120,9 @@ class ReminderDetailsFragmentTest {
 
     @Test
     fun when_reminder_details_fragment_created_should_display_content() {
-        val navigationArgs = ReminderDetailsFragmentArgs(id = 1L).toBundle()
+        val navigationArgs = DetailsFragmentArgs(id = 1L).toBundle()
 
-        launchFragmentInHiltContainer<ReminderDetailsFragment>(
+        launchFragmentInHiltContainer<DetailsFragment>(
             navHostController = navHostController,
             fragmentArgs = navigationArgs
         )
@@ -153,9 +153,9 @@ class ReminderDetailsFragmentTest {
 
     @Test
     fun when_reminder_has_repeat_interval_should_display_repeat_interval_section() {
-        val navigationArgs = ReminderDetailsFragmentArgs(id = 2L).toBundle()
+        val navigationArgs = DetailsFragmentArgs(id = 2L).toBundle()
 
-        launchFragmentInHiltContainer<ReminderDetailsFragment>(
+        launchFragmentInHiltContainer<DetailsFragment>(
             navHostController = navHostController,
             fragmentArgs = navigationArgs
         )
@@ -177,9 +177,9 @@ class ReminderDetailsFragmentTest {
 
     @Test
     fun when_reminder_has_notes_should_display_notes_section() {
-        val navigationArgs = ReminderDetailsFragmentArgs(id = 3L).toBundle()
+        val navigationArgs = DetailsFragmentArgs(id = 3L).toBundle()
 
-        launchFragmentInHiltContainer<ReminderDetailsFragment>(
+        launchFragmentInHiltContainer<DetailsFragment>(
             navHostController = navHostController,
             fragmentArgs = navigationArgs
         )
@@ -201,9 +201,9 @@ class ReminderDetailsFragmentTest {
 
     @Test
     fun when_reminder_has_notification_enabled_should_display_notification_section() {
-        val navigationArgs = ReminderDetailsFragmentArgs(id = 4L).toBundle()
+        val navigationArgs = DetailsFragmentArgs(id = 4L).toBundle()
 
-        launchFragmentInHiltContainer<ReminderDetailsFragment>(
+        launchFragmentInHiltContainer<DetailsFragment>(
             navHostController = navHostController,
             fragmentArgs = navigationArgs
         )
@@ -225,9 +225,9 @@ class ReminderDetailsFragmentTest {
 
     @Test
     fun when_reminder_has_all_optional_parts_enabled_should_display_all_optional_parts() {
-        val navigationArgs = ReminderDetailsFragmentArgs(id = 5L).toBundle()
+        val navigationArgs = DetailsFragmentArgs(id = 5L).toBundle()
 
-        launchFragmentInHiltContainer<ReminderDetailsFragment>(
+        launchFragmentInHiltContainer<DetailsFragment>(
             navHostController = navHostController,
             fragmentArgs = navigationArgs
         )
@@ -265,9 +265,9 @@ class ReminderDetailsFragmentTest {
 
     @Test
     fun when_reminder_with_largest_possible_name_should_display_correctly() {
-        val navigationArgs = ReminderDetailsFragmentArgs(id = 6L).toBundle()
+        val navigationArgs = DetailsFragmentArgs(id = 6L).toBundle()
 
-        launchFragmentInHiltContainer<ReminderDetailsFragment>(
+        launchFragmentInHiltContainer<DetailsFragment>(
             navHostController = navHostController,
             fragmentArgs = navigationArgs
         )
@@ -278,9 +278,9 @@ class ReminderDetailsFragmentTest {
 
     @Test
     fun when_reminder_with_largest_possible_notes_should_display_correctly() {
-        val navigationArgs = ReminderDetailsFragmentArgs(id = 7L).toBundle()
+        val navigationArgs = DetailsFragmentArgs(id = 7L).toBundle()
 
-        launchFragmentInHiltContainer<ReminderDetailsFragment>(
+        launchFragmentInHiltContainer<DetailsFragment>(
             navHostController = navHostController,
             fragmentArgs = navigationArgs
         )
@@ -292,9 +292,9 @@ class ReminderDetailsFragmentTest {
 
     @Test
     fun when_delete_icon_clicked_should_show_alert_dialog() {
-        val navigationArgs = ReminderDetailsFragmentArgs(id = 1L).toBundle()
+        val navigationArgs = DetailsFragmentArgs(id = 1L).toBundle()
 
-        launchFragmentInHiltContainer<ReminderDetailsFragment>(
+        launchFragmentInHiltContainer<DetailsFragment>(
             navHostController = navHostController,
             fragmentArgs = navigationArgs
         )
@@ -307,9 +307,9 @@ class ReminderDetailsFragmentTest {
 
     @Test
     fun when_delete_dialog_cancel_button_clicked_should_dismiss_delete_dialog() {
-        val navigationArgs = ReminderDetailsFragmentArgs(id = 1L).toBundle()
+        val navigationArgs = DetailsFragmentArgs(id = 1L).toBundle()
 
-        launchFragmentInHiltContainer<ReminderDetailsFragment>(
+        launchFragmentInHiltContainer<DetailsFragment>(
             navHostController = navHostController,
             fragmentArgs = navigationArgs
         )
@@ -324,9 +324,9 @@ class ReminderDetailsFragmentTest {
 
     @Test
     fun when_delete_dialog_delete_button_clicked_should_dismiss_delete_dialog_and_show_toast() {
-        val navigationArgs = ReminderDetailsFragmentArgs(id = 1L).toBundle()
+        val navigationArgs = DetailsFragmentArgs(id = 1L).toBundle()
 
-        launchFragmentInHiltContainer<ReminderDetailsFragment>(
+        launchFragmentInHiltContainer<DetailsFragment>(
             navHostController = navHostController,
             fragmentArgs = navigationArgs
         ) {
