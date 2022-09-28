@@ -15,6 +15,7 @@
         android:layout_height="match_parent">
 
         <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/app_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:liftOnScroll="true" >
@@ -24,7 +25,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:title="@string/toolbar_title_details"
-                app:menu="@menu/toolbar_reminder_details"
+                app:menu="@menu/toolbar_details"
                 tools:navigationIcon="@drawable/ic_back"
                 style="@style/Widget.MaterialComponents.Toolbar.Primary" />
 
@@ -34,7 +35,8 @@
             android:id="@+id/details_scroll_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="?attr/actionBarSize">
+            android:layout_marginTop="?attr/actionBarSize"
+            android:transitionGroup="true">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -43,7 +45,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
                 android:paddingBottom="24dp"
-                tools:context=".fragments.ReminderDetailsFragment">
+                tools:context=".fragments.DetailsFragment">
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/name"

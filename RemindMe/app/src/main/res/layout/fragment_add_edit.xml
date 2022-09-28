@@ -5,9 +5,10 @@
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent">
 
         <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/app_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:liftOnScroll="true" >
@@ -16,7 +17,7 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:menu="@menu/toolbar_add_edit_reminder"
+                app:menu="@menu/toolbar_add_edit"
                 app:navigationIcon="@drawable/ic_close"
                 tools:title="Add reminder"
                 style="@style/Widget.MaterialComponents.Toolbar.Primary">
@@ -29,7 +30,8 @@
             android:id="@+id/add_edit_scroll_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="?attr/actionBarSize">
+            android:layout_marginTop="?attr/actionBarSize"
+            android:transitionGroup="true">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintLayout"
@@ -39,7 +41,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
                 android:paddingBottom="24dp"
-                tools:context=".fragments.AddEditReminderFragment">
+                tools:context=".fragments.AddEditFragment">
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/name_label"
