@@ -16,7 +16,7 @@ import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 
 @HiltViewModel
-class ActiveReminderListViewModel @Inject constructor(
+class ActiveListViewModel @Inject constructor(
     val repository: ReminderRepository,
 ) : ViewModel() {
     private val currentAllReminders = repository

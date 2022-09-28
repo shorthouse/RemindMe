@@ -10,7 +10,7 @@ import dev.shorthouse.remindme.R
 // Solution class taken from https://github.com/material-components/material-components-android/issues/1464
 
 class SpinnerArrayAdapter(context: Context, items: List<String>)
-    : ArrayAdapter<String>(context, R.layout.list_item_dropdown_interval, items) {
+    : ArrayAdapter<String>(context, R.layout.spinner_item_repeat_interval, items) {
 
     private val noOpFilter = object : Filter() {
         private val noOpResult = FilterResults()
