@@ -10,7 +10,7 @@ import com.google.android.material.math.MathUtils
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.utilities.RemindersSort
 
-class ReminderListViewPagerViewModel : ViewModel() {
+class ListViewPagerViewModel : ViewModel() {
     val currentSort = MutableLiveData(RemindersSort.EARLIEST_DATE_FIRST)
     val currentFilter = MutableLiveData("")
 
