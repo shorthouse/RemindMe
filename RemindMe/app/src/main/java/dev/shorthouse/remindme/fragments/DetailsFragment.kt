@@ -79,7 +79,7 @@ class DetailsFragment : Fragment() {
         binding.apply {
             name.text = reminder.name
             startDate.text = viewModel.getFormattedStartDate(reminder)
-            startTime.text = viewModel.getFormattedStartTime(reminder)
+            startTime.text = reminder.getFormattedStartTime()
             notes.text = reminder.notes
 
             reminder.repeatInterval?.let {
