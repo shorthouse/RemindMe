@@ -15,10 +15,11 @@
             android:id="@+id/active_reminder_recycler"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:paddingBottom="64dp"
             android:visibility="gone"
             tools:visibility="visible"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

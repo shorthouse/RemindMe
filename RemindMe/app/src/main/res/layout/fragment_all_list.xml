@@ -18,6 +18,8 @@
             android:id="@+id/all_reminder_recycler"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:paddingBottom="64dp"
+            android:clipToPadding="false"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
