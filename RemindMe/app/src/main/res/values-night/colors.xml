@@ -14,4 +14,6 @@
 
     <color name="text_off_black">#212121</color>
     <color name="subtitle_grey">#FF8A939A</color>
+
+    <color name="ic_launcher_background">#FF2A60EB</color>
 </resources>
