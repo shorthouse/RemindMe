@@ -9,7 +9,7 @@ import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.data.RepeatInterval
 import dev.shorthouse.remindme.model.Reminder
-import dev.shorthouse.remindme.utilities.DATE_PATTERN
+import dev.shorthouse.remindme.utilities.DATE_INPUT_PATTERN
 import dev.shorthouse.remindme.utilities.NotificationScheduler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -52,12 +52,8 @@ class DetailsViewModel @Inject constructor(
     fun getFormattedStartDate(reminder: Reminder): String {
         return reminder.startDateTime
             .toLocalDate()
-            .format(DateTimeFormatter.ofPattern(DATE_PATTERN))
+            .format(DateTimeFormatter.ofPattern(DATE_INPUT_PATTERN))
             .toString()
-    }
-
-    fun getFormattedStartTime(reminder: Reminder): String {
-        return reminder.startDateTime.toLocalTime().toString()
     }
 
     fun getRepeatIntervalStringId(repeatInterval: RepeatInterval): Int {
