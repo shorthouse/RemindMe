@@ -260,7 +260,7 @@ class ReminderListViewPagerTest {
         onView(withId(R.id.drawer_sort_earliest_date_first)).perform(click())
 
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-        val reminder = device.findObject( UiSelector().text("Test Older Reminder"))
+        val reminder = device.findObject(UiSelector().text("Test Older Reminder"))
         try {
             reminder.waitForExists(3000)
 
