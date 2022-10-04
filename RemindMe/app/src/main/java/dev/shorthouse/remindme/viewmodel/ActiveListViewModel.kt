@@ -8,6 +8,7 @@ import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.utilities.DAYS_IN_WEEK
 import dev.shorthouse.remindme.utilities.RemindersSort
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.Duration
 import java.time.LocalDateTime
@@ -97,6 +98,7 @@ class ActiveListViewModel @Inject constructor(
 
     fun updateDoneReminder(reminder: Reminder) {
         viewModelScope.launch(Dispatchers.IO) {
+            delay(150)
             repository.updateReminder(getUpdatedDoneReminder(reminder))
         }
     }

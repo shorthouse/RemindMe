@@ -15,6 +15,9 @@ import dev.shorthouse.remindme.databinding.ListItemActiveReminderBinding
 import dev.shorthouse.remindme.fragments.ListViewPagerFragmentDirections
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.viewmodel.ActiveListViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
+import java.time.Duration
 
 class ActiveReminderListAdapter(private val viewModel: ActiveListViewModel) :
     ListAdapter<Reminder, ActiveReminderListAdapter.ViewHolder>(ActiveReminderDiffCallback()) {
@@ -53,6 +56,7 @@ class ActiveReminderListAdapter(private val viewModel: ActiveListViewModel) :
                 }
 
                 setDoneClickListener { view ->
+                    binding.doneCheckbox.jumpDrawablesToCurrentState()
                     cancelDisplayedReminderNotification(view, reminder)
                     updateDoneReminder(view)
                 }
