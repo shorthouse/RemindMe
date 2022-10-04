@@ -18,6 +18,7 @@ import dev.shorthouse.remindme.di.DataSourceModule
 import dev.shorthouse.remindme.launchFragmentInHiltContainer
 import dev.shorthouse.remindme.util.TestUtil
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import org.hamcrest.CoreMatchers.allOf
 import org.junit.Rule
 import org.junit.Test
 import java.time.ZonedDateTime
@@ -49,7 +50,7 @@ class ActiveListFragmentTest {
     }
 
     @Test
-    fun when_active_reminder_exists_should_display_correctly()  {
+    fun when_active_reminder_exists_should_display_correctly() {
         launchFragmentInHiltContainer<ActiveListFragment>(
             themeResId = R.style.Theme_RemindMe
         )
@@ -57,15 +58,16 @@ class ActiveListFragmentTest {
         onView(withId(R.id.reminder_name)).check(matches(withText("Test Active Reminder")))
         onView(withId(R.id.reminder_date)).check(matches(withText("01 Jan 2000")))
         onView(withId(R.id.reminder_time)).check(matches(withText("14:02")))
+        onView(withId(R.id.done_checkbox)).check(matches(allOf(isClickable(), isDisplayed())))
     }
 
     @Test
-    fun when_reminder_done_button_clicked_should_display_snackbar() {
+    fun when_reminder_done_checkbox_clicked_should_display_snackbar() {
         launchFragmentInHiltContainer<ActiveListFragment>(
             themeResId = R.style.Theme_RemindMe
         )
 
-        onView(withText("Done")).perform(click())
+        onView(withId(R.id.done_checkbox)).perform(click())
         onView(withText("Reminder completed")).check(matches(isDisplayed()))
     }
 }
