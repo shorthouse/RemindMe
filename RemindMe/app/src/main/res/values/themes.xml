@@ -7,7 +7,7 @@
         <item name="colorOnPrimary">@color/white</item>
         <item name="colorOnSecondary">@color/white</item>
 
-        <item name="android:statusBarColor">?attr/colorPrimary</item>
+        <item name="android:statusBarColor">@color/primary</item>
 
         <item name="searchViewStyle">@style/Theme.RemindMe.SearchView</item>
     </style>
