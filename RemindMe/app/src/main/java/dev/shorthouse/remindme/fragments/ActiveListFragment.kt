@@ -93,7 +93,6 @@ class ActiveListFragment : Fragment() {
         binding.emptyStateGroup.visibility = View.VISIBLE
         binding.emptyStateSearchGroup.visibility = View.GONE
         binding.activeReminderRecycler.visibility = View.GONE
-
     }
 
     private fun displaySearchEmptyState() {
@@ -101,6 +100,4 @@ class ActiveListFragment : Fragment() {
         binding.emptyStateGroup.visibility = View.GONE
         binding.activeReminderRecycler.visibility = View.GONE
     }
-
-
 }

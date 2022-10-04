@@ -34,5 +34,4 @@ data class Reminder(
     fun getFormattedStartTime() = this.startDateTime
         .toLocalTime()
         .toString()
-
 }
