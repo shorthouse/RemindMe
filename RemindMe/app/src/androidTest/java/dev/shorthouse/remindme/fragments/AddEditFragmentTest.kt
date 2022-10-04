@@ -53,27 +53,31 @@ class AddEditFragmentTest {
     fun when_add_reminder_fragment_created_should_display_toolbar() {
         onView(withId(R.id.toolbar)).check(matches(isDisplayed()))
         onView(withContentDescription("Close")).check(matches(isClickable()))
-        onView(withId(R.id.save_reminder)).check(matches(isClickable()))
+        onView(withId(R.id.action_save)).check(matches(isDisplayed()))
     }
 
     @Test
     fun when_add_reminder_fragment_created_should_display_content() {
         onView(withId(R.id.name_label)).check(matches(isDisplayed()))
+        onView(withId(R.id.start_date_icon)).check(matches(isDisplayed()))
         onView(withId(R.id.start_date_label)).check(matches(isDisplayed()))
+        onView(withId(R.id.start_time_icon)).check(matches(isDisplayed()))
         onView(withId(R.id.start_time_label)).check(matches(isDisplayed()))
+        onView(withId(R.id.start_time_icon)).check(matches(isDisplayed()))
+        onView(withId(R.id.notes_icon)).check(matches(isDisplayed()))
         onView(withId(R.id.notes_label)).check(matches(isDisplayed()))
+        onView(withId(R.id.notification_icon)).check(matches(isDisplayed()))
         onView(withId(R.id.notification_header)).check(matches(isDisplayed()))
         onView(withId(R.id.notification_switch)).check(matches(isDisplayed()))
+        onView(withId(R.id.repeat_icon)).check(matches(isDisplayed()))
         onView(withId(R.id.repeat_header)).check(matches(isDisplayed()))
         onView(withId(R.id.repeat_switch)).check(matches(isDisplayed()))
     }
 
     @Test
     fun when_add_reminder_fragment_created_should_display_hints() {
-        onView(withId(R.id.name_input)).check(matches(withHint("Name")))
-        onView(withId(R.id.start_date_input)).check(matches(withHint("Reminder start date")))
-        onView(withId(R.id.start_time_input)).check(matches(withHint("Reminder start time")))
-        onView(withId(R.id.notes_input)).check(matches(withHint("Notes")))
+        onView(withId(R.id.name_input)).check(matches(withHint("RemindMe to...")))
+        onView(withId(R.id.notes_input)).check(matches(withHint("Add notes")))
     }
 
     @Test
@@ -86,7 +90,7 @@ class AddEditFragmentTest {
         onView(withId(R.id.name_input)).perform(typeText("Reminder name"))
         onView(withId(R.id.start_date_input)).perform(setTextInTextView("Sat, 01 Jan 2000"))
         onView(withId(R.id.start_time_input)).perform(setTextInTextView("00:00"))
-        onView(withId(R.id.save_reminder)).perform(click())
+        onView(withId(R.id.action_save)).perform(click())
         checkToastDisplayed("The start time cannot be in the past.", decorView)
     }
 
@@ -126,7 +130,7 @@ class AddEditFragmentTest {
         onView(withId(R.id.name_input)).perform(typeText("Reminder name"))
         onView(withId(R.id.repeat_switch)).perform(click())
         onView(withId(R.id.repeat_value_input)).perform(replaceText(""))
-        onView(withId(R.id.save_reminder)).perform(click())
+        onView(withId(R.id.action_save)).perform(click())
         checkToastDisplayed("The repeat interval cannot be empty.", decorView)
     }
 
@@ -135,14 +139,14 @@ class AddEditFragmentTest {
         onView(withId(R.id.name_input)).perform(typeText("Reminder name"))
         onView(withId(R.id.repeat_switch)).perform(click())
         onView(withId(R.id.repeat_value_input)).perform(replaceText("0"))
-        onView(withId(R.id.save_reminder)).perform(click())
+        onView(withId(R.id.action_save)).perform(click())
         checkToastDisplayed("The repeat interval cannot be empty.", decorView)
     }
 
     @Test
     fun when_valid_reminder_entered_should_display_toast() {
         onView(withId(R.id.name_input)).perform(typeText("Reminder name"))
-        onView(withId(R.id.save_reminder)).perform(click())
+        onView(withId(R.id.action_save)).perform(click())
         checkToastDisplayed("Reminder saved", decorView)
     }
 
@@ -154,4 +158,3 @@ class AddEditFragmentTest {
         onView(withId(R.id.repeat_header)).check(matches(isDisplayed()))
     }
 }
-

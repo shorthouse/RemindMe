@@ -49,7 +49,7 @@ class AllListFragmentTest {
     }
 
     @Test
-    fun when_all_reminder_exists_should_display_correctly()  {
+    fun when_all_reminder_exists_should_display_correctly() {
         launchFragmentInHiltContainer<AllListFragment>(
             themeResId = R.style.Theme_RemindMe
         )
