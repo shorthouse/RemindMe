@@ -18,6 +18,7 @@
             android:paddingBottom="64dp"
             android:visibility="gone"
             tools:visibility="visible"
+            android:clipToPadding="false"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
