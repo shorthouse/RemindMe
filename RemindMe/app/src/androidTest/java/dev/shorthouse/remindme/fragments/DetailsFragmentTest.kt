@@ -4,11 +4,13 @@ import android.view.View
 import androidx.navigation.testing.TestNavHostController
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.swipeUp
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.platform.app.InstrumentationRegistry
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -109,13 +111,11 @@ class DetailsFragmentTest {
         )
 
         onView(withId(R.id.toolbar)).check(matches(isDisplayed()))
-        onView(withId(R.id.action_delete)).check(
-            matches(
-                allOf(
-                    isClickable(), isDisplayed()
-                )
-            )
-        )
+        onView(withId((R.id.action_edit))).check(matches(allOf(isClickable(), isDisplayed())))
+
+        openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().context)
+        onView(withText("Complete")).check(matches(isDisplayed()))
+        onView(withText("Delete")).check(matches(isDisplayed()))
     }
 
     @Test
@@ -130,24 +130,18 @@ class DetailsFragmentTest {
         onView(withId(R.id.name)).check(matches(isDisplayed()))
         onView(withId(R.id.ic_calendar)).check(matches(isDisplayed()))
         onView(withId(R.id.start_date)).check(matches(isDisplayed()))
-        onView(withId(R.id.divider_start_time)).check(matches(isDisplayed()))
         onView(withId(R.id.ic_clock)).check(matches(isDisplayed()))
         onView(withId(R.id.start_time)).check(matches(isDisplayed()))
-        onView(withId(R.id.edit_reminder_fab)).check(matches(isDisplayed()))
-        onView(withId(R.id.edit_reminder_fab)).check(matches(isClickable()))
 
-        onView(withId(R.id.divider_repeat_interval)).check(matches(not(isDisplayed())))
         onView(withId(R.id.ic_repeat)).check(matches(not(isDisplayed())))
         onView(withId(R.id.repeat_interval)).check(matches(not(isDisplayed())))
-        onView(withId(R.id.divider_notes)).check(matches(not(isDisplayed())))
         onView(withId(R.id.ic_notes)).check(matches(not(isDisplayed())))
         onView(withId(R.id.notes)).check(matches(not(isDisplayed())))
-        onView(withId(R.id.divider_notification)).check(matches(not(isDisplayed())))
         onView(withId(R.id.ic_notification)).check(matches(not(isDisplayed())))
         onView(withId(R.id.notification)).check(matches(not(isDisplayed())))
 
         onView(withId(R.id.name)).check(matches(withText("Test Reminder Details")))
-        onView(withId(R.id.start_date)).check(matches(withText("01 Jan 2000")))
+        onView(withId(R.id.start_date)).check(matches(withText("Sat, 01 Jan 2000")))
         onView(withId(R.id.start_time)).check(matches(withText("14:02")))
     }
 
@@ -160,14 +154,11 @@ class DetailsFragmentTest {
             fragmentArgs = navigationArgs
         )
 
-        onView(withId(R.id.divider_repeat_interval)).check(matches(isDisplayed()))
         onView(withId(R.id.ic_repeat)).check(matches(isDisplayed()))
         onView(withId(R.id.repeat_interval)).check(matches(isDisplayed()))
 
-        onView(withId(R.id.divider_notes)).check(matches(not(isDisplayed())))
         onView(withId(R.id.ic_notes)).check(matches(not(isDisplayed())))
         onView(withId(R.id.notes)).check(matches(not(isDisplayed())))
-        onView(withId(R.id.divider_notification)).check(matches(not(isDisplayed())))
         onView(withId(R.id.ic_notification)).check(matches(not(isDisplayed())))
         onView(withId(R.id.notification)).check(matches(not(isDisplayed())))
 
@@ -184,14 +175,11 @@ class DetailsFragmentTest {
             fragmentArgs = navigationArgs
         )
 
-        onView(withId(R.id.divider_notes)).check(matches(isDisplayed()))
         onView(withId(R.id.ic_notes)).check(matches(isDisplayed()))
         onView(withId(R.id.notes)).check(matches(isDisplayed()))
 
-        onView(withId(R.id.divider_repeat_interval)).check(matches(not(isDisplayed())))
         onView(withId(R.id.ic_repeat)).check(matches(not(isDisplayed())))
         onView(withId(R.id.repeat_interval)).check(matches(not(isDisplayed())))
-        onView(withId(R.id.divider_notification)).check(matches(not(isDisplayed())))
         onView(withId(R.id.ic_notification)).check(matches(not(isDisplayed())))
         onView(withId(R.id.notification)).check(matches(not(isDisplayed())))
 
@@ -208,14 +196,11 @@ class DetailsFragmentTest {
             fragmentArgs = navigationArgs
         )
 
-        onView(withId(R.id.divider_notification)).check(matches(isDisplayed()))
         onView(withId(R.id.ic_notification)).check(matches(isDisplayed()))
         onView(withId(R.id.notification)).check(matches(isDisplayed()))
 
-        onView(withId(R.id.divider_repeat_interval)).check(matches(not(isDisplayed())))
         onView(withId(R.id.ic_repeat)).check(matches(not(isDisplayed())))
         onView(withId(R.id.repeat_interval)).check(matches(not(isDisplayed())))
-        onView(withId(R.id.divider_notes)).check(matches(not(isDisplayed())))
         onView(withId(R.id.ic_notes)).check(matches(not(isDisplayed())))
         onView(withId(R.id.notes)).check(matches(not(isDisplayed())))
 
@@ -236,27 +221,20 @@ class DetailsFragmentTest {
         onView(withId(R.id.ic_calendar)).check(matches(isDisplayed()))
         onView(withId(R.id.start_date)).check(matches(isDisplayed()))
 
-        onView(withId(R.id.divider_start_time)).check(matches(isDisplayed()))
         onView(withId(R.id.ic_clock)).check(matches(isDisplayed()))
         onView(withId(R.id.start_time)).check(matches(isDisplayed()))
 
-        onView(withId(R.id.divider_repeat_interval)).check(matches(isDisplayed()))
         onView(withId(R.id.ic_repeat)).check(matches(isDisplayed()))
         onView(withId(R.id.repeat_interval)).check(matches(isDisplayed()))
 
-        onView(withId(R.id.divider_notes)).check(matches(isDisplayed()))
         onView(withId(R.id.ic_notes)).check(matches(isDisplayed()))
         onView(withId(R.id.notes)).check(matches(isDisplayed()))
 
-        onView(withId(R.id.divider_notification)).check(matches(isDisplayed()))
         onView(withId(R.id.ic_notification)).check(matches(isDisplayed()))
         onView(withId(R.id.notification)).check(matches(isDisplayed()))
 
-        onView(withId(R.id.edit_reminder_fab)).check(matches(isDisplayed()))
-        onView(withId(R.id.edit_reminder_fab)).check(matches(isClickable()))
-
         onView(withId(R.id.name)).check(matches(withText("Test Reminder Details with Everything")))
-        onView(withId(R.id.start_date)).check(matches(withText("01 Jan 2000")))
+        onView(withId(R.id.start_date)).check(matches(withText("Sat, 01 Jan 2000")))
         onView(withId(R.id.start_time)).check(matches(withText("14:02")))
         onView(withId(R.id.repeat_interval)).check(matches(withText("2 weeks")))
         onView(withId(R.id.notes)).check(matches(withText("notes")))
@@ -299,7 +277,9 @@ class DetailsFragmentTest {
             fragmentArgs = navigationArgs
         )
 
-        onView(withId(R.id.action_delete)).perform(click())
+        openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().context)
+        onView(withText("Delete")).perform(click())
+
         onView(withText("Delete this reminder?")).check(matches(isDisplayed()))
         onView(withText("Cancel")).check(matches(isDisplayed()))
         onView(withText("Delete")).check(matches(isDisplayed()))
@@ -314,7 +294,8 @@ class DetailsFragmentTest {
             fragmentArgs = navigationArgs
         )
 
-        onView(withId(R.id.action_delete)).perform(click())
+        openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().context)
+        onView(withText("Delete")).perform(click())
         onView(withText("Cancel")).perform(click())
 
         onView(withText("Delete this reminder?")).check(doesNotExist())
@@ -335,7 +316,7 @@ class DetailsFragmentTest {
             }
         }
 
-        onView(withId(R.id.action_delete)).perform(click())
+        openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().context)
         onView(withText("Delete")).perform(click())
 
         onView(withText("Delete this reminder?")).check(doesNotExist())

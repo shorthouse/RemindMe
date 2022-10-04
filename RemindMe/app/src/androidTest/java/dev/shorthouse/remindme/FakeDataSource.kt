@@ -39,4 +39,20 @@ class FakeDataSource(private var reminders: MutableList<Reminder> = mutableListO
         val reminderToDeleteIndex = reminders.indexOfFirst { it.id == reminder.id }
         reminders.removeAt(reminderToDeleteIndex)
     }
+
+    override fun archiveReminder(id: Long) {
+        val reminderToArchiveIndex = reminders.indexOfFirst { it.id == id }
+        val unarchivedReminder = reminders[reminderToArchiveIndex]
+        val archivedReminder = Reminder(
+            unarchivedReminder.id,
+            unarchivedReminder.name,
+            unarchivedReminder.startDateTime,
+            unarchivedReminder.repeatInterval,
+            unarchivedReminder.notes,
+            true,
+            unarchivedReminder.isNotificationSent
+        )
+
+        reminders[reminderToArchiveIndex] = archivedReminder
+    }
 }
