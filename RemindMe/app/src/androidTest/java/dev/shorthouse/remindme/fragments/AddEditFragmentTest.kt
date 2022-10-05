@@ -52,7 +52,6 @@ class AddEditFragmentTest {
     @Test
     fun when_add_reminder_fragment_created_should_display_toolbar() {
         onView(withId(R.id.toolbar)).check(matches(isDisplayed()))
-        onView(withContentDescription("Close")).check(matches(isClickable()))
         onView(withId(R.id.action_save)).check(matches(isDisplayed()))
     }
 
