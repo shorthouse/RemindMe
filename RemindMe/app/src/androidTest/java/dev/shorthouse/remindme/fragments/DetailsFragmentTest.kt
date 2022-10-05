@@ -318,6 +318,7 @@ class DetailsFragmentTest {
 
         openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().context)
         onView(withText("Delete")).perform(click())
+        onView(withText("Delete")).perform(click())
 
         onView(withText("Delete this reminder?")).check(doesNotExist())
         onView(withText("Cancel")).check(doesNotExist())

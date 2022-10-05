@@ -14,6 +14,7 @@ import dagger.hilt.components.SingletonComponent
 import dev.shorthouse.remindme.FakeDataSource
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.data.ReminderDataSource
+import dev.shorthouse.remindme.data.RepeatInterval
 import dev.shorthouse.remindme.di.DataSourceModule
 import dev.shorthouse.remindme.launchFragmentInHiltContainer
 import dev.shorthouse.remindme.util.TestUtil
@@ -22,6 +23,7 @@ import org.hamcrest.CoreMatchers.allOf
 import org.junit.Rule
 import org.junit.Test
 import java.time.ZonedDateTime
+import java.time.temporal.ChronoUnit
 import javax.inject.Singleton
 
 @ExperimentalCoroutinesApi
@@ -41,7 +43,9 @@ class ActiveListFragmentTest {
             val reminders = mutableListOf(
                 TestUtil.createReminder(
                     name = "Test Active Reminder",
-                    startDateTime = ZonedDateTime.parse("2000-01-01T14:02:00Z")
+                    startDateTime = ZonedDateTime.parse("2000-01-01T14:02:00Z"),
+                    isNotificationSent = true,
+                    repeatInterval = RepeatInterval(1, ChronoUnit.DAYS)
                 )
             )
 
@@ -59,6 +63,8 @@ class ActiveListFragmentTest {
         onView(withId(R.id.reminder_date)).check(matches(withText("01 Jan 2000")))
         onView(withId(R.id.reminder_time)).check(matches(withText("14:02")))
         onView(withId(R.id.done_checkbox)).check(matches(allOf(isClickable(), isDisplayed())))
+        onView(withId(R.id.notification_icon)).check(matches(isDisplayed()))
+        onView(withId(R.id.repeat_icon)).check(matches(isDisplayed()))
     }
 
     @Test
