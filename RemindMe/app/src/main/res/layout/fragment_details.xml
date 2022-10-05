@@ -135,7 +135,7 @@
                     android:layout_width="24dp"
                     android:layout_height="wrap_content"
                     android:contentDescription="@string/cd_icon_notification"
-                    android:src="@drawable/ic_notification"
+                    android:src="@drawable/ic_notification_outline"
                     app:layout_constraintBottom_toBottomOf="@+id/notification"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/notification"
