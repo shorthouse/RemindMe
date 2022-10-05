@@ -7,21 +7,29 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import com.google.android.material.transition.MaterialFadeThrough
 import dagger.hilt.android.AndroidEntryPoint
 import dev.shorthouse.remindme.adapter.AllReminderListAdapter
 import dev.shorthouse.remindme.databinding.FragmentAllListBinding
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.viewmodel.AllListViewModel
-import dev.shorthouse.remindme.viewmodel.ListViewPagerViewModel
+import dev.shorthouse.remindme.viewmodel.ListContainerViewModel
 
 @AndroidEntryPoint
 class AllListFragment : Fragment() {
     private lateinit var binding: FragmentAllListBinding
 
     private val viewModel: AllListViewModel by viewModels()
-    private val viewPagerViewModel: ListViewPagerViewModel by activityViewModels()
+    private val viewPagerViewModel: ListContainerViewModel by activityViewModels()
 
     private lateinit var listAdapter: AllReminderListAdapter
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        enterTransition = MaterialFadeThrough()
+        exitTransition = MaterialFadeThrough()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,10 +55,9 @@ class AllListFragment : Fragment() {
         viewModel.getReminders(viewPagerViewModel.currentSort, viewPagerViewModel.currentFilter)
             .observe(viewLifecycleOwner) { reminders ->
                 reminders?.let {
-                    listAdapter.submitList(reminders)
                     displayListState(reminders)
+                    listAdapter.submitList(reminders)
                 }
-
             }
     }
 

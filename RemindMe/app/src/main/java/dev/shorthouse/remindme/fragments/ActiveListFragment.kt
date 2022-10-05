@@ -8,12 +8,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.transition.MaterialFadeThrough
 import dagger.hilt.android.AndroidEntryPoint
 import dev.shorthouse.remindme.adapter.ActiveReminderListAdapter
 import dev.shorthouse.remindme.databinding.FragmentActiveListBinding
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.viewmodel.ActiveListViewModel
-import dev.shorthouse.remindme.viewmodel.ListViewPagerViewModel
+import dev.shorthouse.remindme.viewmodel.ListContainerViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.Duration
@@ -23,9 +24,16 @@ class ActiveListFragment : Fragment() {
     private lateinit var binding: FragmentActiveListBinding
 
     private val viewModel: ActiveListViewModel by viewModels()
-    private val viewPagerViewModel: ListViewPagerViewModel by activityViewModels()
+    private val viewPagerViewModel: ListContainerViewModel by activityViewModels()
 
     private lateinit var listAdapter: ActiveReminderListAdapter
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        enterTransition = MaterialFadeThrough()
+        exitTransition = MaterialFadeThrough()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

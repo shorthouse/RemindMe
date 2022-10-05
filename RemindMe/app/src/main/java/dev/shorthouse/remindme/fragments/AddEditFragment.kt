@@ -23,6 +23,7 @@ import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.databinding.FragmentAddEditBinding
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.utilities.SpinnerArrayAdapter
+import dev.shorthouse.remindme.utilities.hideKeyboard
 import dev.shorthouse.remindme.utilities.setOnClickThrottleListener
 import dev.shorthouse.remindme.viewmodel.AddEditViewModel
 import java.time.ZonedDateTime
@@ -176,7 +177,7 @@ class AddEditFragment : Fragment() {
 
     private fun saveReminder() {
         binding.apply {
-            val reminderName = nameInput.text.toString()
+            val reminderName = viewModel.getReminderName(nameInput.text.toString())
 
             val reminderStartDateTime = viewModel.convertDateTimeStringToDateTime(
                 startDateInput.text.toString(),
@@ -280,16 +281,6 @@ class AddEditFragment : Fragment() {
             activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
         inputManager.showSoftInput(binding.nameInput, SHOW_IMPLICIT)
-    }
-
-    private fun hideKeyboard() {
-        val inputManager =
-            activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-
-        inputManager.hideSoftInputFromWindow(
-            view?.windowToken,
-            InputMethodManager.HIDE_NOT_ALWAYS
-        )
     }
 
     private fun focusKeyboardOnReminderName() {
