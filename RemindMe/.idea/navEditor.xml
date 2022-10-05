@@ -8,30 +8,30 @@
             <LayoutPositions>
               <option name="myPositions">
                 <map>
-                  <entry key="add_edit_reminder">
+                  <entry key="add_edit">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="363" />
-                            <option name="y" value="26" />
+                            <option name="x" value="448" />
+                            <option name="y" value="54" />
                           </Point>
                         </option>
                       </LayoutPositions>
                     </value>
                   </entry>
-                  <entry key="reminder_details">
+                  <entry key="details">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="368" />
-                            <option name="y" value="345" />
+                            <option name="x" value="230" />
+                            <option name="y" value="12" />
                           </Point>
                         </option>
                         <option name="myPositions">
                           <map>
-                            <entry key="action_reminder_details_to_add_edit_reminder">
+                            <entry key="action_details_to_add_edit">
                               <value>
                                 <LayoutPositions />
                               </value>
@@ -41,23 +41,23 @@
                       </LayoutPositions>
                     </value>
                   </entry>
-                  <entry key="reminder_list_view_pager">
+                  <entry key="list_view_pager">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="17" />
-                            <option name="y" value="175" />
+                            <option name="x" value="12" />
+                            <option name="y" value="54" />
                           </Point>
                         </option>
                         <option name="myPositions">
                           <map>
-                            <entry key="action_reminder_list_view_pager_to_add_edit_reminder">
+                            <entry key="action_list_view_pager_to_add_edit">
                               <value>
                                 <LayoutPositions />
                               </value>
                             </entry>
-                            <entry key="action_reminder_list_view_pager_to_reminder_details">
+                            <entry key="action_list_view_pager_to_details">
                               <value>
                                 <LayoutPositions />
                               </value>
