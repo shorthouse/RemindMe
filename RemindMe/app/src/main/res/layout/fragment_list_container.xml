@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/view_pager_coordinator_layout"
@@ -20,25 +21,17 @@
                 app:theme="@style/Theme.RemindMe.Toolbar"
                 style="@style/Widget.MaterialComponents.Toolbar.Primary"
                 app:title="@string/app_name"
-                app:menu="@menu/toolbar_list_view_pager" />
-
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/tab_layout"
-                style="@style/Widget.MaterialComponents.TabLayout.Colored"
-                android:layout_width="match_parent"
-                android:elevation="4dp"
-                android:contentDescription="@string/cd_reminder_tabs"
-                android:layout_height="?attr/actionBarSize"
-                app:tabTextColor="?attr/colorOnPrimary" />
+                app:menu="@menu/toolbar_list_container" />
 
         </com.google.android.material.appbar.AppBarLayout>
 
-        <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/view_pager"
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/fragment_container_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:name="dev.shorthouse.remindme.fragments.ActiveListFragment"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            android:transitionGroup="true"/>
+            android:transitionGroup="true" />
 
         <FrameLayout
             android:id="@+id/scrim"
@@ -46,21 +39,39 @@
             android:layout_height="match_parent" />
 
         <com.google.android.material.navigation.NavigationView
-            android:id="@+id/navigation_view_list_sort"
+            android:id="@+id/bottom_sheet_navigation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_behavior="@string/bottom_sheet_behavior"
             app:behavior_hideable="true"
-            app:menu="@menu/bottom_nav_drawer_sort"
-            app:headerLayout="@layout/bottom_nav_drawer_sort_header" />
+            app:menu="@menu/bottom_sheet_list_container"
+            app:headerLayout="@layout/bottom_sheet_list_container_header" />
+
+        <com.google.android.material.navigation.NavigationView
+            android:id="@+id/bottom_sheet_sort"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:behavior_hideable="true"
+            app:headerLayout="@layout/bottom_sheet_sort_header"
+            app:layout_behavior="@string/bottom_sheet_behavior"
+            app:menu="@menu/bottom_sheet_sort"
+            tools:visibility="invisible"/>
+
+        <com.google.android.material.bottomappbar.BottomAppBar
+            android:id="@+id/bottom_app_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            style="@style/Widget.MaterialComponents.BottomAppBar.Colored"
+            app:navigationIcon="@drawable/ic_menu"
+            app:menu="@menu/bottom_app_bar_list_container"/>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/add_reminder_fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="@string/cd_fab_add_reminder"
-            android:layout_margin="16dp"
-            android:layout_gravity="bottom|end"
+            app:layout_anchor="@id/bottom_app_bar"
             app:srcCompat="@drawable/ic_add"/>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
