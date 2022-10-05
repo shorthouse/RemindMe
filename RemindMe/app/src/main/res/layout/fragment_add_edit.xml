@@ -30,7 +30,7 @@
             android:id="@+id/add_edit_scroll_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="?attr/actionBarSize"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:transitionGroup="true">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -46,7 +46,7 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/name_label"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     app:boxStrokeWidth="0dp"
                     app:boxStrokeWidthFocused="0dp"
@@ -61,12 +61,11 @@
                         android:layout_height="wrap_content"
                         android:hint="@string/hint_reminder_name"
                         android:imeOptions="actionDone"
-                        android:inputType="textAutoComplete"
+                        android:inputType="textMultiLine"
                         android:maxLength="200"
                         android:paddingStart="0dp"
                         android:paddingEnd="0dp"
                         android:paddingBottom="8dp"
-                        android:singleLine="false"
                         android:textColorHint="@color/subtitle_grey"
                         android:textSize="20sp"
                         android:textStyle="bold" />
@@ -174,7 +173,7 @@
                     android:id="@+id/notification_icon"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/ic_notification"
+                    android:src="@drawable/ic_notification_outline"
                     app:layout_constraintBottom_toBottomOf="@+id/notification_header"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/notification_header" />

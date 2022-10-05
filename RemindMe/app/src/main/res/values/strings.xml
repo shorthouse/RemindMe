@@ -92,7 +92,7 @@
     <string name="top_app_bar_search">Search</string>
     <string name="cd_top_app_bar_search">Search reminders</string>
     <string name="top_app_bar_sort">Sort</string>
-    <string name="cd_top_app_bar_sort">Sort reminders</string>
+    <string name="cd_top_app_bar_sort">Sort</string>
 
     <string name="toast_search_icon_clicked">Search icon clicked!</string>
     <string name="toast_sort_icon_clicked">Sort icon clicked!</string>

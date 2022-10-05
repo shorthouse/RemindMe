@@ -80,7 +80,7 @@ class ReminderListViewPagerTest {
             ApplicationProvider.getApplicationContext()
         )
 
-        launchFragmentInHiltContainer<ListViewPagerFragment>(
+        launchFragmentInHiltContainer<ListContainerFragment>(
             navHostController = navController,
         )
     }
@@ -202,7 +202,7 @@ class ReminderListViewPagerTest {
     @Test
     fun when_sort_icon_clicked_should_display_bottom_sheet() {
         onView(withId(R.id.action_sort)).perform(click())
-        onView(withId(R.id.navigation_view_list_sort)).check(matches(isDisplayed()))
+        onView(withId(R.id.bottom_sheet_sort)).check(matches(isDisplayed()))
         onView(withText("Sort by")).check(matches(isDisplayed()))
 
         onView(withId(R.id.drawer_sort_earliest_date_first)).check(matches(isDisplayed()))

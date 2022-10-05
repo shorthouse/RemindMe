@@ -3,9 +3,9 @@ package dev.shorthouse.remindme.viewmodel
 import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 
-class ListViewPagerViewModelTest {
+class ListContainerViewModelTest {
     // Class under test
-    private val viewModel = ListViewPagerViewModel()
+    private val viewModel = ListContainerViewModel()
 
     @Test
     fun `menu item to sort map, is correctly mapped`() {

@@ -165,6 +165,10 @@ class AddEditViewModel @Inject constructor(
         return if (repeatUnit == null) null else RepeatInterval(timeValue, repeatUnit)
     }
 
+    fun getReminderName(name: String): String {
+        return name.trim()
+    }
+
     fun getReminderNotes(notes: String): String? {
         return notes.trim().ifBlank { null }
     }
