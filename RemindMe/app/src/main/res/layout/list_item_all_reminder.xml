@@ -80,7 +80,7 @@
             android:layout_width="18dp"
             android:layout_height="18dp"
             android:layout_marginStart="8dp"
-            android:src="@drawable/ic_notification"
+            android:src="@drawable/ic_notification_outline"
             android:tint="@color/subtitle_grey"
             app:layout_constraintBottom_toBottomOf="@+id/reminder_time"
             app:layout_constraintStart_toEndOf="@+id/reminder_time"
