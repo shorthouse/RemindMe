@@ -18,7 +18,6 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:theme="@style/Theme.RemindMe.Toolbar"
                 style="@style/Widget.MaterialComponents.Toolbar.Primary"
                 app:title="@string/app_name"
                 app:menu="@menu/toolbar_list_container" />
@@ -29,14 +28,15 @@
             android:id="@+id/fragment_container_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:name="dev.shorthouse.remindme.fragments.ActiveListFragment"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:transitionGroup="true" />
 
         <FrameLayout
             android:id="@+id/scrim"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:elevation="8dp"
+            android:fitsSystemWindows="false"/>
 
         <com.google.android.material.navigation.NavigationView
             android:id="@+id/bottom_sheet_navigation"
@@ -45,7 +45,8 @@
             app:layout_behavior="@string/bottom_sheet_behavior"
             app:behavior_hideable="true"
             app:menu="@menu/bottom_sheet_list_container"
-            app:headerLayout="@layout/bottom_sheet_list_container_header" />
+            app:headerLayout="@layout/bottom_sheet_list_container_header"
+            tools:visibility="invisible"/>
 
         <com.google.android.material.navigation.NavigationView
             android:id="@+id/bottom_sheet_sort"
@@ -72,7 +73,7 @@
             android:layout_height="wrap_content"
             android:contentDescription="@string/cd_fab_add_reminder"
             app:layout_anchor="@id/bottom_app_bar"
-            app:srcCompat="@drawable/ic_add"/>
+            app:srcCompat="@drawable/ic_add" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

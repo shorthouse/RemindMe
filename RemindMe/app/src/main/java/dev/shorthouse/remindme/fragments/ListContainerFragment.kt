@@ -58,10 +58,17 @@ class ListContainerFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        setListFragment()
         setupToolbar()
         setupBottomAppBar()
         setupBottomSheetNavigation()
         setupBottomSheetSort()
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        binding.toolbar.menu.findItem(R.id.action_search).collapseActionView()
     }
 
     private fun setupToolbar() {
@@ -142,9 +149,10 @@ class ListContainerFragment : Fragment() {
             if (viewModel.isItemChanged(menuItem.itemId, currentMenuItem?.itemId)) {
                 viewModel.setCurrentList(menuItem.itemId)
                 binding.bottomSheetNavigation.setCheckedItem(viewModel.getCurrentListItemId())
+
                 lifecycleScope.launch{
                     delay(150)
-                    replaceListFragment()
+                    setListFragment()
                 }
             }
 
@@ -228,16 +236,17 @@ class ListContainerFragment : Fragment() {
         findNavController().navigate(action)
     }
 
-    private fun replaceListFragment() {
+    private fun setListFragment() {
         val fragment = when (viewModel.currentList) {
             RemindersList.ACTIVE_REMINDERS -> ActiveListFragment()
             RemindersList.ALL_REMINDERS -> AllListFragment()
         }
+
+        binding.toolbar.title = getString(viewModel.getToolbarTitle())
 
         childFragmentManager.beginTransaction()
             .setReorderingAllowed(true)
             .replace(R.id.fragment_container_list, fragment)
             .commit()
     }
-
 }
