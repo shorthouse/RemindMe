@@ -25,12 +25,12 @@ class ListContainerViewModel : ViewModel() {
         value to key
     }
 
-    val listToMenuItemMap = mapOf(
+    private val listToMenuItemMap = mapOf(
         RemindersList.ACTIVE_REMINDERS to R.id.drawer_active_list,
         RemindersList.ALL_REMINDERS to R.id.drawer_all_list,
     )
 
-    val menuItemToListMap = listToMenuItemMap.entries.associate { (key, value) ->
+    private val menuItemToListMap = listToMenuItemMap.entries.associate { (key, value) ->
         value to key
     }
 
@@ -46,19 +46,26 @@ class ListContainerViewModel : ViewModel() {
         return itemIdOne != itemIdTwo
     }
 
+    fun getCurrentListItemId(): Int {
+        return listToMenuItemMap[currentList]!!
+    }
+
     fun setCurrentList(itemId: Int) {
         menuItemToListMap[itemId]?.let { list ->
             currentList = list
         }
     }
 
-    fun getCurrentListItemId(): Int {
-        return listToMenuItemMap[currentList]!!
-    }
-
     fun setCurrentSort(itemId: Int) {
         menuItemToSortMap[itemId]?.let { sort ->
             currentSort.value = sort
+        }
+    }
+
+    fun getToolbarTitle(): Int {
+        return when (currentList) {
+            RemindersList.ACTIVE_REMINDERS -> R.string.active_reminders
+            RemindersList.ALL_REMINDERS -> R.string.all_reminders
         }
     }
 }
