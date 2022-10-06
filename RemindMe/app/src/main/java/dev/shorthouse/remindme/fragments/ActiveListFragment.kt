@@ -24,7 +24,7 @@ class ActiveListFragment : Fragment() {
     private lateinit var binding: FragmentActiveListBinding
 
     private val viewModel: ActiveListViewModel by viewModels()
-    private val viewPagerViewModel: ListContainerViewModel by activityViewModels()
+    private val listContainerViewModel: ListContainerViewModel by activityViewModels()
 
     private lateinit var listAdapter: ActiveReminderListAdapter
 
@@ -57,13 +57,25 @@ class ActiveListFragment : Fragment() {
     }
 
     private fun setListData() {
-        viewModel.getReminders(viewPagerViewModel.currentSort, viewPagerViewModel.currentFilter)
+        viewModel.getReminders(
+            listContainerViewModel.currentSort,
+            listContainerViewModel.currentFilter
+        )
             .observe(viewLifecycleOwner) { reminders ->
                 reminders?.let {
-                    listAdapter.submitList(reminders)
+                    submitAdapterList(reminders)
                     displayListState(reminders)
                 }
             }
+    }
+
+    private fun submitAdapterList(reminders: List<Reminder>) {
+        val layoutManager = binding.activeReminderRecycler.layoutManager
+
+        val listScrollPosition = layoutManager?.onSaveInstanceState()
+        listAdapter.submitList(reminders) {
+            layoutManager?.onRestoreInstanceState(listScrollPosition)
+        }
     }
 
     private fun startReminderRefreshCoroutine() {
@@ -80,14 +92,10 @@ class ActiveListFragment : Fragment() {
     }
 
     private fun displayListState(reminders: List<Reminder>) {
-        if (reminders.isNotEmpty()) {
-            displayReminderList()
-        } else {
-            if (viewPagerViewModel.currentFilter.value?.isNotEmpty() == true) {
-                displaySearchEmptyState()
-            } else {
-                displayEmptyState()
-            }
+        when {
+            reminders.isNotEmpty() -> displayReminderList()
+            listContainerViewModel.currentFilter.value?.isNotEmpty() == true -> displaySearchEmptyState()
+            else -> displayEmptyState()
         }
     }
 

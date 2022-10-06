@@ -20,7 +20,7 @@ class AllListFragment : Fragment() {
     private lateinit var binding: FragmentAllListBinding
 
     private val viewModel: AllListViewModel by viewModels()
-    private val viewPagerViewModel: ListContainerViewModel by activityViewModels()
+    private val listContainerViewModel: ListContainerViewModel by activityViewModels()
 
     private lateinit var listAdapter: AllReminderListAdapter
 
@@ -52,24 +52,32 @@ class AllListFragment : Fragment() {
     }
 
     private fun setListData() {
-        viewModel.getReminders(viewPagerViewModel.currentSort, viewPagerViewModel.currentFilter)
+        viewModel.getReminders(
+            listContainerViewModel.currentSort,
+            listContainerViewModel.currentFilter
+        )
             .observe(viewLifecycleOwner) { reminders ->
                 reminders?.let {
+                    submitAdapterList(reminders)
                     displayListState(reminders)
-                    listAdapter.submitList(reminders)
                 }
             }
     }
 
+    private fun submitAdapterList(reminders: List<Reminder>) {
+        val layoutManager = binding.allReminderRecycler.layoutManager
+
+        val listScrollPosition = layoutManager?.onSaveInstanceState()
+        listAdapter.submitList(reminders) {
+            layoutManager?.onRestoreInstanceState(listScrollPosition)
+        }
+    }
+
     private fun displayListState(reminders: List<Reminder>) {
-        if (reminders.isNotEmpty()) {
-            displayReminderList()
-        } else {
-            if (viewPagerViewModel.currentFilter.value?.isNotEmpty() == true) {
-                displaySearchEmptyState()
-            } else {
-                displayEmptyState()
-            }
+        when {
+            reminders.isNotEmpty() -> displayReminderList()
+            listContainerViewModel.currentFilter.value?.isNotEmpty() == true -> displaySearchEmptyState()
+            else -> displayEmptyState()
         }
     }
 
