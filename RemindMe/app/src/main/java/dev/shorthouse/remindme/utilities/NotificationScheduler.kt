@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dev.shorthouse.remindme.R
+import dev.shorthouse.remindme.data.RepeatInterval
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.receivers.DisplayReminderNotificationReceiver
 import java.time.Duration
@@ -17,8 +18,8 @@ class NotificationScheduler @Inject constructor(
     private val alarmManager: AlarmManager
 ) {
     fun scheduleReminderNotification(reminder: Reminder) {
-        if (reminder.isRepeatReminder()) {
-            scheduleRepeatNotification(reminder)
+        if (reminder.repeatInterval != null) {
+            scheduleRepeatNotification(reminder, reminder.repeatInterval)
         } else {
             scheduleOneTimeNotification(reminder)
         }
@@ -32,11 +33,11 @@ class NotificationScheduler @Inject constructor(
         )
     }
 
-    private fun scheduleRepeatNotification(reminder: Reminder) {
+    private fun scheduleRepeatNotification(reminder: Reminder, repeatInterval: RepeatInterval) {
         alarmManager.setRepeating(
             AlarmManager.RTC_WAKEUP,
             getAlarmTriggerTime(reminder),
-            getAlarmRepeatInterval(reminder),
+            getAlarmRepeatInterval(repeatInterval),
             getNotificationBroadcastIntent(reminder)
         )
     }
@@ -87,9 +88,7 @@ class NotificationScheduler @Inject constructor(
         return reminder.startDateTime.toInstant().toEpochMilli()
     }
 
-    private fun getAlarmRepeatInterval(reminder: Reminder): Long {
-        val repeatInterval = reminder.repeatInterval!!
-
+    private fun getAlarmRepeatInterval(repeatInterval: RepeatInterval): Long {
         val repeatIntervalDays = when (repeatInterval.timeUnit) {
             ChronoUnit.DAYS -> repeatInterval.timeValue
             else -> repeatInterval.timeValue * DAYS_IN_WEEK
