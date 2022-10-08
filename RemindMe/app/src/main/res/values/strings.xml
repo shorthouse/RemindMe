@@ -3,26 +3,15 @@
     <string name="reminder_database_name">reminder_database</string>
 
     <!-- Add edit reminder -->
-    <string name="hint_reminder_name">RemindMe to...</string>
-    <string name="hint_reminder_date">Reminder start date</string>
-    <string name="hint_reminder_time">Reminder start time</string>
+    <string name="hint_reminder_name">RemindMe to…</string>
     <string name="hint_reminder_notes">Add notes</string>
-    <string name="format_reminder_time">%1$s:%2$s</string>
     <string name="title_repeat_reminder">Repeat reminder</string>
     <string name="error_name_empty">The name cannot be empty.</string>
     <string name="error_time_past">The start time cannot be in the past.</string>
     <string name="error_interval_empty">The repeat interval cannot be empty.</string>
-    <string name="title_date_picker">Select reminder start date</string>
-    <string name="title_time_picker">Select reminder start time</string>
     <string name="tag_reminder_date_picker">reminder_date_picker</string>
-    <string name="tag_reminder_time_picker">reminder_time_picker</string>
-    <string name="time_unit_days">days</string>
-    <string name="title_repeats_every">Repeats every</string>
     <string name="toast_reminder_saved">Reminder saved</string>
     <string name="title_send_notification">Send notification</string>
-    <string name="toolbar_save_action_title">Save</string>
-    <string name="btn_save_reminder">Save</string>
-    <string name="cd_close_navigate_up">Close</string>
 
 
     <plurals name="dropdown_days">
@@ -38,7 +27,6 @@
     <string name="active_reminders">Active Reminders</string>
     <string name="all_reminders">All Reminders</string>
     <string name="cd_fab_add_reminder">Add reminder</string>
-    <string name="btn_reminder_done">Done</string>
 
     <!-- Reminder details -->
     <string name="cd_icon_calendar">Calendar icon</string>
@@ -47,8 +35,6 @@
     <string name="notifications_on">Notifications enabled</string>
     <string name="cd_icon_notes">Notes icon</string>
     <string name="cd_icon_notification">Notification Icon</string>
-    <string name="cd_button_edit_reminder">Edit reminder</string>
-    <string name="toolbar_delete_action_title">Delete</string>
     <string name="toast_reminder_deleted">Reminder deleted</string>
     <string name="alert_dialog_delete_reminder_message">Delete this reminder?</string>
     <string name="alert_dialog_delete_reminder_cancel">Cancel</string>
@@ -80,12 +66,6 @@
     <string name="notification_channel_name_reboot_reschedule">NOTIFICATION_CHANNEL_NAME_REBOOT_RESCHEDULE</string>
     <string name="notification_channel_id_time_zone_update">NOTIFICATION_CHANNEL_ID_TIME_ZONE_UPDATE</string>
     <string name="notification_channel_name_time_zone_update">NOTIFICATION_CHANNEL_NAME_TIME_ZONE_UPDATE</string>
-    <string name="cd_add_reminder_fab">Add Reminder</string>
-    <string name="bottom_app_bar_sort_title">Sort</string>
-    <string name="cd_bottom_app_bar_sort">Sort reminders</string>
-    <string name="bottom_app_bar_more_title">More</string>
-    <string name="cd_bottom_app_bar_more">More options</string>
-    <string name="cd_active_reminders_icon">Active Reminders Icon</string>
     <string name="drawer_title_earliest_date_first">Earliest date first</string>
     <string name="drawer_title_latest_date_first">Latest date first</string>
     <string name="nav_drawer_sort_title">Sort by</string>
@@ -94,31 +74,19 @@
     <string name="top_app_bar_sort">Sort</string>
     <string name="cd_top_app_bar_sort">Sort</string>
 
-    <string name="toast_search_icon_clicked">Search icon clicked!</string>
-    <string name="toast_sort_icon_clicked">Sort icon clicked!</string>
-
     <string name="toolbar_title_edit_reminder">Edit reminder</string>
 
     <string name="snackbar_reminder_completed">Reminder completed</string>
     <string name="snackbar_reminder_completed_undo">Undo</string>
-    <string name="cd_reminder_tabs">Reminder tabs</string>
     <string name="empty_state_active_title">No active reminders</string>
     <string name="empty_state_active_subtitle">You\'re all caught up</string>
     <string name="empty_state_search_title">No reminders found</string>
     <string name="empty_state_search_subtitle">Try adjusting your search</string>
     <string name="empty_state_all_title">No reminders</string>
     <string name="empty_state_all_subtitle">Add a reminder to get started</string>
-    <string name="cd_save_reminder">Save reminder</string>
-    <string name="cd_details_delete">Delete</string>
     <string name="alert_dialog_complete_reminder_complete">Complete</string>
     <string name="toast_reminder_completed">Reminder completed</string>
     <string name="alert_dialog_complete_reminder_message">Complete this reminder?</string>
-    <string name="cd_edit_reminder">Edit reminder</string>
-    <string name="reminder_details_complete">Complete</string>
-    <string name="cd_complete_reminder">Complete reminder</string>
-    <string name="reminder_details_edit">Edit</string>
-    <string name="reminder_details_delete">Delete</string>
-    <string name="cd_delete_reminder">Delete reminder</string>
     <string name="menu_item_edit">Edit</string>
     <string name="menu_item_complete">Complete</string>
     <string name="menu_item_delete">Delete</string>
