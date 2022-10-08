@@ -9,7 +9,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AllListViewModel @Inject constructor(
-    val repository: ReminderRepository,
+    private val repository: ReminderRepository,
 ) : ViewModel() {
 
     fun getReminders(
