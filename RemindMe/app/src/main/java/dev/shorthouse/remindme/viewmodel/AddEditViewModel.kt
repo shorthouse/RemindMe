@@ -183,8 +183,8 @@ class AddEditViewModel @Inject constructor(
         return name.isNotBlank()
     }
 
-    fun isRepeatIntervalEmpty(repeatIntervalValue: Long): Boolean {
-        return repeatIntervalValue == 0L
+    fun isRepeatIntervalValid(repeatIntervalValue: Long): Boolean {
+        return repeatIntervalValue != 0L
     }
 
     fun isStartTimeValid(startDate: String, startTime: String): Boolean {
