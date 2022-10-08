@@ -91,6 +91,8 @@ class AddEditFragment : Fragment() {
                             hideKeyboard()
                             displayToast(R.string.toast_reminder_saved)
                             findNavController().navigateUp()
+                        } else {
+                            displayToast(getReminderInputErrorMessage())
                         }
                         true
                     }
@@ -223,25 +225,27 @@ class AddEditFragment : Fragment() {
 
     private fun isReminderValid(): Boolean {
         val name = binding.nameInput.text.toString()
-        if (!viewModel.isNameValid(name)) {
-            displayToast(R.string.error_name_empty)
-            return false
-        }
-
         val startDate = binding.startDateInput.text.toString()
         val startTime = binding.startTimeInput.text.toString()
-        if (!viewModel.isStartTimeValid(startDate, startTime)) {
-            displayToast(R.string.error_time_past)
-            return false
-        }
-
         val repeatIntervalValue = binding.repeatValueInput.text.toString().toLongOrNull() ?: 0L
-        if (viewModel.isRepeatIntervalEmpty(repeatIntervalValue)) {
-            displayToast(R.string.error_interval_empty)
-            return false
-        }
 
-        return true
+        return viewModel.isNameValid(name) &&
+            viewModel.isStartTimeValid(startDate, startTime) &&
+            viewModel.isRepeatIntervalValid(repeatIntervalValue)
+    }
+
+    private fun getReminderInputErrorMessage(): Int {
+        val name = binding.nameInput.text.toString()
+        val startDate = binding.startDateInput.text.toString()
+        val startTime = binding.startTimeInput.text.toString()
+        val repeatIntervalValue = binding.repeatValueInput.text.toString().toLongOrNull() ?: 0L
+
+        return when {
+            !viewModel.isNameValid(name) -> R.string.error_name_empty
+            !viewModel.isStartTimeValid(startDate, startTime) -> R.string.error_time_past
+            viewModel.isRepeatIntervalValid(repeatIntervalValue) -> R.string.error_interval_empty
+            else -> R.string.error
+        }
     }
 
     private fun displayDatePicker() {
@@ -275,17 +279,17 @@ class AddEditFragment : Fragment() {
         timePickerDialog.show()
     }
 
+    private fun focusKeyboardOnReminderName() {
+        if (binding.nameInput.requestFocus()) {
+            showKeyboard()
+        }
+    }
+
     private fun showKeyboard() {
         val inputManager =
             activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
         inputManager.showSoftInput(binding.nameInput, SHOW_IMPLICIT)
-    }
-
-    private fun focusKeyboardOnReminderName() {
-        if (binding.nameInput.requestFocus()) {
-            showKeyboard()
-        }
     }
 
     private fun displayToast(stringResId: Int) {
