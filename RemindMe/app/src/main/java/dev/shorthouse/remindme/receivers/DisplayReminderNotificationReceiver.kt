@@ -49,7 +49,7 @@ class DisplayReminderNotificationReceiver : BroadcastReceiver() {
             context,
             reminderId.toInt(),
             contentIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
         return NotificationCompat.Builder(
@@ -74,7 +74,11 @@ class DisplayReminderNotificationReceiver : BroadcastReceiver() {
         val doneIntent = Intent(context, NotificationActionDoneReceiver::class.java)
             .putExtra(context.getString(R.string.intent_key_reminderId), reminderId)
 
-        return PendingIntent.getBroadcast(context, reminderId.toInt(), doneIntent, FLAG_ONE_SHOT)
+        return PendingIntent.getBroadcast(
+            context,
+            reminderId.toInt(),
+            doneIntent, FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
+        )
     }
 
     private fun createNotificationChannel(context: Context) {
