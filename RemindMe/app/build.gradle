@@ -57,6 +57,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.compose.material:material-icons-extended:1.2.1'
+    implementation 'androidx.core:core-splashscreen:1.0.0'
 
     // Lifecycle
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
