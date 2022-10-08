@@ -43,6 +43,7 @@ android {
     testOptions {
         animationsDisabled = true
     }
+    namespace 'dev.shorthouse.remindme'
 
     testOptions.unitTests {
         includeAndroidResources = true
