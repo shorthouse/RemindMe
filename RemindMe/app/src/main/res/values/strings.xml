@@ -130,5 +130,6 @@
     <string name="toolbar_title_save">Save</string>
     <string name="cd_toolbar_item_save_reminder">Save reminder</string>
     <string name="repeats_every_header">Repeats every</string>
+    <string name="error">Error</string>
 
 </resources>
