@@ -43,7 +43,7 @@ class AddEditFragment : Fragment() {
             excludeTarget(R.id.app_bar, true)
         }
 
-        returnTransition =  MaterialSharedAxis(MaterialSharedAxis.Z, false).apply {
+        returnTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false).apply {
             duration = resources.getInteger(R.integer.transition_duration_medium).toLong()
             excludeTarget(R.id.app_bar, true)
         }
@@ -117,9 +117,8 @@ class AddEditFragment : Fragment() {
             }
 
             repeatValueInput.doAfterTextChanged {
-                val dropdownRepeatUnit =
-                    viewModel.repeatPeriodChronoUnitMap[repeatUnitInput.text.toString()]
-                dropdownRepeatUnit?.let { setDropdownList(it) }
+                val dropdownRepeatUnit = viewModel.repeatPeriodChronoUnitMap[repeatUnitInput.text.toString()]
+                dropdownRepeatUnit?.let { repeatUnit -> setDropdownList(repeatUnit) }
             }
         }
     }
@@ -185,7 +184,7 @@ class AddEditFragment : Fragment() {
             )
 
             val repeatInterval = if (binding.repeatSwitch.isChecked) {
-                 viewModel.getRepeatInterval(
+                viewModel.getRepeatInterval(
                     repeatValueInput.text.toString().toLong(),
                     repeatUnitInput.text.toString()
                 )
