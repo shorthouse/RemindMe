@@ -39,7 +39,7 @@ class RescheduleNotificationsOnRebootService : Service() {
                 reminders?.let {
                     remindersLiveData.removeObserver(this)
                     rescheduleNotifications(reminders)
-                    stopForeground(true)
+                    stopForeground(STOP_FOREGROUND_REMOVE)
                     stopSelf()
                 }
             }
