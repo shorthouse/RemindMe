@@ -9,7 +9,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.google.android.material.transition.MaterialFadeThrough
 import dagger.hilt.android.AndroidEntryPoint
-import dev.shorthouse.remindme.adapter.AllReminderListAdapter
+import dev.shorthouse.remindme.adapter.AllListAdapter
 import dev.shorthouse.remindme.databinding.FragmentAllListBinding
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.viewmodel.AllListViewModel
@@ -22,7 +22,7 @@ class AllListFragment : Fragment() {
     private val viewModel: AllListViewModel by viewModels()
     private val listContainerViewModel: ListContainerViewModel by activityViewModels()
 
-    private lateinit var listAdapter: AllReminderListAdapter
+    private lateinit var listAdapter: AllListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,7 +47,7 @@ class AllListFragment : Fragment() {
     }
 
     private fun setListAdapter() {
-        listAdapter = AllReminderListAdapter()
+        listAdapter = AllListAdapter()
         binding.allReminderRecycler.adapter = listAdapter
     }
 
@@ -91,7 +91,6 @@ class AllListFragment : Fragment() {
         binding.emptyStateGroup.visibility = View.VISIBLE
         binding.emptyStateSearchGroup.visibility = View.GONE
         binding.allReminderRecycler.visibility = View.GONE
-
     }
 
     private fun displaySearchEmptyState() {
@@ -99,6 +98,4 @@ class AllListFragment : Fragment() {
         binding.emptyStateGroup.visibility = View.GONE
         binding.allReminderRecycler.visibility = View.GONE
     }
-
-
 }

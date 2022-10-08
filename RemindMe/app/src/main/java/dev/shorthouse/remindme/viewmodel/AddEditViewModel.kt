@@ -7,11 +7,12 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.data.RepeatInterval
+import dev.shorthouse.remindme.di.IoDispatcher
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.utilities.DATE_INPUT_PATTERN
 import dev.shorthouse.remindme.utilities.DATE_TIME_INPUT_PATTERN
 import dev.shorthouse.remindme.utilities.NotificationScheduler
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 import java.time.*
 import java.time.format.DateTimeFormatter
@@ -22,6 +23,7 @@ import javax.inject.Inject
 class AddEditViewModel @Inject constructor(
     private val repository: ReminderRepository,
     private val notificationScheduler: NotificationScheduler,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
     var isEditReminder = false
@@ -58,7 +60,7 @@ class AddEditViewModel @Inject constructor(
             isNotificationSent = isNotificationSent
         )
 
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(ioDispatcher) {
             val reminderId = repository.insertReminder(reminder)
 
             if (reminder.isNotificationSent) {
@@ -87,7 +89,7 @@ class AddEditViewModel @Inject constructor(
             isNotificationSent = isNotificationSent
         )
 
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(ioDispatcher) {
             repository.updateReminder(reminder)
             cancelExistingReminderNotification(reminder)
 
@@ -127,11 +129,15 @@ class AddEditViewModel @Inject constructor(
     }
 
     fun getReminderNotes(reminder: Reminder): String {
-        return reminder.notes ?: ""
+        return reminder.notes.orEmpty()
     }
 
     fun getRepeatValue(reminder: Reminder): String {
-        return if (reminder.repeatInterval == null) "1" else reminder.repeatInterval.timeValue.toString()
+        return if (reminder.repeatInterval == null) {
+            "1"
+        } else {
+            reminder.repeatInterval.timeValue.toString()
+        }
     }
 
     fun getRepeatUnit(reminder: Reminder): ChronoUnit {
@@ -177,8 +183,8 @@ class AddEditViewModel @Inject constructor(
         return name.isNotBlank()
     }
 
-    fun isRepeatIntervalEmpty(repeatIntervalValue: Long): Boolean {
-        return repeatIntervalValue == 0L
+    fun isRepeatIntervalValid(repeatIntervalValue: Long): Boolean {
+        return repeatIntervalValue != 0L
     }
 
     fun isStartTimeValid(startDate: String, startTime: String): Boolean {

@@ -5,8 +5,9 @@ import android.widget.ArrayAdapter
 import android.widget.Filter
 import dev.shorthouse.remindme.R
 
-// Spinner array adapter to fix a known bug of material spinner where a recreation of the fragment (e.g upon screen rotation)
-// results in the spinner drop-down only showing the currently selected item instead of all the possible items
+// Spinner array adapter to fix a known bug of material spinner where a recreation of the fragment
+// (e.g upon screen rotation) results in the spinner drop-down only showing the currently selected item
+// instead of all the possible items
 // Solution class taken from https://github.com/material-components/material-components-android/issues/1464
 
 class SpinnerArrayAdapter(context: Context, items: List<String>)

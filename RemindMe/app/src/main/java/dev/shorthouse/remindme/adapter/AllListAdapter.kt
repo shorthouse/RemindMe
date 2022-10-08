@@ -13,8 +13,7 @@ import dev.shorthouse.remindme.databinding.ListItemAllReminderBinding
 import dev.shorthouse.remindme.fragments.ListContainerFragmentDirections
 import dev.shorthouse.remindme.model.Reminder
 
-class AllReminderListAdapter :
-    ListAdapter<Reminder, AllReminderListAdapter.ViewHolder>(AllReminderDiffCallback()) {
+class AllListAdapter : ListAdapter<Reminder, AllListAdapter.ViewHolder>(AllReminderDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(

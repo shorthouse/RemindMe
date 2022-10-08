@@ -18,7 +18,6 @@ import com.google.android.material.transition.MaterialSharedAxis
 import dagger.hilt.android.AndroidEntryPoint
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.databinding.FragmentListContainerBinding
-import dev.shorthouse.remindme.utilities.RemindersList
 import dev.shorthouse.remindme.utilities.hide
 import dev.shorthouse.remindme.utilities.hideKeyboard
 import dev.shorthouse.remindme.utilities.show
@@ -140,18 +139,18 @@ class ListContainerFragment : Fragment() {
     private fun setupBottomSheetNavigation() {
         val bottomSheetNavigationBehaviour = getBottomSheetNavigation()
         bottomSheetNavigationBehaviour.hide()
-        binding.bottomSheetNavigation.setCheckedItem(viewModel.getCurrentListItemId())
+        binding.bottomSheetNavigation.setCheckedItem(viewModel.bottomSheetListSelection)
 
         binding.bottomSheetNavigation.setNavigationItemSelectedListener { menuItem ->
             bottomSheetNavigationBehaviour.hide()
 
             val currentMenuItem = binding.bottomSheetNavigation.checkedItem
             if (viewModel.isItemChanged(menuItem.itemId, currentMenuItem?.itemId)) {
-                viewModel.setCurrentList(menuItem.itemId)
-                binding.bottomSheetNavigation.setCheckedItem(viewModel.getCurrentListItemId())
+                viewModel.bottomSheetListSelection = menuItem.itemId
+                binding.bottomSheetNavigation.setCheckedItem(viewModel.bottomSheetListSelection)
 
-                lifecycleScope.launch{
-                    delay(150)
+                lifecycleScope.launch {
+                    delay(resources.getInteger(R.integer.animation_delay_medium).toLong())
                     setListFragment()
                 }
             }
@@ -237,9 +236,9 @@ class ListContainerFragment : Fragment() {
     }
 
     private fun setListFragment() {
-        val fragment = when (viewModel.currentList) {
-            RemindersList.ACTIVE_REMINDERS -> ActiveListFragment()
-            RemindersList.ALL_REMINDERS -> AllListFragment()
+        val fragment = when (viewModel.bottomSheetListSelection) {
+            R.id.drawer_all_list -> AllListFragment()
+            else -> ActiveListFragment()
         }
 
         binding.toolbar.title = getString(viewModel.getToolbarTitle())

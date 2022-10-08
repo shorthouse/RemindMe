@@ -12,16 +12,19 @@ import androidx.lifecycle.asLiveData
 import dagger.hilt.android.AndroidEntryPoint
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.data.ReminderRepository
+import dev.shorthouse.remindme.di.IoDispatcher
 import dev.shorthouse.remindme.model.Reminder
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class UpdateReminderTimeZoneService : Service() {
+class UpdateReminderTimeZoneService @Inject constructor(
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+) : Service() {
 
     @Inject
     lateinit var repository: ReminderRepository
@@ -33,7 +36,7 @@ class UpdateReminderTimeZoneService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val newTimeZone = intent?.getStringExtra(this.getString(R.string.intent_key_timeZone))
         if (newTimeZone == null) {
-            stopForeground(true)
+            stopForeground(STOP_FOREGROUND_REMOVE)
             stopSelf()
             return START_NOT_STICKY
         }
@@ -47,7 +50,7 @@ class UpdateReminderTimeZoneService : Service() {
                 reminders?.let {
                     remindersLiveData.removeObserver(this)
                     updateReminderTimeZones(reminders, newTimeZone)
-                    stopForeground(true)
+                    stopForeground(STOP_FOREGROUND_REMOVE)
                     stopSelf()
                 }
             }
@@ -70,7 +73,7 @@ class UpdateReminderTimeZoneService : Service() {
                 reminder.isNotificationSent
             )
 
-            CoroutineScope(Dispatchers.IO).launch {
+            CoroutineScope(ioDispatcher).launch {
                 repository.updateReminder(newReminder)
             }
         }

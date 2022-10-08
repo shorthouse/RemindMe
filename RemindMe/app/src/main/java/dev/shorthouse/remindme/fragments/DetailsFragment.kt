@@ -32,7 +32,7 @@ class DetailsFragment : Fragment() {
             excludeTarget(R.id.app_bar, true)
         }
 
-        returnTransition =  MaterialSharedAxis(MaterialSharedAxis.Z, false).apply {
+        returnTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false).apply {
             duration = resources.getInteger(R.integer.transition_duration_medium).toLong()
             excludeTarget(R.id.app_bar, true)
         }

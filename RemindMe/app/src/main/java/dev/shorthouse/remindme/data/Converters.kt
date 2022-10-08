@@ -5,6 +5,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.time.ZonedDateTime
 
+@Suppress("UtilityClassWithPublicConstructor")
 class Converters {
     companion object {
         @TypeConverter

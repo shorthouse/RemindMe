@@ -10,7 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.transition.MaterialFadeThrough
 import dagger.hilt.android.AndroidEntryPoint
-import dev.shorthouse.remindme.adapter.ActiveReminderListAdapter
+import dev.shorthouse.remindme.adapter.ActiveListAdapter
 import dev.shorthouse.remindme.databinding.FragmentActiveListBinding
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.viewmodel.ActiveListViewModel
@@ -26,7 +26,7 @@ class ActiveListFragment : Fragment() {
     private val viewModel: ActiveListViewModel by viewModels()
     private val listContainerViewModel: ListContainerViewModel by activityViewModels()
 
-    private lateinit var listAdapter: ActiveReminderListAdapter
+    private lateinit var listAdapter: ActiveListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,7 +52,7 @@ class ActiveListFragment : Fragment() {
     }
 
     private fun setListAdapter() {
-        listAdapter = ActiveReminderListAdapter(viewModel)
+        listAdapter = ActiveListAdapter(viewModel)
         binding.activeReminderRecycler.adapter = listAdapter
     }
 

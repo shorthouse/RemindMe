@@ -4,10 +4,11 @@ import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.shorthouse.remindme.data.ReminderRepository
+import dev.shorthouse.remindme.di.IoDispatcher
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.utilities.DAYS_IN_WEEK
 import dev.shorthouse.remindme.utilities.RemindersSort
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.Duration
@@ -15,10 +16,12 @@ import java.time.LocalDateTime
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.milliseconds
 
 @HiltViewModel
 class ActiveListViewModel @Inject constructor(
     val repository: ReminderRepository,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
     private val currentAllReminders = repository
         .getNonArchivedReminders()
@@ -91,14 +94,14 @@ class ActiveListViewModel @Inject constructor(
     }
 
     fun undoDoneReminder(reminder: Reminder) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(ioDispatcher) {
             repository.updateReminder(reminder)
         }
     }
 
     fun updateDoneReminder(reminder: Reminder) {
-        viewModelScope.launch(Dispatchers.IO) {
-            delay(150)
+        viewModelScope.launch(ioDispatcher) {
+            delay(150.milliseconds)
             repository.updateReminder(getUpdatedDoneReminder(reminder))
         }
     }
@@ -127,10 +130,11 @@ class ActiveListViewModel @Inject constructor(
         val passedDuration = Duration.between(reminder.startDateTime, ZonedDateTime.now())
 
         return reminder.startDateTime
-            .plusSeconds(passedDuration
-                .dividedBy(repeatDuration)
-                .plus(1)
-                .times(repeatDuration.toSeconds())
+            .plusSeconds(
+                passedDuration
+                    .dividedBy(repeatDuration)
+                    .plus(1)
+                    .times(repeatDuration.toSeconds())
             )
     }
 }

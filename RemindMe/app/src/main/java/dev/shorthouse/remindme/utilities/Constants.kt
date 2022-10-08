@@ -6,4 +6,5 @@ const val DATE_PATTERN = "dd MMM yyyy"
 const val DATE_INPUT_PATTERN = "EEE, dd MMM yyyy"
 const val DATE_TIME_INPUT_PATTERN = "EEE, dd MMM yyyy HH:mm"
 
-
+const val SCRIM_START_ALPHA = 0.6f
+const val SCRIM_LERP_MAX = 255f

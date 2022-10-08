@@ -16,8 +16,8 @@ import dev.shorthouse.remindme.fragments.ListContainerFragmentDirections
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.viewmodel.ActiveListViewModel
 
-class ActiveReminderListAdapter(private val viewModel: ActiveListViewModel) :
-    ListAdapter<Reminder, ActiveReminderListAdapter.ViewHolder>(ActiveReminderDiffCallback()) {
+class ActiveListAdapter(private val viewModel: ActiveListViewModel) :
+    ListAdapter<Reminder, ActiveListAdapter.ViewHolder>(ActiveReminderDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
