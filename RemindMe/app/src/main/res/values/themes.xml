@@ -12,6 +12,13 @@
         <item name="searchViewStyle">@style/Theme.RemindMe.SearchView</item>
     </style>
 
+    <!-- Splash screen -->
+    <style name="Theme.RemindMe.SplashScreen" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/primary</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
+        <item name="postSplashScreenTheme">@style/Theme.RemindMe</item>
+    </style>
+
     <!-- Search View -->
     <style name="Theme.RemindMe.SearchView" parent="Widget.AppCompat.SearchView">
         <item name="closeIcon">@drawable/ic_close_search</item>
