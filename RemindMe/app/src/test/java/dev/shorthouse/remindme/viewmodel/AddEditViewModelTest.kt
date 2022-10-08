@@ -248,7 +248,7 @@ class AddEditViewModelTest {
     fun `is repeat interval valid with greater than 0 repeat interval value, returns true`() {
         val repeatIntervalValue = 10L
 
-        val isRepeatIntervalValid = viewModel.isRepeatIntervalEmpty(repeatIntervalValue)
+        val isRepeatIntervalValid = viewModel.isRepeatIntervalValid(repeatIntervalValue)
 
         assertThat(isRepeatIntervalValid).isTrue()
     }
@@ -257,7 +257,7 @@ class AddEditViewModelTest {
     fun `is repeat interval valid with 0 repeat interval value, returns false`() {
         val repeatIntervalValue = 0L
 
-        val isRepeatIntervalValid = viewModel.isRepeatIntervalEmpty(repeatIntervalValue)
+        val isRepeatIntervalValid = viewModel.isRepeatIntervalValid(repeatIntervalValue)
 
         assertThat(isRepeatIntervalValid).isFalse()
     }
@@ -266,7 +266,7 @@ class AddEditViewModelTest {
     fun `is repeat interval valid with negative repeat interval value, returns false`() {
         val repeatIntervalValue = -10L
 
-        val isRepeatIntervalValid = viewModel.isRepeatIntervalEmpty(repeatIntervalValue)
+        val isRepeatIntervalValid = viewModel.isRepeatIntervalValid(repeatIntervalValue)
 
         assertThat(isRepeatIntervalValid).isFalse()
     }
