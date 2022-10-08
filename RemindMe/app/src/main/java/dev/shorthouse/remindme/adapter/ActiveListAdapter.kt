@@ -96,6 +96,7 @@ class ActiveListAdapter(private val viewModel: ActiveListViewModel) :
         }
 
         fun bind(reminder: Reminder) {
+            binding.doneCheckbox.isChecked = false
             binding.reminder = reminder
             binding.executePendingBindings()
         }

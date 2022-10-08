@@ -1,7 +1,12 @@
 package dev.shorthouse.remindme.viewmodel
 
 import androidx.annotation.VisibleForTesting
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.di.IoDispatcher
@@ -16,7 +21,10 @@ import java.time.LocalDateTime
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
+import kotlin.time.times
 
 @HiltViewModel
 class ActiveListViewModel @Inject constructor(
@@ -123,18 +131,15 @@ class ActiveListViewModel @Inject constructor(
         val repeatInterval = reminder.repeatInterval ?: return reminder.startDateTime
 
         val repeatDuration = when (repeatInterval.timeUnit) {
-            ChronoUnit.DAYS -> Duration.ofDays(repeatInterval.timeValue)
-            else -> Duration.ofDays(repeatInterval.timeValue * DAYS_IN_WEEK)
+            ChronoUnit.DAYS -> repeatInterval.timeValue.days
+            else -> (repeatInterval.timeValue * DAYS_IN_WEEK).days
         }
 
-        val passedDuration = Duration.between(reminder.startDateTime, ZonedDateTime.now())
+        val epochSecondNow = ZonedDateTime.now().toEpochSecond()
+        val epochSecondStartDateTime = reminder.startDateTime.toEpochSecond()
+        val durationSinceStartDateTime = (epochSecondNow - epochSecondStartDateTime).seconds
+        val durationToNewStartDateTime = durationSinceStartDateTime.div(repeatDuration).plus(1).times(repeatDuration)
 
-        return reminder.startDateTime
-            .plusSeconds(
-                passedDuration
-                    .dividedBy(repeatDuration)
-                    .plus(1)
-                    .times(repeatDuration.toSeconds())
-            )
+        return reminder.startDateTime.plusSeconds(durationToNewStartDateTime.inWholeSeconds)
     }
 }
