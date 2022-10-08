@@ -20,10 +20,19 @@
 
         <item name="searchViewStyle">@style/Theme.RemindMe.SearchView</item>
         <item name="navigationViewStyle">@style/Theme.RemindMe.NavigationView</item>
+    </style>
 
+    <!-- Splash screen -->
+    <style name="Theme.AppSplash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/ic_launcher_background</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
+        <item name="windowSplashScreenAnimationDuration">300</item> <!-- Probably not needed-->
+        <item name="postSplashScreenTheme">@style/Theme.RemindMe</item>
 
-
-
+<!--        &lt;!&ndash; Status bar and Nav bar configs &ndash;&gt;-->
+<!--        <item name="android:statusBarColor" tools:targetApi="l">@color/primary</item>-->
+<!--        <item name="android:navigationBarColor">@color/primary</item>-->
+<!--        <item name="android:windowLightStatusBar">false</item>-->
     </style>
 
     <!-- Alert Dialog -->
