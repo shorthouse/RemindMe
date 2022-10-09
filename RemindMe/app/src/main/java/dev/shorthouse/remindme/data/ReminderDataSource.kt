@@ -5,7 +5,6 @@ import kotlinx.coroutines.flow.Flow
 import java.time.ZonedDateTime
 
 interface ReminderDataSource {
-
     fun getReminders(): Flow<List<Reminder>>
 
     fun getReminder(id: Long): Flow<Reminder>
