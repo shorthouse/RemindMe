@@ -6,9 +6,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class ReminderRepository @Inject constructor(
-    private val reminderLocalDataSource: ReminderDataSource
-) {
+class ReminderRepository @Inject constructor(private val reminderLocalDataSource: ReminderDataSource) {
     fun getReminders(): Flow<List<Reminder>> {
         return reminderLocalDataSource.getReminders()
     }
