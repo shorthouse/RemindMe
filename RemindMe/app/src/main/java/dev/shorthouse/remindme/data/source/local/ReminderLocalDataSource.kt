@@ -6,9 +6,7 @@ import kotlinx.coroutines.flow.Flow
 import java.time.ZonedDateTime
 import javax.inject.Inject
 
-class ReminderLocalDataSource @Inject constructor(
-    private val reminderDao: ReminderDao,
-) : ReminderDataSource {
+class ReminderLocalDataSource @Inject constructor(private val reminderDao: ReminderDao) : ReminderDataSource {
     override fun getReminders(): Flow<List<Reminder>> {
         return reminderDao.getReminders()
     }
@@ -25,6 +23,10 @@ class ReminderLocalDataSource @Inject constructor(
         return reminderDao.getNonArchivedReminders()
     }
 
+    override fun archiveReminder(id: Long) {
+        return reminderDao.archiveReminder(id)
+    }
+
     override fun insertReminder(reminder: Reminder): Long {
         return reminderDao.insert(reminder)
     }
@@ -35,9 +37,5 @@ class ReminderLocalDataSource @Inject constructor(
 
     override fun deleteReminder(reminder: Reminder) {
         return reminderDao.delete(reminder)
-    }
-
-    override fun archiveReminder(id: Long) {
-        return reminderDao.archive(id)
     }
 }
