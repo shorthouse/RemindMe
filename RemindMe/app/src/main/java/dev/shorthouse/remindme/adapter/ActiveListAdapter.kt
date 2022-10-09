@@ -35,21 +35,20 @@ class ActiveListAdapter(private val viewModel: ActiveListViewModel) :
     }
 
     inner class ViewHolder(private val binding: ListItemActiveReminderBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(reminder: Reminder) {
-            binding.reminder = reminder
-
+        fun bind(item: Reminder) {
             binding.apply {
-                repeatIcon.visibility = if (reminder.isRepeatReminder()) View.VISIBLE else View.GONE
-                notificationIcon.visibility = if (reminder.isNotificationSent) View.VISIBLE else View.GONE
+                binding.reminder = item
+                repeatIcon.visibility = if (item.isRepeatReminder()) View.VISIBLE else View.GONE
+                notificationIcon.visibility = if (item.isNotificationSent) View.VISIBLE else View.GONE
                 doneCheckbox.isChecked = false
 
                 setDetailsClickListener { view ->
-                    navigateToReminderDetails(view, reminder)
+                    navigateToReminderDetails(item.id, view)
                 }
 
                 setDoneClickListener { view ->
                     doneCheckbox.jumpDrawablesToCurrentState()
-                    cancelDisplayedReminderNotification(view, reminder)
+                    cancelDisplayedReminderNotification(item.id, view)
                     updateDoneReminder(view)
                 }
 
@@ -64,13 +63,13 @@ class ActiveListAdapter(private val viewModel: ActiveListViewModel) :
             }
         }
 
-        private fun navigateToReminderDetails(view: View, reminder: Reminder) {
-            val action = ListContainerFragmentDirections.actionListContainerToDetails(reminder.id)
+        private fun navigateToReminderDetails(reminderId: Long, view: View) {
+            val action = ListContainerFragmentDirections.actionListContainerToDetails(reminderId)
             view.findNavController().navigate(action)
         }
 
-        private fun cancelDisplayedReminderNotification(view: View, reminder: Reminder) {
-            NotificationManagerCompat.from(view.context).cancel(reminder.id.toInt())
+        private fun cancelDisplayedReminderNotification(reminderId: Long, view: View) {
+            NotificationManagerCompat.from(view.context).cancel(reminderId.toInt())
         }
 
         private fun showUndoSnackbar(view: View, reminder: Reminder) {
