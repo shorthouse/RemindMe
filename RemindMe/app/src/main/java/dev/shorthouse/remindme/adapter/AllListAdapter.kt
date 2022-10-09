@@ -30,41 +30,27 @@ class AllListAdapter : ListAdapter<Reminder, AllListAdapter.ViewHolder>(AllRemin
         holder.bind(getItem(position))
     }
 
-    class ViewHolder(
-        private var binding: ListItemAllReminderBinding
-    ) : RecyclerView.ViewHolder(binding.root) {
-        init {
+    class ViewHolder(private var binding: ListItemAllReminderBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(item: Reminder) {
             binding.apply {
+                reminder = item
+
                 setDetailsClickListener { view ->
-                    reminder?.let { reminder ->
-                        navigateToReminderDetails(reminder.id, view)
-                    }
+                    navigateToReminderDetails(item.id, view)
                 }
+
+                executePendingBindings()
             }
         }
 
         private fun navigateToReminderDetails(reminderId: Long, view: View) {
-            val action = ListContainerFragmentDirections
-                .actionListContainerToDetails(reminderId)
+            val action = ListContainerFragmentDirections.actionListContainerToDetails(reminderId)
             view.findNavController().navigate(action)
-        }
-
-        fun bind(item: Reminder) {
-            binding.apply {
-                reminder = item
-                executePendingBindings()
-            }
         }
     }
 }
 
 private class AllReminderDiffCallback : DiffUtil.ItemCallback<Reminder>() {
-
-    override fun areItemsTheSame(oldItem: Reminder, newItem: Reminder): Boolean {
-        return oldItem.id == newItem.id
-    }
-
-    override fun areContentsTheSame(oldItem: Reminder, newItem: Reminder): Boolean {
-        return oldItem == newItem
-    }
+    override fun areItemsTheSame(oldItem: Reminder, newItem: Reminder) = oldItem.id == newItem.id
+    override fun areContentsTheSame(oldItem: Reminder, newItem: Reminder) = oldItem == newItem
 }
