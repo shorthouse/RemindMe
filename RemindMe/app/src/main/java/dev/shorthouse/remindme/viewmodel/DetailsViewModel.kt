@@ -10,11 +10,9 @@ import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.data.RepeatInterval
 import dev.shorthouse.remindme.di.IoDispatcher
 import dev.shorthouse.remindme.model.Reminder
-import dev.shorthouse.remindme.utilities.DATE_INPUT_PATTERN
 import dev.shorthouse.remindme.utilities.NotificationScheduler
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
-import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 
@@ -24,7 +22,6 @@ class DetailsViewModel @Inject constructor(
     private val notificationScheduler: NotificationScheduler,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
-
     lateinit var reminder: Reminder
 
     fun getReminder(id: Long): LiveData<Reminder> {
@@ -49,13 +46,6 @@ class DetailsViewModel @Inject constructor(
         viewModelScope.launch(ioDispatcher) {
             repository.archiveReminder(reminder.id)
         }
-    }
-
-    fun getFormattedStartDate(reminder: Reminder): String {
-        return reminder.startDateTime
-            .toLocalDate()
-            .format(DateTimeFormatter.ofPattern(DATE_INPUT_PATTERN))
-            .toString()
     }
 
     fun getRepeatIntervalStringId(repeatInterval: RepeatInterval): Int {
