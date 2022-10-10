@@ -1,52 +1,37 @@
 package dev.shorthouse.remindme.fragments
 
 import android.app.TimePickerDialog
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
-import android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT
-import android.widget.Toast
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.transition.MaterialSharedAxis
-import dagger.hilt.android.AndroidEntryPoint
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.databinding.FragmentAddEditBinding
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.utilities.SpinnerArrayAdapter
 import dev.shorthouse.remindme.utilities.hideKeyboard
 import dev.shorthouse.remindme.utilities.setOnClickThrottleListener
+import dev.shorthouse.remindme.utilities.showToast
 import dev.shorthouse.remindme.viewmodel.AddEditViewModel
-import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
 
-@AndroidEntryPoint
-class AddEditFragment : Fragment() {
-    private lateinit var binding: FragmentAddEditBinding
-    private val navigationArgs: AddEditFragmentArgs by navArgs()
-    private val viewModel: AddEditViewModel by viewModels()
+abstract class AddEditFragment : Fragment() {
+    protected lateinit var binding: FragmentAddEditBinding
+
+    protected val viewModel: AddEditViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        enterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, true).apply {
-            duration = resources.getInteger(R.integer.transition_duration_medium).toLong()
-            excludeTarget(R.id.app_bar, true)
-        }
-
-        returnTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false).apply {
-            duration = resources.getInteger(R.integer.transition_duration_medium).toLong()
-            excludeTarget(R.id.app_bar, true)
-        }
+        setTransitionAnimations()
     }
 
     override fun onCreateView(
@@ -61,22 +46,24 @@ class AddEditFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setAddOrEdit()
         setupToolbar()
-        populateData()
         setupClickListeners()
+        populateReminderData()
+    }
 
-        if (viewModel.isAddReminder) {
-            focusKeyboardOnReminderName()
+    private fun setTransitionAnimations() {
+        enterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, true).apply {
+            duration = resources.getInteger(R.integer.transition_duration_medium).toLong()
+            excludeTarget(R.id.app_bar, true)
+        }
+
+        returnTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false).apply {
+            duration = resources.getInteger(R.integer.transition_duration_medium).toLong()
+            excludeTarget(R.id.app_bar, true)
         }
     }
 
-    private fun setAddOrEdit() {
-        viewModel.isEditReminder = navigationArgs.isEditReminder
-        viewModel.isAddReminder = viewModel.isEditReminder.not()
-    }
-
-    private fun setupToolbar() {
+    protected open fun setupToolbar() {
         binding.toolbar.apply {
             setNavigationOnClickListener {
                 hideKeyboard()
@@ -89,21 +76,15 @@ class AddEditFragment : Fragment() {
                         if (isReminderValid()) {
                             saveReminder()
                             hideKeyboard()
-                            displayToast(R.string.toast_reminder_saved)
+                            showToast(R.string.toast_reminder_saved, requireContext())
                             findNavController().navigateUp()
                         } else {
-                            displayToast(getReminderInputErrorMessage())
+                            showToast(getReminderInputErrorMessage(), requireContext())
                         }
                         true
                     }
                     else -> false
                 }
-            }
-
-            title = if (viewModel.isAddReminder) {
-                getString(R.string.toolbar_title_add_reminder)
-            } else {
-                getString(R.string.toolbar_title_edit_reminder)
             }
         }
     }
@@ -119,45 +100,13 @@ class AddEditFragment : Fragment() {
             }
 
             repeatValueInput.doAfterTextChanged {
-                val dropdownRepeatUnit = viewModel.repeatPeriodChronoUnitMap[repeatUnitInput.text.toString()]
+                val dropdownRepeatUnit = viewModel.stringToChronoUnitMap[repeatUnitInput.text.toString()]
                 dropdownRepeatUnit?.let { repeatUnit -> setDropdownList(repeatUnit) }
             }
         }
     }
 
-    private fun populateData() {
-        if (viewModel.isAddReminder) {
-            populateAddData()
-        } else {
-            viewModel.getReminder(navigationArgs.id).observe(viewLifecycleOwner) { reminder ->
-                populateEditData(reminder)
-            }
-        }
-    }
-
-    private fun populateAddData() {
-        binding.apply {
-            startDateInput.setText(viewModel.getFormattedDate(ZonedDateTime.now()))
-            startTimeInput.setText(viewModel.getFormattedTimeNextHour(ZonedDateTime.now()))
-            repeatValueInput.setText(viewModel.defaultRepeatValue)
-            setDropdownList(viewModel.defaultRepeatUnit)
-        }
-    }
-
-    private fun populateEditData(reminder: Reminder) {
-        binding.apply {
-            nameInput.setText(reminder.name)
-            startDateInput.setText(viewModel.getFormattedDate(reminder.startDateTime))
-            startTimeInput.setText(viewModel.getFormattedTime(reminder.startDateTime))
-            notesInput.setText(viewModel.getReminderNotes(reminder))
-            notificationSwitch.isChecked = reminder.isNotificationSent
-            repeatSwitch.isChecked = reminder.isRepeatReminder()
-            repeatValueInput.setText(viewModel.getRepeatValue(reminder))
-            setDropdownList(viewModel.getRepeatUnit(reminder))
-        }
-    }
-
-    private fun setDropdownList(repeatUnit: ChronoUnit) {
+    protected fun setDropdownList(repeatUnit: ChronoUnit) {
         val repeatValue = binding.repeatValueInput.text.toString().toIntOrNull() ?: 0
 
         val dropdownItems = listOf(
@@ -176,50 +125,23 @@ class AddEditFragment : Fragment() {
         binding.repeatUnitInput.setText(selectedItem, false)
     }
 
-    private fun saveReminder() {
+    protected fun getReminderFromInputData(): Reminder {
         binding.apply {
-            val reminderName = viewModel.getReminderName(nameInput.text.toString())
-
-            val reminderStartDateTime = viewModel.convertDateTimeStringToDateTime(
-                startDateInput.text.toString(),
-                startTimeInput.text.toString()
-            )
-
-            val repeatInterval = if (binding.repeatSwitch.isChecked) {
-                viewModel.getRepeatInterval(
+            return Reminder(
+                name = viewModel.getReminderName(nameInput.text.toString()),
+                startDateTime = viewModel.convertDateTimeStringToDateTime(
+                    startDateInput.text.toString(),
+                    startTimeInput.text.toString()
+                ),
+                repeatInterval = viewModel.getRepeatInterval(
+                    binding.repeatSwitch.isChecked,
                     repeatValueInput.text.toString().toLong(),
                     repeatUnitInput.text.toString()
-                )
-            } else {
-                null
-            }
-
-            val reminderNotes = viewModel.getReminderNotes(notesInput.text.toString())
-
-            val isArchived = false
-
-            val isNotificationSent = notificationSwitch.isChecked
-
-            if (viewModel.isAddReminder) {
-                viewModel.addReminder(
-                    reminderName,
-                    reminderStartDateTime,
-                    repeatInterval,
-                    reminderNotes,
-                    isArchived,
-                    isNotificationSent
-                )
-            } else if (viewModel.isEditReminder) {
-                viewModel.editReminder(
-                    navigationArgs.id,
-                    reminderName,
-                    reminderStartDateTime,
-                    repeatInterval,
-                    reminderNotes,
-                    isArchived,
-                    isNotificationSent
-                )
-            }
+                ),
+                notes = viewModel.getReminderNotes(notesInput.text.toString()),
+                isArchived = false,
+                isNotificationSent = notificationSwitch.isChecked
+            )
         }
     }
 
@@ -244,7 +166,7 @@ class AddEditFragment : Fragment() {
             !viewModel.isNameValid(name) -> R.string.error_name_empty
             !viewModel.isStartTimeValid(startDate, startTime) -> R.string.error_time_past
             viewModel.isRepeatIntervalValid(repeatIntervalValue) -> R.string.error_interval_empty
-            else -> R.string.error
+            else -> R.string.error_input
         }
     }
 
@@ -279,24 +201,7 @@ class AddEditFragment : Fragment() {
         timePickerDialog.show()
     }
 
-    private fun focusKeyboardOnReminderName() {
-        if (binding.nameInput.requestFocus()) {
-            showKeyboard()
-        }
-    }
+    abstract fun populateReminderData()
 
-    private fun showKeyboard() {
-        val inputManager =
-            activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-
-        inputManager.showSoftInput(binding.nameInput, SHOW_IMPLICIT)
-    }
-
-    private fun displayToast(stringResId: Int) {
-        Toast.makeText(
-            context,
-            getString(stringResId),
-            Toast.LENGTH_SHORT
-        ).show()
-    }
+    abstract fun saveReminder()
 }

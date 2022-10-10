@@ -8,13 +8,13 @@
             <LayoutPositions>
               <option name="myPositions">
                 <map>
-                  <entry key="add_edit">
+                  <entry key="add">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="448" />
-                            <option name="y" value="54" />
+                            <option name="x" value="175" />
+                            <option name="y" value="289" />
                           </Point>
                         </option>
                       </LayoutPositions>
@@ -25,13 +25,13 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="230" />
-                            <option name="y" value="12" />
+                            <option name="x" value="176" />
+                            <option name="y" value="-38" />
                           </Point>
                         </option>
                         <option name="myPositions">
                           <map>
-                            <entry key="action_details_to_add_edit">
+                            <entry key="action_details_to_edit">
                               <value>
                                 <LayoutPositions />
                               </value>
@@ -41,23 +41,35 @@
                       </LayoutPositions>
                     </value>
                   </entry>
-                  <entry key="list_view_pager">
+                  <entry key="edit">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="12" />
-                            <option name="y" value="54" />
+                            <option name="x" value="470" />
+                            <option name="y" value="-38" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="fragment_container_list">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="-79" />
+                            <option name="y" value="125" />
                           </Point>
                         </option>
                         <option name="myPositions">
                           <map>
-                            <entry key="action_list_view_pager_to_add_edit">
+                            <entry key="action_list_container_to_add">
                               <value>
                                 <LayoutPositions />
                               </value>
                             </entry>
-                            <entry key="action_list_view_pager_to_details">
+                            <entry key="action_list_container_to_details">
                               <value>
                                 <LayoutPositions />
                               </value>
