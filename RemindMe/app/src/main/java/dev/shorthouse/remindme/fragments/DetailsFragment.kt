@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -15,6 +14,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.databinding.FragmentDetailsBinding
 import dev.shorthouse.remindme.model.Reminder
+import dev.shorthouse.remindme.utilities.showToast
 import dev.shorthouse.remindme.viewmodel.DetailsViewModel
 
 @AndroidEntryPoint
@@ -27,25 +27,7 @@ class DetailsFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        enterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, true).apply {
-            duration = resources.getInteger(R.integer.transition_duration_medium).toLong()
-            excludeTarget(R.id.app_bar, true)
-        }
-
-        returnTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false).apply {
-            duration = resources.getInteger(R.integer.transition_duration_medium).toLong()
-            excludeTarget(R.id.app_bar, true)
-        }
-
-        exitTransition = MaterialSharedAxis(MaterialSharedAxis.Z, true).apply {
-            duration = resources.getInteger(R.integer.transition_duration_medium).toLong()
-            excludeTarget(R.id.app_bar, true)
-        }
-
-        reenterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false).apply {
-            duration = resources.getInteger(R.integer.transition_duration_medium).toLong()
-            excludeTarget(R.id.app_bar, true)
-        }
+        setTransitionAnimations()
     }
 
     override fun onCreateView(
@@ -64,6 +46,23 @@ class DetailsFragment : Fragment() {
         setupToolbar()
     }
 
+    private fun setTransitionAnimations() {
+        val forwardTransition = MaterialSharedAxis(MaterialSharedAxis.Z, true).apply {
+            duration = resources.getInteger(R.integer.transition_duration_medium).toLong()
+            excludeTarget(R.id.app_bar, true)
+        }
+
+        val backwardTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false).apply {
+            duration = resources.getInteger(R.integer.transition_duration_medium).toLong()
+            excludeTarget(R.id.app_bar, true)
+        }
+
+        enterTransition = forwardTransition
+        exitTransition = forwardTransition
+        returnTransition = backwardTransition
+        reenterTransition = backwardTransition
+    }
+
     private fun getReminder(reminderId: Long) {
         val reminderLiveData = viewModel.getReminder(reminderId)
 
@@ -78,7 +77,7 @@ class DetailsFragment : Fragment() {
     private fun populateData(reminder: Reminder) {
         binding.apply {
             name.text = reminder.name
-            startDate.text = viewModel.getFormattedStartDate(reminder)
+            startDate.text = reminder.getFormattedStartDate()
             startTime.text = reminder.getFormattedStartTime()
             notes.text = reminder.notes
 
@@ -123,14 +122,14 @@ class DetailsFragment : Fragment() {
             R.style.Theme_RemindMe_MaterialComponents_MaterialAlertDialog
         )
             .setTitle(getString(R.string.alert_dialog_complete_reminder_message))
-            .setNegativeButton(getString(R.string.alert_dialog_delete_reminder_cancel)) { dialog, _ ->
-                dialog.cancel()
-            }
             .setPositiveButton(getString(R.string.alert_dialog_complete_reminder_complete)) { dialog, _ ->
                 viewModel.completeReminder()
-                displayToast(R.string.toast_reminder_completed)
+                showToast(R.string.toast_reminder_completed, requireContext())
                 dialog.dismiss()
                 findNavController().navigateUp()
+            }
+            .setNegativeButton(getString(R.string.alert_dialog_complete_reminder_cancel)) { dialog, _ ->
+                dialog.cancel()
             }
     }
 
@@ -140,29 +139,19 @@ class DetailsFragment : Fragment() {
             R.style.Theme_RemindMe_MaterialComponents_MaterialAlertDialog
         )
             .setTitle(getString(R.string.alert_dialog_delete_reminder_message))
-            .setNegativeButton(getString(R.string.alert_dialog_delete_reminder_cancel)) { dialog, _ ->
-                dialog.cancel()
-            }
             .setPositiveButton(getString(R.string.alert_dialog_delete_reminder_delete)) { dialog, _ ->
                 viewModel.deleteReminder()
-                displayToast(R.string.toast_reminder_deleted)
+                showToast(R.string.toast_reminder_deleted, requireContext())
                 dialog.dismiss()
                 findNavController().navigateUp()
+            }
+            .setNegativeButton(getString(R.string.alert_dialog_delete_reminder_cancel)) { dialog, _ ->
+                dialog.cancel()
             }
     }
 
     private fun navigateToEditReminder() {
-        val action = DetailsFragmentDirections
-            .actionDetailsToAddEdit(
-                navigationArgs.id,
-                isEditReminder = true
-            )
-
+        val action = DetailsFragmentDirections.actionDetailsToEdit(navigationArgs.id)
         findNavController().navigate(action)
-    }
-
-    private fun displayToast(stringResId: Int) {
-        Toast.makeText(context, getString(stringResId), Toast.LENGTH_SHORT)
-            .show()
     }
 }

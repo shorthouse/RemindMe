@@ -33,17 +33,7 @@ class ListContainerFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        exitTransition = MaterialSharedAxis(MaterialSharedAxis.Z, true).apply {
-            duration = resources.getInteger(R.integer.transition_duration_medium).toLong()
-            excludeTarget(R.id.app_bar, true)
-            excludeTarget(R.id.bottom_app_bar, true)
-            excludeTarget(R.id.add_reminder_fab, true)
-        }
-
-        reenterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false).apply {
-            duration = resources.getInteger(R.integer.transition_duration_medium).toLong()
-            excludeTarget(R.id.app_bar, true)
-        }
+        setTransitionAnimations()
     }
 
     override fun onCreateView(
@@ -68,6 +58,20 @@ class ListContainerFragment : Fragment() {
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
         binding.toolbar.menu.findItem(R.id.action_search).collapseActionView()
+    }
+
+    private fun setTransitionAnimations() {
+        exitTransition = MaterialSharedAxis(MaterialSharedAxis.Z, true).apply {
+            duration = resources.getInteger(R.integer.transition_duration_medium).toLong()
+            excludeTarget(R.id.app_bar, true)
+            excludeTarget(R.id.bottom_app_bar, true)
+            excludeTarget(R.id.add_reminder_fab, true)
+        }
+
+        reenterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false).apply {
+            duration = resources.getInteger(R.integer.transition_duration_medium).toLong()
+            excludeTarget(R.id.app_bar, true)
+        }
     }
 
     private fun setupToolbar() {
@@ -95,7 +99,7 @@ class ListContainerFragment : Fragment() {
                 searchViewItem.collapseActionView()
             }
 
-        val expandListener = object : MenuItem.OnActionExpandListener {
+        val searchExpandListener = object : MenuItem.OnActionExpandListener {
             override fun onMenuItemActionExpand(item: MenuItem): Boolean {
                 binding.bottomAppBar.performHide()
                 binding.addReminderFab.hide()
@@ -111,7 +115,7 @@ class ListContainerFragment : Fragment() {
             }
         }
 
-        searchViewItem?.setOnActionExpandListener(expandListener)
+        searchViewItem?.setOnActionExpandListener(searchExpandListener)
     }
 
     private fun setupBottomAppBar() {
@@ -131,7 +135,7 @@ class ListContainerFragment : Fragment() {
             }
 
             addReminderFab.setOnClickListener {
-                navigateToAddEditReminder()
+                navigateToAddReminder()
             }
         }
     }
@@ -230,8 +234,8 @@ class ListContainerFragment : Fragment() {
         binding.scrim.setBackgroundColor(viewModel.calculateScrimColor(slideOffset))
     }
 
-    private fun navigateToAddEditReminder() {
-        val action = ListContainerFragmentDirections.actionListContainerToAddEdit()
+    private fun navigateToAddReminder() {
+        val action = ListContainerFragmentDirections.actionListContainerToAdd()
         findNavController().navigate(action)
     }
 
