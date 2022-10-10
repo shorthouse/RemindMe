@@ -18,10 +18,10 @@ class NotificationScheduler @Inject constructor(
     private val alarmManager: AlarmManager
 ) {
     fun scheduleReminderNotification(reminder: Reminder) {
-        if (reminder.repeatInterval != null) {
-            scheduleRepeatNotification(reminder, reminder.repeatInterval)
-        } else {
+        if (reminder.repeatInterval == null) {
             scheduleOneTimeNotification(reminder)
+        } else {
+            scheduleRepeatNotification(reminder, reminder.repeatInterval)
         }
     }
 
@@ -42,6 +42,19 @@ class NotificationScheduler @Inject constructor(
         )
     }
 
+    private fun getAlarmTriggerTime(reminder: Reminder): Long {
+        return reminder.startDateTime.toInstant().toEpochMilli()
+    }
+
+    private fun getAlarmRepeatInterval(repeatInterval: RepeatInterval): Long {
+        val repeatIntervalDays = when (repeatInterval.timeUnit) {
+            ChronoUnit.DAYS -> repeatInterval.timeValue
+            else -> repeatInterval.timeValue * DAYS_IN_WEEK
+        }
+
+        return Duration.ofDays(repeatIntervalDays).toMillis()
+    }
+
     private fun getNotificationBroadcastIntent(reminder: Reminder): PendingIntent {
         return PendingIntent.getBroadcast(
             context,
@@ -49,6 +62,22 @@ class NotificationScheduler @Inject constructor(
             getAlarmIntent(reminder),
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_CANCEL_CURRENT,
         )
+    }
+
+    private fun getAlarmIntent(reminder: Reminder): Intent {
+        return Intent(context, DisplayReminderNotificationReceiver::class.java)
+            .putExtra(
+                context.getString(R.string.intent_key_reminderId),
+                reminder.id
+            )
+            .putExtra(
+                context.getString(R.string.intent_key_notificationTitle),
+                reminder.name
+            )
+            .putExtra(
+                context.getString(R.string.intent_key_notificationText),
+                reminder.getFormattedStartTime()
+            )
     }
 
     fun cancelExistingReminderNotification(reminder: Reminder) {
@@ -66,42 +95,5 @@ class NotificationScheduler @Inject constructor(
             getAlarmIntent(reminder),
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_NO_CREATE
         )
-    }
-
-    private fun getAlarmIntent(reminder: Reminder): Intent {
-        return Intent(context, DisplayReminderNotificationReceiver::class.java)
-            .putExtra(
-                context.getString(R.string.intent_key_reminderId),
-                reminder.id
-            )
-            .putExtra(
-                context.getString(R.string.intent_key_notificationTitle),
-                getReminderNotificationTitle(reminder)
-            )
-            .putExtra(
-                context.getString(R.string.intent_key_notificationText),
-                getReminderNotificationText(reminder)
-            )
-    }
-
-    private fun getAlarmTriggerTime(reminder: Reminder): Long {
-        return reminder.startDateTime.toInstant().toEpochMilli()
-    }
-
-    private fun getAlarmRepeatInterval(repeatInterval: RepeatInterval): Long {
-        val repeatIntervalDays = when (repeatInterval.timeUnit) {
-            ChronoUnit.DAYS -> repeatInterval.timeValue
-            else -> repeatInterval.timeValue * DAYS_IN_WEEK
-        }
-
-        return Duration.ofDays(repeatIntervalDays).toMillis()
-    }
-
-    private fun getReminderNotificationTitle(reminder: Reminder): String {
-        return reminder.name
-    }
-
-    private fun getReminderNotificationText(reminder: Reminder): String {
-        return reminder.startDateTime.toLocalTime().toString()
     }
 }

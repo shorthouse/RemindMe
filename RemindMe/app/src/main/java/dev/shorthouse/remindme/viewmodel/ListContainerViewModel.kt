@@ -22,7 +22,7 @@ class ListContainerViewModel : ViewModel() {
         RemindersSort.LATEST_DATE_FIRST to R.id.drawer_sort_latest_date_first
     )
 
-    val menuItemToSortMap = sortToMenuItemMap.entries.associate { (key, value) ->
+    private val menuItemToSortMap = sortToMenuItemMap.entries.associate { (key, value) ->
         value to key
     }
 

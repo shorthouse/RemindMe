@@ -94,11 +94,9 @@ class ActiveListViewModel @Inject constructor(
     }
 
     fun getMillisUntilNextMinute(now: LocalDateTime = LocalDateTime.now()): Long {
-        return Duration.between(
-            now,
-            now.plusMinutes(1).truncatedTo(ChronoUnit.MINUTES)
-        )
-            .toMillis()
+        val nextMinute = now.plusMinutes(1).truncatedTo(ChronoUnit.MINUTES)
+
+        return Duration.between(now, nextMinute).toMillis()
     }
 
     fun undoDoneReminder(reminder: Reminder) {

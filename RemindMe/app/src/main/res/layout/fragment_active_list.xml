@@ -29,7 +29,7 @@
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/empty_state_group"
+        android:id="@+id/empty_state"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone"
@@ -81,7 +81,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/empty_state_search_group"
+        android:id="@+id/empty_state_search"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone"
@@ -120,7 +120,6 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/empty_state_search_subtitle"
-            style="@style/TextAppearance.Material3.TitleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/empty_state_search_subtitle"

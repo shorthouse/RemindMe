@@ -5,7 +5,7 @@
     <item
         android:id="@+id/action_save"
         android:icon="@drawable/ic_tick"
-        android:title="@string/toolbar_title_save"
+        android:title="@string/menu_item_Save"
         android:contentDescription="@string/cd_toolbar_item_save_reminder"
         app:showAsAction="always" />
 </menu>

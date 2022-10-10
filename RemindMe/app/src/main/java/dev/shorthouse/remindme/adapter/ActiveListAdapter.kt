@@ -34,29 +34,25 @@ class ActiveListAdapter(private val viewModel: ActiveListViewModel) :
         holder.bind(getItem(position))
     }
 
-    inner class ViewHolder(
-        private val binding: ListItemActiveReminderBinding
-    ) : RecyclerView.ViewHolder(binding.root) {
-
-        init {
+    inner class ViewHolder(private val binding: ListItemActiveReminderBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(item: Reminder) {
             binding.apply {
-                if (this.reminder?.isRepeatReminder() == true) {
-                    this.repeatIcon.visibility = View.VISIBLE
-                }
-
-                if (this.reminder?.isNotificationSent == true) {
-                    this.notificationIcon.visibility = View.VISIBLE
-                }
+                binding.reminder = item
+                repeatIcon.visibility = if (item.isRepeatReminder()) View.VISIBLE else View.GONE
+                notificationIcon.visibility = if (item.isNotificationSent) View.VISIBLE else View.GONE
+                doneCheckbox.isChecked = false
 
                 setDetailsClickListener { view ->
-                    navigateToReminderDetails(view, reminder)
+                    navigateToReminderDetails(item.id, view)
                 }
 
                 setDoneClickListener { view ->
-                    binding.doneCheckbox.jumpDrawablesToCurrentState()
-                    cancelDisplayedReminderNotification(view, reminder)
+                    doneCheckbox.jumpDrawablesToCurrentState()
+                    cancelDisplayedReminderNotification(item.id, view)
                     updateDoneReminder(view)
                 }
+
+                executePendingBindings()
             }
         }
 
@@ -67,18 +63,13 @@ class ActiveListAdapter(private val viewModel: ActiveListViewModel) :
             }
         }
 
-        private fun navigateToReminderDetails(view: View, reminder: Reminder?) {
-            reminder?.id?.let { reminderId ->
-                val action = ListContainerFragmentDirections
-                    .actionListContainerToDetails(reminderId)
-                view.findNavController().navigate(action)
-            }
+        private fun navigateToReminderDetails(reminderId: Long, view: View) {
+            val action = ListContainerFragmentDirections.actionListContainerToDetails(reminderId)
+            view.findNavController().navigate(action)
         }
 
-        private fun cancelDisplayedReminderNotification(view: View, reminder: Reminder?) {
-            reminder?.id?.let { reminderId ->
-                NotificationManagerCompat.from(view.context).cancel(reminderId.toInt())
-            }
+        private fun cancelDisplayedReminderNotification(reminderId: Long, view: View) {
+            NotificationManagerCompat.from(view.context).cancel(reminderId.toInt())
         }
 
         private fun showUndoSnackbar(view: View, reminder: Reminder) {
@@ -93,12 +84,6 @@ class ActiveListAdapter(private val viewModel: ActiveListViewModel) :
                 }
                 .setAnchorView(view.rootView.findViewById(R.id.add_reminder_fab))
                 .show()
-        }
-
-        fun bind(reminder: Reminder) {
-            binding.doneCheckbox.isChecked = false
-            binding.reminder = reminder
-            binding.executePendingBindings()
         }
     }
 }

@@ -89,8 +89,7 @@
             android:tint="@color/subtitle_grey"
             app:layout_constraintBottom_toBottomOf="@+id/reminder_time"
             app:layout_constraintStart_toEndOf="@+id/reminder_time"
-            app:layout_constraintTop_toTopOf="@+id/reminder_time"
-            app:showIfNotificationEnabled="@{reminder.notificationSent}" />
+            app:layout_constraintTop_toTopOf="@+id/reminder_time" />
 
         <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/done_checkbox"
@@ -104,4 +103,5 @@
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>

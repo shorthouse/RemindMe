@@ -4,20 +4,22 @@ plugins {
     id 'kotlin-kapt'
     id 'androidx.navigation.safeargs.kotlin'
     id 'dagger.hilt.android.plugin'
-    id "io.gitlab.arturbosch.detekt" version "1.22.0-RC1"
+    id 'io.gitlab.arturbosch.detekt' version '1.22.0-RC1'
 }
 
 android {
     compileSdk 33
 
+    namespace 'dev.shorthouse.remindme'
+
     defaultConfig {
-        applicationId "dev.shorthouse.remindme"
+        applicationId 'dev.shorthouse.remindme'
         minSdk 26
         targetSdk 33
         versionCode 1
-        versionName "1.0"
+        versionName '1.0'
 
-        testInstrumentationRunner "dev.shorthouse.remindme.CustomTestRunner"
+        testInstrumentationRunner 'dev.shorthouse.remindme.CustomTestRunner'
     }
 
     buildFeatures {
@@ -36,6 +38,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
     kotlinOptions {
         jvmTarget = '1.8'
     }
@@ -43,7 +46,6 @@ android {
     testOptions {
         animationsDisabled = true
     }
-    namespace 'dev.shorthouse.remindme'
 
     testOptions.unitTests {
         includeAndroidResources = true
@@ -65,54 +67,54 @@ dependencies {
     implementation 'androidx.test.ext:junit-ktx:1.1.3'
 
     // Navigation
-    implementation "androidx.navigation:navigation-fragment-ktx:2.5.2"
-    implementation "androidx.navigation:navigation-ui-ktx:2.5.2"
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.5.2'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.5.2'
 
     // Room
-    implementation "androidx.room:room-runtime:2.4.3"
+    implementation 'androidx.room:room-runtime:2.4.3'
     implementation 'androidx.navigation:navigation-testing:2.5.2'
+    implementation 'androidx.room:room-ktx:2.4.3'
     debugImplementation 'androidx.fragment:fragment-testing:1.5.3'
-    kapt "androidx.room:room-compiler:2.4.3"
-    implementation "androidx.room:room-ktx:2.4.3"
+    kapt 'androidx.room:room-compiler:2.4.3'
 
     // Work Manager
-    implementation "androidx.work:work-runtime-ktx:2.7.1"
-    androidTestImplementation "androidx.work:work-testing:2.7.1"
+    implementation 'androidx.work:work-runtime-ktx:2.7.1'
+    androidTestImplementation 'androidx.work:work-testing:2.7.1'
 
     // GSON
     implementation 'com.google.code.gson:gson:2.9.0'
 
     // Hilt
-    implementation "com.google.dagger:hilt-android:2.38.1"
-    kapt("com.google.dagger:hilt-android-compiler:2.38.1")
+    implementation 'com.google.dagger:hilt-android:2.38.1'
+    kapt 'com.google.dagger:hilt-android-compiler:2.38.1'
 
     // Local unit tests
-    testImplementation "androidx.test:core:1.4.0"
-    testImplementation "junit:junit:4.13.2"
-    testImplementation "org.robolectric:robolectric:4.8.1"
-    testImplementation "com.google.truth:truth:1.1.3"
-    testImplementation "io.mockk:mockk:1.12.4"
-    testImplementation "org.mockito:mockito-core:4.0.0"
-    testImplementation "org.mockito.kotlin:mockito-kotlin:4.0.0"
-    testImplementation "androidx.arch.core:core-testing:2.1.0"
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.1"
+    testImplementation 'androidx.test:core:1.4.0'
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.robolectric:robolectric:4.8.1'
+    testImplementation 'com.google.truth:truth:1.1.3'
+    testImplementation 'io.mockk:mockk:1.12.4'
+    testImplementation 'org.mockito:mockito-core:4.0.0'
+    testImplementation 'org.mockito.kotlin:mockito-kotlin:4.0.0'
+    testImplementation 'androidx.arch.core:core-testing:2.1.0'
+    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.1'
 
     // Instrumentation tests
-    androidTestImplementation "androidx.test:core-ktx:1.4.0"
-    androidTestImplementation "androidx.test:runner:1.4.0"
+    androidTestImplementation 'androidx.test:core-ktx:1.4.0'
+    androidTestImplementation 'androidx.test:runner:1.4.0'
     androidTestImplementation 'android.arch.core:core-testing:1.1.1'
-    androidTestImplementation "androidx.test:rules:1.4.0"
+    androidTestImplementation 'androidx.test:rules:1.4.0'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
-    androidTestImplementation "androidx.test.espresso:espresso-core:3.4.0"
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     androidTestImplementation 'com.android.support.test.espresso:espresso-contrib:3.0.2'
     androidTestImplementation 'com.google.dagger:hilt-android-testing:2.38.1'
-    kaptAndroidTest 'com.google.dagger:hilt-android-compiler:2.38.1'
     androidTestImplementation 'androidx.navigation:navigation-testing:2.5.2'
     androidTestImplementation 'com.google.truth:truth:1.1.3'
     androidTestImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.1'
     androidTestImplementation 'org.mockito:mockito-android:3.8.0'
     androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
+    kaptAndroidTest 'com.google.dagger:hilt-android-compiler:2.38.1'
 }
 
 kapt {

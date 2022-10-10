@@ -88,4 +88,5 @@
             app:showIfNotificationEnabled="@{reminder.notificationSent}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>
