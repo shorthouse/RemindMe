@@ -27,8 +27,7 @@ class AllListFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        enterTransition = MaterialFadeThrough()
-        exitTransition = MaterialFadeThrough()
+        setTransitionAnimations()
     }
 
     override fun onCreateView(
@@ -44,6 +43,11 @@ class AllListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setListAdapter()
         setListData()
+    }
+
+    private fun setTransitionAnimations() {
+        enterTransition = MaterialFadeThrough()
+        exitTransition = MaterialFadeThrough()
     }
 
     private fun setListAdapter() {
@@ -67,35 +71,27 @@ class AllListFragment : Fragment() {
     private fun submitAdapterList(reminders: List<Reminder>) {
         val layoutManager = binding.allReminderRecycler.layoutManager
 
-        val listScrollPosition = layoutManager?.onSaveInstanceState()
+        val savedListScrollPosition = layoutManager?.onSaveInstanceState()
         listAdapter.submitList(reminders) {
-            layoutManager?.onRestoreInstanceState(listScrollPosition)
+            layoutManager?.onRestoreInstanceState(savedListScrollPosition)
         }
     }
 
     private fun displayListState(reminders: List<Reminder>) {
-        when {
-            reminders.isNotEmpty() -> displayReminderList()
-            listContainerViewModel.currentFilter.value?.isNotEmpty() == true -> displaySearchEmptyState()
-            else -> displayEmptyState()
+        hideOldListState()
+
+        val newListState = when {
+            reminders.isNotEmpty() -> binding.allReminderRecycler
+            listContainerViewModel.currentFilter.value?.isNotEmpty() == true -> binding.emptyStateSearch
+            else -> binding.emptyState
         }
+
+        newListState.visibility = View.VISIBLE
     }
 
-    private fun displayReminderList() {
-        binding.allReminderRecycler.visibility = View.VISIBLE
-        binding.emptyStateGroup.visibility = View.GONE
-        binding.emptyStateSearchGroup.visibility = View.GONE
-    }
-
-    private fun displayEmptyState() {
-        binding.emptyStateGroup.visibility = View.VISIBLE
-        binding.emptyStateSearchGroup.visibility = View.GONE
+    private fun hideOldListState() {
         binding.allReminderRecycler.visibility = View.GONE
-    }
-
-    private fun displaySearchEmptyState() {
-        binding.emptyStateSearchGroup.visibility = View.VISIBLE
-        binding.emptyStateGroup.visibility = View.GONE
-        binding.allReminderRecycler.visibility = View.GONE
+        binding.emptyState.visibility = View.GONE
+        binding.emptyStateSearch.visibility = View.GONE
     }
 }
