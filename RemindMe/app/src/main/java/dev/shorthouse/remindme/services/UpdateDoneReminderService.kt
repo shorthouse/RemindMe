@@ -88,13 +88,11 @@ class UpdateDoneReminderService @Inject constructor(
 
         val passedDuration = Duration.between(reminder.startDateTime, ZonedDateTime.now())
 
-        return reminder.startDateTime
-            .plusSeconds(
-                passedDuration
-                    .dividedBy(repeatDuration)
-                    .plus(1)
-                    .times(repeatDuration.toSeconds())
-            )
+        val secondsToNextReminder = passedDuration.dividedBy(repeatDuration)
+            .plus(1)
+            .times(repeatDuration.toSeconds())
+
+        return reminder.startDateTime.plusSeconds(secondsToNextReminder)
     }
 
     override fun onBind(intent: Intent?): IBinder? = null
