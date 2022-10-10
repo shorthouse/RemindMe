@@ -31,8 +31,7 @@ class ActiveListFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        enterTransition = MaterialFadeThrough()
-        exitTransition = MaterialFadeThrough()
+        setTransitionAnimations()
     }
 
     override fun onCreateView(
@@ -49,6 +48,11 @@ class ActiveListFragment : Fragment() {
         setListAdapter()
         setListData()
         startReminderRefreshCoroutine()
+    }
+
+    private fun setTransitionAnimations() {
+        enterTransition = MaterialFadeThrough()
+        exitTransition = MaterialFadeThrough()
     }
 
     private fun setListAdapter() {
@@ -71,11 +75,29 @@ class ActiveListFragment : Fragment() {
 
     private fun submitAdapterList(reminders: List<Reminder>) {
         val layoutManager = binding.activeReminderRecycler.layoutManager
+        val savedListScrollPosition = layoutManager?.onSaveInstanceState()
 
-        val listScrollPosition = layoutManager?.onSaveInstanceState()
         listAdapter.submitList(reminders) {
-            layoutManager?.onRestoreInstanceState(listScrollPosition)
+            layoutManager?.onRestoreInstanceState(savedListScrollPosition)
         }
+    }
+
+    private fun displayListState(reminders: List<Reminder>) {
+        hideOldListState()
+
+        val newListState = when {
+            reminders.isNotEmpty() -> binding.activeReminderRecycler
+            listContainerViewModel.currentFilter.value?.isNotEmpty() == true -> binding.emptyStateSearch
+            else -> binding.emptyState
+        }
+
+        newListState.visibility = View.VISIBLE
+    }
+
+    private fun hideOldListState() {
+        binding.activeReminderRecycler.visibility = View.GONE
+        binding.emptyState.visibility = View.GONE
+        binding.emptyStateSearch.visibility = View.GONE
     }
 
     private fun startReminderRefreshCoroutine() {
@@ -89,31 +111,5 @@ class ActiveListFragment : Fragment() {
                 delay(Duration.ofMinutes(1).toMillis())
             }
         }.start()
-    }
-
-    private fun displayListState(reminders: List<Reminder>) {
-        when {
-            reminders.isNotEmpty() -> displayReminderList()
-            listContainerViewModel.currentFilter.value?.isNotEmpty() == true -> displaySearchEmptyState()
-            else -> displayEmptyState()
-        }
-    }
-
-    private fun displayReminderList() {
-        binding.activeReminderRecycler.visibility = View.VISIBLE
-        binding.emptyStateGroup.visibility = View.GONE
-        binding.emptyStateSearchGroup.visibility = View.GONE
-    }
-
-    private fun displayEmptyState() {
-        binding.emptyStateGroup.visibility = View.VISIBLE
-        binding.emptyStateSearchGroup.visibility = View.GONE
-        binding.activeReminderRecycler.visibility = View.GONE
-    }
-
-    private fun displaySearchEmptyState() {
-        binding.emptyStateSearchGroup.visibility = View.VISIBLE
-        binding.emptyStateGroup.visibility = View.GONE
-        binding.activeReminderRecycler.visibility = View.GONE
     }
 }
