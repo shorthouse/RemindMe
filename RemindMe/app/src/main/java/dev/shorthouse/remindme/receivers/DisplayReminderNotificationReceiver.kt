@@ -20,24 +20,31 @@ class DisplayReminderNotificationReceiver : BroadcastReceiver() {
         displayReminderNotification(context, intent)
     }
 
+    private fun createNotificationChannel(context: Context) {
+        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
+        val notificationChannel = NotificationChannel(
+            context.getString(R.string.notification_channel_id_reminder),
+            context.getString(R.string.notification_channel_name_reminder),
+            NotificationManager.IMPORTANCE_HIGH
+        )
+
+        notificationManager?.createNotificationChannel(notificationChannel)
+    }
+
     private fun displayReminderNotification(context: Context, intent: Intent) {
         val intentKeyReminderId = context.getString(R.string.intent_key_reminderId)
         val reminderNotificationId = intent.getLongExtra(intentKeyReminderId, -1L).toInt()
         val reminderNotification = getReminderNotification(context, intent)
 
-        if (reminderNotification != null) {
-            NotificationManagerCompat.from(context)
-                .notify(reminderNotificationId, reminderNotification)
+        reminderNotification?.let {
+            NotificationManagerCompat.from(context).notify(reminderNotificationId, reminderNotification)
         }
     }
 
     private fun getReminderNotification(context: Context, intent: Intent): Notification? {
-        val reminderId =
-            intent.getLongExtra(context.getString(R.string.intent_key_reminderId), -1L)
-        val notificationTitle =
-            intent.getStringExtra(context.getString(R.string.intent_key_notificationTitle))
-        val notificationText =
-            intent.getStringExtra(context.getString(R.string.intent_key_notificationText))
+        val reminderId = intent.getLongExtra(context.getString(R.string.intent_key_reminderId), -1L)
+        val notificationTitle = intent.getStringExtra(context.getString(R.string.intent_key_notificationTitle))
+        val notificationText = intent.getStringExtra(context.getString(R.string.intent_key_notificationText))
 
         if (!areIntentValuesValid(reminderId, notificationTitle, notificationText)) return null
 
@@ -79,19 +86,6 @@ class DisplayReminderNotificationReceiver : BroadcastReceiver() {
             reminderId.toInt(),
             doneIntent, FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
         )
-    }
-
-    private fun createNotificationChannel(context: Context) {
-        val notificationChannel = NotificationChannel(
-            context.getString(R.string.notification_channel_id_reminder),
-            context.getString(R.string.notification_channel_name_reminder),
-            NotificationManager.IMPORTANCE_HIGH
-        )
-
-        val notificationManager =
-            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
-
-        notificationManager?.createNotificationChannel(notificationChannel)
     }
 
     private fun areIntentValuesValid(
