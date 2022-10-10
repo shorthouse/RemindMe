@@ -97,18 +97,6 @@ class DetailsViewModelTest {
     }
 
     @Test
-    fun `get formatted start date, is correctly formatted`() {
-        val formattedStartDate = viewModel.getFormattedStartDate(reminder1)
-        assertThat(formattedStartDate).isEqualTo("15 Jun 2000")
-    }
-
-    @Test
-    fun `get formatted start time, is correctly formatted`() {
-        val formattedStartTime = viewModel.getFormattedStartTime(reminder1)
-        assertThat(formattedStartTime).isEqualTo("19:01")
-    }
-
-    @Test
     fun `get repeat interval id on days, returns days`() {
         val repeatIntervalId = viewModel.getRepeatIntervalStringId(reminder1.repeatInterval!!)
         assertThat(repeatIntervalId).isEqualTo(R.plurals.interval_days)
