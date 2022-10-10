@@ -1,6 +1,10 @@
 package dev.shorthouse.remindme.viewmodel
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.model.Reminder
@@ -8,9 +12,7 @@ import dev.shorthouse.remindme.utilities.RemindersSort
 import javax.inject.Inject
 
 @HiltViewModel
-class AllListViewModel @Inject constructor(
-    private val repository: ReminderRepository,
-) : ViewModel() {
+class AllListViewModel @Inject constructor(private val repository: ReminderRepository) : ViewModel() {
 
     fun getReminders(
         currentSort: MutableLiveData<RemindersSort>,
