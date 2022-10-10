@@ -3,12 +3,14 @@ package dev.shorthouse.remindme.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.app.NotificationManagerCompat
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.databinding.ListItemActiveReminderBinding
@@ -77,12 +79,20 @@ class ActiveListAdapter(private val viewModel: ActiveListViewModel) :
             val reminderCompletedText = context.getString(R.string.snackbar_reminder_completed)
             val undoActionText = context.getString(R.string.snackbar_reminder_completed_undo)
 
+            val addReminderFab = view.rootView.findViewById<FloatingActionButton>(R.id.add_reminder_fab)
+
+            val snackbarAnchorView = if (addReminderFab.visibility != View.VISIBLE) {
+                view.findViewById<CoordinatorLayout>(R.id.coordinator_layout_active_list)
+            } else {
+                addReminderFab
+            }
+
             Snackbar.make(view, reminderCompletedText, Snackbar.LENGTH_SHORT)
                 .setAction(undoActionText) {
                     binding.doneCheckbox.isChecked = false
                     viewModel.undoDoneReminder(reminder)
                 }
-                .setAnchorView(view.rootView.findViewById(R.id.add_reminder_fab))
+                .setAnchorView(snackbarAnchorView)
                 .show()
         }
     }

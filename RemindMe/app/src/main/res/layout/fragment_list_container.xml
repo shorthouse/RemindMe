@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/view_pager_coordinator_layout"
+        android:id="@+id/coordinator_layout_fragment_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
