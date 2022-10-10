@@ -30,8 +30,8 @@
             android:id="@+id/add_edit_scroll_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            android:transitionGroup="true">
+            android:transitionGroup="true"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" >
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintLayout"
@@ -45,7 +45,6 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/name_label"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     app:boxStrokeWidth="0dp"
@@ -53,7 +52,8 @@
                     app:hintEnabled="false"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:layout_constraintTop_toTopOf="parent"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/name_input"
@@ -82,7 +82,7 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/start_date_label"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     app:boxStrokeWidth="0dp"
@@ -90,7 +90,8 @@
                     app:hintEnabled="false"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/start_date_icon"
-                    app:layout_constraintTop_toBottomOf="@+id/name_label">
+                    app:layout_constraintTop_toBottomOf="@+id/name_label"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/start_date_input"
@@ -116,7 +117,6 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/start_time_label"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     app:boxStrokeWidth="0dp"
@@ -124,7 +124,8 @@
                     app:hintEnabled="false"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/start_time_icon"
-                    app:layout_constraintTop_toBottomOf="@+id/start_date_label">
+                    app:layout_constraintTop_toBottomOf="@+id/start_date_label"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/start_time_input"
@@ -149,7 +150,6 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/notes_label"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     app:boxStrokeWidth="0dp"
@@ -157,7 +157,8 @@
                     app:hintEnabled="false"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/notes_icon"
-                    app:layout_constraintTop_toBottomOf="@+id/start_time_label">
+                    app:layout_constraintTop_toBottomOf="@+id/start_time_label"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/notes_input"
@@ -282,7 +283,11 @@
                         tools:text="day" />
 
                 </com.google.android.material.textfield.TextInputLayout>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
+
         </ScrollView>
+
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
 </layout>

@@ -18,9 +18,9 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                style="@style/Widget.MaterialComponents.Toolbar.Primary"
                 app:title="@string/app_name"
-                app:menu="@menu/toolbar_list_container" />
+                app:menu="@menu/toolbar_list_container"
+                style="@style/Widget.MaterialComponents.Toolbar.Primary"/>
 
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -28,8 +28,9 @@
             android:id="@+id/fragment_container_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:transitionGroup="true"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            android:transitionGroup="true" />
+            tools:name="dev.shorthouse.remindme.fragments.ActiveListFragment"/>
 
         <FrameLayout
             android:id="@+id/scrim"
@@ -63,9 +64,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            style="@style/Widget.MaterialComponents.BottomAppBar.Colored"
             app:navigationIcon="@drawable/ic_menu"
-            app:menu="@menu/bottom_app_bar_list_container"/>
+            app:menu="@menu/bottom_app_bar_list_container"
+            style="@style/Widget.MaterialComponents.BottomAppBar.Colored"/>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/add_reminder_fab"
@@ -76,4 +77,5 @@
             app:srcCompat="@drawable/ic_add" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
 </layout>

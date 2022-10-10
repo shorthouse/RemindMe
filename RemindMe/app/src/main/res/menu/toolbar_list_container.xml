@@ -10,6 +10,6 @@
         android:title="@string/top_app_bar_search"
         android:contentDescription="@string/cd_top_app_bar_search"
         app:showAsAction="always|collapseActionView"
-        app:actionLayout="@layout/toolbar_search_view" />
+        app:actionLayout="@layout/toolbar_reminder_list_search_action_layout" />
 
 </menu>
