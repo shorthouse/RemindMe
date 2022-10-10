@@ -8,27 +8,28 @@
     <fragment
         android:id="@+id/fragment_container_list"
         android:name="dev.shorthouse.remindme.fragments.ListContainerFragment"
-        tools:layout="@layout/fragment_list_container">
+        tools:layout="@layout/fragment_active_list">
         <action
-            android:id="@+id/action_list_container_to_add_edit"
-            app:destination="@id/add_edit" />
+            android:id="@+id/action_list_container_to_add"
+            app:destination="@id/add" />
         <action
             android:id="@+id/action_list_container_to_details"
             app:destination="@id/details" />
     </fragment>
 
     <fragment
-        android:id="@+id/add_edit"
-        android:name="dev.shorthouse.remindme.fragments.AddEditFragment"
+        android:id="@+id/add"
+        android:name="dev.shorthouse.remindme.fragments.AddFragment"
+        tools:layout="@layout/fragment_add_edit" />
+
+    <fragment
+        android:id="@+id/edit"
+        android:name="dev.shorthouse.remindme.fragments.EditFragment"
         tools:layout="@layout/fragment_add_edit" >
         <argument
             android:name="id"
             android:defaultValue="0L"
             app:argType="long" />
-        <argument
-            android:name="isEditReminder"
-            android:defaultValue="false"
-            app:argType="boolean" />
     </fragment>
 
     <fragment
@@ -41,8 +42,8 @@
             android:defaultValue="0L"
             app:argType="long" />
         <action
-            android:id="@+id/action_details_to_add_edit"
-            app:destination="@id/add_edit" />
+            android:id="@+id/action_details_to_edit"
+            app:destination="@id/edit" />
     </fragment>
 
 </navigation>
