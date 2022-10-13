@@ -12,7 +12,7 @@ import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.di.IoDispatcher
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.utilities.DAYS_IN_WEEK
-import dev.shorthouse.remindme.utilities.RemindersSort
+import dev.shorthouse.remindme.utilities.ReminderSort
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -39,7 +39,7 @@ class ActiveListViewModel @Inject constructor(
     val currentTime = MutableLiveData(ZonedDateTime.now())
 
     fun getReminders(
-        currentSort: MutableLiveData<RemindersSort>,
+        currentSort: MutableLiveData<ReminderSort>,
         currentFilter: MutableLiveData<String>
     ): LiveData<List<Reminder>> {
         val remindersListData = MediatorLiveData<List<Reminder>>()
@@ -61,7 +61,7 @@ class ActiveListViewModel @Inject constructor(
     }
 
     private fun getRemindersListData(
-        currentSort: MutableLiveData<RemindersSort>,
+        currentSort: MutableLiveData<ReminderSort>,
         currentFilter: MutableLiveData<String>
     ): List<Reminder>? {
         val allReminders = currentAllReminders.value
@@ -76,7 +76,7 @@ class ActiveListViewModel @Inject constructor(
         }
 
         val activeSortedReminders = when (sort) {
-            RemindersSort.EARLIEST_DATE_FIRST -> activeReminders.sortedBy { it.startDateTime }
+            ReminderSort.EARLIEST_DATE_FIRST -> activeReminders.sortedBy { it.startDateTime }
             else -> activeReminders.sortedByDescending { it.startDateTime }
         }
 
@@ -86,22 +86,6 @@ class ActiveListViewModel @Inject constructor(
             activeSortedReminders.filter { reminder ->
                 reminder.name.contains(filter, true)
             }
-        }
-    }
-
-    fun updateCurrentTime() {
-        currentTime.value = ZonedDateTime.now()
-    }
-
-    fun getMillisUntilNextMinute(now: LocalDateTime = LocalDateTime.now()): Long {
-        val nextMinute = now.plusMinutes(1).truncatedTo(ChronoUnit.MINUTES)
-
-        return Duration.between(now, nextMinute).toMillis()
-    }
-
-    fun undoDoneReminder(reminder: Reminder) {
-        viewModelScope.launch(ioDispatcher) {
-            repository.updateReminder(reminder)
         }
     }
 
@@ -139,5 +123,21 @@ class ActiveListViewModel @Inject constructor(
         val durationToNewStartDateTime = durationSinceStartDateTime.div(repeatDuration).plus(1).times(repeatDuration)
 
         return reminder.startDateTime.plusSeconds(durationToNewStartDateTime.inWholeSeconds)
+    }
+
+    fun undoDoneReminder(reminder: Reminder) {
+        viewModelScope.launch(ioDispatcher) {
+            repository.updateReminder(reminder)
+        }
+    }
+
+    fun updateCurrentTime() {
+        currentTime.value = ZonedDateTime.now()
+    }
+
+    fun getMillisUntilNextMinute(now: LocalDateTime = LocalDateTime.now()): Long {
+        val nextMinute = now.plusMinutes(1).truncatedTo(ChronoUnit.MINUTES)
+
+        return Duration.between(now, nextMinute).toMillis()
     }
 }

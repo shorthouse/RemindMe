@@ -1,6 +1,7 @@
 package dev.shorthouse.remindme.viewmodel
 
 import android.graphics.Color
+import androidx.annotation.VisibleForTesting
 import androidx.core.graphics.blue
 import androidx.core.graphics.green
 import androidx.core.graphics.red
@@ -8,21 +9,22 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.android.material.math.MathUtils
 import dev.shorthouse.remindme.R
-import dev.shorthouse.remindme.utilities.RemindersSort
+import dev.shorthouse.remindme.utilities.ReminderSort
 import dev.shorthouse.remindme.utilities.SCRIM_LERP_MAX
 import dev.shorthouse.remindme.utilities.SCRIM_START_ALPHA
 
 class ListContainerViewModel : ViewModel() {
-    val currentSort = MutableLiveData(RemindersSort.EARLIEST_DATE_FIRST)
+    val currentSort = MutableLiveData(ReminderSort.EARLIEST_DATE_FIRST)
     val currentFilter = MutableLiveData("")
     var bottomSheetListSelection = R.id.drawer_active_list
 
     val sortToMenuItemMap = mapOf(
-        RemindersSort.EARLIEST_DATE_FIRST to R.id.drawer_sort_earliest_date_first,
-        RemindersSort.LATEST_DATE_FIRST to R.id.drawer_sort_latest_date_first
+        ReminderSort.EARLIEST_DATE_FIRST to R.id.drawer_sort_earliest_date_first,
+        ReminderSort.LATEST_DATE_FIRST to R.id.drawer_sort_latest_date_first
     )
 
-    private val menuItemToSortMap = sortToMenuItemMap.entries.associate { (key, value) ->
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    val menuItemToSortMap = sortToMenuItemMap.entries.associate { (key, value) ->
         value to key
     }
 
