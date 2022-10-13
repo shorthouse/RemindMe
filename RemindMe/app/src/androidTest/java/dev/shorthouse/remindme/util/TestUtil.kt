@@ -13,7 +13,8 @@ object TestUtil {
         notes: String? = null,
         isArchived: Boolean = false,
         isNotificationSent: Boolean = false
-    ) = Reminder (
+    ): Reminder {
+        return Reminder(
             id = id,
             name = name,
             startDateTime = startDateTime,
@@ -22,4 +23,5 @@ object TestUtil {
             isArchived = isArchived,
             isNotificationSent = isNotificationSent
         )
+    }
 }
