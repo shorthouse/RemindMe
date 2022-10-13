@@ -4,14 +4,13 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.asLiveData
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
-import dev.shorthouse.remindme.getOrAwaitValue
-import dev.shorthouse.remindme.model.Reminder
+import dev.shorthouse.remindme.util.TestUtil
+import dev.shorthouse.remindme.util.getOrAwaitValue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
 
@@ -21,70 +20,41 @@ class ReminderRepositoryTest {
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
 
-    private val reminder1 = Reminder(
-        id = 1,
+    private val repeatActiveReminder = TestUtil.createReminder(
+        id = 1L,
         name = "repeatActiveReminder",
-        startDateTime = ZonedDateTime.of(
-            2000,
-            6,
-            15,
-            19,
-            1,
-            0,
-            0,
-            ZoneId.of("Europe/London")
-        ),
+        startDateTime = ZonedDateTime.parse("2000-06-15T19:01:00Z"),
         repeatInterval = RepeatInterval(1, ChronoUnit.DAYS),
-        notes = "notes",
-        isArchived = false,
-        isNotificationSent = true
     )
 
-    private val reminder2 = Reminder(
-        id = 2,
+    private val archivedRepeatReminder = TestUtil.createReminder(
+        id = 2L,
         name = "archivedRepeatReminder",
-        startDateTime = ZonedDateTime.of(
-            2000,
-            6,
-            15,
-            19,
-            1,
-            0,
-            0,
-            ZoneId.of("Europe/London")
-        ),
+        startDateTime = ZonedDateTime.parse("2000-06-15T19:01:00Z"),
         repeatInterval = RepeatInterval(1, ChronoUnit.DAYS),
-        notes = "notes",
         isArchived = true,
-        isNotificationSent = true
     )
 
-    private val reminder3 = Reminder(
-        id = 3,
+    private val oneOffNotActiveReminder = TestUtil.createReminder(
+        id = 3L,
         name = "oneOffNotActiveReminder",
-        startDateTime = ZonedDateTime.of(
-            3000,
-            6,
-            15,
-            19,
-            1,
-            0,
-            0,
-            ZoneId.of("Europe/London")
-        ),
-        repeatInterval = null,
-        notes = null,
-        isArchived = false,
-        isNotificationSent = false
+        startDateTime = ZonedDateTime.parse("3000-06-15T19:01:00Z"),
     )
 
-    private val localReminders = listOf(reminder1, reminder2).sortedBy { it.id }
+    private val reminderToArchive = TestUtil.createReminder(
+        id = 4L,
+        name = "reminderToArchive",
+        startDateTime = ZonedDateTime.parse("2000-06-15T19:01:00Z"),
+        isArchived = false
+    )
+
+    private val localReminders = listOf(repeatActiveReminder, archivedRepeatReminder, reminderToArchive)
+        .sortedBy { it.id }
 
     private lateinit var reminderLocalDataSource: FakeDataSource
 
     // Class under test
     private lateinit var reminderRepository: ReminderRepository
-
 
     @Before
     fun createRepository() {
@@ -114,39 +84,44 @@ class ReminderRepositoryTest {
             .getOrAwaitValue()
 
         assertThat(nonArchivedReminders.forEach { it.isArchived.not() })
-        assertThat(nonArchivedReminders).contains(reminder1)
+        assertThat(nonArchivedReminders).contains(repeatActiveReminder)
+    }
+
+    @Test
+    fun `Archive reminder archives specified reminder`() {
+        val expectedArchivedReminder = TestUtil.createReminder(
+            reminderToArchive.id,
+            reminderToArchive.name,
+            reminderToArchive.startDateTime,
+            isArchived = true
+        )
+
+        reminderRepository.archiveReminder(4L)
+        val archivedReminder = reminderRepository.getReminder(4L).asLiveData().getOrAwaitValue()
+
+        assertThat(archivedReminder).isEqualTo(expectedArchivedReminder)
     }
 
     @Test
     fun `Insert reminder inserts specified reminder`() {
-        val insertedReminderId = reminderRepository.insertReminder(reminder3)
+        val insertedReminderId = reminderRepository.insertReminder(oneOffNotActiveReminder)
         val allReminders = reminderRepository.getReminders().asLiveData().getOrAwaitValue()
 
-        assertThat(insertedReminderId).isEqualTo(reminder3.id)
-        assertThat(allReminders).contains(reminder3)
+        assertThat(insertedReminderId).isEqualTo(oneOffNotActiveReminder.id)
+        assertThat(allReminders).contains(oneOffNotActiveReminder)
         assertThat(allReminders).hasSize(3)
     }
 
     @Test
     fun `Update reminder updates specified reminder`() {
-        val updatedReminder = Reminder(
-            id = reminder1.id,
+        val updatedReminder = TestUtil.createReminder(
+            id = repeatActiveReminder.id,
             name = "updatedReminder",
-            startDateTime = ZonedDateTime.of(
-                2700,
-                6,
-                15,
-                19,
-                1,
-                0,
-                0,
-                ZoneId.of("Europe/London")
-            ),
+            startDateTime = ZonedDateTime.parse("2700-06-15T19:01:00Z"),
             repeatInterval = RepeatInterval(1, ChronoUnit.WEEKS),
-            notes = "notes",
-            isArchived = false,
-            isNotificationSent = false
+            notes = "updatedNotes",
         )
+
         reminderRepository.updateReminder(updatedReminder)
         val allReminders = reminderRepository.getReminders().asLiveData().getOrAwaitValue()
 
@@ -156,10 +131,10 @@ class ReminderRepositoryTest {
 
     @Test
     fun `Delete reminder deletes specified reminder`() {
-        reminderRepository.deleteReminder(reminder1)
+        reminderRepository.deleteReminder(repeatActiveReminder)
         val allReminders = reminderRepository.getReminders().asLiveData().getOrAwaitValue()
 
-        assertThat(allReminders).doesNotContain(reminder1)
+        assertThat(allReminders).doesNotContain(repeatActiveReminder)
         assertThat(allReminders).hasSize(localReminders.size.dec())
     }
 }
