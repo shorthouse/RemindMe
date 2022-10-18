@@ -1,6 +1,5 @@
 package dev.shorthouse.remindme.fragments
 
-import android.view.View
 import androidx.navigation.testing.TestNavHostController
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
@@ -9,7 +8,11 @@ import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.swipeUp
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.espresso.matcher.ViewMatchers.isClickable
+import androidx.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry
 import dagger.Module
 import dagger.Provides
@@ -25,7 +28,6 @@ import dev.shorthouse.remindme.data.RepeatInterval
 import dev.shorthouse.remindme.di.DataSourceModule
 import dev.shorthouse.remindme.launchFragmentInHiltContainer
 import dev.shorthouse.remindme.util.TestUtil
-import dev.shorthouse.remindme.util.checkToastDisplayed
 import org.hamcrest.core.AllOf.allOf
 import org.hamcrest.core.IsNot.not
 import org.junit.Before
@@ -43,7 +45,6 @@ class DetailsFragmentTest {
     var hiltRule = HiltAndroidRule(this)
 
     private lateinit var navHostController: TestNavHostController
-    private lateinit var decorView: View
 
     @Module
     @InstallIn(SingletonComponent::class)
@@ -310,11 +311,7 @@ class DetailsFragmentTest {
         launchFragmentInHiltContainer<DetailsFragment>(
             navHostController = navHostController,
             fragmentArgs = navigationArgs
-        ) {
-            this.activity?.window?.decorView?.let {
-                decorView = it
-            }
-        }
+        )
 
         openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().context)
         onView(withText("Delete")).perform(click())
@@ -323,7 +320,5 @@ class DetailsFragmentTest {
         onView(withText("Delete this reminder?")).check(doesNotExist())
         onView(withText("Cancel")).check(doesNotExist())
         onView(withText("Delete")).check(doesNotExist())
-
-        checkToastDisplayed("Reminder deleted", decorView)
     }
 }
