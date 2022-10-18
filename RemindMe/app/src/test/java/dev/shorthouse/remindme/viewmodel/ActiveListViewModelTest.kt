@@ -45,7 +45,7 @@ class ActiveListViewModelTest {
             id = 2L,
             name = "reminderNow",
             repeatInterval = RepeatInterval(1, ChronoUnit.DAYS),
-            startDateTime = ZonedDateTime.now(),
+            startDateTime = ZonedDateTime.now().minusMinutes(1),
         )
 
         val futureReminder = TestUtil.createReminder(
@@ -114,7 +114,7 @@ class ActiveListViewModelTest {
 
         val filterTimeReminders = viewModel.getReminders(sort, filter).getOrAwaitValue()
 
-        assertThat(filterTimeReminders).isEqualTo(reminders.subList(0, 1))
+        assertThat(filterTimeReminders).isEqualTo(reminders.subList(0, 2))
     }
 
     @Test
