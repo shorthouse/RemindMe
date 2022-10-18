@@ -21,6 +21,7 @@ import java.time.LocalDateTime
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject
+import kotlin.math.floor
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
@@ -120,7 +121,9 @@ class ActiveListViewModel @Inject constructor(
         val epochSecondNow = ZonedDateTime.now().toEpochSecond()
         val epochSecondStartDateTime = reminder.startDateTime.toEpochSecond()
         val durationSinceStartDateTime = (epochSecondNow - epochSecondStartDateTime).seconds
-        val durationToNewStartDateTime = durationSinceStartDateTime.div(repeatDuration).plus(1).times(repeatDuration)
+
+        val passedIntervals = floor(durationSinceStartDateTime.div(repeatDuration)).plus(1)
+        val durationToNewStartDateTime = passedIntervals.times(repeatDuration)
 
         return reminder.startDateTime.plusSeconds(durationToNewStartDateTime.inWholeSeconds)
     }
