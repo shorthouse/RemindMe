@@ -51,7 +51,7 @@ class AllListViewModelTest {
     fun `Sort all reminders by earliest date first, sorted by date earliest first`() {
         val sort = MutableLiveData(ReminderSort.EARLIEST_DATE_FIRST)
         val filter = MutableLiveData("")
-        val expectedSortedReminders = reminders.sortedByDescending { it.startDateTime }
+        val expectedSortedReminders = reminders.sortedBy { it.startDateTime }
 
         val sortedReminders = viewModel.getReminders(sort, filter).getOrAwaitValue()
 
@@ -62,7 +62,7 @@ class AllListViewModelTest {
     fun `Sort all reminders by oldest date first, sorted by date oldest first`() {
         val sort = MutableLiveData(ReminderSort.LATEST_DATE_FIRST)
         val filter = MutableLiveData("")
-        val expectedSortedReminders = reminders.sortedBy { it.startDateTime }
+        val expectedSortedReminders = reminders.sortedByDescending { it.startDateTime }
 
         val sortedReminders = viewModel.getReminders(sort, filter).getOrAwaitValue()
 
@@ -72,16 +72,6 @@ class AllListViewModelTest {
     @Test
     fun `Sort is null, returns null`() {
         val sort = MutableLiveData<ReminderSort>(null)
-        val filter = MutableLiveData<String>(null)
-
-        val nullReminders = viewModel.getReminders(sort, filter).getOrAwaitValue()
-
-        assertThat(nullReminders).isNull()
-    }
-
-    @Test
-    fun `Filter is null, returns null`() {
-        val sort = MutableLiveData(ReminderSort.LATEST_DATE_FIRST)
         val filter = MutableLiveData<String>(null)
 
         val nullReminders = viewModel.getReminders(sort, filter).getOrAwaitValue()
@@ -113,7 +103,7 @@ class AllListViewModelTest {
 
     @Test
     fun `Filter is null, treats filter as blank`() {
-        val sort = MutableLiveData(ReminderSort.LATEST_DATE_FIRST)
+        val sort = MutableLiveData(ReminderSort.EARLIEST_DATE_FIRST)
         val filter = MutableLiveData<String>(null)
 
         val nullFilterReminders = viewModel.getReminders(sort, filter).getOrAwaitValue()
@@ -123,7 +113,7 @@ class AllListViewModelTest {
 
     @Test
     fun `Filter is only whitespace, treats filter as blank`() {
-        val sort = MutableLiveData(ReminderSort.LATEST_DATE_FIRST)
+        val sort = MutableLiveData(ReminderSort.EARLIEST_DATE_FIRST)
         val filter = MutableLiveData("      ")
 
         val whitespaceFilterReminders = viewModel.getReminders(sort, filter).getOrAwaitValue()
