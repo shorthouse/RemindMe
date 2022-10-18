@@ -8,12 +8,15 @@ import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.utilities.NotificationScheduler
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.StandardTestDispatcher
 import org.junit.Before
 import org.junit.Test
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class AddEditViewModelTest {
     // Class under test
     private lateinit var viewModel: AddEditViewModel
@@ -67,11 +70,11 @@ class AddEditViewModelTest {
 
         val dataSource = FakeDataSource()
         val reminderRepository = ReminderRepository(dataSource)
-        viewModel = AddEditViewModel(reminderRepository, notificationScheduler)
+        viewModel = AddEditViewModel(reminderRepository, notificationScheduler, StandardTestDispatcher())
     }
 
     @Test
-    fun `format reminder start date, returns correct date`() {
+    fun `Get formatted reminder start date, returns correct date`() {
         val expectedDate = "Thu, 15 Jun 2000"
         val date = viewModel.getFormattedDate(reminder.startDateTime)
 
@@ -79,7 +82,7 @@ class AddEditViewModelTest {
     }
 
     @Test
-    fun `format reminder start time, returns correct time`() {
+    fun `Get formatted reminder start time, returns correct time`() {
         val expectedTime = "19:01"
         val time = viewModel.getFormattedTime(reminder.startDateTime)
 
@@ -87,7 +90,7 @@ class AddEditViewModelTest {
     }
 
     @Test
-    fun `get start time next hour, returns correct time`() {
+    fun `Get start time next hour, returns correct time`() {
         val expectedTime = "20:00"
         val time = viewModel.getFormattedTimeNextHour(reminder.startDateTime)
 
@@ -95,7 +98,7 @@ class AddEditViewModelTest {
     }
 
     @Test
-    fun `get reminder notes that exist, returns notes`() {
+    fun `Get reminder notes that exist, returns notes`() {
         val expectedNotes = "notes"
         val notes = viewModel.getReminderNotes(reminder)
 
@@ -103,7 +106,7 @@ class AddEditViewModelTest {
     }
 
     @Test
-    fun `get reminder notes that are null, returns empty string`() {
+    fun `Get reminder notes that are null, returns empty string`() {
         val expectedNotes = ""
         val notes = viewModel.getReminderNotes(oneOffReminder)
 
@@ -111,7 +114,7 @@ class AddEditViewModelTest {
     }
 
     @Test
-    fun `get repeat value on repeat reminder, returns expected repeat value`() {
+    fun `Get repeat value on repeat reminder, returns expected repeat value`() {
         val expectedRepeatValue = "4"
         val repeatValue = viewModel.getRepeatValue(reminder)
 
@@ -119,7 +122,7 @@ class AddEditViewModelTest {
     }
 
     @Test
-    fun `get repeat value on one off reminder, returns default repeat value`() {
+    fun `Get repeat value on one off reminder, returns default repeat value`() {
         val expectedRepeatValue = "1"
         val repeatValue = viewModel.getRepeatValue(oneOffReminder)
 
@@ -127,7 +130,7 @@ class AddEditViewModelTest {
     }
 
     @Test
-    fun `get repeat unit on repeat reminder, returns expected repeat unit`() {
+    fun `Get repeat unit on repeat reminder, returns expected repeat unit`() {
         val expectedRepeatUnit = ChronoUnit.WEEKS
         val repeatUnit = viewModel.getRepeatUnit(reminder)
 
@@ -135,7 +138,7 @@ class AddEditViewModelTest {
     }
 
     @Test
-    fun `get repeat unit on one off reminder, returns default repeat unit`() {
+    fun `Get repeat unit on one off reminder, returns default repeat unit`() {
         val expectedRepeatUnit = ChronoUnit.DAYS
         val repeatUnit = viewModel.getRepeatUnit(oneOffReminder)
 
@@ -143,21 +146,7 @@ class AddEditViewModelTest {
     }
 
     @Test
-    fun `get is notification sent on notifying reminder, should return true`() {
-        val isNotificationSent = viewModel.getIsNotificationSent(reminder)
-
-        assertThat(isNotificationSent).isTrue()
-    }
-
-    @Test
-    fun `get is notification sent on non notifying reminder, should return false`() {
-        val isNotificationSent = viewModel.getIsNotificationSent(oneOffReminder)
-
-        assertThat(isNotificationSent).isFalse()
-    }
-
-    @Test
-    fun `convert date time string to ZonedDateTime, returns expected date time`() {
+    fun `Convert date time string to ZonedDateTime, returns expected date time`() {
         val dateText = "Thu, 15 Jun 2000"
         val timeText = "19:01"
         val expectedDateTime = reminder.startDateTime
@@ -168,7 +157,7 @@ class AddEditViewModelTest {
     }
 
     @Test
-    fun `format date picker date, returns expected formatted date`() {
+    fun `Convert epoch milli to date, returns expected formatted date`() {
         val timeStampMillis = 100_000_000L
         val expectedDate = "Fri, 02 Jan 1970"
 
@@ -178,7 +167,7 @@ class AddEditViewModelTest {
     }
 
     @Test
-    fun `format time picker time, returns expected formatted time`() {
+    fun `Format time picker time, returns expected formatted time`() {
         val hour = 14
         val minute = 30
         val expectedTime = "14:30"
@@ -189,63 +178,116 @@ class AddEditViewModelTest {
     }
 
     @Test
-    fun `get repeat interval with valid interval, returns expected interval`() {
+    fun `Get repeat interval with valid interval, returns expected interval`() {
         val timeValue = 10L
         val repeatUnitString = "weeks"
+        val isRepeatReminder = true
 
         val expectedRepeatInterval = RepeatInterval(10L, ChronoUnit.WEEKS)
 
-        val repeatInterval = viewModel.getRepeatInterval(timeValue, repeatUnitString)
+        val repeatInterval = viewModel.getRepeatInterval(isRepeatReminder, timeValue, repeatUnitString)
 
         assertThat(repeatInterval).isEqualTo(expectedRepeatInterval)
     }
 
     @Test
-    fun `get repeat interval with null interval, returns null`() {
+    fun `Get repeat interval with invalid interval, returns null`() {
         val timeValue = 0L
         val repeatUnitString = ""
+        val isRepeatReminder = true
 
-        val repeatInterval = viewModel.getRepeatInterval(timeValue, repeatUnitString)
+        val repeatInterval = viewModel.getRepeatInterval(isRepeatReminder, timeValue, repeatUnitString)
 
         assertThat(repeatInterval).isNull()
     }
 
     @Test
-    fun `get reminder notes with non blank notes, returns notes`() {
-        val notesInput = "notes"
+    fun `Get repeat interval with one-off reminder, returns null`() {
+        val timeValue = 0L
+        val repeatUnitString = ""
+        val isRepeatReminder = false
 
-        val notes = viewModel.getReminderNotes(notesInput)
+        val repeatInterval = viewModel.getRepeatInterval(isRepeatReminder, timeValue, repeatUnitString)
 
-        assertThat(notes).isEqualTo(notesInput)
+        assertThat(repeatInterval).isNull()
     }
 
     @Test
-    fun `get reminder notes with blank notes, returns null`() {
-        val notes = viewModel.getReminderNotes("")
+    fun `Get reminder name with non blank name, returns name`() {
+        val expectedName = "name"
+
+        val name = viewModel.getReminderName(expectedName)
+
+        assertThat(name).isEqualTo(expectedName)
+    }
+
+    @Test
+    fun `Get reminder name with whitespace surrounded name, returns name with whitespace removed`() {
+        val nameInput = "         name   "
+        val expectedName = "name"
+
+        val name = viewModel.getReminderName(nameInput)
+
+        assertThat(name).isEqualTo(expectedName)
+    }
+
+    @Test
+    fun `Get reminder notes with non blank notes, returns notes`() {
+        val expectedNotes = "notes"
+
+        val notes = viewModel.getReminderNotes(expectedNotes)
+
+        assertThat(notes).isEqualTo(expectedNotes)
+    }
+
+    @Test
+    fun `Get reminder notes with whitespace surrounded notes, returns notes with whitespace removed`() {
+        val notesInput = "         notes   "
+        val expectedNotes = "notes"
+
+        val notes = viewModel.getReminderName(notesInput)
+
+        assertThat(notes).isEqualTo(expectedNotes)
+    }
+
+    @Test
+    fun `Get reminder notes with blank notes, returns null`() {
+        val notesInput = ""
+
+        val notes = viewModel.getReminderNotes(notesInput)
 
         assertThat(notes).isNull()
     }
 
     @Test
-    fun `is name valid with non blank name, returns true`() {
-        val name = "name"
+    fun `Is name valid with non blank name, returns true`() {
+        val nameInput = "name"
 
-        val isNameValid = viewModel.isNameValid(name)
+        val isNameValid = viewModel.isNameValid(nameInput)
 
         assertThat(isNameValid).isTrue()
     }
 
     @Test
-    fun `is name valid with blank name, returns false`() {
-        val name = "    "
+    fun `Is name valid with blank name, returns false`() {
+        val nameInput = "    "
 
-        val isNameValid = viewModel.isNameValid(name)
+        val isNameValid = viewModel.isNameValid(nameInput)
 
         assertThat(isNameValid).isFalse()
     }
 
     @Test
-    fun `is repeat interval valid with greater than 0 repeat interval value, returns true`() {
+    fun `Is name valid with empty name, returns false`() {
+        val nameInput = ""
+
+        val isNameValid = viewModel.isNameValid(nameInput)
+
+        assertThat(isNameValid).isFalse()
+    }
+
+    @Test
+    fun `Is repeat interval valid with greater than 0 repeat interval value, returns true`() {
         val repeatIntervalValue = 10L
 
         val isRepeatIntervalValid = viewModel.isRepeatIntervalValid(repeatIntervalValue)
@@ -254,7 +296,7 @@ class AddEditViewModelTest {
     }
 
     @Test
-    fun `is repeat interval valid with 0 repeat interval value, returns false`() {
+    fun `Is repeat interval valid with 0 repeat interval value, returns false`() {
         val repeatIntervalValue = 0L
 
         val isRepeatIntervalValid = viewModel.isRepeatIntervalValid(repeatIntervalValue)
@@ -263,7 +305,7 @@ class AddEditViewModelTest {
     }
 
     @Test
-    fun `is repeat interval valid with negative repeat interval value, returns false`() {
+    fun `Is repeat interval valid with negative repeat interval value, returns false`() {
         val repeatIntervalValue = -10L
 
         val isRepeatIntervalValid = viewModel.isRepeatIntervalValid(repeatIntervalValue)

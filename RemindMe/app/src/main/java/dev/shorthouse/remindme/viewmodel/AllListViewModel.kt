@@ -8,14 +8,14 @@ import androidx.lifecycle.asLiveData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.model.Reminder
-import dev.shorthouse.remindme.utilities.RemindersSort
+import dev.shorthouse.remindme.utilities.ReminderSort
 import javax.inject.Inject
 
 @HiltViewModel
 class AllListViewModel @Inject constructor(private val repository: ReminderRepository) : ViewModel() {
 
     fun getReminders(
-        currentSort: MutableLiveData<RemindersSort>,
+        currentSort: MutableLiveData<ReminderSort>,
         currentFilter: MutableLiveData<String>
     ): LiveData<List<Reminder>> {
         val allReminders = repository
@@ -39,7 +39,7 @@ class AllListViewModel @Inject constructor(private val repository: ReminderRepos
 
     private fun sortFilterReminders(
         allReminders: LiveData<List<Reminder>>,
-        currentSort: MutableLiveData<RemindersSort>,
+        currentSort: MutableLiveData<ReminderSort>,
         currentFilter: MutableLiveData<String>
     ): List<Reminder>? {
         val reminders = allReminders.value
@@ -49,7 +49,7 @@ class AllListViewModel @Inject constructor(private val repository: ReminderRepos
         if (reminders == null || sort == null) return null
 
         val sortedReminders = when (sort) {
-            RemindersSort.EARLIEST_DATE_FIRST -> reminders.sortedBy { it.startDateTime }
+            ReminderSort.EARLIEST_DATE_FIRST -> reminders.sortedBy { it.startDateTime }
             else -> reminders.sortedByDescending { it.startDateTime }
         }
 

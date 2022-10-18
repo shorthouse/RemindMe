@@ -16,9 +16,11 @@ class FakeDataSource(private var reminders: MutableList<Reminder> = mutableListO
     }
 
     override fun getActiveNonArchivedReminders(nowDateTime: ZonedDateTime): Flow<List<Reminder>> {
-        return flowOf(reminders.filter {
-            it.startDateTime.isBefore(nowDateTime) || it.startDateTime.isEqual(nowDateTime)
-        })
+        return flowOf(
+            reminders.filter {
+                it.startDateTime.isBefore(nowDateTime) || it.startDateTime.isEqual(nowDateTime)
+            }
+        )
     }
 
     override fun getNonArchivedReminders(): Flow<List<Reminder>> {

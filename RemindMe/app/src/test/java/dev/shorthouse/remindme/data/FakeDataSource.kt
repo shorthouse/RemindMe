@@ -15,13 +15,30 @@ class FakeDataSource(private var reminders: MutableList<Reminder> = mutableListO
     }
 
     override fun getActiveNonArchivedReminders(nowDateTime: ZonedDateTime): Flow<List<Reminder>> {
-        return flowOf(reminders.filter {
-            it.startDateTime.isBefore(nowDateTime) || it.startDateTime.isEqual(nowDateTime)
-        })
+        return flowOf(
+            reminders.filter { it.startDateTime.isBefore(nowDateTime) || it.startDateTime.isEqual(nowDateTime) }
+        )
     }
 
     override fun getNonArchivedReminders(): Flow<List<Reminder>> {
         return flowOf(reminders.filter { !it.isArchived })
+    }
+
+    override fun archiveReminder(id: Long) {
+        val reminderToArchiveIndex = reminders.indexOfFirst { it.id == id }
+        val reminderToArchive = reminders[reminderToArchiveIndex]
+
+        val archivedReminder = Reminder(
+            reminderToArchive.id,
+            reminderToArchive.name,
+            reminderToArchive.startDateTime,
+            reminderToArchive.repeatInterval,
+            reminderToArchive.notes,
+            isArchived = true,
+            reminderToArchive.isNotificationSent,
+        )
+
+        reminders[reminderToArchiveIndex] = archivedReminder
     }
 
     override fun insertReminder(reminder: Reminder): Long {

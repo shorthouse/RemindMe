@@ -10,9 +10,12 @@ import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.data.RepeatInterval
 import dev.shorthouse.remindme.di.IoDispatcher
 import dev.shorthouse.remindme.model.Reminder
+import dev.shorthouse.remindme.utilities.DATE_INPUT_PATTERN
 import dev.shorthouse.remindme.utilities.NotificationScheduler
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 
@@ -53,6 +56,13 @@ class DetailsViewModel @Inject constructor(
             ChronoUnit.DAYS -> R.plurals.interval_days
             else -> R.plurals.interval_weeks
         }
+    }
+
+    fun getFormattedDate(zonedDateTime: ZonedDateTime): String {
+        return zonedDateTime
+            .toLocalDate()
+            .format(DateTimeFormatter.ofPattern(DATE_INPUT_PATTERN))
+            .toString()
     }
 
     private fun cancelReminderNotification() {
