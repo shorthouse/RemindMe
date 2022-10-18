@@ -58,9 +58,7 @@ class ActiveListFragmentTest {
 
     @Test
     fun when_active_reminder_exists_should_display_correctly() {
-        launchFragmentInHiltContainer<ActiveListFragment>(
-            themeResId = R.style.Theme_RemindMe
-        )
+        launchFragmentInHiltContainer<ActiveListFragment>()
 
         onView(withId(R.id.reminder_name)).check(matches(withText("Test Active Reminder")))
         onView(withId(R.id.reminder_date)).check(matches(withText("01 Jan 2000")))
@@ -68,15 +66,5 @@ class ActiveListFragmentTest {
         onView(withId(R.id.done_checkbox)).check(matches(allOf(isClickable(), isDisplayed())))
         onView(withId(R.id.notification_icon)).check(matches(isDisplayed()))
         onView(withId(R.id.repeat_icon)).check(matches(isDisplayed()))
-    }
-
-    @Test
-    fun when_reminder_done_checkbox_clicked_should_display_snackbar() {
-        launchFragmentInHiltContainer<ActiveListFragment>(
-            themeResId = R.style.Theme_RemindMe
-        )
-
-        onView(withId(R.id.done_checkbox)).perform(click())
-        onView(withText("Reminder completed")).check(matches(isDisplayed()))
     }
 }
