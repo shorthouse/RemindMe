@@ -109,7 +109,7 @@ class ReminderRepositoryTest {
 
         assertThat(insertedReminderId).isEqualTo(oneOffNotActiveReminder.id)
         assertThat(allReminders).contains(oneOffNotActiveReminder)
-        assertThat(allReminders).hasSize(3)
+        assertThat(allReminders).hasSize(4)
     }
 
     @Test
