@@ -2,22 +2,19 @@ package dev.shorthouse.remindme.util
 
 import android.view.View
 import android.widget.TextView
-import androidx.test.espresso.Espresso
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
-import androidx.test.espresso.assertion.ViewAssertions
-import androidx.test.espresso.matcher.RootMatchers
-import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import org.hamcrest.Matcher
-import org.hamcrest.Matchers
-import org.hamcrest.core.AllOf
+import org.hamcrest.Matchers.allOf
 
 fun setTextInTextView(value: String?): ViewAction {
     return object : ViewAction {
         override fun getConstraints(): Matcher<View> {
-            return AllOf.allOf(
-                ViewMatchers.isDisplayed(),
-                ViewMatchers.isAssignableFrom(TextView::class.java)
+            return allOf(
+                isDisplayed(),
+                isAssignableFrom(TextView::class.java)
             )
         }
 
@@ -29,10 +26,4 @@ fun setTextInTextView(value: String?): ViewAction {
             return "replace text"
         }
     }
-}
-
-fun checkToastDisplayed(message: String, decorView: View) {
-    Espresso.onView(ViewMatchers.withText(message))
-        .inRoot(RootMatchers.withDecorView(Matchers.not(decorView)))
-        .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
 }
