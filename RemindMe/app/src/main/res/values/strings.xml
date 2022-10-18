@@ -100,4 +100,5 @@
     <string name="intent_key_notificationTitle">notificationTitle</string>
     <string name="intent_key_notificationText">notificationText</string>
     <string name="intent_key_timeZone">"time-zone"</string>
+    <string name="cd_bottom_app_bar_menu">Menu</string>
 </resources>
