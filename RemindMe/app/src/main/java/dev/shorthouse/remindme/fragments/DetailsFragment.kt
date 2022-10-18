@@ -77,7 +77,7 @@ class DetailsFragment : Fragment() {
     private fun populateData(reminder: Reminder) {
         binding.apply {
             name.text = reminder.name
-            startDate.text = reminder.getFormattedStartDate()
+            startDate.text = viewModel.getFormattedDate(reminder.startDateTime)
             startTime.text = reminder.getFormattedStartTime()
             notes.text = reminder.notes
 
