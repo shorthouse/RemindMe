@@ -165,7 +165,7 @@ abstract class AddEditFragment : Fragment() {
         return when {
             !viewModel.isNameValid(name) -> R.string.error_name_empty
             !viewModel.isStartTimeValid(startDate, startTime) -> R.string.error_time_past
-            viewModel.isRepeatIntervalValid(repeatIntervalValue) -> R.string.error_interval_empty
+            !viewModel.isRepeatIntervalValid(repeatIntervalValue) -> R.string.error_interval_empty
             else -> R.string.error_input
         }
     }
