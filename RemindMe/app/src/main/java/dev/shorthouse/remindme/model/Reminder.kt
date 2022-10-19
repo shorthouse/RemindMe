@@ -2,7 +2,6 @@ package dev.shorthouse.remindme.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import dev.shorthouse.remindme.model.RepeatInterval
 import dev.shorthouse.remindme.utilities.DATE_PATTERN
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
