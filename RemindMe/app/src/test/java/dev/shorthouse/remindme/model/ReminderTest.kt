@@ -1,7 +1,7 @@
 package dev.shorthouse.remindme.model
 
 import com.google.common.truth.Truth.assertThat
-import dev.shorthouse.remindme.data.RepeatInterval
+import dev.shorthouse.remindme.model.RepeatInterval
 import dev.shorthouse.remindme.util.TestUtil
 import org.junit.Before
 import org.junit.Test

@@ -2,7 +2,7 @@ package dev.shorthouse.remindme.utilities
 
 import android.view.View
 import androidx.databinding.BindingAdapter
-import dev.shorthouse.remindme.data.RepeatInterval
+import dev.shorthouse.remindme.model.RepeatInterval
 
 @BindingAdapter("showIfRepeatReminder")
 fun showIfRepeatReminder(view: View, repeatInterval: RepeatInterval?) {
