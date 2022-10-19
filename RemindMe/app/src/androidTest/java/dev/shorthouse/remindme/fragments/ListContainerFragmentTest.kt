@@ -191,13 +191,15 @@ class ListContainerFragmentTest {
     fun when_sort_icon_clicked_should_display_bottom_sheet() {
         navigateToActiveReminders()
         onView(withId(R.id.action_sort)).perform(click())
+        device.waitForIdle()
+
         onView(withId(R.id.bottom_sheet_sort)).check(matches(isDisplayed()))
         onView(withText("Sort by")).check(matches(isDisplayed()))
 
         onView(withId(R.id.drawer_sort_earliest_date_first)).check(matches(isDisplayed()))
-        onView(withText("Newest first")).check(matches(isDisplayed()))
+        onView(withText("Earliest date first")).check(matches(isDisplayed()))
         onView(withId(R.id.drawer_sort_latest_date_first)).check(matches(isDisplayed()))
-        onView(withText("Oldest first")).check(matches(isDisplayed()))
+        onView(withText("Latest date first")).check(matches(isDisplayed()))
     }
 
     @Test
