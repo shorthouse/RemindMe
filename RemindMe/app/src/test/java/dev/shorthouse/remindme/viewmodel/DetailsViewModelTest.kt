@@ -6,7 +6,7 @@ import com.google.common.truth.Truth.assertThat
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.data.FakeDataSource
 import dev.shorthouse.remindme.data.ReminderRepository
-import dev.shorthouse.remindme.data.RepeatInterval
+import dev.shorthouse.remindme.model.RepeatInterval
 import dev.shorthouse.remindme.util.TestUtil
 import dev.shorthouse.remindme.util.getOrAwaitValue
 import dev.shorthouse.remindme.utilities.NotificationScheduler

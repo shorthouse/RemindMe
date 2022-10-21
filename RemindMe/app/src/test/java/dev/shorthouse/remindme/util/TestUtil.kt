@@ -1,6 +1,6 @@
 package dev.shorthouse.remindme.util
 
-import dev.shorthouse.remindme.data.RepeatInterval
+import dev.shorthouse.remindme.model.RepeatInterval
 import dev.shorthouse.remindme.model.Reminder
 import java.time.ZonedDateTime
 

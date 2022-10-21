@@ -4,6 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.asLiveData
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
+import dev.shorthouse.remindme.model.RepeatInterval
 import dev.shorthouse.remindme.util.TestUtil
 import dev.shorthouse.remindme.util.getOrAwaitValue
 import kotlinx.coroutines.ExperimentalCoroutinesApi

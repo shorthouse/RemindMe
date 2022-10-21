@@ -1,4 +1,4 @@
-package dev.shorthouse.remindme.data
+package dev.shorthouse.remindme.model
 
 import java.time.temporal.ChronoUnit
 
