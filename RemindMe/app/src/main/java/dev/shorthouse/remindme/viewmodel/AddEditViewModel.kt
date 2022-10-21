@@ -5,10 +5,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.data.ReminderRepository
-import dev.shorthouse.remindme.model.RepeatInterval
 import dev.shorthouse.remindme.di.IoDispatcher
 import dev.shorthouse.remindme.model.Reminder
+import dev.shorthouse.remindme.model.RepeatInterval
 import dev.shorthouse.remindme.utilities.DATE_INPUT_PATTERN
 import dev.shorthouse.remindme.utilities.DATE_TIME_INPUT_PATTERN
 import dev.shorthouse.remindme.utilities.NotificationScheduler
@@ -29,9 +30,6 @@ class AddEditViewModel @Inject constructor(
     private val notificationScheduler: NotificationScheduler,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
-
-    val defaultRepeatValue = "1"
-    val defaultRepeatUnit = ChronoUnit.DAYS
 
     val stringToChronoUnitMap = mapOf(
         "day" to ChronoUnit.DAYS,
@@ -99,16 +97,8 @@ class AddEditViewModel @Inject constructor(
         return reminder.notes.orEmpty()
     }
 
-    fun getRepeatValue(reminder: Reminder): String {
-        return if (reminder.repeatInterval == null) {
-            defaultRepeatValue
-        } else {
-            reminder.repeatInterval.timeValue.toString()
-        }
-    }
-
-    fun getRepeatUnit(reminder: Reminder): ChronoUnit {
-        return if (reminder.repeatInterval == null) defaultRepeatUnit else reminder.repeatInterval.timeUnit
+    fun getRepeatValue(repeatInterval: RepeatInterval): String {
+        return repeatInterval.timeValue.toString()
     }
 
     fun convertDateTimeStringToDateTime(dateText: String, timeText: String): ZonedDateTime {
@@ -126,12 +116,24 @@ class AddEditViewModel @Inject constructor(
         return LocalTime.of(hour, minute).toString()
     }
 
-    fun getRepeatInterval(isRepeatReminder: Boolean, timeValue: Long, repeatUnitString: String): RepeatInterval? {
+    fun getRepeatUnitFromRadioId(repeatUnitCheckedRadioId: Int): ChronoUnit {
+        return when (repeatUnitCheckedRadioId) {
+            R.id.repeat_unit_days -> ChronoUnit.DAYS
+            else -> ChronoUnit.WEEKS
+        }
+    }
+
+    fun getRadioIdFromRepeatUnit(repeatInterval: RepeatInterval): Int {
+        return when (repeatInterval.timeUnit) {
+            ChronoUnit.DAYS -> R.id.repeat_unit_days
+            else -> R.id.repeat_unit_weeks
+        }
+    }
+
+    fun getRepeatInterval(isRepeatReminder: Boolean, timeValue: Long, timeUnit: ChronoUnit): RepeatInterval? {
         if (!isRepeatReminder) return null
 
-        val repeatUnit = stringToChronoUnitMap[repeatUnitString] ?: return null
-
-        return RepeatInterval(timeValue, repeatUnit)
+        return RepeatInterval(timeValue, timeUnit)
     }
 
     fun getReminderName(name: String): String {
@@ -152,5 +154,9 @@ class AddEditViewModel @Inject constructor(
 
     fun isStartTimeValid(startDate: String, startTime: String): Boolean {
         return convertDateTimeStringToDateTime(startDate, startTime).isAfter(ZonedDateTime.now())
+    }
+
+    fun getRepeatValueText(repeatValueText: String): Int {
+        return repeatValueText.toIntOrNull() ?: 0
     }
 }

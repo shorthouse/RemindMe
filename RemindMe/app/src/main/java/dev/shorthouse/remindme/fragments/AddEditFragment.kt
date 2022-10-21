@@ -16,12 +16,10 @@ import com.google.android.material.transition.MaterialSharedAxis
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.databinding.FragmentAddEditBinding
 import dev.shorthouse.remindme.model.Reminder
-import dev.shorthouse.remindme.utilities.SpinnerArrayAdapter
 import dev.shorthouse.remindme.utilities.hideKeyboard
 import dev.shorthouse.remindme.utilities.setOnClickThrottleListener
 import dev.shorthouse.remindme.utilities.showToast
 import dev.shorthouse.remindme.viewmodel.AddEditViewModel
-import java.time.temporal.ChronoUnit
 
 abstract class AddEditFragment : Fragment() {
     protected lateinit var binding: FragmentAddEditBinding
@@ -100,29 +98,9 @@ abstract class AddEditFragment : Fragment() {
             }
 
             repeatValueInput.doAfterTextChanged {
-                val dropdownRepeatUnit = viewModel.stringToChronoUnitMap[repeatUnitInput.text.toString()]
-                dropdownRepeatUnit?.let { repeatUnit -> setDropdownList(repeatUnit) }
+                updateRepeatUnitRadioText()
             }
         }
-    }
-
-    protected fun setDropdownList(repeatUnit: ChronoUnit) {
-        val repeatValue = binding.repeatValueInput.text.toString().toIntOrNull() ?: 0
-
-        val dropdownItems = listOf(
-            resources.getQuantityString(R.plurals.dropdown_days, repeatValue),
-            resources.getQuantityString(R.plurals.dropdown_weeks, repeatValue)
-        )
-
-        val spinnerAdapter = SpinnerArrayAdapter(requireContext(), dropdownItems)
-        binding.repeatUnitInput.setAdapter(spinnerAdapter)
-
-        val selectedItem = when (repeatUnit) {
-            ChronoUnit.DAYS -> dropdownItems[0]
-            else -> dropdownItems[1]
-        }
-
-        binding.repeatUnitInput.setText(selectedItem, false)
     }
 
     protected fun getReminderFromInputData(): Reminder {
@@ -136,7 +114,7 @@ abstract class AddEditFragment : Fragment() {
                 repeatInterval = viewModel.getRepeatInterval(
                     binding.repeatSwitch.isChecked,
                     repeatValueInput.text.toString().toLong(),
-                    repeatUnitInput.text.toString()
+                    viewModel.getRepeatUnitFromRadioId(repeatUnitRadioGroup.checkedRadioButtonId)
                 ),
                 notes = viewModel.getReminderNotes(notesInput.text.toString()),
                 isArchived = false,
@@ -199,6 +177,18 @@ abstract class AddEditFragment : Fragment() {
         val timePickerDialog = TimePickerDialog(context, onTimeSetListener, 0, 0, true)
 
         timePickerDialog.show()
+    }
+
+    private fun updateRepeatUnitRadioText() {
+        binding.apply {
+            val repeatValue = viewModel.getRepeatValueText(repeatValueInput.text.toString())
+
+            val repeatUnitDaysString = resources.getQuantityString(R.plurals.radio_button_days, repeatValue)
+            val repeatUnitWeeksString = resources.getQuantityString(R.plurals.radio_button_weeks, repeatValue)
+
+            repeatUnitDays.text = repeatUnitDaysString
+            repeatUnitWeeks.text = repeatUnitWeeksString
+        }
     }
 
     abstract fun populateReminderData()

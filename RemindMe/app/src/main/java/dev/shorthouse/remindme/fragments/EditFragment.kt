@@ -22,10 +22,12 @@ class EditFragment : AddEditFragment() {
                 startTimeInput.setText(viewModel.getFormattedTime(reminder.startDateTime))
                 notesInput.setText(viewModel.getReminderNotes(reminder))
                 notificationSwitch.isChecked = reminder.isNotificationSent
-                repeatSwitch.isChecked = reminder.isRepeatReminder()
-                repeatValueInput.setText(viewModel.getRepeatValue(reminder))
 
-                setDropdownList(viewModel.getRepeatUnit(reminder))
+                if (reminder.repeatInterval != null) {
+                    repeatSwitch.isChecked = true
+                    repeatValueInput.setText(viewModel.getRepeatValue(reminder.repeatInterval))
+                    repeatUnitRadioGroup.check(viewModel.getRadioIdFromRepeatUnit(reminder.repeatInterval))
+                }
             }
         }
     }

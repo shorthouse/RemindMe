@@ -38,13 +38,13 @@
     <string name="tag_reminder_date_picker">reminder_date_picker</string>
     <string name="toast_reminder_saved">Reminder saved</string>
 
-    <plurals name="dropdown_days">
-        <item quantity="one">day</item>
-        <item quantity="other">days</item>
+    <plurals name="radio_button_days">
+        <item quantity="one">Day</item>
+        <item quantity="other">Days</item>
     </plurals>
-    <plurals name="dropdown_weeks">
-        <item quantity="one">week</item>
-        <item quantity="other">weeks</item>
+    <plurals name="radio_button_weeks">
+        <item quantity="one">Week</item>
+        <item quantity="other">Weeks</item>
     </plurals>
 
     <!-- Reminder lists -->

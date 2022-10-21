@@ -238,7 +238,8 @@
                     android:text="@string/repeats_every_header"
                     android:textColor="@color/subtitle_grey"
                     android:textSize="16sp"
-                    app:layout_constraintStart_toStartOf="@+id/repeat_value_label"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/repeat_header"
                     app:showIfRepeatChecked="@{repeatSwitch.checked}" />
 
@@ -248,7 +249,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/repeats_every_header"
+                    app:layout_constraintStart_toStartOf="@+id/repeats_every_header"
                     app:layout_constraintTop_toBottomOf="@+id/repeats_every_header"
                     app:showIfRepeatChecked="@{repeatSwitch.checked}">
 
@@ -259,30 +261,34 @@
                         android:gravity="center"
                         android:inputType="number"
                         android:maxLength="2"
+                        android:text="1"
                         tools:text="2" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/repeat_unit_label"
-
+                <RadioGroup
+                    android:id="@+id/repeat_unit_radio_group"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    app:layout_constraintBottom_toBottomOf="@+id/repeat_value_label"
-                    app:layout_constraintStart_toEndOf="@+id/repeat_value_label"
-                    app:layout_constraintTop_toTopOf="@+id/repeat_value_label"
-                    app:showIfRepeatChecked="@{repeatSwitch.checked}"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu" >
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintEnd_toEndOf="@+id/repeat_value_label"
+                    app:layout_constraintStart_toStartOf="@+id/repeat_value_label"
+                    app:layout_constraintTop_toBottomOf="@+id/repeat_value_label"
+                    app:showIfRepeatChecked="@{repeatSwitch.checked}">
 
-                    <AutoCompleteTextView
-                        android:id="@+id/repeat_unit_input"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:inputType="none"
-                        tools:ignore="LabelFor"
-                        tools:text="day" />
+                    <RadioButton
+                        android:id="@+id/repeat_unit_days"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:checked="true"
+                        android:text="Days" />
 
-                </com.google.android.material.textfield.TextInputLayout>
+                    <RadioButton
+                        android:id="@+id/repeat_unit_weeks"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:checked="false"
+                        android:text="Weeks" />
+                </RadioGroup>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
