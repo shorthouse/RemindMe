@@ -25,9 +25,6 @@ class AddFragment : AddEditFragment() {
         binding.apply {
             startDateInput.setText(viewModel.getFormattedDate(ZonedDateTime.now()))
             startTimeInput.setText(viewModel.getFormattedTimeNextHour(ZonedDateTime.now()))
-            repeatValueInput.setText(viewModel.defaultRepeatValue)
-
-            setDropdownList(viewModel.defaultRepeatUnit)
         }
     }
 
