@@ -261,7 +261,7 @@
                         android:gravity="center"
                         android:inputType="number"
                         android:maxLength="2"
-                        android:text="1"
+                        android:text="@string/default_repeat_unit"
                         tools:text="2" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -280,14 +280,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:checked="true"
-                        android:text="Days" />
+                        android:text="@string/repeat_unit_day" />
 
                     <RadioButton
                         android:id="@+id/repeat_unit_weeks"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:checked="false"
-                        android:text="Weeks" />
+                        android:text="@string/repeat_unit_week" />
                 </RadioGroup>
 
             </androidx.constraintlayout.widget.ConstraintLayout>

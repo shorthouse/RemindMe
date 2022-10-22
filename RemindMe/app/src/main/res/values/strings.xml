@@ -101,4 +101,7 @@
     <string name="intent_key_notificationText">notificationText</string>
     <string name="intent_key_timeZone">"time-zone"</string>
     <string name="cd_bottom_app_bar_menu">Menu</string>
+    <string name="repeat_unit_day">Day</string>
+    <string name="repeat_unit_week">Week</string>
+    <string name="default_repeat_unit">1</string>
 </resources>
