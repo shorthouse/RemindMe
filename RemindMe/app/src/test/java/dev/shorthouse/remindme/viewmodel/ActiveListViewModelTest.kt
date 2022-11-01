@@ -153,7 +153,7 @@ class ActiveListViewModelTest {
 
         val updatedDoneReminder = viewModel.repository.getReminder(reminderToArchive.id).asLiveData().getOrAwaitValue()
 
-        assertThat(updatedDoneReminder.isArchived)
+        assertThat(updatedDoneReminder.isComplete)
     }
 
     @Test
@@ -163,7 +163,7 @@ class ActiveListViewModelTest {
 
         val updatedDoneReminder = viewModel.repository.getReminder(reminder.id).asLiveData().getOrAwaitValue()
 
-        assertThat(!updatedDoneReminder.isArchived)
+        assertThat(!updatedDoneReminder.isComplete)
     }
 
     @Test

@@ -20,7 +20,7 @@ object TestUtil {
             startDateTime = startDateTime,
             repeatInterval = repeatInterval,
             notes = notes,
-            isArchived = isArchived,
+            isComplete = isArchived,
             isNotificationSent = isNotificationSent
         )
     }
