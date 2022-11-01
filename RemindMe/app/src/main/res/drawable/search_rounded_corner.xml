@@ -3,6 +3,6 @@
     android:insetRight="16dp" >
     <shape>
         <corners android:radius="4dp" />
-        <solid android:color="#FFFFFF" />
+        <solid android:color="@color/search_bar" />
     </shape>
 </inset>
