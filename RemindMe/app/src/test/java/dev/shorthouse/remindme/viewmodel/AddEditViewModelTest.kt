@@ -39,7 +39,7 @@ class AddEditViewModelTest {
         ),
         repeatInterval = RepeatInterval(4, ChronoUnit.WEEKS),
         notes = "notes",
-        isArchived = false,
+        isComplete = false,
         isNotificationSent = true
     )
 
@@ -58,7 +58,7 @@ class AddEditViewModelTest {
         ),
         null,
         notes = null,
-        isArchived = false,
+        isComplete = false,
         isNotificationSent = false
     )
 

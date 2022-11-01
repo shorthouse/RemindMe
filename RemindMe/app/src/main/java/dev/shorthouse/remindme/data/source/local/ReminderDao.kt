@@ -18,14 +18,14 @@ interface ReminderDao {
     @Query("SELECT * FROM reminder WHERE id = :id")
     fun getReminder(id: Long): Flow<Reminder>
 
-    @Query("SELECT * FROM reminder WHERE startDateTime <= :nowDateTime AND isArchived = 0")
-    fun getActiveNonArchivedReminders(nowDateTime: ZonedDateTime): Flow<List<Reminder>>
+    @Query("SELECT * FROM reminder WHERE startDateTime <= :nowDateTime AND isComplete = 0")
+    fun getActiveNotCompletedReminders(nowDateTime: ZonedDateTime): Flow<List<Reminder>>
 
-    @Query("SELECT * FROM reminder WHERE isArchived = 0")
-    fun getNonArchivedReminders(): Flow<List<Reminder>>
+    @Query("SELECT * FROM reminder WHERE isComplete = 0")
+    fun getNotCompleteReminders(): Flow<List<Reminder>>
 
-    @Query("UPDATE reminder SET isArchived = 1 WHERE id = :id")
-    fun archiveReminder(id: Long)
+    @Query("UPDATE reminder SET isComplete = 1 WHERE id = :id")
+    fun completeReminder(id: Long)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(reminder: Reminder): Long

@@ -33,7 +33,7 @@ class ActiveListViewModel @Inject constructor(
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
     private val currentAllReminders = repository
-        .getNonArchivedReminders()
+        .getNotCompletedReminders()
         .asLiveData()
 
     @VisibleForTesting
@@ -105,7 +105,7 @@ class ActiveListViewModel @Inject constructor(
             startDateTime = getUpdatedStartDateTime(reminder),
             repeatInterval = reminder.repeatInterval,
             notes = reminder.notes,
-            isArchived = !reminder.isRepeatReminder(),
+            isComplete = !reminder.isRepeatReminder(),
             isNotificationSent = reminder.isNotificationSent,
         )
     }

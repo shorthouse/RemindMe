@@ -11,7 +11,7 @@ object TestUtil {
         startDateTime: ZonedDateTime = ZonedDateTime.now(),
         repeatInterval: RepeatInterval? = null,
         notes: String? = null,
-        isArchived: Boolean = false,
+        isComplete: Boolean = false,
         isNotificationSent: Boolean = false
     ): Reminder {
         return Reminder(
@@ -20,7 +20,7 @@ object TestUtil {
             startDateTime = startDateTime,
             repeatInterval = repeatInterval,
             notes = notes,
-            isArchived = isArchived,
+            isComplete = isComplete,
             isNotificationSent = isNotificationSent
         )
     }

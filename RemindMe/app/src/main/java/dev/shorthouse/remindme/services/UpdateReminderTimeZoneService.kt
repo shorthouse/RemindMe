@@ -69,7 +69,7 @@ class UpdateReminderTimeZoneService @Inject constructor(
                 ZonedDateTime.of(reminder.startDateTime.toLocalDateTime(), newZoneId),
                 reminder.repeatInterval,
                 reminder.notes,
-                reminder.isArchived,
+                reminder.isComplete,
                 reminder.isNotificationSent
             )
 

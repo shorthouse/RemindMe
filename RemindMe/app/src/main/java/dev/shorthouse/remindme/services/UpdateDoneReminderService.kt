@@ -73,7 +73,7 @@ class UpdateDoneReminderService @Inject constructor(
             startDateTime = getUpdatedStartDateTime(reminder),
             repeatInterval = reminder.repeatInterval,
             notes = reminder.notes,
-            isArchived = !reminder.isRepeatReminder(),
+            isComplete = !reminder.isRepeatReminder(),
             isNotificationSent = reminder.isNotificationSent,
         )
     }
