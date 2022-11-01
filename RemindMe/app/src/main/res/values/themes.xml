@@ -27,4 +27,7 @@
         <item name="queryBackground">@color/white</item>
         <item name="android:background">@drawable/search_rounded_corner</item>
     </style>
+
+    <!-- Time Picker -->
+    <style name="Theme.RemindMe.TimePicker" parent="ThemeOverlay.Material3.MaterialTimePicker" />
 </resources>
