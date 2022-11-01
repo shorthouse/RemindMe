@@ -117,7 +117,7 @@ abstract class AddEditFragment : Fragment() {
                     viewModel.getRepeatUnitFromRadioId(repeatUnitRadioGroup.checkedRadioButtonId)
                 ),
                 notes = viewModel.getReminderNotes(notesInput.text.toString()),
-                isArchived = false,
+                isComplete = false,
                 isNotificationSent = notificationSwitch.isChecked
             )
         }

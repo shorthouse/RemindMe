@@ -19,7 +19,7 @@ data class Reminder(
 
     val notes: String?,
 
-    val isArchived: Boolean,
+    val isComplete: Boolean,
 
     val isNotificationSent: Boolean,
 ) {
