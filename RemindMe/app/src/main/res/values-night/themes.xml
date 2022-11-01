@@ -40,12 +40,27 @@
     </style>
 
     <!-- Search View -->
-    <style name="Theme.RemindMe.SearchView" parent="Widget.AppCompat.SearchView">
+    <style name="Theme.RemindMe.SearchView" parent="Widget.AppCompat.SearchView.ActionBar">
         <item name="closeIcon">@drawable/ic_close_search</item>
         <item name="searchHintIcon">@null</item>
         <item name="queryHint">@string/top_app_bar_search</item>
-        <item name="queryBackground">@color/white</item>
+        <item name="queryBackground">@color/primary_variant</item>
         <item name="android:background">@drawable/search_rounded_corner</item>
+    </style>
+
+    <!-- Time Picker -->
+    <style name="Theme.RemindMe.TimePicker" parent="ThemeOverlay.Material3.MaterialTimePicker">
+        <item name="android:buttonBarPositiveButtonStyle">@style/ButtonStyle</item>
+        <item name="android:buttonBarNegativeButtonStyle">@style/ButtonStyle</item>
+    </style>
+
+    <!-- Date Picker -->
+    <style name="Theme.RemindMe.DatePicker" parent="@style/ThemeOverlay.MaterialComponents.MaterialCalendar">
+        <item name="buttonBarPositiveButtonStyle">@style/ButtonStyle</item>
+        <item name="buttonBarNegativeButtonStyle">@style/ButtonStyle</item>
+        <item name="android:colorControlActivated">@color/light_blue</item>
+        <item name="android:colorAccent">@color/light_blue</item>
+        <item name="android:colorSecondary">@color/light_blue</item>
     </style>
 
     <!-- Toolbar -->
