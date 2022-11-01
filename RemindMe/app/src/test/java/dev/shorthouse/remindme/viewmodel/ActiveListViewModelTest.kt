@@ -141,27 +141,29 @@ class ActiveListViewModelTest {
     }
 
     @Test
-    fun `Set one-off reminder to done, should archive`() {
-        val reminderToArchive = TestUtil.createReminder(
+    fun `Set one-off reminder to done, should complete`() {
+        val reminderToComplete = TestUtil.createReminder(
             id = 4L,
-            name = "reminderToArchive",
+            name = "reminderToComplete",
             startDateTime = ZonedDateTime.parse("2000-06-15T19:01:00Z"),
         )
-        viewModel.repository.insertReminder(reminderToArchive)
+        viewModel.repository.insertReminder(reminderToComplete)
 
-        viewModel.updateDoneReminder(reminderToArchive)
+        viewModel.updateDoneReminder(reminderToComplete)
 
-        val updatedDoneReminder = viewModel.repository.getReminder(reminderToArchive.id).asLiveData().getOrAwaitValue()
+        val updatedDoneReminder =
+            viewModel.repository.getReminder(reminderToComplete.id).asLiveData().getOrAwaitValue()
 
         assertThat(updatedDoneReminder.isComplete)
     }
 
     @Test
-    fun `Set repeat reminder to done, should not archive`() {
+    fun `Set repeat reminder to done, should not complete`() {
         val reminder = reminders.last()
         viewModel.updateDoneReminder(reminder)
 
-        val updatedDoneReminder = viewModel.repository.getReminder(reminder.id).asLiveData().getOrAwaitValue()
+        val updatedDoneReminder =
+            viewModel.repository.getReminder(reminder.id).asLiveData().getOrAwaitValue()
 
         assertThat(!updatedDoneReminder.isComplete)
     }

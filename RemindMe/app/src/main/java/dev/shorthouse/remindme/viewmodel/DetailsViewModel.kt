@@ -47,7 +47,7 @@ class DetailsViewModel @Inject constructor(
         }
 
         viewModelScope.launch(ioDispatcher) {
-            repository.archiveReminder(reminder.id)
+            repository.completeReminder(reminder.id)
         }
     }
 

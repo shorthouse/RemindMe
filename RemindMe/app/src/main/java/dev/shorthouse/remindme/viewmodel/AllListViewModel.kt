@@ -19,7 +19,7 @@ class AllListViewModel @Inject constructor(private val repository: ReminderRepos
         currentFilter: MutableLiveData<String>
     ): LiveData<List<Reminder>> {
         val allReminders = repository
-            .getNonArchivedReminders()
+            .getNotCompletedReminders()
             .asLiveData()
 
         val remindersListData = MediatorLiveData<List<Reminder>>()

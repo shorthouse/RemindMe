@@ -14,31 +14,31 @@ class FakeDataSource(private var reminders: MutableList<Reminder> = mutableListO
         return flowOf(reminders.first { it.id == id })
     }
 
-    override fun getActiveNonArchivedReminders(nowDateTime: ZonedDateTime): Flow<List<Reminder>> {
+    override fun getActiveNotCompletedReminders(nowDateTime: ZonedDateTime): Flow<List<Reminder>> {
         return flowOf(
             reminders.filter { it.startDateTime.isBefore(nowDateTime) || it.startDateTime.isEqual(nowDateTime) }
         )
     }
 
-    override fun getNonArchivedReminders(): Flow<List<Reminder>> {
+    override fun getNotCompletedReminders(): Flow<List<Reminder>> {
         return flowOf(reminders.filter { !it.isComplete })
     }
 
-    override fun archiveReminder(id: Long) {
-        val reminderToArchiveIndex = reminders.indexOfFirst { it.id == id }
-        val reminderToArchive = reminders[reminderToArchiveIndex]
+    override fun completeReminder(id: Long) {
+        val reminderToCompleteIndex = reminders.indexOfFirst { it.id == id }
+        val reminderToComplete = reminders[reminderToCompleteIndex]
 
-        val archivedReminder = Reminder(
-            reminderToArchive.id,
-            reminderToArchive.name,
-            reminderToArchive.startDateTime,
-            reminderToArchive.repeatInterval,
-            reminderToArchive.notes,
+        val completedReminder = Reminder(
+            reminderToComplete.id,
+            reminderToComplete.name,
+            reminderToComplete.startDateTime,
+            reminderToComplete.repeatInterval,
+            reminderToComplete.notes,
             isComplete = true,
-            reminderToArchive.isNotificationSent,
+            reminderToComplete.isNotificationSent,
         )
 
-        reminders[reminderToArchiveIndex] = archivedReminder
+        reminders[reminderToCompleteIndex] = completedReminder
     }
 
     override fun insertReminder(reminder: Reminder): Long {

@@ -28,12 +28,12 @@ class ReminderRepositoryTest {
         repeatInterval = RepeatInterval(1, ChronoUnit.DAYS),
     )
 
-    private val archivedRepeatReminder = TestUtil.createReminder(
+    private val completedRepeatReminder = TestUtil.createReminder(
         id = 2L,
-        name = "archivedRepeatReminder",
+        name = "completedRepeatReminder",
         startDateTime = ZonedDateTime.parse("2000-06-15T19:01:00Z"),
         repeatInterval = RepeatInterval(1, ChronoUnit.DAYS),
-        isArchived = true,
+        isComplete = true,
     )
 
     private val oneOffNotActiveReminder = TestUtil.createReminder(
@@ -42,15 +42,15 @@ class ReminderRepositoryTest {
         startDateTime = ZonedDateTime.parse("3000-06-15T19:01:00Z"),
     )
 
-    private val reminderToArchive = TestUtil.createReminder(
+    private val reminderToComplete = TestUtil.createReminder(
         id = 4L,
-        name = "reminderToArchive",
+        name = "reminderToComplete",
         startDateTime = ZonedDateTime.parse("2000-06-15T19:01:00Z"),
-        isArchived = false
+        isComplete = false
     )
 
-    private val localReminders = listOf(repeatActiveReminder, archivedRepeatReminder, reminderToArchive)
-        .sortedBy { it.id }
+    private val localReminders =
+        listOf(repeatActiveReminder, completedRepeatReminder, reminderToComplete).sortedBy { it.id }
 
     private lateinit var reminderLocalDataSource: FakeDataSource
 
@@ -78,29 +78,29 @@ class ReminderRepositoryTest {
     }
 
     @Test
-    fun `Get non archived reminders returns non archived reminders`() {
-        val nonArchivedReminders = reminderRepository
-            .getNonArchivedReminders()
+    fun `Get not completed reminders returns not completed reminders`() {
+        val notCompletedReminders = reminderRepository
+            .getNotCompletedReminders()
             .asLiveData()
             .getOrAwaitValue()
 
-        assertThat(nonArchivedReminders.forEach { it.isComplete.not() })
-        assertThat(nonArchivedReminders).contains(repeatActiveReminder)
+        assertThat(notCompletedReminders.forEach { it.isComplete.not() })
+        assertThat(notCompletedReminders).contains(repeatActiveReminder)
     }
 
     @Test
-    fun `Archive reminder archives specified reminder`() {
-        val expectedArchivedReminder = TestUtil.createReminder(
-            reminderToArchive.id,
-            reminderToArchive.name,
-            reminderToArchive.startDateTime,
-            isArchived = true
+    fun `Complete reminder completes specified reminder`() {
+        val expectedCompletedReminder = TestUtil.createReminder(
+            reminderToComplete.id,
+            reminderToComplete.name,
+            reminderToComplete.startDateTime,
+            isComplete = true
         )
 
-        reminderRepository.archiveReminder(4L)
-        val archivedReminder = reminderRepository.getReminder(4L).asLiveData().getOrAwaitValue()
+        reminderRepository.completeReminder(4L)
+        val completedReminder = reminderRepository.getReminder(4L).asLiveData().getOrAwaitValue()
 
-        assertThat(archivedReminder).isEqualTo(expectedArchivedReminder)
+        assertThat(completedReminder).isEqualTo(expectedCompletedReminder)
     }
 
     @Test
