@@ -130,8 +130,8 @@ abstract class AddEditFragment : Fragment() {
         val repeatIntervalValue = binding.repeatValueInput.text.toString().toLongOrNull() ?: 0L
 
         return viewModel.isNameValid(name) &&
-            viewModel.isStartTimeValid(startDate, startTime) &&
-            viewModel.isRepeatIntervalValid(repeatIntervalValue)
+                viewModel.isStartTimeValid(startDate, startTime) &&
+                viewModel.isRepeatIntervalValid(repeatIntervalValue)
     }
 
     private fun getReminderInputErrorMessage(): Int {
@@ -156,6 +156,7 @@ abstract class AddEditFragment : Fragment() {
         val datePicker = MaterialDatePicker.Builder.datePicker()
             .setCalendarConstraints(constraints)
             .setTitleText("")
+            .setTheme(R.style.Theme_RemindMe_DatePicker)
             .build()
 
         datePicker.addOnPositiveButtonClickListener { dateTimestamp ->
@@ -168,13 +169,21 @@ abstract class AddEditFragment : Fragment() {
     }
 
     private fun displayTimePicker() {
-        val onTimeSetListener = TimePickerDialog.OnTimeSetListener { _, selectedHour, selectedMinute ->
-            binding.startTimeInput.setText(
-                viewModel.formatTimePickerTime(selectedHour, selectedMinute)
-            )
-        }
+        val onTimeSetListener =
+            TimePickerDialog.OnTimeSetListener { _, selectedHour, selectedMinute ->
+                binding.startTimeInput.setText(
+                    viewModel.formatTimePickerTime(selectedHour, selectedMinute)
+                )
+            }
 
-        val timePickerDialog = TimePickerDialog(context, onTimeSetListener, 0, 0, true)
+        val timePickerDialog = TimePickerDialog(
+            context,
+            R.style.Theme_RemindMe_TimePicker,
+            onTimeSetListener,
+            0,
+            0,
+            true
+        )
 
         timePickerDialog.show()
     }
@@ -183,8 +192,10 @@ abstract class AddEditFragment : Fragment() {
         binding.apply {
             val repeatValue = viewModel.getRepeatValueText(repeatValueInput.text.toString())
 
-            val repeatUnitDaysString = resources.getQuantityString(R.plurals.radio_button_days, repeatValue)
-            val repeatUnitWeeksString = resources.getQuantityString(R.plurals.radio_button_weeks, repeatValue)
+            val repeatUnitDaysString =
+                resources.getQuantityString(R.plurals.radio_button_days, repeatValue)
+            val repeatUnitWeeksString =
+                resources.getQuantityString(R.plurals.radio_button_weeks, repeatValue)
 
             repeatUnitDays.text = repeatUnitDaysString
             repeatUnitWeeks.text = repeatUnitWeeksString
