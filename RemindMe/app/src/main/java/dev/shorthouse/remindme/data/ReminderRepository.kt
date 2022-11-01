@@ -15,8 +15,8 @@ class ReminderRepository @Inject constructor(private val reminderLocalDataSource
         return reminderLocalDataSource.getReminder(id)
     }
 
-    fun getNonArchivedReminders(): Flow<List<Reminder>> {
-        return reminderLocalDataSource.getNonArchivedReminders()
+    fun getNotCompletedReminders(): Flow<List<Reminder>> {
+        return reminderLocalDataSource.getNotCompletedReminders()
     }
 
     fun insertReminder(reminder: Reminder): Long {
@@ -31,7 +31,7 @@ class ReminderRepository @Inject constructor(private val reminderLocalDataSource
         return reminderLocalDataSource.deleteReminder(reminder)
     }
 
-    fun archiveReminder(id: Long) {
-        return reminderLocalDataSource.archiveReminder(id)
+    fun completeReminder(id: Long) {
+        return reminderLocalDataSource.completeReminder(id)
     }
 }

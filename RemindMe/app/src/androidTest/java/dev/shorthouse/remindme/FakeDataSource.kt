@@ -15,7 +15,7 @@ class FakeDataSource(private var reminders: MutableList<Reminder> = mutableListO
         return flowOf(reminders.first { it.id == id })
     }
 
-    override fun getActiveNonArchivedReminders(nowDateTime: ZonedDateTime): Flow<List<Reminder>> {
+    override fun getActiveNotCompletedReminders(nowDateTime: ZonedDateTime): Flow<List<Reminder>> {
         return flowOf(
             reminders.filter {
                 it.startDateTime.isBefore(nowDateTime) || it.startDateTime.isEqual(nowDateTime)
@@ -23,7 +23,7 @@ class FakeDataSource(private var reminders: MutableList<Reminder> = mutableListO
         )
     }
 
-    override fun getNonArchivedReminders(): Flow<List<Reminder>> {
+    override fun getNotCompletedReminders(): Flow<List<Reminder>> {
         return flowOf(reminders.filter { !it.isComplete })
     }
 
@@ -42,19 +42,19 @@ class FakeDataSource(private var reminders: MutableList<Reminder> = mutableListO
         reminders.removeAt(reminderToDeleteIndex)
     }
 
-    override fun archiveReminder(id: Long) {
-        val reminderToArchiveIndex = reminders.indexOfFirst { it.id == id }
-        val unarchivedReminder = reminders[reminderToArchiveIndex]
-        val archivedReminder = Reminder(
-            unarchivedReminder.id,
-            unarchivedReminder.name,
-            unarchivedReminder.startDateTime,
-            unarchivedReminder.repeatInterval,
-            unarchivedReminder.notes,
+    override fun completeReminder(id: Long) {
+        val reminderToCompleteIndex = reminders.indexOfFirst { it.id == id }
+        val uncompletedReminder = reminders[reminderToCompleteIndex]
+        val completedReminder = Reminder(
+            uncompletedReminder.id,
+            uncompletedReminder.name,
+            uncompletedReminder.startDateTime,
+            uncompletedReminder.repeatInterval,
+            uncompletedReminder.notes,
             true,
-            unarchivedReminder.isNotificationSent
+            uncompletedReminder.isNotificationSent
         )
 
-        reminders[reminderToArchiveIndex] = archivedReminder
+        reminders[reminderToCompleteIndex] = completedReminder
     }
 }
