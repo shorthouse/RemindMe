@@ -21,7 +21,7 @@ class FakeDataSource(private var reminders: MutableList<Reminder> = mutableListO
     }
 
     override fun getNonArchivedReminders(): Flow<List<Reminder>> {
-        return flowOf(reminders.filter { !it.isArchived })
+        return flowOf(reminders.filter { !it.isComplete })
     }
 
     override fun archiveReminder(id: Long) {
@@ -34,7 +34,7 @@ class FakeDataSource(private var reminders: MutableList<Reminder> = mutableListO
             reminderToArchive.startDateTime,
             reminderToArchive.repeatInterval,
             reminderToArchive.notes,
-            isArchived = true,
+            isComplete = true,
             reminderToArchive.isNotificationSent,
         )
 

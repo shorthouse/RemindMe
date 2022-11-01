@@ -84,7 +84,7 @@ class ReminderRepositoryTest {
             .asLiveData()
             .getOrAwaitValue()
 
-        assertThat(nonArchivedReminders.forEach { it.isArchived.not() })
+        assertThat(nonArchivedReminders.forEach { it.isComplete.not() })
         assertThat(nonArchivedReminders).contains(repeatActiveReminder)
     }
 
