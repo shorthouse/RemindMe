@@ -109,13 +109,11 @@ class EditFragmentTest {
         onView(withId(R.id.repeat_switch)).check(matches(isChecked()))
         onView(withId(R.id.repeats_every_header)).check(matches(isDisplayed()))
         onView(withId(R.id.repeat_value_input)).check(matches(withText("3")))
-        onView(withId(R.id.repeat_unit_input)).check(matches(withText("weeks")))
     }
 
     @Test
     fun when_repeat_value_changed_to_singular_should_display_singular_repeat_unit() {
         onView(withId(R.id.repeat_value_input)).perform(replaceText("1"))
-        onView(withId(R.id.repeat_unit_input)).check(matches(withText("week")))
     }
 
     @Test
