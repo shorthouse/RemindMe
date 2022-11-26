@@ -19,6 +19,7 @@
 
         <item name="searchViewStyle">@style/Theme.RemindMe.SearchView</item>
         <item name="navigationViewStyle">@style/Theme.RemindMe.NavigationView</item>
+        <item name="materialCalendarTheme">@style/Theme.RemindMe.DatePicker</item>
     </style>
 
     <!-- Splash screen -->
@@ -49,18 +50,16 @@
     </style>
 
     <!-- Time Picker -->
-    <style name="Theme.RemindMe.TimePicker" parent="ThemeOverlay.Material3.MaterialTimePicker">
+    <style name="Theme.RemindMe.TimePicker" parent="ThemeOverlay.MaterialComponents.TimePicker">
         <item name="android:buttonBarPositiveButtonStyle">@style/ButtonStyle</item>
         <item name="android:buttonBarNegativeButtonStyle">@style/ButtonStyle</item>
     </style>
 
     <!-- Date Picker -->
-    <style name="Theme.RemindMe.DatePicker" parent="@style/ThemeOverlay.MaterialComponents.MaterialCalendar">
+    <style name="Theme.RemindMe.DatePicker" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
         <item name="buttonBarPositiveButtonStyle">@style/ButtonStyle</item>
         <item name="buttonBarNegativeButtonStyle">@style/ButtonStyle</item>
-        <item name="android:colorControlActivated">@color/light_blue</item>
-        <item name="android:colorAccent">@color/light_blue</item>
-        <item name="android:colorSecondary">@color/light_blue</item>
+        <item name="colorPrimary">@color/secondary</item>
     </style>
 
     <!-- Toolbar -->
