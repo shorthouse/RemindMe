@@ -156,7 +156,6 @@ abstract class AddEditFragment : Fragment() {
         val datePicker = MaterialDatePicker.Builder.datePicker()
             .setCalendarConstraints(constraints)
             .setTitleText("")
-            .setTheme(R.style.Theme_RemindMe_DatePicker)
             .build()
 
         datePicker.addOnPositiveButtonClickListener { dateTimestamp ->
