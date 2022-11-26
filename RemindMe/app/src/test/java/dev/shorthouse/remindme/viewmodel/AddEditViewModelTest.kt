@@ -116,33 +116,9 @@ class AddEditViewModelTest {
     @Test
     fun `Get repeat value on repeat reminder, returns expected repeat value`() {
         val expectedRepeatValue = "4"
-        val repeatValue = viewModel.getRepeatValue(reminder)
+        val repeatValue = viewModel.getRepeatValue(reminder.repeatInterval!!)
 
         assertThat(repeatValue).isEqualTo(expectedRepeatValue)
-    }
-
-    @Test
-    fun `Get repeat value on one off reminder, returns default repeat value`() {
-        val expectedRepeatValue = "1"
-        val repeatValue = viewModel.getRepeatValue(oneOffReminder)
-
-        assertThat(repeatValue).isEqualTo(expectedRepeatValue)
-    }
-
-    @Test
-    fun `Get repeat unit on repeat reminder, returns expected repeat unit`() {
-        val expectedRepeatUnit = ChronoUnit.WEEKS
-        val repeatUnit = viewModel.getRepeatUnit(reminder)
-
-        assertThat(repeatUnit).isEqualTo(expectedRepeatUnit)
-    }
-
-    @Test
-    fun `Get repeat unit on one off reminder, returns default repeat unit`() {
-        val expectedRepeatUnit = ChronoUnit.DAYS
-        val repeatUnit = viewModel.getRepeatUnit(oneOffReminder)
-
-        assertThat(repeatUnit).isEqualTo(expectedRepeatUnit)
     }
 
     @Test
@@ -180,7 +156,7 @@ class AddEditViewModelTest {
     @Test
     fun `Get repeat interval with valid interval, returns expected interval`() {
         val timeValue = 10L
-        val repeatUnitString = "weeks"
+        val repeatUnitString = ChronoUnit.WEEKS
         val isRepeatReminder = true
 
         val expectedRepeatInterval = RepeatInterval(10L, ChronoUnit.WEEKS)
@@ -191,20 +167,9 @@ class AddEditViewModelTest {
     }
 
     @Test
-    fun `Get repeat interval with invalid interval, returns null`() {
-        val timeValue = 0L
-        val repeatUnitString = ""
-        val isRepeatReminder = true
-
-        val repeatInterval = viewModel.getRepeatInterval(isRepeatReminder, timeValue, repeatUnitString)
-
-        assertThat(repeatInterval).isNull()
-    }
-
-    @Test
     fun `Get repeat interval with one-off reminder, returns null`() {
         val timeValue = 0L
-        val repeatUnitString = ""
+        val repeatUnitString = ChronoUnit.WEEKS
         val isRepeatReminder = false
 
         val repeatInterval = viewModel.getRepeatInterval(isRepeatReminder, timeValue, repeatUnitString)
