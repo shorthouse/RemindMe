@@ -31,13 +31,6 @@ class AddEditViewModel @Inject constructor(
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
-    val stringToChronoUnitMap = mapOf(
-        "day" to ChronoUnit.DAYS,
-        "days" to ChronoUnit.DAYS,
-        "week" to ChronoUnit.WEEKS,
-        "weeks" to ChronoUnit.WEEKS,
-    )
-
     fun getReminder(id: Long): LiveData<Reminder> {
         return repository.getReminder(id).asLiveData()
     }
