@@ -4,8 +4,8 @@ import androidx.navigation.testing.TestNavHostController
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.action.ViewActions.swipeUp
+import androidx.test.espresso.action.ViewActions
+import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isClickable
@@ -264,7 +264,7 @@ class DetailsFragmentTest {
             fragmentArgs = navigationArgs
         )
 
-        onView(withId(R.id.details_scroll_view)).perform(swipeUp())
+        onView(withId(R.id.ic_notification)).perform(scrollTo())
         onView(withId(R.id.ic_notification)).check(matches(isCompletelyDisplayed()))
         onView(withId(R.id.notification)).check(matches(isCompletelyDisplayed()))
     }
