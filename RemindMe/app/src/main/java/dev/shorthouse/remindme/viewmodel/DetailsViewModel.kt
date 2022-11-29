@@ -1,9 +1,6 @@
 package dev.shorthouse.remindme.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.data.ReminderRepository
@@ -23,31 +20,38 @@ import javax.inject.Inject
 class DetailsViewModel @Inject constructor(
     private val repository: ReminderRepository,
     private val notificationScheduler: NotificationScheduler,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
+    state: SavedStateHandle
 ) : ViewModel() {
-    lateinit var reminder: Reminder
+    private val reminderId = state.get<Long>("id") ?: 1L
+
+    val reminder = repository.getReminder(reminderId).asLiveData()
 
     fun getReminder(id: Long): LiveData<Reminder> {
         return repository.getReminder(id).asLiveData()
     }
 
     fun deleteReminder() {
-        if (reminder.isNotificationSent) {
-            cancelReminderNotification()
-        }
+        reminder.value?.let {
+            if (it.isNotificationSent) {
+                cancelReminderNotification()
+            }
 
-        viewModelScope.launch(ioDispatcher) {
-            repository.deleteReminder(reminder)
+            viewModelScope.launch(ioDispatcher) {
+                repository.deleteReminder(it)
+            }
         }
     }
 
     fun completeReminder() {
-        if (reminder.isNotificationSent) {
-            cancelReminderNotification()
-        }
+        reminder.value?.let {
+            if (it.isNotificationSent) {
+                cancelReminderNotification()
+            }
 
-        viewModelScope.launch(ioDispatcher) {
-            repository.completeReminder(reminder.id)
+            viewModelScope.launch(ioDispatcher) {
+                repository.completeReminder(it.id)
+            }
         }
     }
 
@@ -66,6 +70,8 @@ class DetailsViewModel @Inject constructor(
     }
 
     private fun cancelReminderNotification() {
-        notificationScheduler.cancelExistingReminderNotification(reminder)
+        reminder.value?.let {
+            notificationScheduler.cancelExistingReminderNotification(it)
+        }
     }
 }
