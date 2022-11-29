@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.material3.MaterialTheme
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -12,6 +13,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.transition.MaterialSharedAxis
 import dagger.hilt.android.AndroidEntryPoint
 import dev.shorthouse.remindme.R
+import dev.shorthouse.remindme.compose.ReminderDetails
 import dev.shorthouse.remindme.databinding.FragmentDetailsBinding
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.utilities.showToast
@@ -35,15 +37,22 @@ class DetailsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentDetailsBinding.inflate(inflater, container, false)
+        binding = FragmentDetailsBinding.inflate(inflater, container, false).apply {
+            detailsComposeView.setContent {
+                MaterialTheme {
+                    ReminderDetails(viewModel)
+                }
+            }
+        }
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        getReminder(navigationArgs.id)
         setupToolbar()
+        displayReminderData()
     }
 
     private fun setTransitionAnimations() {
@@ -63,18 +72,16 @@ class DetailsFragment : Fragment() {
         reenterTransition = backwardTransition
     }
 
-    private fun getReminder(reminderId: Long) {
-        val reminderLiveData = viewModel.getReminder(reminderId)
-
-        reminderLiveData.observe(viewLifecycleOwner) { reminder ->
-            reminderLiveData.removeObservers(viewLifecycleOwner)
-            viewModel.reminder = reminder
-            binding.reminder = reminder
-            populateData(reminder)
+    private fun displayReminderData() {
+        viewModel.reminder.observe(viewLifecycleOwner) { reminderValue ->
+            reminderValue?.let {
+                binding.reminder = it
+                populateReminderData(it)
+            }
         }
     }
 
-    private fun populateData(reminder: Reminder) {
+    private fun populateReminderData(reminder: Reminder) {
         binding.apply {
             name.text = reminder.name
             startDate.text = viewModel.getFormattedDate(reminder.startDateTime)
