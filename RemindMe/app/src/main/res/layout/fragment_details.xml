@@ -38,6 +38,11 @@
             android:layout_marginTop="?attr/actionBarSize"
             android:transitionGroup="true">
 
+            <androidx.compose.ui.platform.ComposeView
+                android:id="@+id/detailsComposeView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
