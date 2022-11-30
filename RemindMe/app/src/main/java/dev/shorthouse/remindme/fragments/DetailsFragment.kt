@@ -4,11 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.composethemeadapter.MdcTheme
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.transition.MaterialSharedAxis
 import dagger.hilt.android.AndroidEntryPoint
@@ -38,9 +39,13 @@ class DetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentDetailsBinding.inflate(inflater, container, false).apply {
-            detailsComposeView.setContent {
-                MaterialTheme {
-                    ReminderDetails(viewModel)
+            detailsComposeView.apply {
+                setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+
+                setContent {
+                    MdcTheme {
+                        ReminderDetails(viewModel)
+                    }
                 }
             }
         }
@@ -84,17 +89,9 @@ class DetailsFragment : Fragment() {
     private fun populateReminderData(reminder: Reminder) {
         binding.apply {
             name.text = reminder.name
-            startDate.text = viewModel.getFormattedDate(reminder.startDateTime)
+            startDate.text = reminder.getFormattedStartDateDayOfWeek()
             startTime.text = reminder.getFormattedStartTime()
             notes.text = reminder.notes
-
-            reminder.repeatInterval?.let {
-                repeatInterval.text = resources.getQuantityString(
-                    viewModel.getRepeatIntervalStringId(it),
-                    it.timeValue.toInt(),
-                    it.timeValue
-                )
-            }
         }
     }
 
