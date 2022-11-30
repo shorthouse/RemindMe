@@ -31,17 +31,17 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
+        <androidx.compose.ui.platform.ComposeView
+            android:id="@+id/detailsComposeView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
         <ScrollView
             android:id="@+id/details_scroll_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="?attr/actionBarSize"
             android:transitionGroup="true">
-
-            <androidx.compose.ui.platform.ComposeView
-                android:id="@+id/detailsComposeView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -158,7 +158,7 @@
                     app:layout_constraintStart_toEndOf="@+id/ic_notification"
                     app:layout_constraintTop_toBottomOf="@+id/notes"
                     app:showIfNotificationEnabled="@{reminder.notificationSent}"
-                    tools:text="Notifications on" />
+                    tools:text="Notifications enabled" />
 
                 <ImageView
                     android:id="@+id/ic_repeat"
