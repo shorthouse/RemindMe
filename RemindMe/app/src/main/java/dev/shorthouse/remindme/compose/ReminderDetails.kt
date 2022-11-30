@@ -183,8 +183,39 @@ fun ReminderDetailRow(
 }
 
 @Composable
-private fun DeleteAlertDialog() {
-    var isDeleteDialogOpen by remember { mutableStateOf(false) }
+private fun DetailsAlertDialog(
+    title: String,
+    confirmText: String,
+    cancelText: String,
+    showInitially: Boolean = false,
+) {
+    var isDialogOpen by remember { mutableStateOf(showInitially) }
+
+    if (isDialogOpen) {
+        AlertDialog(
+            onDismissRequest = { isDialogOpen = false },
+            title = { stringResource(R.string.alert_dialog_delete_reminder_message) },
+            confirmButton = {
+                Button(onClick = {
+                    isDialogOpen = false
+                }) {
+                    Text("Delete")
+                }
+            },
+            dismissButton = {
+                Button(onClick = {
+                    isDialogOpen = false
+                }) {
+                    Text("Cancel")
+                }
+            },
+        )
+    }
+}
+
+@Composable
+private fun DeleteAlertDialog(showInitially: Boolean = false) {
+    var isDeleteDialogOpen by remember { mutableStateOf(showInitially) }
 
     if (isDeleteDialogOpen) {
         AlertDialog(
@@ -226,8 +257,15 @@ private fun ReminderDetailsScaffoldPreview() {
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun DeleteAlertDialogPreview() {
-    DeleteAlertDialog()
+    MdcTheme {
+        DetailsAlertDialog(
+            title = "Delete this reminder?",
+            confirmText = "Delete",
+            cancelText = "Cancel",
+            showInitially = true
+        )
+    }
 }
