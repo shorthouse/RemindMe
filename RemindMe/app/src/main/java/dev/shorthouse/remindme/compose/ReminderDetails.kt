@@ -193,48 +193,20 @@ private fun DetailsAlertDialog(
 
     if (isDialogOpen) {
         AlertDialog(
+            title = {
+                Text(text = title, fontSize = 18.sp)
+            },
+            confirmButton = {
+                TextButton(onClick = { isDialogOpen = false }) {
+                    Text(text = confirmText, fontSize = 16.sp)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { isDialogOpen = false }) {
+                    Text(text = cancelText, fontSize = 16.sp)
+                }
+            },
             onDismissRequest = { isDialogOpen = false },
-            title = { stringResource(R.string.alert_dialog_delete_reminder_message) },
-            confirmButton = {
-                Button(onClick = {
-                    isDialogOpen = false
-                }) {
-                    Text("Delete")
-                }
-            },
-            dismissButton = {
-                Button(onClick = {
-                    isDialogOpen = false
-                }) {
-                    Text("Cancel")
-                }
-            },
-        )
-    }
-}
-
-@Composable
-private fun DeleteAlertDialog(showInitially: Boolean = false) {
-    var isDeleteDialogOpen by remember { mutableStateOf(showInitially) }
-
-    if (isDeleteDialogOpen) {
-        AlertDialog(
-            onDismissRequest = { isDeleteDialogOpen = false },
-            title = { stringResource(R.string.alert_dialog_delete_reminder_message) },
-            confirmButton = {
-                Button(onClick = {
-                    isDeleteDialogOpen = false
-                }) {
-                    Text("Delete")
-                }
-            },
-            dismissButton = {
-                Button(onClick = {
-                    isDeleteDialogOpen = false
-                }) {
-                    Text("Cancel")
-                }
-            },
         )
     }
 }
@@ -257,7 +229,7 @@ private fun ReminderDetailsScaffoldPreview() {
     }
 }
 
-@Preview(showBackground = true)
+@Preview()
 @Composable
 private fun DeleteAlertDialogPreview() {
     MdcTheme {
