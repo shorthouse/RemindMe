@@ -104,4 +104,6 @@
     <string name="repeat_unit_day">Day</string>
     <string name="repeat_unit_week">Week</string>
     <string name="default_repeat_unit">1</string>
+    <string name="cd_back">Back</string>
+    <string name="cd_more">More</string>
 </resources>
