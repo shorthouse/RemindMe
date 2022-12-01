@@ -11,12 +11,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.composethemeadapter.MdcTheme
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.transition.MaterialSharedAxis
 import dagger.hilt.android.AndroidEntryPoint
 import dev.shorthouse.remindme.R
-import dev.shorthouse.remindme.compose.ReminderDetails
+import dev.shorthouse.remindme.compose.ReminderDetailsScreen
 import dev.shorthouse.remindme.databinding.FragmentDetailsBinding
-import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.utilities.showToast
 import dev.shorthouse.remindme.viewmodel.DetailsViewModel
 
@@ -30,7 +28,7 @@ class DetailsFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setTransitionAnimations()
+        //setTransitionAnimations()
     }
 
     override fun onCreateView(
@@ -42,9 +40,15 @@ class DetailsFragment : Fragment() {
             detailsComposeView.apply {
                 setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
 
+                val editAction = DetailsFragmentDirections.actionDetailsToEdit(navigationArgs.id)
+
                 setContent {
                     MdcTheme {
-                        ReminderDetails(viewModel)
+                        ReminderDetailsScreen(
+                            detailsViewModel = viewModel,
+                            onNavigateEdit = { findNavController().navigate(editAction) },
+                            onNavigateUp = { findNavController().navigateUp() },
+                        )
                     }
                 }
             }
@@ -53,73 +57,73 @@ class DetailsFragment : Fragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+//        super.onViewCreated(view, savedInstanceState)
+//
+//        //setupToolbar()
+//        displayReminderData()
+//    }
 
-        setupToolbar()
-        displayReminderData()
-    }
+//    private fun setTransitionAnimations() {
+//        val forwardTransition = MaterialSharedAxis(MaterialSharedAxis.Z, true).apply {
+//            duration = resources.getInteger(R.integer.transition_duration_medium).toLong()
+//            excludeTarget(R.id.app_bar, true)
+//        }
+//
+//        val backwardTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false).apply {
+//            duration = resources.getInteger(R.integer.transition_duration_medium).toLong()
+//            excludeTarget(R.id.app_bar, true)
+//        }
+//
+//        enterTransition = forwardTransition
+//        exitTransition = forwardTransition
+//        returnTransition = backwardTransition
+//        reenterTransition = backwardTransition
+//    }
 
-    private fun setTransitionAnimations() {
-        val forwardTransition = MaterialSharedAxis(MaterialSharedAxis.Z, true).apply {
-            duration = resources.getInteger(R.integer.transition_duration_medium).toLong()
-            excludeTarget(R.id.app_bar, true)
-        }
+//    private fun displayReminderData() {
+//        viewModel.reminder.observe(viewLifecycleOwner) { reminderValue ->
+//            reminderValue?.let {
+//                binding.reminder = it
+//                //populateReminderData(it)
+//            }
+//        }
+//    }
 
-        val backwardTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false).apply {
-            duration = resources.getInteger(R.integer.transition_duration_medium).toLong()
-            excludeTarget(R.id.app_bar, true)
-        }
-
-        enterTransition = forwardTransition
-        exitTransition = forwardTransition
-        returnTransition = backwardTransition
-        reenterTransition = backwardTransition
-    }
-
-    private fun displayReminderData() {
-        viewModel.reminder.observe(viewLifecycleOwner) { reminderValue ->
-            reminderValue?.let {
-                binding.reminder = it
-                populateReminderData(it)
-            }
-        }
-    }
-
-    private fun populateReminderData(reminder: Reminder) {
-        binding.apply {
-            name.text = reminder.name
-            startDate.text = reminder.getFormattedStartDateDayOfWeek()
-            startTime.text = reminder.getFormattedStartTime()
-            notes.text = reminder.notes
-        }
-    }
-
-    private fun setupToolbar() {
-        binding.toolbar.apply {
-            setNavigationOnClickListener { findNavController().navigateUp() }
-            setNavigationIcon(R.drawable.ic_back)
-
-            setOnMenuItemClickListener { menuItem ->
-                when (menuItem.itemId) {
-                    R.id.action_edit -> {
-                        navigateToEditReminder()
-                        true
-                    }
-                    R.id.action_delete -> {
-                        getDeleteAlertDialog().show()
-                        true
-                    }
-                    R.id.action_complete -> {
-                        getCompleteAlertDialog().show()
-                        true
-                    }
-                    else -> false
-                }
-            }
-        }
-    }
-
+    //    private fun populateReminderData(reminder: Reminder) {
+//        binding.apply {
+//            name.text = reminder.name
+//            startDate.text = reminder.getFormattedStartDateDayOfWeek()
+//            startTime.text = reminder.getFormattedStartTime()
+//            notes.text = reminder.notes
+//        }
+//    }
+//
+//    private fun setupToolbar() {
+//        binding.toolbar.apply {
+//            setNavigationOnClickListener { findNavController().navigateUp() }
+//            setNavigationIcon(R.drawable.ic_back)
+//
+//            setOnMenuItemClickListener { menuItem ->
+//                when (menuItem.itemId) {
+//                    R.id.action_edit -> {
+//                        navigateToEditReminder()
+//                        true
+//                    }
+//                    R.id.action_delete -> {
+//                        getDeleteAlertDialog().show()
+//                        true
+//                    }
+//                    R.id.action_complete -> {
+//                        getCompleteAlertDialog().show()
+//                        true
+//                    }
+//                    else -> false
+//                }
+//            }
+//        }
+//    }
+//
     private fun getCompleteAlertDialog(): MaterialAlertDialogBuilder {
         return MaterialAlertDialogBuilder(
             requireContext(),
