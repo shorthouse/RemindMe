@@ -6,7 +6,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.*
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -15,6 +15,7 @@ import androidx.compose.ui.res.*
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.android.material.composethemeadapter.MdcTheme
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.model.DisplayReminder
@@ -22,27 +23,74 @@ import dev.shorthouse.remindme.model.DisplayRepeatInterval
 import dev.shorthouse.remindme.viewmodel.DetailsViewModel
 
 @Composable
-fun ReminderDetails(detailsViewModel: DetailsViewModel) {
+fun ReminderDetailsScreen(
+    detailsViewModel: DetailsViewModel = viewModel(),
+    onNavigateEdit: () -> Unit,
+    onNavigateUp: () -> Unit
+) {
     val reminder by detailsViewModel.displayReminder.observeAsState()
 
     reminder?.let {
-        ReminderDetailsScaffold(it)
+        ReminderDetailsScreenContent(it, detailsViewModel, onNavigateEdit, onNavigateUp)
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ReminderDetailsScaffold(reminder: DisplayReminder) {
+fun ReminderDetailsScreenContent(
+    reminder: DisplayReminder,
+    detailsViewModel: DetailsViewModel,
+    onNavigateEdit: () -> Unit,
+    onNavigateUp: () -> Unit
+) {
     Scaffold(
-        topBar = { ReminderDetailsTopAppBar() },
+        topBar = {
+            ReminderDetailsTopAppBar(
+                onEdit = onNavigateEdit,
+                onDelete = {
+                    detailsViewModel.deleteReminder()
+                    onNavigateUp()
+                },
+                onComplete = {
+                    detailsViewModel.completeReminder()
+                    onNavigateUp()
+                },
+                onNavigateUp = onNavigateUp
+            )
+        },
         content = { innerPadding -> ReminderDetailsContent(reminder, innerPadding) }
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ReminderDetailsTopAppBar() {
+fun ReminderDetailsTopAppBar(
+    onEdit: () -> Unit,
+    onDelete: () -> Unit,
+    onComplete: () -> Unit,
+    onNavigateUp: () -> Unit
+) {
     var isMenuShown by remember { mutableStateOf(false) }
+    var isDeleteDialogShown by remember { mutableStateOf(false) }
+    var isCompleteDialogShown by remember { mutableStateOf(false) }
+
+    if (isDeleteDialogShown) {
+        DetailsAlertDialog(
+            title = "Delete this reminder?",
+            confirmText = "Delete",
+            cancelText = "Cancel",
+            onConfirm = onDelete,
+            onDismiss = { isDeleteDialogShown = false },
+        )
+    }
+
+    if (isCompleteDialogShown) {
+        DetailsAlertDialog(
+            title = "Complete this reminder?",
+            confirmText = "Complete",
+            cancelText = "Cancel",
+            onConfirm = onComplete,
+            onDismiss = { isCompleteDialogShown = false },
+        )
+    }
 
     TopAppBar(
         title = {
@@ -52,7 +100,7 @@ fun ReminderDetailsTopAppBar() {
             )
         },
         navigationIcon = {
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = onNavigateUp) {
                 Icon(
                     painter = painterResource(R.drawable.ic_back),
                     contentDescription = stringResource(R.string.cd_back),
@@ -60,9 +108,8 @@ fun ReminderDetailsTopAppBar() {
                 )
             }
         },
-        colors = TopAppBarDefaults.smallTopAppBarColors(colorResource(R.color.primary)),
         actions = {
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = onEdit) {
                 Icon(
                     painter = painterResource(R.drawable.ic_edit),
                     contentDescription = stringResource(R.string.cd_menu_item_edit),
@@ -81,12 +128,18 @@ fun ReminderDetailsTopAppBar() {
                 onDismissRequest = { isMenuShown = false }
             ) {
                 DropdownMenuItem(
-                    onClick = { /*TODO*/ },
-                    text = { Text(text = stringResource(R.string.menu_item_delete)) }
+                    onClick = {
+                        isDeleteDialogShown = true
+                        isMenuShown = false
+                    },
+                    content = { Text(text = stringResource(R.string.menu_item_delete)) }
                 )
                 DropdownMenuItem(
-                    onClick = { /*TODO*/ },
-                    text = { Text(text = stringResource(R.string.menu_item_complete)) }
+                    onClick = {
+                        isCompleteDialogShown = true
+                        isMenuShown = false
+                    },
+                    content = { Text(text = stringResource(R.string.menu_item_complete)) }
                 )
             }
         }
@@ -187,28 +240,25 @@ private fun DetailsAlertDialog(
     title: String,
     confirmText: String,
     cancelText: String,
-    showInitially: Boolean = false,
+    onConfirm: () -> Unit,
+    onDismiss: () -> Unit
 ) {
-    var isDialogOpen by remember { mutableStateOf(showInitially) }
-
-    if (isDialogOpen) {
-        AlertDialog(
-            title = {
-                Text(text = title, fontSize = 18.sp)
-            },
-            confirmButton = {
-                TextButton(onClick = { isDialogOpen = false }) {
-                    Text(text = confirmText, fontSize = 16.sp)
-                }
-            },
-            dismissButton = {
-                TextButton(onClick = { isDialogOpen = false }) {
-                    Text(text = cancelText, fontSize = 16.sp)
-                }
-            },
-            onDismissRequest = { isDialogOpen = false },
-        )
-    }
+    AlertDialog(
+        title = {
+            Text(text = title, fontSize = 18.sp)
+        },
+        confirmButton = {
+            TextButton(onClick = onConfirm) {
+                Text(text = confirmText, fontSize = 16.sp)
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text(text = cancelText, fontSize = 16.sp)
+            }
+        },
+        onDismissRequest = onDismiss,
+    )
 }
 
 @Preview(showBackground = true)
@@ -225,11 +275,16 @@ private fun ReminderDetailsScaffoldPreview() {
             notes = "Don't forget to warm up!",
         )
 
-        ReminderDetailsScaffold(reminder = reminder)
+        ReminderDetailsScreenContent(
+            reminder = reminder,
+            detailsViewModel = viewModel(),
+            onNavigateEdit = {},
+            onNavigateUp = {}
+        )
     }
 }
 
-@Preview()
+@Preview
 @Composable
 private fun DeleteAlertDialogPreview() {
     MdcTheme {
@@ -237,7 +292,8 @@ private fun DeleteAlertDialogPreview() {
             title = "Delete this reminder?",
             confirmText = "Delete",
             cancelText = "Cancel",
-            showInitially = true
+            onConfirm = {},
+            onDismiss = {}
         )
     }
 }
