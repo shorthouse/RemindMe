@@ -3,6 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+
+
     <data>
         <variable
             name="reminder"
@@ -14,180 +16,182 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/app_bar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:liftOnScroll="true" >
-
-            <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:title="@string/toolbar_title_details"
-                app:menu="@menu/toolbar_details"
-                tools:navigationIcon="@drawable/ic_back"
-                style="@style/Widget.MaterialComponents.Toolbar.Primary" />
-
-        </com.google.android.material.appbar.AppBarLayout>
-
         <androidx.compose.ui.platform.ComposeView
             android:id="@+id/detailsComposeView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
-        <ScrollView
-            android:id="@+id/details_scroll_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="?attr/actionBarSize"
-            android:transitionGroup="true">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                android:paddingBottom="24dp"
-                tools:context=".fragments.DetailsFragment">
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/name"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:textColor="@color/on_primary"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:text="Brush teeth" />
-
-                <ImageView
-                    android:id="@+id/ic_calendar"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:contentDescription="@string/cd_icon_calendar"
-                    android:src="@drawable/ic_calendar"
-                    app:layout_constraintBottom_toBottomOf="@+id/start_date"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/start_date" />
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/start_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="24dp"
-                    android:textColor="@color/on_primary"
-                    android:textSize="18sp"
-                    app:layout_constraintStart_toEndOf="@+id/ic_calendar"
-                    app:layout_constraintTop_toBottomOf="@+id/name"
-                    tools:text="22 Mar 2022" />
-
-                <ImageView
-                    android:id="@+id/ic_clock"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:contentDescription="@string/cd_icon_clock"
-                    android:src="@drawable/ic_clock"
-                    app:layout_constraintBottom_toBottomOf="@+id/start_time"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/start_time" />
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/start_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="32dp"
-                    android:textColor="@color/on_primary"
-                    android:textSize="18sp"
-                    app:layout_constraintStart_toEndOf="@+id/ic_clock"
-                    app:layout_constraintTop_toBottomOf="@+id/start_date"
-                    tools:text="14:30" />
-
-                <ImageView
-                    android:id="@+id/ic_notes"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:contentDescription="@string/cd_icon_notes"
-                    android:src="@drawable/ic_notes"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/notes"
-                    app:showIfNotesExist="@{reminder.notes}" />
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/notes"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="32dp"
-                    android:layout_marginEnd="16dp"
-                    android:textColor="@color/on_primary"
-                    android:textSize="18sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/ic_notes"
-                    app:layout_constraintTop_toBottomOf="@+id/start_time"
-                    app:showIfNotesExist="@{reminder.notes}"
-                    tools:text="Don't forget mouthwash!" />
-
-                <ImageView
-                    android:id="@+id/ic_notification"
-                    android:layout_width="24dp"
-                    android:layout_height="wrap_content"
-                    android:contentDescription="@string/cd_icon_notification"
-                    android:src="@drawable/ic_notification_outline"
-                    app:layout_constraintBottom_toBottomOf="@+id/notification"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/notification"
-                    app:showIfNotificationEnabled="@{reminder.notificationSent}" />
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/notification"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="32dp"
-                    android:text="@string/notifications_on"
-                    android:textColor="@color/on_primary"
-                    android:textSize="18sp"
-                    app:layout_constraintStart_toEndOf="@+id/ic_notification"
-                    app:layout_constraintTop_toBottomOf="@+id/notes"
-                    app:showIfNotificationEnabled="@{reminder.notificationSent}"
-                    tools:text="Notifications enabled" />
-
-                <ImageView
-                    android:id="@+id/ic_repeat"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:contentDescription="@string/cd_icon_repeat"
-                    android:src="@drawable/ic_repeat"
-                    app:layout_constraintBottom_toBottomOf="@+id/repeat_interval"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/repeat_interval"
-                    app:showIfRepeatReminder="@{reminder.repeatInterval}" />
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/repeat_interval"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="32dp"
-                    android:textColor="@color/on_primary"
-                    android:textSize="18sp"
-                    app:layout_constraintStart_toEndOf="@+id/ic_repeat"
-                    app:layout_constraintTop_toBottomOf="@+id/notification"
-                    app:showIfRepeatReminder="@{reminder.repeatInterval}"
-                    tools:text="3 days" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </ScrollView>
-
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+<!--        <com.google.android.material.appbar.AppBarLayout-->
+<!--            android:id="@+id/app_bar"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:liftOnScroll="true" >-->
+
+<!--            <com.google.android.material.appbar.MaterialToolbar-->
+<!--                android:id="@+id/toolbar"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="?attr/actionBarSize"-->
+<!--                app:title="@string/toolbar_title_details"-->
+<!--                app:menu="@menu/toolbar_details"-->
+<!--                tools:navigationIcon="@drawable/ic_back"-->
+<!--                style="@style/Widget.MaterialComponents.Toolbar.Primary" />-->
+
+<!--        </com.google.android.material.appbar.AppBarLayout>-->
+<!--        -->
+<!--        <ScrollView-->
+<!--            android:id="@+id/details_scroll_view"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="?attr/actionBarSize"-->
+<!--            android:transitionGroup="true">-->
+
+<!--            <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="16dp"-->
+<!--                android:layout_marginTop="8dp"-->
+<!--                android:layout_marginEnd="16dp"-->
+<!--                android:paddingBottom="24dp"-->
+<!--                tools:context=".fragments.DetailsFragment">-->
+
+<!--                <com.google.android.material.textview.MaterialTextView-->
+<!--                    android:id="@+id/name"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="16dp"-->
+<!--                    android:textColor="@color/on_primary"-->
+<!--                    android:textSize="20sp"-->
+<!--                    android:textStyle="bold"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintHorizontal_bias="0.0"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toTopOf="parent"-->
+<!--                    tools:text="Brush teeth" />-->
+
+<!--                <ImageView-->
+<!--                    android:id="@+id/ic_calendar"-->
+<!--                    android:layout_width="24dp"-->
+<!--                    android:layout_height="24dp"-->
+<!--                    android:contentDescription="@string/cd_icon_calendar"-->
+<!--                    android:src="@drawable/ic_calendar"-->
+<!--                    app:layout_constraintBottom_toBottomOf="@+id/start_date"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toTopOf="@+id/start_date" />-->
+
+<!--                <com.google.android.material.textview.MaterialTextView-->
+<!--                    android:id="@+id/start_date"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginStart="16dp"-->
+<!--                    android:layout_marginTop="24dp"-->
+<!--                    android:textColor="@color/on_primary"-->
+<!--                    android:textSize="18sp"-->
+<!--                    app:layout_constraintStart_toEndOf="@+id/ic_calendar"-->
+<!--                    app:layout_constraintTop_toBottomOf="@+id/name"-->
+<!--                    tools:text="22 Mar 2022" />-->
+
+<!--                <ImageView-->
+<!--                    android:id="@+id/ic_clock"-->
+<!--                    android:layout_width="24dp"-->
+<!--                    android:layout_height="24dp"-->
+<!--                    android:contentDescription="@string/cd_icon_clock"-->
+<!--                    android:src="@drawable/ic_clock"-->
+<!--                    app:layout_constraintBottom_toBottomOf="@+id/start_time"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toTopOf="@+id/start_time" />-->
+
+<!--                <com.google.android.material.textview.MaterialTextView-->
+<!--                    android:id="@+id/start_time"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginStart="16dp"-->
+<!--                    android:layout_marginTop="32dp"-->
+<!--                    android:textColor="@color/on_primary"-->
+<!--                    android:textSize="18sp"-->
+<!--                    app:layout_constraintStart_toEndOf="@+id/ic_clock"-->
+<!--                    app:layout_constraintTop_toBottomOf="@+id/start_date"-->
+<!--                    tools:text="14:30" />-->
+
+<!--                <ImageView-->
+<!--                    android:id="@+id/ic_notes"-->
+<!--                    android:layout_width="24dp"-->
+<!--                    android:layout_height="24dp"-->
+<!--                    android:contentDescription="@string/cd_icon_notes"-->
+<!--                    android:src="@drawable/ic_notes"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toTopOf="@+id/notes"-->
+<!--                    app:showIfNotesExist="@{reminder.notes}" />-->
+
+<!--                <com.google.android.material.textview.MaterialTextView-->
+<!--                    android:id="@+id/notes"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginStart="16dp"-->
+<!--                    android:layout_marginTop="32dp"-->
+<!--                    android:layout_marginEnd="16dp"-->
+<!--                    android:textColor="@color/on_primary"-->
+<!--                    android:textSize="18sp"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintStart_toEndOf="@+id/ic_notes"-->
+<!--                    app:layout_constraintTop_toBottomOf="@+id/start_time"-->
+<!--                    app:showIfNotesExist="@{reminder.notes}"-->
+<!--                    tools:text="Don't forget mouthwash!" />-->
+
+<!--                <ImageView-->
+<!--                    android:id="@+id/ic_notification"-->
+<!--                    android:layout_width="24dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:contentDescription="@string/cd_icon_notification"-->
+<!--                    android:src="@drawable/ic_notification_outline"-->
+<!--                    app:layout_constraintBottom_toBottomOf="@+id/notification"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toTopOf="@+id/notification"-->
+<!--                    app:showIfNotificationEnabled="@{reminder.notificationSent}" />-->
+
+<!--                <com.google.android.material.textview.MaterialTextView-->
+<!--                    android:id="@+id/notification"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginStart="16dp"-->
+<!--                    android:layout_marginTop="32dp"-->
+<!--                    android:text="@string/notifications_on"-->
+<!--                    android:textColor="@color/on_primary"-->
+<!--                    android:textSize="18sp"-->
+<!--                    app:layout_constraintStart_toEndOf="@+id/ic_notification"-->
+<!--                    app:layout_constraintTop_toBottomOf="@+id/notes"-->
+<!--                    app:showIfNotificationEnabled="@{reminder.notificationSent}"-->
+<!--                    tools:text="Notifications enabled" />-->
+
+<!--                <ImageView-->
+<!--                    android:id="@+id/ic_repeat"-->
+<!--                    android:layout_width="24dp"-->
+<!--                    android:layout_height="24dp"-->
+<!--                    android:contentDescription="@string/cd_icon_repeat"-->
+<!--                    android:src="@drawable/ic_repeat"-->
+<!--                    app:layout_constraintBottom_toBottomOf="@+id/repeat_interval"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toTopOf="@+id/repeat_interval"-->
+<!--                    app:showIfRepeatReminder="@{reminder.repeatInterval}" />-->
+
+<!--                <com.google.android.material.textview.MaterialTextView-->
+<!--                    android:id="@+id/repeat_interval"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginStart="16dp"-->
+<!--                    android:layout_marginTop="32dp"-->
+<!--                    android:textColor="@color/on_primary"-->
+<!--                    android:textSize="18sp"-->
+<!--                    app:layout_constraintStart_toEndOf="@+id/ic_repeat"-->
+<!--                    app:layout_constraintTop_toBottomOf="@+id/notification"-->
+<!--                    app:showIfRepeatReminder="@{reminder.repeatInterval}"-->
+<!--                    tools:text="3 days" />-->
+
+<!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
+
+<!--        </ScrollView>-->
+
+<!--    </androidx.coordinatorlayout.widget.CoordinatorLayout>-->
 
 </layout>
