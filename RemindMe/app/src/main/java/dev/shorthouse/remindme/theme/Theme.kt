@@ -1,14 +1,14 @@
 package dev.shorthouse.remindme.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.MaterialTheme.shapes
-import androidx.compose.material3.MaterialTheme.typography
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.lightColorScheme
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.MaterialTheme.shapes
+import androidx.compose.material.MaterialTheme.typography
+import androidx.compose.material.darkColors
+import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 
-private val LightColors = lightColorScheme(
+private val LightColors = lightColors(
     primary = Blue500,
     onPrimary = OffBlack,
     secondary = Blue300,
@@ -17,7 +17,7 @@ private val LightColors = lightColorScheme(
     onBackground = White
 )
 
-private val DarkColors = darkColorScheme(
+private val DarkColors = darkColors(
     primary = Grey500,
     onPrimary = White,
     secondary = Blue500,
@@ -31,7 +31,7 @@ fun RemindMeTheme(
     content: @Composable () -> Unit
 ) {
     MaterialTheme(
-        colorScheme = if (darkTheme) DarkColors else LightColors,
+        colors = if (darkTheme) DarkColors else LightColors,
         shapes = shapes,
         typography = typography,
         content = content
