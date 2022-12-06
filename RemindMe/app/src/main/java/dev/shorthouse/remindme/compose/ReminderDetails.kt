@@ -11,6 +11,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.*
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -57,7 +58,9 @@ fun ReminderDetailsScreenContent(
                 onNavigateUp = onNavigateUp
             )
         },
-        content = { innerPadding -> ReminderDetailsContent(reminder, innerPadding) }
+        content = { innerPadding ->
+            ReminderDetailsContent(reminder, innerPadding)
+        }
     )
 }
 
@@ -76,9 +79,8 @@ fun ReminderDetailsTopAppBar(
         DetailsAlertDialog(
             title = "Delete this reminder?",
             confirmText = "Delete",
-            cancelText = "Cancel",
             onConfirm = onDelete,
-            onDismiss = { isDeleteDialogShown = false },
+            onDismiss = { isDeleteDialogShown = false }
         )
     }
 
@@ -86,13 +88,13 @@ fun ReminderDetailsTopAppBar(
         DetailsAlertDialog(
             title = "Complete this reminder?",
             confirmText = "Complete",
-            cancelText = "Cancel",
             onConfirm = onComplete,
-            onDismiss = { isCompleteDialogShown = false },
+            onDismiss = { isDeleteDialogShown = false }
         )
     }
 
     TopAppBar(
+        modifier = Modifier.testTag("TopAppBar"),
         title = {
             Text(
                 text = stringResource(R.string.toolbar_title_details),
@@ -151,13 +153,16 @@ fun ReminderDetailsTopAppBar(
 fun ReminderDetailsContent(displayReminder: DisplayReminder, innerPadding: PaddingValues) {
     Column(
         Modifier
+            .fillMaxWidth()
+            .verticalScroll(rememberScrollState())
             .padding(
                 start = dimensionResource(R.dimen.margin_normal),
                 end = dimensionResource(R.dimen.margin_normal),
-                top = innerPadding.calculateTopPadding() + dimensionResource(R.dimen.margin_normal),
+                top = innerPadding.calculateTopPadding(),
             )
-            .verticalScroll(rememberScrollState())
     ) {
+        Spacer(modifier = Modifier.height(dimensionResource(R.dimen.margin_normal)))
+
         ReminderName(displayReminder.name)
 
         ReminderDetailRow(
@@ -172,14 +177,6 @@ fun ReminderDetailsContent(displayReminder: DisplayReminder, innerPadding: Paddi
             displayReminder.startTime
         )
 
-        if (displayReminder.isNotificationSent) {
-            ReminderDetailRow(
-                R.drawable.ic_notification_outline,
-                R.string.cd_icon_notification,
-                stringResource(R.string.notifications_on),
-            )
-        }
-
         if (displayReminder.repeatInterval != null) {
             ReminderDetailRow(
                 R.drawable.ic_repeat,
@@ -189,6 +186,14 @@ fun ReminderDetailsContent(displayReminder: DisplayReminder, innerPadding: Paddi
                     displayReminder.repeatInterval.pluralCount,
                     displayReminder.repeatInterval.pluralCount
                 ),
+            )
+        }
+
+        if (displayReminder.isNotificationSent) {
+            ReminderDetailRow(
+                R.drawable.ic_notification_outline,
+                R.string.cd_icon_notification,
+                stringResource(R.string.notifications_on),
             )
         }
 
@@ -239,7 +244,6 @@ fun ReminderDetailRow(
 private fun DetailsAlertDialog(
     title: String,
     confirmText: String,
-    cancelText: String,
     onConfirm: () -> Unit,
     onDismiss: () -> Unit
 ) {
@@ -254,7 +258,7 @@ private fun DetailsAlertDialog(
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text(text = cancelText, fontSize = 16.sp)
+                Text(text = stringResource(R.string.alert_dialog_cancel), fontSize = 16.sp)
             }
         },
         onDismissRequest = onDismiss,
@@ -286,12 +290,11 @@ private fun ReminderDetailsScaffoldPreview() {
 
 @Preview
 @Composable
-private fun DeleteAlertDialogPreview() {
+private fun DetailsAlertDialogPreview() {
     MdcTheme {
         DetailsAlertDialog(
             title = "Delete this reminder?",
             confirmText = "Delete",
-            cancelText = "Cancel",
             onConfirm = {},
             onDismiss = {}
         )
