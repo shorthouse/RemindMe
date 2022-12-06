@@ -63,7 +63,7 @@ class DisplayReminderNotificationReceiver : BroadcastReceiver() {
             context,
             context.getString(R.string.notification_channel_id_reminder)
         )
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setSmallIcon(R.drawable.ic_bell)
             .setContentTitle(notificationTitle)
             .setContentText(notificationText)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
