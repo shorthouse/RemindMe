@@ -13,7 +13,7 @@ The app has the following feature set:
  - Create repeating reminders
  - Filter, search, and sort reminders
  - Edit, complete, and delete reminders
- - Dark mode to give your eyes a rest
+ - Dark mode
  - Reminders are automatically updated when a timezone change occurs 
 
 # Architecture
