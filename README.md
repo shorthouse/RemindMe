@@ -3,7 +3,7 @@
 
 Breathe a sigh of relief as your phone remembers all your important events and tasks for you, giving you more time to relax 🏖️.
 
-The app is built using Kotlin, and follows Android design and development best practices. 
+The app is built using Kotlin and follows Android design and development best practices. 
 
 The core features of the app are fully completed, and the app is under heavy development to further improve its feature set. Currently, the app is being migrated to Jetpack Compose.
 
@@ -40,7 +40,7 @@ As the app is currently being migrated to Jetpack Compose, the Jetpack Compose t
 # Future Features
 There are many upcoming features in the backlog for RemindMe, alongside architecture and refactoring changes.
 
-To give a sneak peak, here are some of the upcoming changes:
+To give a sneak peek, here are some of the upcoming changes:
  - More customisable repeating reminder durations
  - Jetpack Compose
  - Material Design 3
