@@ -38,7 +38,7 @@ To facilitate testing of components, RemindMe uses the following:
 As the app is currently being migrated to Jetpack Compose, the Jetpack Compose testing library is also being integrated and used in the test suite.
 
 # Future Features
-There are many upcoming features in the backlog for RemindMe, alongside archiecture and refactoring changes.
+There are many upcoming features in the backlog for RemindMe, alongside architecture and refactoring changes.
 
 To give a sneak peak, here are some of the upcoming changes:
  - More customisable repeating reminder durations
