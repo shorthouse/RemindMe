@@ -210,20 +210,4 @@ class ReminderDetailsTest {
             onNodeWithText("Delete").assertDoesNotExist()
         }
     }
-
-    @Test
-    fun when_delete_dialog_delete_button_clicked_should_dismiss_delete_dialog() {
-        setDetailsContent(reminders[0])
-
-        composeTestRule.apply {
-            onNodeWithContentDescription("More").performClick()
-            onNodeWithText("Delete").performClick()
-
-            onNodeWithText("Delete").performClick()
-
-            onNodeWithText("Delete this reminder?").assertDoesNotExist()
-            onNodeWithText("Cancel").assertDoesNotExist()
-            onNodeWithText("Delete").assertDoesNotExist()
-        }
-    }
 }
