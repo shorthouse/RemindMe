@@ -59,7 +59,7 @@
     <string name="cd_icon_clock">Clock icon</string>
     <string name="cd_icon_repeat">Repeat icon</string>
     <string name="cd_icon_notes">Notes icon</string>
-    <string name="cd_icon_notification">Notification Icon</string>
+    <string name="cd_icon_notification">Notification icon</string>
     <string name="toast_reminder_deleted">Reminder deleted</string>
     <string name="alert_dialog_complete_reminder_message">Complete this reminder?</string>
     <string name="alert_dialog_complete_reminder_complete">Complete</string>

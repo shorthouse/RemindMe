@@ -10,7 +10,7 @@ import com.google.android.material.composethemeadapter.MdcTheme
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dev.shorthouse.remindme.HiltTestActivity
-import dev.shorthouse.remindme.MainActivity
+import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.model.RepeatInterval
 import dev.shorthouse.remindme.util.TestUtil
 import org.junit.Before
@@ -28,7 +28,7 @@ class ReminderDetailsTest {
     @get:Rule(order = 2)
     var composeTestRule = createAndroidComposeRule<HiltTestActivity>()
 
-    private val testReminders = listOf(
+    private val reminders = listOf(
         TestUtil.createReminder(
             id = 1L,
             name = "Test Reminder Details",
@@ -75,18 +75,22 @@ class ReminderDetailsTest {
         hiltTestRule.inject()
     }
 
-    @Test
-    fun when_reminder_details_created_should_display_top_app_bar() {
+    private fun setDetailsContent(reminder: Reminder) {
         composeTestRule.setContent {
             MdcTheme {
                 ReminderDetailsScreenContent(
                     detailsViewModel = hiltViewModel(),
-                    reminder = testReminders[0].createDisplayReminder(),
+                    reminder = reminder.createDisplayReminder(),
                     onNavigateEdit = {},
                     onNavigateUp = {}
                 )
             }
         }
+    }
+
+    @Test
+    fun when_reminder_details_created_should_display_top_app_bar() {
+        setDetailsContent(reminders[0])
 
         composeTestRule.apply {
             onNodeWithText("Details").assertIsDisplayed()
@@ -97,6 +101,113 @@ class ReminderDetailsTest {
             onNodeWithContentDescription("More").performClick()
             onNodeWithText("Complete").assertIsDisplayed()
             onNodeWithText("Delete").assertIsDisplayed()
+        }
+    }
+
+    @Test
+    fun when_reminder_details_created_should_display_base_details() {
+        setDetailsContent(reminders[0])
+
+        composeTestRule.apply {
+            onNodeWithText("Test Reminder Details").assertIsDisplayed()
+
+            onNodeWithContentDescription("Calendar icon").assertIsDisplayed()
+            onNodeWithText("Sat, 01 Jan 2000").assertIsDisplayed()
+
+            onNodeWithContentDescription("Clock icon").assertIsDisplayed()
+            onNodeWithText("14:02").assertIsDisplayed()
+        }
+    }
+
+    @Test
+    fun when_reminder_has_repeat_interval_should_display_repeat_interval_section() {
+        setDetailsContent(reminders[1])
+
+        composeTestRule.apply {
+            onNodeWithText("Test Reminder Details with Repeat Interval").assertIsDisplayed()
+            onNodeWithContentDescription("Repeat icon").assertIsDisplayed()
+            onNodeWithText("2 weeks").assertIsDisplayed()
+        }
+    }
+
+    @Test
+    fun when_reminder_has_notes_should_display_notes_section() {
+        setDetailsContent(reminders[2])
+
+        composeTestRule.apply {
+            onNodeWithText("Test Reminder Details with Notes").assertIsDisplayed()
+            onNodeWithContentDescription("Notes icon").assertIsDisplayed()
+            onNodeWithText("notes").assertIsDisplayed()
+        }
+    }
+
+    @Test
+    fun when_reminder_has_notification_enabled_should_display_notification_section() {
+        setDetailsContent(reminders[3])
+
+        composeTestRule.apply {
+            onNodeWithText("Test Reminder Details with Notification Enabled").assertIsDisplayed()
+            onNodeWithContentDescription("Notification icon").assertIsDisplayed()
+            onNodeWithText("Notifications enabled").assertIsDisplayed()
+        }
+    }
+
+    @Test
+    fun when_reminder_has_all_optional_parts_enabled_should_display_all_optional_parts() {
+        setDetailsContent(reminders[4])
+
+        composeTestRule.apply {
+            onNodeWithText("Test Reminder Details with Everything").assertIsDisplayed()
+
+            onNodeWithContentDescription("Calendar icon").assertIsDisplayed()
+            onNodeWithContentDescription("Clock icon").assertIsDisplayed()
+            onNodeWithContentDescription("Repeat icon").assertIsDisplayed()
+            onNodeWithContentDescription("Notes icon").assertIsDisplayed()
+            onNodeWithContentDescription("Notification icon").assertIsDisplayed()
+
+            onNodeWithText("Sat, 01 Jan 2000").assertIsDisplayed()
+            onNodeWithText("14:02").assertIsDisplayed()
+            onNodeWithText("2 weeks").assertIsDisplayed()
+            onNodeWithText("notes").assertIsDisplayed()
+        }
+    }
+
+    @Test
+    fun when_reminder_with_largest_possible_name_should_display_correctly() {
+        setDetailsContent(reminders[5])
+
+        composeTestRule.apply {
+            onNodeWithText("m".repeat(200)).assertIsDisplayed()
+        }
+    }
+
+    @Test
+    fun when_delete_icon_clicked_should_show_alert_dialog() {
+        setDetailsContent(reminders[0])
+
+        composeTestRule.apply {
+            onNodeWithContentDescription("More").performClick()
+            onNodeWithText("Delete").performClick()
+
+            onNodeWithText("Delete this reminder?").assertIsDisplayed()
+            onNodeWithText("Cancel").assertIsDisplayed()
+            onNodeWithText("Delete").assertIsDisplayed()
+        }
+    }
+
+    @Test
+    fun when_delete_dialog_cancel_button_clicked_should_dismiss_delete_dialog() {
+        setDetailsContent(reminders[0])
+
+        composeTestRule.apply {
+            onNodeWithContentDescription("More").performClick()
+            onNodeWithText("Delete").performClick()
+
+            onNodeWithText("Cancel").performClick()
+
+            onNodeWithText("Delete this reminder?").assertDoesNotExist()
+            onNodeWithText("Cancel").assertDoesNotExist()
+            onNodeWithText("Delete").assertDoesNotExist()
         }
     }
 }
