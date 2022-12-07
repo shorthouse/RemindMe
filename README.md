@@ -14,7 +14,7 @@ The app has the following feature set:
  - Filter, search, and sort reminders
  - Edit, complete, and delete reminders
  - Dark mode
- - Reminders are automatically updated when a timezone change occurs 
+ - Automatic updates to reminders when a timezone shift occurs
 
 # Architecture
 RemindMe utilises modern components and follows best practices for architecture, including:
