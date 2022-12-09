@@ -22,9 +22,11 @@ import java.time.ZonedDateTime
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class UpdateReminderTimeZoneService @Inject constructor(
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
-) : Service() {
+class UpdateReminderTimeZoneService : Service() {
+
+    @Inject
+    @IoDispatcher
+    lateinit var ioDispatcher: CoroutineDispatcher
 
     @Inject
     lateinit var repository: ReminderRepository
