@@ -21,9 +21,11 @@ import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class UpdateDoneReminderService @Inject constructor(
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
-) : Service() {
+class UpdateDoneReminderService : Service() {
+
+    @Inject
+    @IoDispatcher
+    lateinit var ioDispatcher: CoroutineDispatcher
 
     @Inject
     lateinit var repository: ReminderRepository
