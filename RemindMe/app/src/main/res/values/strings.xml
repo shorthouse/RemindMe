@@ -9,7 +9,7 @@
     <string name="top_app_bar_search">Search</string>
     <string name="cd_top_app_bar_search">Search reminders</string>
     <string name="top_app_bar_sort">Sort</string>
-    <string name="cd_top_app_bar_sort">Sort</string>
+    <string name="cd_bottom_app_bar_sort">Sort</string>
     <string name="snackbar_reminder_completed">Reminder completed</string>
     <string name="snackbar_reminder_completed_undo">Undo</string>
 
@@ -100,10 +100,16 @@
     <string name="intent_key_notificationTitle">notificationTitle</string>
     <string name="intent_key_notificationText">notificationText</string>
     <string name="intent_key_timeZone">"time-zone"</string>
+
+
     <string name="cd_bottom_app_bar_menu">Menu</string>
     <string name="repeat_unit_day">Day</string>
     <string name="repeat_unit_week">Week</string>
     <string name="default_repeat_unit">1</string>
+    <string name="notification_rationale_title">Allow RemindMe to send you notifications?</string>
+    <string name="notification_rationale_message">This allows you to receive notifications for reminders</string>
+    <string name="notification_rationale_positive">Allow</string>
+    <string name="notification_rationale_negative">Deny</string>
     <string name="cd_back">Back</string>
     <string name="cd_more">More</string>
     <string name="alert_dialog_cancel">Cancel</string>
