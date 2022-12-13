@@ -26,11 +26,11 @@
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fragment_container_list"
+            android:name="dev.shorthouse.remindme.fragments.AllListFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:transitionGroup="true"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            tools:name="dev.shorthouse.remindme.fragments.ActiveListFragment"/>
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
         <FrameLayout
             android:id="@+id/scrim"
