@@ -22,6 +22,7 @@ class DisplayReminderNotificationReceiver : BroadcastReceiver() {
 
     private fun createNotificationChannel(context: Context) {
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
+
         val notificationChannel = NotificationChannel(
             context.getString(R.string.notification_channel_id_reminder),
             context.getString(R.string.notification_channel_name_reminder),

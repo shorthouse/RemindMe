@@ -57,23 +57,25 @@ class RescheduleNotificationsOnRebootService : Service() {
     }
 
     private fun createServiceNotificationChannel() {
+        val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+
         val notificationChannel = NotificationChannel(
-            getString(R.string.notification_channel_id_reboot_reschedule),
-            getString(R.string.notification_channel_name_reboot_reschedule),
+            getString(R.string.notification_channel_id_reminder),
+            getString(R.string.notification_channel_name_reminder),
             NotificationManager.IMPORTANCE_DEFAULT
         )
-        val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+
         notificationManager.createNotificationChannel(notificationChannel)
     }
 
     private fun getServiceNotification(): Notification {
         return NotificationCompat.Builder(
             this,
-            getString(R.string.notification_channel_id_reboot_reschedule)
+            getString(R.string.notification_channel_id_reminder)
         )
             .setContentTitle(getString(R.string.app_name))
             .setContentText(getString(R.string.notification_body_text_reboot_reschedule))
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setSmallIcon(R.drawable.ic_bell)
             .build()
     }
 
