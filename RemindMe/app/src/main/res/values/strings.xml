@@ -110,9 +110,10 @@
     <string name="notification_rationale_message">This allows you to receive notifications for reminders</string>
     <string name="notification_rationale_positive">Allow</string>
     <string name="notification_rationale_negative">Deny</string>
+<<<<<<< Updated upstream
+=======
     <string name="cd_back">Back</string>
     <string name="cd_more">More</string>
     <string name="alert_dialog_cancel">Cancel</string>
-    <string name="cd_top_bar_close_reminder">Close</string>
 >>>>>>> Stashed changes
 </resources>
