@@ -45,9 +45,8 @@ fun ReminderDetailsScreenContent(
 ) {
     Scaffold(
         topBar = {
-            ReminderDetailsTopAppBar(
-                onNavigateUp = onNavigateUp,
-                onEdit = onEdit,
+            ReminderDetailsTopBar(
+                onEdit = onNavigateEdit,
                 onDelete = {
                     detailsViewModel.deleteReminder()
                     onNavigateUp()
@@ -65,8 +64,7 @@ fun ReminderDetailsScreenContent(
 }
 
 @Composable
-fun ReminderDetailsTopAppBar(
-    onNavigateUp: () -> Unit,
+fun ReminderDetailsTopBar(
     onEdit: () -> Unit,
     onDelete: () -> Unit,
     onComplete: () -> Unit
@@ -94,7 +92,7 @@ fun ReminderDetailsTopAppBar(
     }
 
     TopAppBar(
-        modifier = Modifier.testTag("TopAppBar"),
+        modifier = Modifier.testTag("DetailsTopAppBar"),
         title = {
             Text(
                 text = stringResource(R.string.toolbar_title_details),
