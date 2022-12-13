@@ -1,7 +1,5 @@
 # RemindMe App
-**RemindMe** is an Android app that allows the user to set customised reminders. 
-
-Breathe a sigh of relief as your phone remembers all your important events and tasks for you, giving you more time to relax 🏖️.
+**RemindMe** is an Android app that allows the user to set customised reminders, giving you more time to relax 🏖️.
 
 The app is built using Kotlin and follows Android design and development best practices. 
 
