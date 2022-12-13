@@ -22,9 +22,11 @@ import java.time.ZonedDateTime
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class UpdateReminderTimeZoneService @Inject constructor(
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
-) : Service() {
+class UpdateReminderTimeZoneService : Service() {
+
+    @Inject
+    @IoDispatcher
+    lateinit var ioDispatcher: CoroutineDispatcher
 
     @Inject
     lateinit var repository: ReminderRepository
@@ -80,23 +82,25 @@ class UpdateReminderTimeZoneService @Inject constructor(
     }
 
     private fun createServiceNotificationChannel() {
+        val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+
         val notificationChannel = NotificationChannel(
-            getString(R.string.notification_channel_id_time_zone_update),
-            getString(R.string.notification_channel_name_time_zone_update),
+            getString(R.string.notification_channel_id_reminder),
+            getString(R.string.notification_channel_name_reminder),
             NotificationManager.IMPORTANCE_DEFAULT
         )
-        val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+
         notificationManager.createNotificationChannel(notificationChannel)
     }
 
     private fun getServiceNotification(): Notification {
         return NotificationCompat.Builder(
             this,
-            getString(R.string.notification_channel_id_time_zone_update)
+            getString(R.string.notification_channel_id_reminder)
         )
             .setContentTitle(getString(R.string.app_name))
             .setContentText(getString(R.string.notification_body_text_time_zone_update))
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setSmallIcon(R.drawable.ic_bell)
             .build()
     }
 
