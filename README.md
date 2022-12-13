@@ -1,4 +1,4 @@
-![RemindMe Main](https://user-images.githubusercontent.com/73708076/207445429-6c35cd2a-96dd-4ebe-81bc-9a321c7bb866.png)
+![RemindMe Main](https://user-images.githubusercontent.com/73708076/207454305-b870d65b-6065-4af2-ae4c-0ae64c1e6adc.png)
 
 # Overview
 **RemindMe** is an Android app that allows you to set customised reminders, giving you more time to relax 🏖️.
