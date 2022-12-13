@@ -40,13 +40,14 @@ fun ReminderDetailsScreen(
 fun ReminderDetailsScreenContent(
     reminder: DisplayReminder,
     detailsViewModel: DetailsViewModel,
-    onNavigateEdit: () -> Unit,
+    onEdit: () -> Unit,
     onNavigateUp: () -> Unit
 ) {
     Scaffold(
         topBar = {
-            ReminderDetailsTopBar(
-                onEdit = onNavigateEdit,
+            ReminderDetailsTopAppBar(
+                onNavigateUp = onNavigateUp,
+                onEdit = onEdit,
                 onDelete = {
                     detailsViewModel.deleteReminder()
                     onNavigateUp()
@@ -55,7 +56,6 @@ fun ReminderDetailsScreenContent(
                     detailsViewModel.completeReminder()
                     onNavigateUp()
                 },
-                onNavigateUp = onNavigateUp
             )
         },
         content = { innerPadding ->
@@ -65,11 +65,11 @@ fun ReminderDetailsScreenContent(
 }
 
 @Composable
-fun ReminderDetailsTopBar(
+fun ReminderDetailsTopAppBar(
+    onNavigateUp: () -> Unit,
     onEdit: () -> Unit,
     onDelete: () -> Unit,
-    onComplete: () -> Unit,
-    onNavigateUp: () -> Unit
+    onComplete: () -> Unit
 ) {
     var isMenuShown by remember { mutableStateOf(false) }
     var isDeleteDialogShown by remember { mutableStateOf(false) }
@@ -94,7 +94,7 @@ fun ReminderDetailsTopBar(
     }
 
     TopAppBar(
-        modifier = Modifier.testTag("DetailsTopAppBar"),
+        modifier = Modifier.testTag("TopAppBar"),
         title = {
             Text(
                 text = stringResource(R.string.toolbar_title_details),
@@ -267,7 +267,7 @@ private fun DetailsAlertDialog(
 
 @Preview(showBackground = true)
 @Composable
-private fun ReminderDetailsScaffoldPreview() {
+private fun ReminderDetailsScreenPreview() {
     MdcTheme {
         val reminder = DisplayReminder(
             id = 1,
@@ -282,7 +282,7 @@ private fun ReminderDetailsScaffoldPreview() {
         ReminderDetailsScreenContent(
             reminder = reminder,
             detailsViewModel = viewModel(),
-            onNavigateEdit = {},
+            onEdit = {},
             onNavigateUp = {}
         )
     }
