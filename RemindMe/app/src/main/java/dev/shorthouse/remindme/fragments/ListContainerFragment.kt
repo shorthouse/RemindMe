@@ -1,12 +1,17 @@
 package dev.shorthouse.remindme.fragments
 
+import android.Manifest
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.addCallback
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -29,6 +34,16 @@ import kotlinx.coroutines.launch
 class ListContainerFragment : Fragment() {
     private lateinit var binding: FragmentListContainerBinding
     private val viewModel: ListContainerViewModel by activityViewModels()
+
+    private val requestPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            if (isGranted) {
+                Log.i("Permission: ", "Granted")
+            } else {
+                Log.i("Permission: ", "Denied")
+            }
+        }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,6 +68,7 @@ class ListContainerFragment : Fragment() {
         setupBottomAppBar()
         setupBottomSheetNavigation()
         setupBottomSheetSort()
+        requestNotificationPermission()
     }
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
@@ -72,6 +88,31 @@ class ListContainerFragment : Fragment() {
             duration = resources.getInteger(R.integer.transition_duration_medium).toLong()
             excludeTarget(R.id.app_bar, true)
         }
+    }
+
+    private fun requestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= 33) {
+            when {
+                shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS) -> {
+                    showNotificationPermissionRationale()
+                }
+
+                else -> {
+                    requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                }
+            }
+        }
+    }
+
+    private fun showNotificationPermissionRationale() {
+        AlertDialog.Builder(requireContext())
+            .setTitle(getString(R.string.notification_rationale_title))
+            .setMessage(getString(R.string.notification_rationale_message))
+            .setPositiveButton(getString(R.string.notification_rationale_positive)) { _, _ ->
+                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            }
+            .setNegativeButton(getString(R.string.notification_rationale_negative)) { _, _ -> }
+            .show()
     }
 
     private fun setupToolbar() {
