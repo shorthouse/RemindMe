@@ -106,12 +106,10 @@
     <string name="repeat_unit_day">Day</string>
     <string name="repeat_unit_week">Week</string>
     <string name="default_repeat_unit">1</string>
-<<<<<<< Updated upstream
     <string name="notification_rationale_title">Allow RemindMe to send you notifications?</string>
     <string name="notification_rationale_message">This allows you to receive notifications for reminders</string>
     <string name="notification_rationale_positive">Allow</string>
     <string name="notification_rationale_negative">Deny</string>
-=======
     <string name="cd_back">Back</string>
     <string name="cd_more">More</string>
     <string name="alert_dialog_cancel">Cancel</string>
