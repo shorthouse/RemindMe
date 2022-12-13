@@ -22,10 +22,10 @@
     <string name="empty_state_all_subtitle">Add a reminder to get started</string>
 
     <!-- Add / edit reminder -->
-    <string name="toolbar_title_add_reminder">Add reminder</string>
+    <string name="top_bar_title_add_reminder">Add reminder</string>
     <string name="toolbar_title_edit_reminder">Edit reminder</string>
     <string name="menu_item_Save">Save</string>
-    <string name="cd_toolbar_item_save_reminder">Save reminder</string>
+    <string name="cd_top_bar_save_reminder">Save reminder</string>
     <string name="hint_reminder_name">RemindMe to…</string>
     <string name="hint_reminder_notes">Add notes</string>
     <string name="title_repeat_reminder">Repeat reminder</string>
@@ -106,11 +106,15 @@
     <string name="repeat_unit_day">Day</string>
     <string name="repeat_unit_week">Week</string>
     <string name="default_repeat_unit">1</string>
+<<<<<<< Updated upstream
     <string name="notification_rationale_title">Allow RemindMe to send you notifications?</string>
     <string name="notification_rationale_message">This allows you to receive notifications for reminders</string>
     <string name="notification_rationale_positive">Allow</string>
     <string name="notification_rationale_negative">Deny</string>
+=======
     <string name="cd_back">Back</string>
     <string name="cd_more">More</string>
     <string name="alert_dialog_cancel">Cancel</string>
+    <string name="cd_top_bar_close_reminder">Close</string>
+>>>>>>> Stashed changes
 </resources>

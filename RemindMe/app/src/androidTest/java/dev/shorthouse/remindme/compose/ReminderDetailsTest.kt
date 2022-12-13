@@ -81,7 +81,7 @@ class ReminderDetailsTest {
                 ReminderDetailsScreenContent(
                     detailsViewModel = hiltViewModel(),
                     reminder = reminder.createDisplayReminder(),
-                    onNavigateEdit = {},
+                    onEdit = {},
                     onNavigateUp = {}
                 )
             }

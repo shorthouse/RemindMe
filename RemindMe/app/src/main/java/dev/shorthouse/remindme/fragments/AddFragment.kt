@@ -18,7 +18,7 @@ class AddFragment : AddEditFragment() {
     override fun setupToolbar() {
         super.setupToolbar()
 
-        binding.toolbar.title = getString(R.string.toolbar_title_add_reminder)
+        binding.toolbar.title = getString(R.string.top_bar_title_add_reminder)
     }
 
     override fun populateReminderData() {
