@@ -3,7 +3,7 @@
 # Overview
 **RemindMe** is an Android app that allows you to set customised reminders, giving you more time to relax 🏖️.
 
-The app is built using Kotlin and follows Android design and development best practices. 
+The app is built using Kotlin and follows best practices for Android design and development. 
 
 The core features of the app are fully completed, and the app is under heavy development to further improve its feature set. Currently, the app is being migrated to Jetpack Compose.
 
