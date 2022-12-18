@@ -9,4 +9,3 @@ data class DisplayReminder(
     val repeatInterval: DisplayRepeatInterval?,
     val notes: String?,
 )
-
