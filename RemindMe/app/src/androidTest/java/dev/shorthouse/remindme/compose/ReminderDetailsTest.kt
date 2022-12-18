@@ -5,7 +5,6 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.android.material.composethemeadapter.MdcTheme
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -79,10 +78,11 @@ class ReminderDetailsTest {
         composeTestRule.setContent {
             MdcTheme {
                 ReminderDetailsScreenContent(
-                    detailsViewModel = hiltViewModel(),
                     reminder = reminder.createDisplayReminder(),
                     onEdit = {},
-                    onNavigateUp = {}
+                    onNavigateUp = {},
+                    onDelete = {},
+                    onComplete = {}
                 )
             }
         }
