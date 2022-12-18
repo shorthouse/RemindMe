@@ -16,7 +16,7 @@ import androidx.compose.ui.res.*
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.android.material.composethemeadapter.MdcTheme
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.model.DisplayReminder
@@ -25,36 +25,42 @@ import dev.shorthouse.remindme.viewmodel.DetailsViewModel
 
 @Composable
 fun ReminderDetailsScreen(
-    detailsViewModel: DetailsViewModel = viewModel(),
-    onNavigateEdit: () -> Unit,
-    onNavigateUp: () -> Unit
+    detailsViewModel: DetailsViewModel = hiltViewModel(),
+    onNavigateUp: () -> Unit,
+    onEdit: () -> Unit,
 ) {
+    val onDelete = {
+        detailsViewModel.deleteReminder()
+        onNavigateUp()
+    }
+
+    val onComplete = {
+        detailsViewModel.completeReminder()
+        onNavigateUp()
+    }
+
     val reminder by detailsViewModel.displayReminder.observeAsState()
 
     reminder?.let {
-        ReminderDetailsScreenContent(it, detailsViewModel, onNavigateEdit, onNavigateUp)
+        ReminderDetailsScreenContent(it, onNavigateUp, onEdit, onDelete, onComplete)
     }
 }
 
 @Composable
 fun ReminderDetailsScreenContent(
     reminder: DisplayReminder,
-    detailsViewModel: DetailsViewModel,
+    onNavigateUp: () -> Unit,
     onEdit: () -> Unit,
-    onNavigateUp: () -> Unit
+    onDelete: () -> Unit,
+    onComplete: () -> Unit,
 ) {
     Scaffold(
         topBar = {
             ReminderDetailsTopBar(
-                onEdit = onNavigateEdit,
-                onDelete = {
-                    detailsViewModel.deleteReminder()
-                    onNavigateUp()
-                },
-                onComplete = {
-                    detailsViewModel.completeReminder()
-                    onNavigateUp()
-                },
+                onNavigateUp = onNavigateUp,
+                onEdit = onEdit,
+                onDelete = onDelete,
+                onComplete = onComplete
             )
         },
         content = { innerPadding ->
@@ -65,6 +71,7 @@ fun ReminderDetailsScreenContent(
 
 @Composable
 fun ReminderDetailsTopBar(
+    onNavigateUp: () -> Unit,
     onEdit: () -> Unit,
     onDelete: () -> Unit,
     onComplete: () -> Unit
@@ -279,9 +286,10 @@ private fun ReminderDetailsScreenPreview() {
 
         ReminderDetailsScreenContent(
             reminder = reminder,
-            detailsViewModel = viewModel(),
+            onNavigateUp = {},
             onEdit = {},
-            onNavigateUp = {}
+            onDelete = {},
+            onComplete = {}
         )
     }
 }
