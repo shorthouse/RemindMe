@@ -10,13 +10,11 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.composethemeadapter.MdcTheme
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.transition.MaterialSharedAxis
 import dagger.hilt.android.AndroidEntryPoint
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.compose.ReminderDetailsScreen
 import dev.shorthouse.remindme.databinding.FragmentDetailsBinding
-import dev.shorthouse.remindme.utilities.showToast
 import dev.shorthouse.remindme.viewmodel.DetailsViewModel
 
 @AndroidEntryPoint
@@ -48,7 +46,7 @@ class DetailsFragment : Fragment() {
                     MdcTheme {
                         ReminderDetailsScreen(
                             detailsViewModel = viewModel,
-                            onNavigateEdit = { findNavController().navigate(editAction) },
+                            onEdit = { findNavController().navigate(editAction) },
                             onNavigateUp = { findNavController().navigateUp() },
                         )
                     }
