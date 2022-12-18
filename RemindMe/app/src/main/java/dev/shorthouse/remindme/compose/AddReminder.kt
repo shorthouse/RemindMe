@@ -2,62 +2,82 @@ package dev.shorthouse.remindme.compose
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.android.material.composethemeadapter.MdcTheme
 import dev.shorthouse.remindme.R
-import dev.shorthouse.remindme.model.DisplayReminder
-import dev.shorthouse.remindme.model.DisplayRepeatInterval
-import dev.shorthouse.remindme.theme.White
-import dev.shorthouse.remindme.viewmodel.AddEditViewModel
-import java.time.ZonedDateTime
+import dev.shorthouse.remindme.model.InputReminder
+import dev.shorthouse.remindme.model.InputRepeatInterval
 
 @Composable
 fun AddReminderScreen(
-    addEditViewModel: AddEditViewModel = viewModel(),
+    //addViewModel: AddViewModel = hiltViewModel(),
     onNavigateUp: () -> Unit,
-    onSave: () -> Unit,
 ) {
-    // TODO put this into the fragment instead and pass the reminder in
+    //var inputReminder by remember { mutableStateOf(addViewModel.addReminderInitialValues) }
 
-    val addReminderDefaults = DisplayReminder(
-        name = "",
-        startDate = addEditViewModel.getFormattedDate(ZonedDateTime.now()),
-        startTime = addEditViewModel.getFormattedTimeNextHour(ZonedDateTime.now()),
-        isNotificationSent = false,
-        repeatInterval = DisplayRepeatInterval(
-            R.plurals.interval_days,
-            1
-        ),
-        notes = null
-    )
+    var inputReminder by remember {
+        mutableStateOf(
+            InputReminder(
+                name = "",
+                startDate = "Wed, 22 Mar 2000",
+                startTime = "15:30",
+                isNotificationSent = false,
+                repeatInterval = InputRepeatInterval(
+                    R.plurals.interval_days,
+                    1
+                ),
+                notes = null,
+                isComplete = false
+            )
+        )
+    }
+    val maxNameLength = 200
+
+    val onSave = {
+        //addViewModel.addReminder(inputReminder.toReminder())
+        onNavigateUp()
+    }
+
+    val onNameChange = { name: String ->
+        if (name.length <= maxNameLength) inputReminder = inputReminder.copy(name = name)
+    }
+
+    val onNotificationChange = { isNotificationSent: Boolean ->
+        inputReminder = inputReminder.copy(isNotificationSent = isNotificationSent)
+    }
 
     AddReminderScaffold(
-        reminder = addReminderDefaults,
+        reminder = inputReminder,
+        onNavigateUp = onNavigateUp,
         onSave = onSave,
-        onNavigateUp = onNavigateUp
+        onNameChange = onNameChange,
+        onNotificationChange = onNotificationChange
     )
 }
 
 @Composable
 fun AddReminderScaffold(
-    reminder: DisplayReminder,
+    reminder: InputReminder,
     onSave: () -> Unit,
     onNavigateUp: () -> Unit,
+    onNameChange: (String) -> Unit,
+    onNotificationChange: (Boolean) -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -68,8 +88,10 @@ fun AddReminderScaffold(
         },
         content = { innerPadding ->
             AddReminderContent(
+                innerPadding = innerPadding,
                 reminder = reminder,
-                innerPadding = innerPadding
+                onNameChange = onNameChange,
+                onNotificationChange = onNotificationChange
             )
         }
     )
@@ -108,8 +130,10 @@ fun AddReminderTopBar(
 
 @Composable
 fun AddReminderContent(
-    reminder: DisplayReminder,
-    innerPadding: PaddingValues
+    innerPadding: PaddingValues,
+    reminder: InputReminder,
+    onNameChange: (String) -> Unit,
+    onNotificationChange: (Boolean) -> Unit,
 ) {
     Column(
         Modifier
@@ -121,63 +145,179 @@ fun AddReminderContent(
                 top = innerPadding.calculateTopPadding(),
             )
     ) {
-        Spacer(modifier = Modifier.height(dimensionResource(R.dimen.margin_small)))
+        ReminderNameInput(
+            reminder,
+            onNameChange = onNameChange
+        )
 
-        ReminderNameInput(reminder)
+        AddReminderNotification(
+            reminder.isNotificationSent,
+            onNotificationChange
+        )
+
+//        val icons = listOf(
+//            R.drawable.ic_calendar,
+//            R.drawable.ic_clock,
+//            R.drawable.ic_notification_outline,
+//            R.drawable.ic_repeat,
+//        )
+//
+//        val iconContentDescriptions = listOf(
+//            R.string.cd_icon_calendar,
+//            R.string.cd_icon_clock,
+//            R.string.cd_icon_notification,
+//            R.string.cd_icon_repeat
+//        )
+//
+//        val titleTexts = listOf(
+//            reminder.startDate,
+//            reminder.startTime,
+//            stringResource(R.string.title_send_notification),
+//            stringResource(R.string.title_repeat_reminder),
+//        )
+//
+//        for (i in icons.indices) {
+//            Spacer(modifier = Modifier.height(dimensionResource(R.dimen.margin_large)))
+//
+//            AddReminderRow(
+//                iconId = icons[i],
+//                iconContentDescriptionId = iconContentDescriptions[i],
+//                titleText = titleTexts[i]
+//            )
+//        }
+
+//        AddReminderRow(
+//            reminder.startDate,
+//            R.drawable.ic_calendar,
+//            R.string.cd_icon_calendar
+//        )
+//
+//        AddReminderRow(
+//            reminder.startTime,
+//            R.drawable.ic_clock,
+//            R.string.cd_icon_clock
+//        )
+//
+//        AddReminderRow(
+//            stringResource(R.string.title_send_notification),
+//            R.drawable.ic_notification_outline,
+//            R.string.cd_icon_notification
+//        )
+//
+//        AddReminderRow(
+//            stringResource(R.string.title_repeat_reminder),
+//            R.drawable.ic_repeat,
+//            R.string.cd_icon_repeat
+//        )
     }
 }
 
 @Composable
-fun ReminderNameInput(reminder: DisplayReminder) {
-    var reminderName by remember { mutableStateOf(reminder.name) }
-    val maxLength = 200
-    val textStyle = TextStyle(
-        fontSize = 20.sp,
-        fontWeight = FontWeight.Bold
-    )
+fun ReminderNameInput(
+    reminder: InputReminder,
+    onNameChange: (String) -> Unit,
+) {
+    val textStyle = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.Bold)
 
-    OutlinedTextField(
-        value = reminderName,
-        placeholder = {
-            Text(
-                text = stringResource(R.string.hint_reminder_name),
-                fontSize = textStyle.fontSize,
-                fontWeight = textStyle.fontWeight
-            )
-        },
-        singleLine = false,
-        keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.Text,
-            imeAction = ImeAction.Done
-        ),
-        colors = TextFieldDefaults.outlinedTextFieldColors(
-            focusedBorderColor = White,
-            unfocusedBorderColor = White
-        ),
+    BasicTextField(
+        value = reminder.name,
+        onValueChange = onNameChange,
         textStyle = textStyle,
-        onValueChange = { if (it.length <= maxLength) reminderName = it },
+        keyboardOptions = KeyboardOptions(
+            imeAction = ImeAction.Done,
+            autoCorrect = true
+        ),
+        decorationBox = { innerTextField ->
+            if (reminder.name.isEmpty()) {
+                Text(
+                    text = stringResource(R.string.hint_reminder_name),
+                    fontSize = textStyle.fontSize,
+                    fontWeight = textStyle.fontWeight,
+                    color = colorResource(R.color.subtitle_grey)
+                )
+            }
+            innerTextField()
+        },
         modifier = Modifier
+            .padding(top = dimensionResource(R.dimen.margin_large))
             .fillMaxWidth()
     )
 }
 
-@Preview
 @Composable
-private fun AddReminderScreenPreview() {
-    MdcTheme {
-        val addReminderDefaults = DisplayReminder(
-            name = "",
-            startDate = "Wed, 22 Mar 2000",
-            startTime = "14:30",
-            isNotificationSent = false,
-            repeatInterval = DisplayRepeatInterval(R.plurals.interval_days, 1),
-            notes = null
+fun AddReminderNotification(
+    isNotificationSent: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Icon(
+            painter = painterResource(R.drawable.ic_notification_outline),
+            contentDescription = stringResource(R.string.cd_icon_notification),
+            tint = colorResource(R.color.icon_grey),
         )
 
-        AddReminderScaffold(
-            reminder = addReminderDefaults,
-            onNavigateUp = {},
-            onSave = {}
+        Spacer(modifier = Modifier.width(dimensionResource(R.dimen.margin_normal)))
+
+        Text(
+            text = stringResource(R.string.title_send_notification),
+            fontSize = 18.sp,
+        )
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        Switch(
+            checked = isNotificationSent,
+            onCheckedChange = onCheckedChange
+        )
+    }
+}
+
+//@Composable
+//fun AddReminderRow(
+//    iconId: Int,
+//    iconContentDescriptionId: Int,
+//    titleText: String,
+//    onValueChange:
+//) {
+//    Row(
+//        verticalAlignment = Alignment.CenterVertically,
+//    ) {
+//        Icon(
+//            painter = painterResource(iconId),
+//            contentDescription = stringResource(iconContentDescriptionId),
+//            tint = colorResource(R.color.icon_grey),
+//        )
+//
+//        Spacer(modifier = Modifier.width(dimensionResource(R.dimen.margin_normal)))
+//
+//        Text(
+//            text = titleText,
+//            fontSize = 18.sp,
+//        )
+//    }
+//}
+
+@Preview
+@Composable
+private fun AddReminderContentPreview() {
+    MdcTheme {
+        val previewReminder = InputReminder(
+            name = "",
+            startDate = "Wed, 22 Mar 2000",
+            startTime = "15:30",
+            isNotificationSent = false,
+            repeatInterval = InputRepeatInterval(
+                R.plurals.interval_days,
+                1
+            ),
+            notes = null,
+            isComplete = false
+        )
+
+        AddReminderScreen(
+            onNavigateUp = {}
         )
     }
 }
