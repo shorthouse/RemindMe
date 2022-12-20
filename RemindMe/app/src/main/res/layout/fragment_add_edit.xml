@@ -279,7 +279,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:checked="true"
-                        android:text="@string/repeat_unit_day" />
+                        android:text="@string/day" />
 
                     <RadioButton
                         android:id="@+id/repeat_unit_weeks"
