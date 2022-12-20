@@ -52,12 +52,12 @@ data class InputReminder(
 }
 
 data class InputRepeatInterval(
-    var pluralCount: Int,
+    var amount: Int,
     var pluralId: Int,
 ) {
     fun toRepeatInterval(): RepeatInterval {
         return RepeatInterval(
-            this.pluralCount.toLong(),
+            this.amount.toLong(),
             pluralIdToChronoUnit(pluralId)
         )
     }
