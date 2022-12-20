@@ -60,7 +60,7 @@ class DetailsViewModel @Inject constructor(
     fun getRepeatIntervalStringId(repeatInterval: RepeatInterval?): Int? {
         if (repeatInterval == null) return null
 
-        return when (repeatInterval.timeUnit) {
+        return when (repeatInterval.unit) {
             ChronoUnit.DAYS -> R.plurals.interval_days
             else -> R.plurals.interval_weeks
         }
