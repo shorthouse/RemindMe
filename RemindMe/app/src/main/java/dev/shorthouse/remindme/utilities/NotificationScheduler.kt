@@ -47,9 +47,9 @@ class NotificationScheduler @Inject constructor(
     }
 
     private fun getAlarmRepeatInterval(repeatInterval: RepeatInterval): Long {
-        val repeatIntervalDays = when (repeatInterval.timeUnit) {
-            ChronoUnit.DAYS -> repeatInterval.timeValue
-            else -> repeatInterval.timeValue * DAYS_IN_WEEK
+        val repeatIntervalDays = when (repeatInterval.unit) {
+            ChronoUnit.DAYS -> repeatInterval.amount
+            else -> repeatInterval.amount * DAYS_IN_WEEK
         }
 
         return Duration.ofDays(repeatIntervalDays).toMillis()
