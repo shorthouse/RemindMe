@@ -1,25 +1,22 @@
 package dev.shorthouse.remindme.compose.state
 
 import androidx.compose.runtime.*
-import dev.shorthouse.remindme.R
-import dev.shorthouse.remindme.model.InputRepeatInterval
 
 @Stable
 interface ReminderInputState {
     var reminderName: String
     var isNotificationSent: Boolean
     var isRepeatReminder: Boolean
-    var repeatInterval: InputRepeatInterval
+    var repeatAmount: String
+    var repeatUnit: String
 }
 
 private class ReminderInputStateImpl(
     reminderName: String = "",
     isNotificationSent: Boolean = false,
     isRepeatReminder: Boolean = false,
-    repeatInterval: InputRepeatInterval = InputRepeatInterval(
-        R.plurals.interval_days,
-        1
-    )
+    repeatAmount: String = "1",
+    repeatUnit: String = "Day",
 ) : ReminderInputState {
     private var _reminderName by mutableStateOf(reminderName, structuralEqualityPolicy())
 
@@ -46,13 +43,20 @@ private class ReminderInputStateImpl(
             _isRepeatReminder = value
         }
 
-    private var _repeatInterval by mutableStateOf(repeatInterval, structuralEqualityPolicy())
+    private var _repeatAmount by mutableStateOf(repeatAmount, structuralEqualityPolicy())
 
-    // TODO dont think custom set needed if just setting value
-    override var repeatInterval: InputRepeatInterval
-        get() = _repeatInterval
+    override var repeatAmount: String
+        get() = _repeatAmount
         set(value) {
-            _repeatInterval = value
+            _repeatAmount = value
+        }
+
+    private var _repeatUnit by mutableStateOf(repeatUnit, structuralEqualityPolicy())
+
+    override var repeatUnit: String
+        get() = _repeatUnit
+        set(value) {
+            _repeatUnit = value
         }
 }
 
