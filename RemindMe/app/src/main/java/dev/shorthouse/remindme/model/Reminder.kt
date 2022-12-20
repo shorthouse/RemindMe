@@ -42,8 +42,8 @@ data class Reminder(
         if (repeatInterval == null) return null
 
         return DisplayRepeatInterval(
-            getRepeatIntervalStringId(repeatInterval.timeUnit),
-            repeatInterval.timeValue.toInt()
+            getRepeatIntervalStringId(repeatInterval.unit),
+            repeatInterval.amount.toInt()
         )
     }
 
@@ -70,3 +70,8 @@ data class Reminder(
         }
     }
 }
+
+data class RepeatInterval(
+    val amount: Long,
+    val unit: ChronoUnit
+)
