@@ -103,7 +103,7 @@
 
 
     <string name="cd_bottom_app_bar_menu">Menu</string>
-    <string name="repeat_unit_day">Day</string>
+    <string name="day">Day</string>
     <string name="repeat_unit_week">Week</string>
     <string name="default_repeat_unit">1</string>
     <string name="notification_rationale_title">Allow RemindMe to send you notifications?</string>
