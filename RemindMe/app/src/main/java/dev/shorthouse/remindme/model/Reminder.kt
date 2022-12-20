@@ -5,6 +5,7 @@ import androidx.room.PrimaryKey
 import dev.shorthouse.remindme.utilities.DATE_PATTERN
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 
 @Entity
 data class Reminder(
@@ -34,3 +35,8 @@ data class Reminder(
         .toLocalTime()
         .toString()
 }
+
+data class RepeatInterval(
+    val amount: Long,
+    val unit: ChronoUnit
+) 

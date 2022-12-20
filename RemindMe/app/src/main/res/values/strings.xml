@@ -110,4 +110,5 @@
     <string name="notification_rationale_message">This allows you to receive notifications for reminders</string>
     <string name="notification_rationale_positive">Allow</string>
     <string name="notification_rationale_negative">Deny</string>
+    <string name="cd_bottom_app_bar_sort">Sort</string>
 </resources>

@@ -91,7 +91,7 @@ class AddEditViewModel @Inject constructor(
     }
 
     fun getRepeatValue(repeatInterval: RepeatInterval): String {
-        return repeatInterval.timeValue.toString()
+        return repeatInterval.amount.toString()
     }
 
     fun convertDateTimeStringToDateTime(dateText: String, timeText: String): ZonedDateTime {
@@ -117,7 +117,7 @@ class AddEditViewModel @Inject constructor(
     }
 
     fun getRadioIdFromRepeatUnit(repeatInterval: RepeatInterval): Int {
-        return when (repeatInterval.timeUnit) {
+        return when (repeatInterval.unit) {
             ChronoUnit.DAYS -> R.id.repeat_unit_days
             else -> R.id.repeat_unit_weeks
         }

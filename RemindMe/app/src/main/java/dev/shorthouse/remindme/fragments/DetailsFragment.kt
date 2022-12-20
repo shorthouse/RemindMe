@@ -84,8 +84,8 @@ class DetailsFragment : Fragment() {
             reminder.repeatInterval?.let {
                 repeatInterval.text = resources.getQuantityString(
                     viewModel.getRepeatIntervalStringId(it),
-                    it.timeValue.toInt(),
-                    it.timeValue
+                    it.amount.toInt(),
+                    it.amount
                 )
             }
         }
