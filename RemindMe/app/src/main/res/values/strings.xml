@@ -84,6 +84,8 @@
         <item quantity="other">%d weeks</item>
     </plurals>
 
+    <string name="reminder_details_repeat_interval">%1s %2s</string>
+
     <!-- Notifications -->
     <string name="notification_body_text_reboot_reschedule">Scheduling reminder notifications after reboot</string>
     <string name="notification_body_text_time_zone_update">Updating reminder timezones</string>
@@ -114,5 +116,8 @@
     <string name="cd_more">More</string>
     <string name="alert_dialog_cancel">Cancel</string>
     <string name="cd_top_bar_close_reminder">Close</string>
->>>>>>> Stashed changes
+    <string name="alert_dialog_title_delete">Delete this reminder?</string>
+    <string name="alert_dialog_confirm_delete">Delete</string>
+    <string name="alert_dialog_title_complete">Complete this reminder?</string>
+    <string name="alert_dialog_confirm_complete">Complete</string>
 </resources>
