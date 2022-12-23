@@ -13,18 +13,12 @@ import java.time.temporal.ChronoUnit
 data class Reminder(
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0L,
-
     val name: String,
-
     val startDateTime: ZonedDateTime,
-
-    val repeatInterval: RepeatInterval?,
-
-    val notes: String?,
-
-    val isComplete: Boolean,
-
     val isNotificationSent: Boolean,
+    val repeatInterval: RepeatInterval?,
+    val notes: String?,
+    val isComplete: Boolean
 ) {
     fun createDisplayReminder(): DisplayReminder {
         return DisplayReminder(

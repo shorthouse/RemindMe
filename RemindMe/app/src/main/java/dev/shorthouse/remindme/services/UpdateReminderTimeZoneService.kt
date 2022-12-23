@@ -69,10 +69,10 @@ class UpdateReminderTimeZoneService : Service() {
                 reminder.id,
                 reminder.name,
                 ZonedDateTime.of(reminder.startDateTime.toLocalDateTime(), newZoneId),
+                reminder.isNotificationSent,
                 reminder.repeatInterval,
                 reminder.notes,
                 reminder.isComplete,
-                reminder.isNotificationSent
             )
 
             CoroutineScope(ioDispatcher).launch {
