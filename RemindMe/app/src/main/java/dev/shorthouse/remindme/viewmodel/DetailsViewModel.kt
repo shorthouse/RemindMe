@@ -5,7 +5,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.di.IoDispatcher
-import dev.shorthouse.remindme.model.DisplayReminder
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.model.RepeatInterval
 import dev.shorthouse.remindme.utilities.NotificationScheduler
@@ -24,10 +23,6 @@ class DetailsViewModel @Inject constructor(
     private val reminderId = state.get<Long>("id") ?: 1L
 
     val reminder = repository.getReminder(reminderId).asLiveData()
-
-    val displayReminder: LiveData<DisplayReminder> = Transformations.map(reminder) { reminder ->
-        reminder.createDisplayReminder()
-    }
 
     fun getReminder(id: Long): LiveData<Reminder> {
         return repository.getReminder(id).asLiveData()
