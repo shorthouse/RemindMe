@@ -1,11 +1,8 @@
 package dev.shorthouse.remindme.compose
 
-import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
@@ -16,6 +13,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.*
 import androidx.compose.ui.text.TextStyle
@@ -26,20 +25,27 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.android.material.composethemeadapter.MdcTheme
 import dev.shorthouse.remindme.R
-import dev.shorthouse.remindme.compose.state.ReminderInputState
+import dev.shorthouse.remindme.compose.state.ReminderState
+import dev.shorthouse.remindme.viewmodel.AddViewModel
 
 @Composable
 fun AddReminderScreen(
-    //addViewModel: AddViewModel = hiltViewModel(),
+    addViewModel: AddViewModel = hiltViewModel(),
     onNavigateUp: () -> Unit,
 ) {
-    val reminderState by remember { mutableStateOf(ReminderInputState()) }
+    //TODO
+    // Focus keyboard on reminder name if its add
+
+    val reminderState by remember { mutableStateOf(ReminderState()) }
 
     val onSave = {
-        //addViewModel.addReminder(inputReminder.toReminder())
-        onNavigateUp()
+        if (addViewModel.isReminderValid(reminderState.toReminder())) {
+            addViewModel.addReminder(reminderState.toReminder())
+            onNavigateUp()
+        }
     }
 
     AddReminderScaffold(
@@ -51,7 +57,7 @@ fun AddReminderScreen(
 
 @Composable
 fun AddReminderScaffold(
-    reminderState: ReminderInputState,
+    reminderState: ReminderState,
     onSave: () -> Unit,
     onNavigateUp: () -> Unit,
 ) {
@@ -95,23 +101,23 @@ fun AddReminderTopBar(
             IconButton(onClick = onSave) {
                 Icon(
                     painter = painterResource(R.drawable.ic_tick),
-                    contentDescription = stringResource(R.string.cd_top_bar_save_reminder)
+                    contentDescription = stringResource(R.string.cd_top_bar_save_reminder),
+                    tint = Color.White
                 )
             }
         }
     )
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun AddReminderContent(
     innerPadding: PaddingValues,
-    reminderState: ReminderInputState,
+    reminderState: ReminderState,
 ) {
     Column(
-        Modifier
-            .fillMaxWidth()
+        modifier = Modifier
             .verticalScroll(rememberScrollState())
+            .fillMaxWidth()
             .padding(
                 start = dimensionResource(R.dimen.margin_normal),
                 end = dimensionResource(R.dimen.margin_normal),
@@ -119,28 +125,53 @@ fun AddReminderContent(
             )
     ) {
         val maxNameLength = 200
-        ReminderNameInput(
-            reminderState = reminderState,
-            onNameChange = { if (it.length <= maxNameLength) reminderState.reminderName = it }
+        RemindMeTextField(
+            text = reminderState.name,
+            onTextChange = { if (it.length <= maxNameLength) reminderState.name = it },
+            textStyle = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.Bold),
+            hintText = stringResource(R.string.hint_reminder_name),
+            imeAction = ImeAction.Done,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = dimensionResource(R.dimen.margin_normal))
         )
 
-        AddReminderSwitchRow(
+        TextWithLeftIcon(
+            icon = painterResource(R.drawable.ic_calendar),
+            text = reminderState.date,
+            modifier = Modifier
+                .padding(top = dimensionResource(R.dimen.margin_large))
+                .fillMaxWidth()
+
+        )
+
+        TextWithLeftIcon(
+            icon = painterResource(R.drawable.ic_clock),
+            text = reminderState.time,
+            modifier = Modifier
+                .padding(top = dimensionResource(R.dimen.margin_large))
+                .fillMaxWidth()
+        )
+
+        Spacer(Modifier.height(dimensionResource(R.dimen.margin_small)))
+
+        ReminderSwitchRow(
+            icon = painterResource(R.drawable.ic_notification_outline),
+            switchText = stringResource(R.string.title_send_notification),
             isChecked = reminderState.isNotificationSent,
-            onCheckedChange = { reminderState.isNotificationSent = it },
-            iconId = R.drawable.ic_notification_outline,
-            switchStringId = R.string.title_send_notification
+            onCheckedChange = { reminderState.isNotificationSent = it }
         )
 
-        AddReminderSwitchRow(
+        ReminderSwitchRow(
+            icon = painterResource(R.drawable.ic_repeat),
+            switchText = stringResource(R.string.title_repeat_reminder),
             isChecked = reminderState.isRepeatReminder,
-            onCheckedChange = { reminderState.isRepeatReminder = it },
-            iconId = R.drawable.ic_repeat,
-            switchStringId = R.string.title_repeat_reminder
+            onCheckedChange = { reminderState.isRepeatReminder = it }
         )
 
-        val maxRepeatAmountLength = 2
         if (reminderState.isRepeatReminder) {
-            ReminderRepeatIntervalInput(
+            val maxRepeatAmountLength = 2
+            RepeatIntervalInput(
                 reminderState = reminderState,
                 onRepeatUnitChange = { reminderState.repeatUnit = it },
                 onRepeatAmountChange = {
@@ -148,101 +179,30 @@ fun AddReminderContent(
                 }
             )
         }
-    }
-}
 
-@Composable
-@OptIn(ExperimentalComposeUiApi::class)
-private fun ReminderRepeatIntervalInput(
-    reminderState: ReminderInputState,
-    onRepeatUnitChange: (String) -> Unit,
-    onRepeatAmountChange: (String) -> Unit
-) {
-    val repeatAmount = reminderState.repeatAmount.toIntOrNull() ?: 0
-    val pluralDays = pluralStringResource(R.plurals.radio_button_days, repeatAmount)
-    val pluralWeeks = pluralStringResource(R.plurals.radio_button_weeks, repeatAmount)
-    val repeatUnitOptions = listOf(pluralDays, pluralWeeks)
-
-    reminderState.repeatUnit = if (stringResource(R.string.day) in reminderState.repeatUnit) {
-        pluralDays
-    } else {
-        pluralWeeks
-    }
-
-    Row(
-        horizontalArrangement = Arrangement.SpaceEvenly,
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .fillMaxWidth()
-    ) {
-        AddReminderRepeatAmount(
+        val maxNotesLength = 2000
+        ReminderNotesInput(
             reminderState = reminderState,
-            onRepeatAmountChange = onRepeatAmountChange
-        )
-
-        AddReminderRepeatUnitRadios(
-            reminderState = reminderState,
-            onRepeatUnitChange = onRepeatUnitChange,
-            repeatUnitOptions = repeatUnitOptions
+            onNotesChange = { if (it.length <= maxNotesLength) reminderState.notes = it },
         )
     }
-
-
 }
 
 @Composable
-fun ReminderNameInput(
-    reminderState: ReminderInputState,
-    onNameChange: (String) -> Unit,
-) {
-    val textStyle = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.Bold)
-
-    BasicTextField(
-        value = reminderState.reminderName,
-        onValueChange = onNameChange,
-        textStyle = textStyle,
-        keyboardOptions = KeyboardOptions(
-            imeAction = ImeAction.Done,
-            autoCorrect = true
-        ),
-        decorationBox = { innerTextField ->
-            if (reminderState.reminderName.isEmpty()) {
-                Text(
-                    text = stringResource(R.string.hint_reminder_name),
-                    fontSize = textStyle.fontSize,
-                    fontWeight = textStyle.fontWeight,
-                    color = colorResource(R.color.subtitle_grey)
-                )
-            }
-            innerTextField()
-        },
-        modifier = Modifier
-            .padding(top = dimensionResource(R.dimen.margin_large))
-            .fillMaxWidth()
-    )
-}
-
-@Composable
-fun AddReminderSwitchRow(
+fun ReminderSwitchRow(
+    icon: Painter,
+    switchText: String,
     isChecked: Boolean,
-    onCheckedChange: (Boolean) -> Unit,
-    @DrawableRes iconId: Int,
-    @StringRes switchStringId: Int,
+    onCheckedChange: (Boolean) -> Unit
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
     ) {
-        Icon(
-            painter = painterResource(iconId),
-            contentDescription = null,
-            tint = colorResource(R.color.icon_grey),
-        )
-
-        Spacer(modifier = Modifier.width(dimensionResource(R.dimen.margin_normal)))
-
-        Text(
-            text = stringResource(switchStringId),
-            fontSize = 18.sp,
+        TextWithLeftIcon(
+            icon = icon,
+            text = switchText,
         )
 
         Spacer(modifier = Modifier.weight(1f))
@@ -255,30 +215,97 @@ fun AddReminderSwitchRow(
 }
 
 @Composable
-fun AddReminderRepeatAmount(
-    reminderState: ReminderInputState,
-    onRepeatAmountChange: (String) -> Unit
+@OptIn(ExperimentalComposeUiApi::class)
+private fun RepeatIntervalInput(
+    reminderState: ReminderState,
+    onRepeatAmountChange: (String) -> Unit,
+    onRepeatUnitChange: (String) -> Unit
+) {
+    val repeatAmount = reminderState.repeatAmount.toIntOrNull() ?: 0
+    val pluralDays = pluralStringResource(R.plurals.radio_button_days, repeatAmount)
+    val pluralWeeks = pluralStringResource(R.plurals.radio_button_weeks, repeatAmount)
+    val repeatUnitOptions = listOf(pluralDays, pluralWeeks)
+
+    reminderState.repeatUnit = when {
+        stringResource(R.string.day) in reminderState.repeatUnit -> pluralDays
+        else -> pluralWeeks
+    }
+
+    Column {
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    top = dimensionResource(R.dimen.margin_normal),
+                    bottom = dimensionResource(R.dimen.margin_tiny)
+                )
+        ) {
+            Text(
+                text = "Repeats every",
+                color = colorResource(R.color.subtitle_grey)
+            )
+        }
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            Row(
+                horizontalArrangement = Arrangement.End,
+                modifier = Modifier
+                    .weight(1f)
+            ) {
+                RepeatAmountInput(
+                    reminderState = reminderState,
+                    onRepeatAmountChange = onRepeatAmountChange,
+                )
+            }
+
+            Spacer(Modifier.width(dimensionResource(R.dimen.margin_x_large)))
+
+            Row(
+                horizontalArrangement = Arrangement.Start,
+                modifier = Modifier
+                    .weight(1f)
+            ) {
+                RepeatUnitInput(
+                    reminderState = reminderState,
+                    onRepeatUnitChange = onRepeatUnitChange,
+                    repeatUnitOptions = repeatUnitOptions,
+                )
+            }
+        }
+    }
+
+
+}
+
+@Composable
+fun RepeatAmountInput(
+    reminderState: ReminderState,
+    onRepeatAmountChange: (String) -> Unit,
 ) {
     OutlinedTextField(
         value = reminderState.repeatAmount,
         onValueChange = onRepeatAmountChange,
-        textStyle = TextStyle(
-            textAlign = TextAlign.Center
-        ),
+        textStyle = TextStyle(textAlign = TextAlign.Center),
         keyboardOptions = KeyboardOptions(
             imeAction = ImeAction.Done,
             keyboardType = KeyboardType.Number
         ),
         modifier = Modifier
-            .width(56.dp)
+            .width(72.dp)
+            .padding(end = dimensionResource(R.dimen.margin_normal))
     )
 }
 
 @Composable
-fun AddReminderRepeatUnitRadios(
-    reminderState: ReminderInputState,
+fun RepeatUnitInput(
+    reminderState: ReminderState,
     onRepeatUnitChange: (String) -> Unit,
-    repeatUnitOptions: List<String>
+    repeatUnitOptions: List<String>,
 ) {
     Column {
         repeatUnitOptions.forEach { text ->
@@ -288,20 +315,51 @@ fun AddReminderRepeatUnitRadios(
                     .selectable(
                         selected = (text == reminderState.repeatUnit),
                         onClick = { onRepeatUnitChange(text) }
-                    ),
+                    )
             ) {
                 RadioButton(
                     selected = (text == reminderState.repeatUnit),
                     onClick = { onRepeatUnitChange(text) }
                 )
 
-                Spacer(modifier = Modifier.width(dimensionResource(R.dimen.margin_small)))
+                Spacer(modifier = Modifier.width(dimensionResource(R.dimen.margin_tiny)))
 
                 Text(
                     text = text
                 )
             }
         }
+    }
+}
+
+@Composable
+fun ReminderNotesInput(
+    reminderState: ReminderState,
+    onNotesChange: (String) -> Unit
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = dimensionResource(R.dimen.margin_small))
+    ) {
+        Icon(
+            painter = painterResource(R.drawable.ic_notes),
+            contentDescription = null,
+            tint = colorResource(R.color.icon_grey),
+        )
+
+        Spacer(Modifier.width(dimensionResource(R.dimen.margin_normal)))
+
+        RemindMeTextField(
+            text = reminderState.notes.orEmpty(),
+            onTextChange = onNotesChange,
+            textStyle = TextStyle(fontSize = 18.sp, fontWeight = FontWeight.Normal),
+            hintText = stringResource(R.string.hint_reminder_notes),
+            imeAction = ImeAction.None,
+            modifier = Modifier
+                .fillMaxWidth()
+        )
     }
 }
 
@@ -315,7 +373,7 @@ private fun sanitiseRepeatAmount(repeatAmount: String): String {
 @Composable
 private fun AddReminderContentPreview() {
     MdcTheme {
-        val reminderState by remember { mutableStateOf(ReminderInputState()) }
+        val reminderState by remember { mutableStateOf(ReminderState()) }
         reminderState.isRepeatReminder = true
 
         AddReminderScaffold(
