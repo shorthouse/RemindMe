@@ -1,41 +1,66 @@
 package dev.shorthouse.remindme.fragments
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import com.google.android.material.composethemeadapter.MdcTheme
+import com.google.android.material.transition.MaterialSharedAxis
 import dagger.hilt.android.AndroidEntryPoint
 import dev.shorthouse.remindme.R
-import dev.shorthouse.remindme.utilities.showKeyboard
-import java.time.ZonedDateTime
+import dev.shorthouse.remindme.compose.AddReminderScreen
+import dev.shorthouse.remindme.databinding.FragmentAddEditBinding
+import dev.shorthouse.remindme.viewmodel.AddViewModel
 
 @AndroidEntryPoint
-class AddFragment : AddEditFragment() {
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+class AddFragment : Fragment() {
+    private lateinit var binding: FragmentAddEditBinding
+    private val viewModel: AddViewModel by viewModels()
 
-        focusKeyboardOnReminderName()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        setTransitionAnimations()
     }
 
-    override fun setupToolbar() {
-        super.setupToolbar()
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentAddEditBinding.inflate(inflater, container, false)
 
-        binding.toolbar.title = getString(R.string.top_bar_title_add_reminder)
-    }
+        binding.addEditComposeView.apply {
+            setViewCompositionStrategy(
+                ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed
+            )
 
-    override fun populateReminderData() {
-        binding.apply {
-            startDateInput.setText(viewModel.getFormattedDate(ZonedDateTime.now()))
-            startTimeInput.setText(viewModel.getFormattedTimeNextHour(ZonedDateTime.now()))
+            setContent {
+                MdcTheme {
+                    AddReminderScreen(
+                        addViewModel = viewModel,
+                        onNavigateUp = { findNavController().navigateUp() },
+                    )
+                }
+            }
         }
+
+        return binding.root
     }
 
-    override fun saveReminder() {
-        val newReminder = getReminderFromInputData()
-        viewModel.addReminder(newReminder)
-    }
+    private fun setTransitionAnimations() {
+        enterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, true).apply {
+            duration = resources.getInteger(R.integer.transition_duration_medium).toLong()
+            excludeTarget(R.id.app_bar, true)
+        }
 
-    private fun focusKeyboardOnReminderName() {
-        if (binding.nameInput.requestFocus()) {
-            showKeyboard()
+        returnTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false).apply {
+            duration = resources.getInteger(R.integer.transition_duration_medium).toLong()
+            excludeTarget(R.id.app_bar, true)
         }
     }
 }
