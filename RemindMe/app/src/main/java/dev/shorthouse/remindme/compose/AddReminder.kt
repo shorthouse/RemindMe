@@ -207,6 +207,12 @@ fun AddReminderContent(
             reminderState = reminderState,
             onNotesChange = { if (it.length <= maxNotesLength) reminderState.notes = it },
         )
+
+        Spacer(Modifier.height(dimensionResource(R.dimen.margin_normal)))
+    }
+
+    LaunchedEffect(Unit) {
+        focusRequester.requestFocus()
     }
 }
 
