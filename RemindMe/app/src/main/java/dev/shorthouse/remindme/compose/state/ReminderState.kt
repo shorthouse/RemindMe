@@ -4,6 +4,7 @@ import androidx.compose.runtime.*
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.model.RepeatInterval
 import java.time.LocalDateTime
+import java.time.LocalTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
@@ -14,7 +15,7 @@ fun ReminderState(reminder: Reminder): ReminderState = ReminderStateImpl(reminde
 fun ReminderState(
     name: String,
     date: String,
-    time: String,
+    time: LocalTime,
     isNotificationSent: Boolean,
     isRepeatReminder: Boolean,
     repeatAmount: String,
@@ -35,7 +36,7 @@ fun ReminderState(
 interface ReminderState {
     var name: String
     var date: String
-    var time: String
+    var time: LocalTime
     var isNotificationSent: Boolean
     var isRepeatReminder: Boolean
     var repeatAmount: String
@@ -48,7 +49,7 @@ interface ReminderState {
 private class ReminderStateImpl(
     name: String = "",
     date: String = getDateToday(),
-    time: String = getTimeNextHour(),
+    time: LocalTime = getTimeNextHour(),
     isNotificationSent: Boolean = false,
     isRepeatReminder: Boolean = false,
     repeatAmount: String = "1",
@@ -77,12 +78,11 @@ private class ReminderStateImpl(
                 .toString()
         }
 
-        private fun getTimeNextHour(): String {
+        private fun getTimeNextHour(): LocalTime {
             return ZonedDateTime.now()
                 .truncatedTo(ChronoUnit.HOURS)
                 .plusHours(1)
                 .toLocalTime()
-                .toString()
         }
 
         private fun getStateDate(zonedDateTime: ZonedDateTime): String {
@@ -92,10 +92,9 @@ private class ReminderStateImpl(
                 .toString()
         }
 
-        private fun getStateTime(zonedDateTime: ZonedDateTime): String {
+        private fun getStateTime(zonedDateTime: ZonedDateTime): LocalTime {
             return zonedDateTime
                 .toLocalTime()
-                .toString()
         }
 
         private fun getStateRepeatUnit(repeatInterval: RepeatInterval?): String {
@@ -109,7 +108,7 @@ private class ReminderStateImpl(
             }
         }
 
-        private fun getReminderStartDateTime(date: String, time: String): ZonedDateTime {
+        private fun getReminderStartDateTime(date: String, time: LocalTime): ZonedDateTime {
             return LocalDateTime
                 .parse("$date $time", dateTimeFormatter)
                 .atZone(ZoneId.systemDefault())
@@ -132,7 +131,7 @@ private class ReminderStateImpl(
             startDateTime = getReminderStartDateTime(_date, _time),
             isNotificationSent = _isNotificationSent,
             repeatInterval = if (isRepeatReminder) getReminderRepeatInterval(_repeatAmount, _repeatUnit) else null,
-            notes = _notes,
+            notes = _notes?.trim()?.ifBlank { null },
             isComplete = false
         )
     }
@@ -152,7 +151,7 @@ private class ReminderStateImpl(
         }
 
     private var _time by mutableStateOf(time, structuralEqualityPolicy())
-    override var time: String
+    override var time: LocalTime
         get() = _time
         set(value) {
             _time = value
