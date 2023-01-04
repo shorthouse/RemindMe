@@ -1,4 +1,5 @@
 package dev.shorthouse.remindme.fragments
+
 //
 //import android.app.TimePickerDialog
 //import android.os.Bundle
@@ -148,24 +149,24 @@ package dev.shorthouse.remindme.fragments
 ////        }
 ////    }
 //
-////    private fun displayDatePicker() {
-////        val constraints = CalendarConstraints.Builder()
-////            .setValidator(DateValidatorPointForward.now())
-////            .build()
-////
-////        val datePicker = MaterialDatePicker.Builder.datePicker()
-////            .setCalendarConstraints(constraints)
-////            .setTitleText("")
-////            .build()
-////
-////        datePicker.addOnPositiveButtonClickListener { dateTimestamp ->
-////            binding.startDateInput.setText(
-////                viewModel.convertEpochMilliToDate(dateTimestamp)
-////            )
-////        }
-////
-////        datePicker.show(parentFragmentManager, getString(R.string.tag_reminder_date_picker))
-////    }
+//    private fun displayDatePicker() {
+//        val constraints = CalendarConstraints.Builder()
+//            .setValidator(DateValidatorPointForward.now())
+//            .build()
+//
+//        val datePicker = MaterialDatePicker.Builder.datePicker()
+//            .setCalendarConstraints(constraints)
+//            .setTitleText("")
+//            .build()
+//
+//        datePicker.addOnPositiveButtonClickListener { dateTimestamp ->
+//            binding.startDateInput.setText(
+//                viewModel.convertEpochMilliToDate(dateTimestamp)
+//            )
+//        }
+//
+//        datePicker.show(parentFragmentManager, getString(R.string.tag_reminder_date_picker))
+//    }
 ////
 ////    private fun displayTimePicker() {
 ////        val onTimeSetListener =
