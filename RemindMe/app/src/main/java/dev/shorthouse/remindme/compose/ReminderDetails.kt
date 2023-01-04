@@ -20,6 +20,7 @@ import com.google.android.material.composethemeadapter.MdcTheme
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.compose.state.ReminderState
 import dev.shorthouse.remindme.viewmodel.DetailsViewModel
+import java.time.LocalTime
 
 @Composable
 fun ReminderDetailsScreen(
@@ -191,7 +192,7 @@ fun ReminderDetailsContent(
 
         val detailTexts = buildList {
             add(reminderState.date)
-            add(reminderState.time)
+            add(reminderState.time.toString())
             if (reminderState.isRepeatReminder) add(
                 stringResource(
                     R.string.reminder_details_repeat_interval,
@@ -257,7 +258,7 @@ private fun ReminderDetailsScreenPreview() {
                 ReminderState(
                     name = "Yoga tonight",
                     date = "Wed, 22 Mar 2000",
-                    time = "14:30",
+                    time = LocalTime.of(14, 30),
                     isNotificationSent = true,
                     isRepeatReminder = true,
                     repeatAmount = "2",
