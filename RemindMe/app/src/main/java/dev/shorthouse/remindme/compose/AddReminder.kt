@@ -27,51 +27,72 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.android.material.composethemeadapter.MdcTheme
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.DateValidatorPointForward
+import com.google.android.material.datepicker.MaterialDatePicker
+import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.compose.state.ReminderState
 import dev.shorthouse.remindme.viewmodel.AddViewModel
+import kotlinx.coroutines.launch
 
 @Composable
 fun AddReminderScreen(
     addViewModel: AddViewModel = hiltViewModel(),
     onNavigateUp: () -> Unit,
 ) {
-    //TODO
-    // Focus keyboard on reminder name if its add
-
     val reminderState by remember { mutableStateOf(ReminderState()) }
+    val scaffoldState = rememberScaffoldState()
+    val coroutineScope = rememberCoroutineScope()
+    val context = LocalContext.current
 
-    val onSave = {
-        if (addViewModel.isReminderValid(reminderState.toReminder())) {
-            addViewModel.addReminder(reminderState.toReminder())
+    val onSave: () -> Unit = {
+        val reminder = reminderState.toReminder()
+
+        if (addViewModel.isReminderValid(reminder)) {
+            addViewModel.addReminder(reminder)
             onNavigateUp()
+        } else {
+            val errorMessage = addViewModel.getErrorMessage(reminder).asString(context)
+
+            coroutineScope.launch {
+                scaffoldState.snackbarHostState.showSnackbar(
+                    message = errorMessage,
+                    duration = SnackbarDuration.Short
+                )
+            }
         }
     }
 
     AddReminderScaffold(
         reminderState = reminderState,
+        scaffoldState = scaffoldState,
         onNavigateUp = onNavigateUp,
-        onSave = onSave,
+        onSave = onSave
     )
 }
 
 @Composable
 fun AddReminderScaffold(
     reminderState: ReminderState,
+    scaffoldState: ScaffoldState,
     onSave: () -> Unit,
-    onNavigateUp: () -> Unit,
+    onNavigateUp: () -> Unit
 ) {
     Scaffold(
+        scaffoldState = scaffoldState,
         topBar = {
             AddReminderTopBar(
                 onNavigateUp = onNavigateUp,
                 onSave = onSave
             )
         },
-        content = { innerPadding ->
+        content = { scaffoldPadding ->
             AddReminderContent(
-                innerPadding = innerPadding,
                 reminderState = reminderState,
+                modifier = Modifier
+                    .padding(scaffoldPadding)
+                    .fillMaxSize()
             )
         }
     )
