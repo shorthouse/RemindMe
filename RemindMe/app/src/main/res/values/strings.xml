@@ -31,9 +31,8 @@
     <string name="title_repeat_reminder">Repeat reminder</string>
     <string name="title_send_notification">Send notification</string>
     <string name="repeats_every_header">Repeats every</string>
-    <string name="error_name_empty">The name cannot be empty.</string>
-    <string name="error_time_past">The start time cannot be in the past.</string>
-    <string name="error_interval_empty">The repeat interval cannot be empty.</string>
+    <string name="error_name_empty">The reminder name cannot be empty</string>
+    <string name="error_time_past">The reminder start time cannot be in the past</string>
     <string name="error_input">Error</string>
     <string name="tag_reminder_date_picker">reminder_date_picker</string>
     <string name="toast_reminder_saved">Reminder saved</string>
@@ -120,4 +119,6 @@
     <string name="alert_dialog_confirm_delete">Delete</string>
     <string name="alert_dialog_title_complete">Complete this reminder?</string>
     <string name="alert_dialog_confirm_complete">Complete</string>
+    <string name="dialog_ok">Ok</string>
+    <string name="dialog_cancel">Cancel</string>
 </resources>
