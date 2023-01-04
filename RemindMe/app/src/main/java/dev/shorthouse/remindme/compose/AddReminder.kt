@@ -132,18 +132,19 @@ fun AddReminderTopBar(
 
 @Composable
 fun AddReminderContent(
-    innerPadding: PaddingValues,
     reminderState: ReminderState,
+    modifier: Modifier = Modifier
 ) {
+    val focusRequester = remember { FocusRequester() }
+
     Column(
-        modifier = Modifier
-            .verticalScroll(rememberScrollState())
-            .fillMaxWidth()
+        modifier = modifier
             .padding(
                 start = dimensionResource(R.dimen.margin_normal),
-                end = dimensionResource(R.dimen.margin_normal),
-                top = innerPadding.calculateTopPadding(),
+                top = dimensionResource(R.dimen.margin_normal),
+                end = dimensionResource(R.dimen.margin_normal)
             )
+            .verticalScroll(rememberScrollState())
     ) {
         val maxNameLength = 200
         RemindMeTextField(
