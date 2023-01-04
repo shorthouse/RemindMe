@@ -397,15 +397,38 @@ private fun sanitiseRepeatAmount(repeatAmount: String): String {
         .filter { it.isDigit() }
 }
 
+private fun showDatePicker(
+    activity: AppCompatActivity,
+    reminderState: ReminderState,
+) {
+    val constraints = CalendarConstraints.Builder()
+        .setValidator(DateValidatorPointForward.now())
+        .build()
+
+    val datePicker = MaterialDatePicker.Builder.datePicker()
+        .setCalendarConstraints(constraints)
+        .setTitleText("")
+        .build()
+
+    datePicker.addOnPositiveButtonClickListener { dateTimestamp ->
+        reminderState.date = dateTimestamp.toString()
+    }
+
+    datePicker.show(activity.supportFragmentManager, datePicker.toString())
+}
+
 @Preview
 @Composable
 private fun AddReminderContentPreview() {
     MdcTheme {
         val reminderState by remember { mutableStateOf(ReminderState()) }
+        val scaffoldState = rememberScaffoldState()
+
         reminderState.isRepeatReminder = true
 
         AddReminderScaffold(
             reminderState = reminderState,
+            scaffoldState = scaffoldState,
             onNavigateUp = {},
             onSave = {}
         )
