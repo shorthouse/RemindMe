@@ -7,10 +7,12 @@
     <color name="on_primary">@color/text_off_black</color>
 
     <color name="surface">@color/white</color>
+    <color name="on_surface">@color/primary</color>
 
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="light_blue">#FF1387FF</color>
+    <color name="blue">#FF2A60EB</color>
 
     <color name="text_off_black">#212121</color>
     <color name="subtitle_grey">#FF777D7F</color>
