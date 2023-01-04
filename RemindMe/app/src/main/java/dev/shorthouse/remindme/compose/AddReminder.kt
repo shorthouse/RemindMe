@@ -1,20 +1,22 @@
 package dev.shorthouse.remindme.compose
 
+import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.*
 import androidx.compose.ui.text.TextStyle
@@ -155,7 +157,13 @@ fun AddReminderContent(
             imeAction = ImeAction.Done,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = dimensionResource(R.dimen.margin_normal))
+                .focusRequester(focusRequester)
+        )
+
+        val dateDialogState = rememberMaterialDialogState()
+        DatePicker(
+            dialogState = dateDialogState,
+            reminderState = reminderState
         )
 
         TextWithLeftIcon(
@@ -164,15 +172,22 @@ fun AddReminderContent(
             modifier = Modifier
                 .padding(top = dimensionResource(R.dimen.margin_large))
                 .fillMaxWidth()
+                .clickable { dateDialogState.show() }
+        )
 
+        val timeDialogState = rememberMaterialDialogState()
+        TimePicker(
+            dialogState = timeDialogState,
+            reminderState = reminderState
         )
 
         TextWithLeftIcon(
             icon = painterResource(R.drawable.ic_clock),
-            text = reminderState.time,
+            text = reminderState.time.toString(),
             modifier = Modifier
                 .padding(top = dimensionResource(R.dimen.margin_large))
                 .fillMaxWidth()
+                .clickable { timeDialogState.show() }
         )
 
         Spacer(Modifier.height(dimensionResource(R.dimen.margin_small)))
@@ -270,7 +285,7 @@ private fun RepeatIntervalInput(
                 )
         ) {
             Text(
-                text = "Repeats every",
+                text = stringResource(R.string.repeats_every_header),
                 color = colorResource(R.color.subtitle_grey)
             )
         }
@@ -306,8 +321,6 @@ private fun RepeatIntervalInput(
             }
         }
     }
-
-
 }
 
 @Composable
