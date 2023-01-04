@@ -83,9 +83,9 @@ class UpdateDoneReminderService : Service() {
     private fun getUpdatedStartDateTime(reminder: Reminder): ZonedDateTime {
         val repeatInterval = reminder.repeatInterval ?: return reminder.startDateTime
 
-        val repeatDuration = when (repeatInterval.timeUnit) {
-            ChronoUnit.DAYS -> Duration.ofDays(repeatInterval.timeValue)
-            else -> Duration.ofDays(repeatInterval.timeValue * DAYS_IN_WEEK)
+        val repeatDuration = when (repeatInterval.unit) {
+            ChronoUnit.DAYS -> Duration.ofDays(repeatInterval.amount)
+            else -> Duration.ofDays(repeatInterval.amount * DAYS_IN_WEEK)
         }
 
         val passedDuration = Duration.between(reminder.startDateTime, ZonedDateTime.now())

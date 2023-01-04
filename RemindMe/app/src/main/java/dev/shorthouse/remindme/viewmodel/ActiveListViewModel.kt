@@ -113,9 +113,9 @@ class ActiveListViewModel @Inject constructor(
     private fun getUpdatedStartDateTime(reminder: Reminder): ZonedDateTime {
         val repeatInterval = reminder.repeatInterval ?: return reminder.startDateTime
 
-        val repeatDuration = when (repeatInterval.timeUnit) {
-            ChronoUnit.DAYS -> repeatInterval.timeValue.days
-            else -> (repeatInterval.timeValue * DAYS_IN_WEEK).days
+        val repeatDuration = when (repeatInterval.unit) {
+            ChronoUnit.DAYS -> repeatInterval.amount.days
+            else -> (repeatInterval.amount * DAYS_IN_WEEK).days
         }
 
         val epochSecondNow = ZonedDateTime.now().toEpochSecond()

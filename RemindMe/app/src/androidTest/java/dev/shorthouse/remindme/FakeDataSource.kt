@@ -49,10 +49,10 @@ class FakeDataSource(private var reminders: MutableList<Reminder> = mutableListO
             uncompletedReminder.id,
             uncompletedReminder.name,
             uncompletedReminder.startDateTime,
+            uncompletedReminder.isNotificationSent,
             uncompletedReminder.repeatInterval,
             uncompletedReminder.notes,
             true,
-            uncompletedReminder.isNotificationSent
         )
 
         reminders[reminderToCompleteIndex] = completedReminder

@@ -14,6 +14,7 @@ private val LightColors = lightColors(
     secondary = Blue300,
     onSecondary = White,
     surface = White,
+    onSurface = Blue500,
     onBackground = White
 )
 
@@ -23,6 +24,7 @@ private val DarkColors = darkColors(
     secondary = Blue500,
     onSecondary = OffBlack,
     surface = Grey900,
+    onSurface = Blue500
 )
 
 @Composable
@@ -37,4 +39,3 @@ fun RemindMeTheme(
         content = content
     )
 }
-

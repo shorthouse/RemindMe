@@ -5,11 +5,11 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.android.material.composethemeadapter.MdcTheme
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dev.shorthouse.remindme.HiltTestActivity
+import dev.shorthouse.remindme.compose.state.ReminderState
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.model.RepeatInterval
 import dev.shorthouse.remindme.util.TestUtil
@@ -78,11 +78,12 @@ class ReminderDetailsTest {
     private fun setDetailsContent(reminder: Reminder) {
         composeTestRule.setContent {
             MdcTheme {
-                ReminderDetailsScreenContent(
-                    detailsViewModel = hiltViewModel(),
-                    reminder = reminder.createDisplayReminder(),
+                ReminderDetailsScaffold(
+                    reminderState = ReminderState(reminder),
                     onEdit = {},
-                    onNavigateUp = {}
+                    onNavigateUp = {},
+                    onDelete = {},
+                    onComplete = {}
                 )
             }
         }
