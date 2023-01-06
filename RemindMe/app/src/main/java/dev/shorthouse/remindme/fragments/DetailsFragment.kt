@@ -13,7 +13,7 @@ import com.google.android.material.composethemeadapter.MdcTheme
 import com.google.android.material.transition.MaterialSharedAxis
 import dagger.hilt.android.AndroidEntryPoint
 import dev.shorthouse.remindme.R
-import dev.shorthouse.remindme.compose.ReminderDetailsScreen
+import dev.shorthouse.remindme.compose.screen.ReminderDetailsScreen
 import dev.shorthouse.remindme.databinding.FragmentDetailsBinding
 import dev.shorthouse.remindme.viewmodel.DetailsViewModel
 

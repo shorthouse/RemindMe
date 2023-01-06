@@ -21,7 +21,6 @@ class DetailsViewModel @Inject constructor(
     state: SavedStateHandle
 ) : ViewModel() {
     private val reminderId = state.get<Long>("id") ?: 1L
-
     val reminder = repository.getReminder(reminderId).asLiveData()
 
     fun getReminder(id: Long): LiveData<Reminder> {
