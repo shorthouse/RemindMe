@@ -13,6 +13,7 @@ import java.time.temporal.ChronoUnit
 fun ReminderState(): ReminderState = ReminderStateImpl()
 fun ReminderState(reminder: Reminder): ReminderState = ReminderStateImpl(reminder)
 fun ReminderState(
+    id: Long,
     name: String,
     date: String,
     time: LocalTime,
@@ -22,6 +23,7 @@ fun ReminderState(
     repeatUnit: String,
     notes: String?
 ): ReminderState = ReminderStateImpl(
+    id = id,
     name = name,
     date = date,
     time = time,
@@ -34,6 +36,7 @@ fun ReminderState(
 
 @Stable
 interface ReminderState {
+    var id: Long
     var name: String
     var date: String
     var time: LocalTime
@@ -47,6 +50,7 @@ interface ReminderState {
 }
 
 private class ReminderStateImpl(
+    id: Long = 0L,
     name: String = "",
     date: String = getDateToday(),
     time: LocalTime = getTimeNextHour(),
@@ -57,6 +61,7 @@ private class ReminderStateImpl(
     notes: String? = ""
 ) : ReminderState {
     constructor(reminder: Reminder) : this(
+        id = reminder.id,
         name = reminder.name,
         date = getStateDate(reminder.startDateTime),
         time = getStateTime(reminder.startDateTime),
@@ -127,6 +132,7 @@ private class ReminderStateImpl(
 
     override fun toReminder(): Reminder {
         return Reminder(
+            id = _id,
             name = _name,
             startDateTime = getReminderStartDateTime(_date, _time),
             isNotificationSent = _isNotificationSent,
@@ -135,6 +141,13 @@ private class ReminderStateImpl(
             isComplete = false
         )
     }
+
+    private var _id by mutableStateOf(id, structuralEqualityPolicy())
+    override var id: Long
+        get() = _id
+        set(value) {
+            _id = value
+        }
 
     private var _name by mutableStateOf(name, structuralEqualityPolicy())
     override var name: String
