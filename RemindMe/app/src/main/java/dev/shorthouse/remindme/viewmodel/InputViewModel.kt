@@ -20,13 +20,6 @@ class InputViewModel @Inject constructor(
     private val notificationScheduler: NotificationScheduler,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : ViewModel() {
-    fun saveReminder(reminder: Reminder) {
-        when (reminder.id) {
-            0L -> addReminder(reminder)
-            else -> editReminder(reminder)
-        }
-    }
-
     fun isReminderValid(reminder: Reminder): Boolean {
         return reminder.name.isNotBlank() &&
                 reminder.startDateTime.isAfter(ZonedDateTime.now())
@@ -36,6 +29,13 @@ class InputViewModel @Inject constructor(
         return when {
             reminder.name.isBlank() -> UiText.StringResource(R.string.error_name_empty)
             else -> UiText.StringResource(R.string.error_time_past)
+        }
+    }
+
+    fun saveReminder(reminder: Reminder) {
+        when (reminder.id) {
+            0L -> addReminder(reminder)
+            else -> editReminder(reminder)
         }
     }
 
