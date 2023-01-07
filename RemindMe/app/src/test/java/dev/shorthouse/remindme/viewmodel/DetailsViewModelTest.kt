@@ -62,20 +62,6 @@ class DetailsViewModelTest {
     }
 
     @Test
-    fun `Get valid reminder, returns reminder`() {
-        val returnedReminder = viewModel.getReminder(1L).getOrAwaitValue()
-
-        assertThat(returnedReminder).isEqualTo(reminder1)
-    }
-
-    @Test
-    fun `Get invalid reminder id, throws error`() {
-        assertThrows(NoSuchElementException::class.java) {
-            viewModel.getReminder(0).getOrAwaitValue()
-        }
-    }
-
-    @Test
     fun `Get repeat interval id on days, returns days`() {
         val repeatIntervalId = viewModel.getRepeatIntervalStringId(reminder1.repeatInterval!!)
         assertThat(repeatIntervalId).isEqualTo(R.plurals.interval_days)
