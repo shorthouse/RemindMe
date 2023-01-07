@@ -23,10 +23,6 @@ class DetailsViewModel @Inject constructor(
     private val reminderId = state.get<Long>("id") ?: 1L
     val reminder = repository.getReminder(reminderId).asLiveData()
 
-    fun getReminder(id: Long): LiveData<Reminder> {
-        return repository.getReminder(id).asLiveData()
-    }
-
     fun deleteReminder() {
         reminder.value?.let {
             if (it.isNotificationSent) {
