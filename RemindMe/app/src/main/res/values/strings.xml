@@ -23,7 +23,7 @@
 
     <!-- Add / edit reminder -->
     <string name="top_bar_title_add_reminder">Add reminder</string>
-    <string name="toolbar_title_edit_reminder">Edit reminder</string>
+    <string name="top_bar_title_edit_reminder">Edit reminder</string>
     <string name="menu_item_Save">Save</string>
     <string name="cd_top_bar_save_reminder">Save reminder</string>
     <string name="hint_reminder_name">RemindMe to…</string>
