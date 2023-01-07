@@ -87,7 +87,6 @@ fun ReminderInputScaffold(
     )
 }
 
-
 @Composable
 fun ReminderInputTopBar(
     topBarTitle: String,
@@ -102,7 +101,8 @@ fun ReminderInputTopBar(
             IconButton(onClick = onNavigateUp) {
                 Icon(
                     painter = painterResource(R.drawable.ic_close),
-                    contentDescription = stringResource(R.string.cd_top_bar_close_reminder)
+                    contentDescription = stringResource(R.string.cd_top_bar_close_reminder),
+                    tint = colorResource(R.color.on_primary)
                 )
             }
         },
@@ -171,17 +171,37 @@ fun ReminderInputContent(
 
 @Preview
 @Composable
-private fun ReminderInputPreview() {
+private fun ReminderAddPreview() {
     MdcTheme {
         val reminderState by remember { mutableStateOf(ReminderState()) }
         val scaffoldState = rememberScaffoldState()
 
+        ReminderInputScaffold(
+            reminderState = reminderState,
+            scaffoldState = scaffoldState,
+            topBarTitle = stringResource(R.string.top_bar_title_add_reminder),
+            onNavigateUp = {},
+            onSave = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun ReminderEditPreview() {
+    MdcTheme {
+        val reminderState by remember { mutableStateOf(ReminderState()) }
+        val scaffoldState = rememberScaffoldState()
+
+        reminderState.name = "Yoga with Alice"
         reminderState.isRepeatReminder = true
+        reminderState.isNotificationSent = true
+        reminderState.notes = "Don't forget the yoga mat!"
 
         ReminderInputScaffold(
             reminderState = reminderState,
             scaffoldState = scaffoldState,
-            topBarTitle = "Add / Edit Reminder",
+            topBarTitle = stringResource(R.string.top_bar_title_edit_reminder),
             onNavigateUp = {},
             onSave = {},
         )
