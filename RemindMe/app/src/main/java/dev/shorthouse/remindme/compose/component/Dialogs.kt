@@ -54,7 +54,10 @@ fun ReminderDatePickerDialog(
     reminderState: ReminderState,
     dialogState: MaterialDialogState
 ) {
-    val dialogButtonTextStyle = TextStyle(color = colorResource(R.color.on_surface), fontWeight = FontWeight.Bold)
+    val dialogButtonTextStyle = TextStyle(
+        color = colorResource(R.color.on_surface),
+        fontWeight = FontWeight.Bold
+    )
 
     MaterialDialog(
         dialogState = dialogState,
@@ -83,7 +86,10 @@ fun ReminderTimePickerDialog(
     reminderState: ReminderState,
     dialogState: MaterialDialogState
 ) {
-    val dialogButtonTextStyle = TextStyle(color = colorResource(R.color.on_surface), fontWeight = FontWeight.Bold)
+    val dialogButtonTextStyle = TextStyle(
+        color = colorResource(R.color.on_surface),
+        fontWeight = FontWeight.Bold
+    )
 
     MaterialDialog(
         dialogState = dialogState,

@@ -33,10 +33,11 @@ fun ReminderNameInput(reminderState: ReminderState, focusRequester: FocusRequest
     ReminderTextField(
         text = reminderState.name,
         onTextChange = { if (it.length <= nameMaxLength) reminderState.name = it },
-        textStyle = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center),
+        textStyle = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.Bold),
         hintText = stringResource(R.string.hint_reminder_name),
         imeAction = ImeAction.Done,
         modifier = modifier
+            .padding(top = dimensionResource(R.dimen.margin_small))
             .focusRequester(focusRequester)
     )
 }

@@ -103,7 +103,7 @@ fun ReminderDetailsTopBar(
             title = stringResource(R.string.alert_dialog_title_complete),
             confirmText = stringResource(R.string.alert_dialog_confirm_complete),
             onConfirm = onComplete,
-            onDismiss = { isDeleteDialogShown = false }
+            onDismiss = { isCompleteDialogShown = false }
         )
     }
 

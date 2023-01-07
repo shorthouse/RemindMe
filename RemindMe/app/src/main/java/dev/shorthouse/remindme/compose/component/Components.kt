@@ -20,7 +20,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.sp
 import dev.shorthouse.remindme.R
 
-
 @Composable
 fun ReminderTextField(
     text: String,

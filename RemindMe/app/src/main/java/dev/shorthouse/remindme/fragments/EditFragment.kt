@@ -8,20 +8,20 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import com.google.android.material.composethemeadapter.MdcTheme
 import com.google.android.material.transition.MaterialSharedAxis
 import dagger.hilt.android.AndroidEntryPoint
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.compose.screen.ReminderEditScreen
 import dev.shorthouse.remindme.databinding.FragmentAddEditBinding
+import dev.shorthouse.remindme.viewmodel.EditViewModel
 import dev.shorthouse.remindme.viewmodel.InputViewModel
 
 @AndroidEntryPoint
 class EditFragment : Fragment() {
     private lateinit var binding: FragmentAddEditBinding
-    private val viewModel: InputViewModel by viewModels()
-    private val navigationArgs: EditFragmentArgs by navArgs()
+    private val inputViewModel: InputViewModel by viewModels()
+    private val editViewModel: EditViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +44,8 @@ class EditFragment : Fragment() {
             setContent {
                 MdcTheme {
                     ReminderEditScreen(
-                        inputViewModel = viewModel,
+                        inputViewModel = inputViewModel,
+                        editViewModel = editViewModel,
                         onNavigateUp = { findNavController().navigateUp() }
                     )
                 }
