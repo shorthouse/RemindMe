@@ -20,7 +20,7 @@ fun ReminderAddScreen(
     ReminderInputScreen(
         reminderState = reminderState,
         inputViewModel = inputViewModel,
-        topBarTitle = stringResource(R.string.top_bar_title_edit_reminder),
+        topBarTitle = stringResource(R.string.top_bar_title_add_reminder),
         onNavigateUp = onNavigateUp,
     )
 }
