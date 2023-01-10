@@ -121,4 +121,7 @@
     <string name="alert_dialog_confirm_complete">Complete</string>
     <string name="dialog_ok">Ok</string>
     <string name="dialog_cancel">Cancel</string>
+    <string name="cd_notification_sent">Notification sent</string>
+    <string name="cd_repeat_reminder">Repeat reminder</string>
+    <string name="cd_checkbox_complete_reminder">Complete reminder</string>
 </resources>
