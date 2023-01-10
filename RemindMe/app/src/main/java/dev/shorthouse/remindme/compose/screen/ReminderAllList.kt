@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
@@ -33,7 +34,9 @@ fun ReminderListAllScreen(reminderListViewModel: ReminderListViewModel) {
 fun ReminderListAll(reminderStates: List<ReminderState>) {
     if (reminderStates.isEmpty()) {
         Column(
-            modifier = Modifier.fillMaxHeight()
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.fillMaxHeight(0.8f)
         ) {
             ReminderEmptyState(
                 painter = painterResource(R.drawable.ic_empty_state_all),
@@ -41,7 +44,6 @@ fun ReminderListAll(reminderStates: List<ReminderState>) {
                 subtitle = stringResource(R.string.empty_state_all_subtitle)
             )
         }
-
     } else {
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.margin_large)),
