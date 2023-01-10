@@ -13,8 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import dev.shorthouse.remindme.R
-import dev.shorthouse.remindme.databinding.ListItemActiveReminderBinding
-import dev.shorthouse.remindme.fragments.ListContainerFragmentDirections
+import dev.shorthouse.remindme.fragments.ListHomeFragmentDirections
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.viewmodel.ActiveListViewModel
 
@@ -36,7 +35,7 @@ class ActiveListAdapter(private val viewModel: ActiveListViewModel) :
         holder.bind(getItem(position))
     }
 
-    inner class ViewHolder(private val binding: ListItemActiveReminderBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolder(private val binding: dev.shorthouse.remindme.databinding.ListItemActiveReminderBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Reminder) {
             binding.apply {
                 binding.reminder = item
@@ -66,7 +65,7 @@ class ActiveListAdapter(private val viewModel: ActiveListViewModel) :
         }
 
         private fun navigateToReminderDetails(reminderId: Long, view: View) {
-            val action = ListContainerFragmentDirections.actionListContainerToDetails(reminderId)
+            val action = ListHomeFragmentDirections.actionListContainerToDetails(reminderId)
             view.findNavController().navigate(action)
         }
 
