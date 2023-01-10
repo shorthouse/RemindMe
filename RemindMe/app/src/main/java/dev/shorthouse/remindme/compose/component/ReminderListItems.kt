@@ -4,7 +4,6 @@ import android.content.res.Configuration
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -16,7 +15,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.compose.state.ReminderState
@@ -25,18 +23,13 @@ import java.time.LocalTime
 @Composable
 fun ActiveReminderListItem(reminderState: ReminderState, onNavigateDetails: () -> Unit, onChecked: () -> Unit) {
     Row(
-        horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(
-                start = dimensionResource(R.dimen.margin_normal),
-                top = dimensionResource(R.dimen.margin_normal),
-                bottom = dimensionResource(R.dimen.margin_normal),
-            )
+            .padding(dimensionResource(R.dimen.margin_normal))
             .clickable(onClick = onNavigateDetails)
     ) {
-        ReminderListItem(reminderState = reminderState)
+        ReminderListItem(reminderState = reminderState, modifier = Modifier.weight(1f))
 
         var selected by remember { mutableStateOf(false) }
         ReminderListItemCheckbox(
@@ -62,8 +55,8 @@ fun AllReminderListItem(reminderState: ReminderState, onNavigateDetails: () -> U
 }
 
 @Composable
-fun ReminderListItem(reminderState: ReminderState) {
-    Column {
+fun ReminderListItem(reminderState: ReminderState, modifier: Modifier = Modifier) {
+    Column(modifier = modifier) {
         Text(
             text = reminderState.name,
             color = colorResource(R.color.text_on_surface),
@@ -72,8 +65,6 @@ fun ReminderListItem(reminderState: ReminderState) {
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
         )
-
-        Spacer(Modifier.height(6.dp))
 
         Row(
             horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.margin_tiny)),
@@ -125,13 +116,13 @@ fun ReminderListItemCheckbox(selected: Boolean, onChecked: () -> Unit) {
         true -> colorResource(R.color.blue)
     }
 
-    IconButton(onClick = onChecked) {
-        Icon(
-            painter = checkboxIcon,
-            tint = checkboxIconColor,
-            contentDescription = stringResource(R.string.cd_checkbox_complete_reminder),
-        )
-    }
+    Icon(
+        painter = checkboxIcon,
+        tint = checkboxIconColor,
+        contentDescription = stringResource(R.string.cd_checkbox_complete_reminder),
+        modifier = Modifier
+            .clickable { onChecked() }
+    )
 }
 
 @Preview(name = "Light Mode", showBackground = true)
