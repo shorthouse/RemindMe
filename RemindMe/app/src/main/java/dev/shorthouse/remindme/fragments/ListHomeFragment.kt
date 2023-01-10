@@ -31,7 +31,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class ListContainerFragment : Fragment() {
+class ListHomeFragment : Fragment() {
     private lateinit var binding: FragmentListContainerBinding
     private val viewModel: ListContainerViewModel by activityViewModels()
 
@@ -276,7 +276,7 @@ class ListContainerFragment : Fragment() {
     }
 
     private fun navigateToAddReminder() {
-        val action = ListContainerFragmentDirections.actionListContainerToAdd()
+        val action = ListHomeFragmentDirections.actionListContainerToAdd()
         findNavController().navigate(action)
     }
 
