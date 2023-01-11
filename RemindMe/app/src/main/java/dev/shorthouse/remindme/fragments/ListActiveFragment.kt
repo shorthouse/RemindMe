@@ -8,26 +8,27 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
 import com.google.android.material.composethemeadapter.MdcTheme
 import com.google.android.material.transition.MaterialFadeThrough
 import dagger.hilt.android.AndroidEntryPoint
-import dev.shorthouse.remindme.adapter.AllListAdapter
-import dev.shorthouse.remindme.compose.screen.ReminderListAllScreen
-import dev.shorthouse.remindme.databinding.FragmentAllListBinding
-import dev.shorthouse.remindme.viewmodel.AllListViewModel
+import dev.shorthouse.remindme.compose.screen.ReminderListActiveScreen
+import dev.shorthouse.remindme.databinding.FragmentActiveListBinding
+import dev.shorthouse.remindme.viewmodel.ActiveListViewModelOld
+import dev.shorthouse.remindme.viewmodel.ListActiveViewModel
 import dev.shorthouse.remindme.viewmodel.ListContainerViewModel
 import dev.shorthouse.remindme.viewmodel.ReminderListViewModel
 
 @AndroidEntryPoint
-class AllListFragment : Fragment() {
-    private lateinit var binding: FragmentAllListBinding
+class ListActiveFragment : Fragment() {
+    private lateinit var binding: FragmentActiveListBinding
 
-    private val viewModel: AllListViewModel by viewModels()
+    private val viewModel: ActiveListViewModelOld by viewModels()
     private val listContainerViewModel: ListContainerViewModel by activityViewModels()
 
-    private lateinit var listAdapter: AllListAdapter
-
     private val reminderListViewModel: ReminderListViewModel by viewModels()
+
+    private val listActiveViewModel: ListActiveViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,16 +41,22 @@ class AllListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentAllListBinding.inflate(inflater, container, false).apply {
-            allReminderListComposeView.apply {
+        binding = FragmentActiveListBinding.inflate(inflater, container, false).apply {
+            listActiveComposeView.apply {
                 setViewCompositionStrategy(
                     ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed
                 )
 
+                val onNavigate: (Long) -> Unit = { reminderId ->
+                    val action = ListHomeFragmentDirections.actionListContainerToDetails(reminderId)
+                    findNavController().navigate(action)
+                }
+
                 setContent {
                     MdcTheme {
-                        ReminderListAllScreen(
-                            reminderListViewModel = reminderListViewModel
+                        ReminderListActiveScreen(
+                            listActiveViewModel = listActiveViewModel,
+                            onNavigate = onNavigate
                         )
                     }
                 }
@@ -63,6 +70,7 @@ class AllListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 //        setListAdapter()
 //        setListData()
+//        startReminderRefreshCoroutine()
     }
 
     private fun setTransitionAnimations() {
@@ -71,10 +79,10 @@ class AllListFragment : Fragment() {
     }
 
 //    private fun setListAdapter() {
-//        listAdapter = AllListAdapter()
-//        binding.allReminderRecycler.adapter = listAdapter
+//        listAdapter = ActiveListAdapter(viewModel)
+//        binding.activeReminderRecycler.adapter = listAdapter
 //    }
-
+//
 //    private fun setListData() {
 //        viewModel.getReminders(
 //            listContainerViewModel.currentSort,
@@ -87,31 +95,44 @@ class AllListFragment : Fragment() {
 //                }
 //            }
 //    }
-
-//    private fun submitAdapterList(reminders: List<Reminder>) {
-//        val layoutManager = binding.allReminderRecycler.layoutManager
 //
+//    private fun submitAdapterList(reminders: List<Reminder>) {
+//        val layoutManager = binding.activeReminderRecycler.layoutManager
 //        val savedListScrollPosition = layoutManager?.onSaveInstanceState()
+//
 //        listAdapter.submitList(reminders) {
 //            layoutManager?.onRestoreInstanceState(savedListScrollPosition)
 //        }
 //    }
-
+//
 //    private fun displayListState(reminders: List<Reminder>) {
 //        hideOldListState()
 //
 //        val newListState = when {
-//            reminders.isNotEmpty() -> binding.allReminderRecycler
+//            reminders.isNotEmpty() -> binding.activeReminderRecycler
 //            listContainerViewModel.currentFilter.value?.isNotEmpty() == true -> binding.emptyStateSearch
 //            else -> binding.emptyState
 //        }
 //
 //        newListState.visibility = View.VISIBLE
 //    }
-
+//
 //    private fun hideOldListState() {
-//        binding.allReminderRecycler.visibility = View.GONE
+//        binding.activeReminderRecycler.visibility = View.GONE
 //        binding.emptyState.visibility = View.GONE
 //        binding.emptyStateSearch.visibility = View.GONE
+//    }
+//
+//    private fun startReminderRefreshCoroutine() {
+//        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+//            delay(viewModel.getMillisUntilNextMinute())
+//
+//            while (true) {
+//                launch {
+//                    viewModel.updateCurrentTime()
+//                }
+//                delay(Duration.ofMinutes(1).toMillis())
+//            }
+//        }.start()
 //    }
 }

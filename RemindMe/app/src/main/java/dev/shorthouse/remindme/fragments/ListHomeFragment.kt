@@ -282,8 +282,8 @@ class ListHomeFragment : Fragment() {
 
     private fun setListFragment() {
         val fragment = when (viewModel.bottomSheetListSelection) {
-            R.id.drawer_all_list -> AllListFragment()
-            else -> ActiveListFragment()
+            R.id.drawer_all_list -> ListAllFragment()
+            else -> ListActiveFragment()
         }
 
         binding.toolbar.title = getString(viewModel.getToolbarTitle())

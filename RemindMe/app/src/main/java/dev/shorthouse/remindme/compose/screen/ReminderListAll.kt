@@ -1,62 +1,79 @@
 package dev.shorthouse.remindme.compose.screen
 
 import android.content.res.Configuration
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import dev.shorthouse.remindme.R
+import dev.shorthouse.remindme.compose.component.AllReminderListItem
 import dev.shorthouse.remindme.compose.component.ReminderEmptyState
-import dev.shorthouse.remindme.compose.component.ReminderListItem
 import dev.shorthouse.remindme.compose.state.ReminderState
 import dev.shorthouse.remindme.viewmodel.ReminderListViewModel
 import java.time.LocalTime
 
 @Composable
-fun ReminderListAllScreen(reminderListViewModel: ReminderListViewModel) {
+fun ReminderListAllScreen(
+    reminderListViewModel: ReminderListViewModel,
+    onNavigate: (Long) -> Unit
+) {
     val allReminders by reminderListViewModel.allReminders.observeAsState()
 
     allReminders?.let { reminders ->
         val reminderStates = reminders.map { ReminderState(it) }
-        ReminderListAll(reminderStates = reminderStates)
+
+        ReminderListAllContent(
+            reminderStates = reminderStates,
+            onNavigate = onNavigate
+        )
     }
 }
 
 @Composable
-fun ReminderListAll(reminderStates: List<ReminderState>) {
+fun ReminderListAllContent(
+    reminderStates: List<ReminderState>,
+    onNavigate: (Long) -> Unit
+) {
     if (reminderStates.isEmpty()) {
-        Column(
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxHeight(0.8f)
-        ) {
-            ReminderEmptyState(
-                painter = painterResource(R.drawable.ic_empty_state_all),
-                title = stringResource(R.string.empty_state_all_title),
-                subtitle = stringResource(R.string.empty_state_all_subtitle)
-            )
-        }
+        ReminderEmptyState(
+            painter = painterResource(R.drawable.ic_empty_state_all),
+            title = stringResource(R.string.empty_state_all_title),
+            subtitle = stringResource(R.string.empty_state_all_subtitle)
+        )
     } else {
-        LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.margin_large)),
-            contentPadding = PaddingValues(
-                horizontal = dimensionResource(R.dimen.margin_normal),
-                vertical = dimensionResource(R.dimen.margin_normal)
-            ),
-            modifier = Modifier
-                .fillMaxWidth()
-        ) {
-            items(reminderStates) { reminderState ->
-                ReminderListItem(reminderState = reminderState)
-            }
+        ReminderListAll(reminderStates, onNavigate)
+    }
+}
+
+@Composable
+private fun ReminderListAll(
+    reminderStates: List<ReminderState>,
+    onNavigate: (Long) -> Unit
+) {
+    LazyColumn(
+        verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.margin_large)),
+        contentPadding = PaddingValues(
+            horizontal = dimensionResource(R.dimen.margin_normal),
+            vertical = dimensionResource(R.dimen.margin_normal)
+        ),
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        items(reminderStates) { reminderState ->
+            AllReminderListItem(
+                reminderState = reminderState,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { onNavigate(reminderState.id) })
         }
     }
 }
@@ -101,5 +118,5 @@ fun ReminderListAllPreview() {
         )
     )
 
-    ReminderListAll(reminderStates = reminderStates)
+    ReminderListAllContent(reminderStates = reminderStates) {}
 }
