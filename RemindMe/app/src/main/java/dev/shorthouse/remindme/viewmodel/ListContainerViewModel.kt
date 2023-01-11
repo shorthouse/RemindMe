@@ -9,18 +9,18 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.android.material.math.MathUtils
 import dev.shorthouse.remindme.R
-import dev.shorthouse.remindme.utilities.ReminderSort
+import dev.shorthouse.remindme.utilities.ReminderSortOrder
 import dev.shorthouse.remindme.utilities.SCRIM_LERP_MAX
 import dev.shorthouse.remindme.utilities.SCRIM_START_ALPHA
 
 class ListContainerViewModel : ViewModel() {
-    val currentSort = MutableLiveData(ReminderSort.EARLIEST_DATE_FIRST)
+    val currentSort = MutableLiveData(ReminderSortOrder.EARLIEST_DATE_FIRST)
     val currentFilter = MutableLiveData("")
     var bottomSheetListSelection = R.id.drawer_active_list
 
     val sortToMenuItemMap = mapOf(
-        ReminderSort.EARLIEST_DATE_FIRST to R.id.drawer_sort_earliest_date_first,
-        ReminderSort.LATEST_DATE_FIRST to R.id.drawer_sort_latest_date_first
+        ReminderSortOrder.EARLIEST_DATE_FIRST to R.id.drawer_sort_earliest_date_first,
+        ReminderSortOrder.LATEST_DATE_FIRST to R.id.drawer_sort_latest_date_first
     )
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
