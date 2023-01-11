@@ -2,7 +2,10 @@ package dev.shorthouse.remindme.compose.component
 
 import android.content.res.Configuration
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
@@ -18,16 +21,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.compose.state.ReminderState
+import dev.shorthouse.remindme.model.Reminder
 import java.time.LocalTime
 
 @Composable
-fun ActiveReminderListItem(reminderState: ReminderState, onNavigateDetails: () -> Unit, onChecked: () -> Unit) {
+fun ActiveReminderListItem(
+    reminderState: ReminderState,
+    onCompleteChecked: (Reminder) -> Unit,
+    modifier: Modifier = Modifier
+) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(dimensionResource(R.dimen.margin_normal))
-            .clickable(onClick = onNavigateDetails)
+        modifier = modifier
     ) {
         ReminderListItem(reminderState = reminderState, modifier = Modifier.weight(1f))
 
@@ -36,20 +41,18 @@ fun ActiveReminderListItem(reminderState: ReminderState, onNavigateDetails: () -
             selected = selected,
             onChecked = {
                 selected = !selected
-                onChecked()
+                onCompleteChecked(reminderState.toReminder())
             }
         )
     }
 }
 
 @Composable
-fun AllReminderListItem(reminderState: ReminderState, onNavigateDetails: () -> Unit) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(dimensionResource(R.dimen.margin_normal))
-            .clickable(onClick = onNavigateDetails)
-    ) {
+fun AllReminderListItem(
+    reminderState: ReminderState,
+    modifier: Modifier = Modifier
+) {
+    Row(modifier = modifier) {
         ReminderListItem(reminderState = reminderState)
     }
 }
@@ -120,8 +123,7 @@ fun ReminderListItemCheckbox(selected: Boolean, onChecked: () -> Unit) {
         painter = checkboxIcon,
         tint = checkboxIconColor,
         contentDescription = stringResource(R.string.cd_checkbox_complete_reminder),
-        modifier = Modifier
-            .clickable { onChecked() }
+        modifier = Modifier.clickable { onChecked() }
     )
 }
 
@@ -141,7 +143,7 @@ fun ActiveReminderListItemPreview() {
         notes = "Don't forget to warm up!"
     )
 
-    ActiveReminderListItem(reminderState = reminderState, {}, {})
+    ActiveReminderListItem(reminderState = reminderState, {})
 }
 
 @Preview(name = "Light Mode", showBackground = true)
@@ -160,7 +162,7 @@ fun AllReminderListItemPreview() {
         notes = "Don't forget to warm up!"
     )
 
-    AllReminderListItem(reminderState = reminderState, {})
+    AllReminderListItem(reminderState = reminderState)
 }
 
 @Preview(name = "Light Mode", showBackground = true)
