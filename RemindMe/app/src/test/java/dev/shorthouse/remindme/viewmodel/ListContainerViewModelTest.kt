@@ -2,7 +2,7 @@ package dev.shorthouse.remindme.viewmodel
 
 import com.google.common.truth.Truth.assertThat
 import dev.shorthouse.remindme.R
-import dev.shorthouse.remindme.utilities.ReminderSort
+import dev.shorthouse.remindme.utilities.ReminderSortOrder
 import org.junit.Test
 
 class ListContainerViewModelTest {
@@ -12,8 +12,8 @@ class ListContainerViewModelTest {
     @Test
     fun `Reminder sort to item map, has expected map values`() {
         val expectedMap = mapOf(
-            ReminderSort.EARLIEST_DATE_FIRST to R.id.drawer_sort_earliest_date_first,
-            ReminderSort.LATEST_DATE_FIRST to R.id.drawer_sort_latest_date_first
+            ReminderSortOrder.EARLIEST_DATE_FIRST to R.id.drawer_sort_earliest_date_first,
+            ReminderSortOrder.LATEST_DATE_FIRST to R.id.drawer_sort_latest_date_first
         )
 
         assertThat(viewModel.sortToMenuItemMap).isEqualTo(expectedMap)
@@ -22,8 +22,8 @@ class ListContainerViewModelTest {
     @Test
     fun `Reminder menu item to sort map, has expected values`() {
         val expectedMap = mapOf(
-            R.id.drawer_sort_earliest_date_first to ReminderSort.EARLIEST_DATE_FIRST,
-            R.id.drawer_sort_latest_date_first to ReminderSort.LATEST_DATE_FIRST
+            R.id.drawer_sort_earliest_date_first to ReminderSortOrder.EARLIEST_DATE_FIRST,
+            R.id.drawer_sort_latest_date_first to ReminderSortOrder.LATEST_DATE_FIRST
         )
 
         assertThat(viewModel.menuItemToSortMap).isEqualTo(expectedMap)
