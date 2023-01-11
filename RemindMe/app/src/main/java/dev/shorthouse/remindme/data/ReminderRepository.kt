@@ -1,7 +1,9 @@
 package dev.shorthouse.remindme.data
 
 import dev.shorthouse.remindme.model.Reminder
+import dev.shorthouse.remindme.utilities.ReminderSortOrder
 import kotlinx.coroutines.flow.Flow
+import java.time.ZonedDateTime
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -15,8 +17,19 @@ class ReminderRepository @Inject constructor(private val reminderLocalDataSource
         return reminderLocalDataSource.getReminder(id)
     }
 
-    fun getNotCompletedReminders(): Flow<List<Reminder>> {
-        return reminderLocalDataSource.getNotCompletedReminders()
+    fun getActiveReminders(): Flow<List<Reminder>> {
+        return reminderLocalDataSource.getActiveReminders(ZonedDateTime.now())
+    }
+
+    fun getAllReminders(): Flow<List<Reminder>> {
+        return reminderLocalDataSource.getAllReminders()
+    }
+
+    fun getAllRemindersFilteredSorted(searchFilter: String?, sortOrder: ReminderSortOrder): Flow<List<Reminder>> {
+        val filter = searchFilter?.ifBlank { null }
+        val sort = if (sortOrder == ReminderSortOrder.EARLIEST_DATE_FIRST) "ASC" else "DESC"
+
+        return reminderLocalDataSource.getAllRemindersFilteredSorted(filter, sort)
     }
 
     fun insertReminder(reminder: Reminder): Long {
