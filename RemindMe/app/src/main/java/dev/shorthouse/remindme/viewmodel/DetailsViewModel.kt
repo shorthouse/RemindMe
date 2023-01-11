@@ -1,21 +1,15 @@
 package dev.shorthouse.remindme.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.data.ReminderRepository
-import dev.shorthouse.remindme.model.RepeatInterval
 import dev.shorthouse.remindme.di.IoDispatcher
 import dev.shorthouse.remindme.model.Reminder
-import dev.shorthouse.remindme.utilities.DATE_INPUT_PATTERN
+import dev.shorthouse.remindme.model.RepeatInterval
 import dev.shorthouse.remindme.utilities.NotificationScheduler
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
-import java.time.ZonedDateTime
-import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 
@@ -23,49 +17,48 @@ import javax.inject.Inject
 class DetailsViewModel @Inject constructor(
     private val repository: ReminderRepository,
     private val notificationScheduler: NotificationScheduler,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
+    state: SavedStateHandle
 ) : ViewModel() {
-    lateinit var reminder: Reminder
-
-    fun getReminder(id: Long): LiveData<Reminder> {
-        return repository.getReminder(id).asLiveData()
-    }
+    private val reminderId = state.get<Long>("id") ?: 1L
+    val reminder = repository.getReminder(reminderId).asLiveData()
 
     fun deleteReminder() {
-        if (reminder.isNotificationSent) {
-            cancelReminderNotification()
-        }
+        reminder.value?.let {
+            if (it.isNotificationSent) {
+                cancelReminderNotification()
+            }
 
-        viewModelScope.launch(ioDispatcher) {
-            repository.deleteReminder(reminder)
+            viewModelScope.launch(ioDispatcher) {
+                repository.deleteReminder(it)
+            }
         }
     }
 
     fun completeReminder() {
-        if (reminder.isNotificationSent) {
-            cancelReminderNotification()
-        }
+        reminder.value?.let {
+            if (it.isNotificationSent) {
+                cancelReminderNotification()
+            }
 
-        viewModelScope.launch(ioDispatcher) {
-            repository.completeReminder(reminder.id)
+            viewModelScope.launch(ioDispatcher) {
+                repository.completeReminder(it.id)
+            }
         }
     }
 
-    fun getRepeatIntervalStringId(repeatInterval: RepeatInterval): Int {
+    fun getRepeatIntervalStringId(repeatInterval: RepeatInterval?): Int? {
+        if (repeatInterval == null) return null
+
         return when (repeatInterval.unit) {
             ChronoUnit.DAYS -> R.plurals.interval_days
             else -> R.plurals.interval_weeks
         }
     }
 
-    fun getFormattedDate(zonedDateTime: ZonedDateTime): String {
-        return zonedDateTime
-            .toLocalDate()
-            .format(DateTimeFormatter.ofPattern(DATE_INPUT_PATTERN))
-            .toString()
-    }
-
     private fun cancelReminderNotification() {
-        notificationScheduler.cancelExistingReminderNotification(reminder)
+        reminder.value?.let {
+            notificationScheduler.cancelExistingReminderNotification(it)
+        }
     }
 }

@@ -1,40 +1,67 @@
 package dev.shorthouse.remindme.fragments
 
-import androidx.navigation.fragment.navArgs
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import com.google.android.material.composethemeadapter.MdcTheme
+import com.google.android.material.transition.MaterialSharedAxis
 import dagger.hilt.android.AndroidEntryPoint
 import dev.shorthouse.remindme.R
+import dev.shorthouse.remindme.compose.screen.ReminderEditScreen
+import dev.shorthouse.remindme.databinding.FragmentAddEditBinding
+import dev.shorthouse.remindme.viewmodel.EditViewModel
+import dev.shorthouse.remindme.viewmodel.InputViewModel
 
 @AndroidEntryPoint
-class EditFragment : AddEditFragment() {
-    private val navigationArgs: EditFragmentArgs by navArgs()
+class EditFragment : Fragment() {
+    private lateinit var binding: FragmentAddEditBinding
+    private val inputViewModel: InputViewModel by viewModels()
+    private val editViewModel: EditViewModel by viewModels()
 
-    override fun setupToolbar() {
-        super.setupToolbar()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
-        binding.toolbar.title = getString(R.string.toolbar_title_edit_reminder)
+        setTransitionAnimations()
     }
 
-    override fun populateReminderData() {
-        viewModel.getReminder(navigationArgs.id).observe(viewLifecycleOwner) { reminder ->
-            binding.apply {
-                nameInput.setText(reminder.name)
-                startDateInput.setText(viewModel.getFormattedDate(reminder.startDateTime))
-                startTimeInput.setText(viewModel.getFormattedTime(reminder.startDateTime))
-                notesInput.setText(viewModel.getReminderNotes(reminder))
-                notificationSwitch.isChecked = reminder.isNotificationSent
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentAddEditBinding.inflate(inflater, container, false)
 
-                if (reminder.repeatInterval != null) {
-                    repeatSwitch.isChecked = true
-                    repeatValueInput.setText(viewModel.getRepeatValue(reminder.repeatInterval))
-                    repeatUnitRadioGroup.check(viewModel.getRadioIdFromRepeatUnit(reminder.repeatInterval))
+        binding.addEditComposeView.apply {
+            setViewCompositionStrategy(
+                ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed
+            )
+
+            setContent {
+                MdcTheme {
+                    ReminderEditScreen(
+                        inputViewModel = inputViewModel,
+                        editViewModel = editViewModel,
+                        onNavigateUp = { findNavController().navigateUp() }
+                    )
                 }
             }
         }
+
+        return binding.root
     }
 
-    override fun saveReminder() {
-        val editedReminder = getReminderFromInputData()
-        editedReminder.id = navigationArgs.id
-        viewModel.editReminder(editedReminder)
+    private fun setTransitionAnimations() {
+        enterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, true).apply {
+            duration = resources.getInteger(R.integer.transition_duration_medium).toLong()
+        }
+
+        returnTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false).apply {
+            duration = resources.getInteger(R.integer.transition_duration_medium).toLong()
+        }
     }
 }

@@ -11,21 +11,13 @@ import java.time.temporal.ChronoUnit
 data class Reminder(
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0L,
-
     val name: String,
-
     val startDateTime: ZonedDateTime,
-
-    val repeatInterval: RepeatInterval?,
-
-    val notes: String?,
-
-    val isComplete: Boolean,
-
     val isNotificationSent: Boolean,
+    val repeatInterval: RepeatInterval?,
+    val notes: String?,
+    val isComplete: Boolean
 ) {
-    fun isRepeatReminder() = this.repeatInterval != null
-
     fun getFormattedStartDate() = this.startDateTime
         .toLocalDate()
         .format(DateTimeFormatter.ofPattern(DATE_PATTERN))
@@ -34,9 +26,11 @@ data class Reminder(
     fun getFormattedStartTime() = this.startDateTime
         .toLocalTime()
         .toString()
+
+    fun isRepeatReminder() = this.repeatInterval != null
 }
 
 data class RepeatInterval(
     val amount: Long,
     val unit: ChronoUnit
-) 
+)

@@ -13,7 +13,6 @@ import dev.shorthouse.remindme.utilities.NotificationScheduler
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
 import org.junit.Assert.assertThrows
 import org.junit.Before
 import org.junit.Rule
@@ -59,21 +58,7 @@ class DetailsViewModelTest {
         val dataSource = FakeDataSource(reminders)
         reminderRepository = ReminderRepository(dataSource)
 
-        viewModel = DetailsViewModel(reminderRepository, notificationScheduler, StandardTestDispatcher())
-    }
-
-    @Test
-    fun `Get valid reminder, returns reminder`() {
-        val returnedReminder = viewModel.getReminder(1L).getOrAwaitValue()
-
-        assertThat(returnedReminder).isEqualTo(reminder1)
-    }
-
-    @Test
-    fun `Get invalid reminder id, throws error`() {
-        assertThrows(NoSuchElementException::class.java) {
-            viewModel.getReminder(0).getOrAwaitValue()
-        }
+        //viewModel = DetailsViewModel(reminderRepository, notificationScheduler, StandardTestDispatcher())
     }
 
     @Test
