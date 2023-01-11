@@ -11,7 +11,7 @@ import dev.shorthouse.remindme.model.RepeatInterval
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.util.TestUtil
 import dev.shorthouse.remindme.util.getOrAwaitValue
-import dev.shorthouse.remindme.utilities.ReminderSort
+import dev.shorthouse.remindme.utilities.ReminderSortOrder
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
 import org.junit.Before
@@ -29,7 +29,7 @@ class ActiveListViewModelTest {
     var instantExecutorRule = InstantTaskExecutorRule()
 
     // Class under test
-    private lateinit var viewModel: ActiveListViewModel
+    private lateinit var viewModel: ActiveListViewModelOld
 
     private lateinit var reminders: MutableList<Reminder>
 
@@ -60,12 +60,12 @@ class ActiveListViewModelTest {
         val dataSource = FakeDataSource(reminders)
         val reminderRepository = ReminderRepository(dataSource)
 
-        viewModel = ActiveListViewModel(reminderRepository, StandardTestDispatcher())
+        viewModel = ActiveListViewModelOld(reminderRepository, StandardTestDispatcher())
     }
 
     @Test
     fun `Sort active reminders by earliest date first, sorted by date earliest first`() {
-        val sort = MutableLiveData(ReminderSort.EARLIEST_DATE_FIRST)
+        val sort = MutableLiveData(ReminderSortOrder.EARLIEST_DATE_FIRST)
         val filter = MutableLiveData("")
         val expectedSortedReminders = reminders.subList(0, 2)
             .sortedBy { it.startDateTime }
@@ -77,7 +77,7 @@ class ActiveListViewModelTest {
 
     @Test
     fun `Sort active reminders by oldest date first, sorted by date oldest first`() {
-        val sort = MutableLiveData(ReminderSort.LATEST_DATE_FIRST)
+        val sort = MutableLiveData(ReminderSortOrder.LATEST_DATE_FIRST)
         val filter = MutableLiveData("")
         val expectedSortedReminders = reminders.subList(0, 2)
             .sortedByDescending { it.startDateTime }
@@ -89,7 +89,7 @@ class ActiveListViewModelTest {
 
     @Test
     fun `Sort is null, returns null`() {
-        val sort = MutableLiveData<ReminderSort>(null)
+        val sort = MutableLiveData<ReminderSortOrder>(null)
         val filter = MutableLiveData("")
 
         val nullReminders = viewModel.getReminders(sort, filter).getOrAwaitValue()
@@ -99,7 +99,7 @@ class ActiveListViewModelTest {
 
     @Test
     fun `Filter is null, returns null`() {
-        val sort = MutableLiveData(ReminderSort.LATEST_DATE_FIRST)
+        val sort = MutableLiveData(ReminderSortOrder.LATEST_DATE_FIRST)
         val filter = MutableLiveData<String>(null)
 
         val nullReminders = viewModel.getReminders(sort, filter).getOrAwaitValue()
@@ -109,7 +109,7 @@ class ActiveListViewModelTest {
 
     @Test
     fun `Filter on current time, returns only active reminders`() {
-        val sort = MutableLiveData(ReminderSort.EARLIEST_DATE_FIRST)
+        val sort = MutableLiveData(ReminderSortOrder.EARLIEST_DATE_FIRST)
         val filter = MutableLiveData("")
 
         val filterTimeReminders = viewModel.getReminders(sort, filter).getOrAwaitValue()
@@ -119,7 +119,7 @@ class ActiveListViewModelTest {
 
     @Test
     fun `Filter active reminders by name string, only reminders with that name remain`() {
-        val sort = MutableLiveData(ReminderSort.EARLIEST_DATE_FIRST)
+        val sort = MutableLiveData(ReminderSortOrder.EARLIEST_DATE_FIRST)
         val filter = MutableLiveData("past")
         val expectedFilteredReminders = reminders.subList(0, 2)
             .filter { it.name.contains(filter.getOrAwaitValue(), true) }
@@ -131,7 +131,7 @@ class ActiveListViewModelTest {
 
     @Test
     fun `Filter active reminders with no matching reminders, returns no reminders`() {
-        val sort = MutableLiveData(ReminderSort.EARLIEST_DATE_FIRST)
+        val sort = MutableLiveData(ReminderSortOrder.EARLIEST_DATE_FIRST)
         val filter = MutableLiveData("xxxxx")
         val expectedFilteredReminders = emptyList<Reminder>()
 
