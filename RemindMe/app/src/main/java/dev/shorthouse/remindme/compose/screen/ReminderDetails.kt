@@ -230,7 +230,7 @@ private fun ReminderDetailsScreenPreview() {
             mutableStateOf(
                 ReminderState(
                     id = 1,
-                    name = "Yoga tonight",
+                    name = "Yoga with Alice",
                     date = "Wed, 22 Mar 2000",
                     time = LocalTime.of(14, 30),
                     isNotificationSent = true,

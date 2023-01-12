@@ -28,6 +28,8 @@ fun Context.showKeyboard(view: View) {
     inputMethodManager.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
 }
 
+fun Double.floor(): Double = kotlin.math.floor(this)
+
 fun Fragment.showToast(messageStringId: Int, context: Context) {
     Toast.makeText(context, getString(messageStringId), Toast.LENGTH_SHORT).show()
 }

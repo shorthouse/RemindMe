@@ -14,14 +14,18 @@ class FakeDataSource(private var reminders: MutableList<Reminder> = mutableListO
         return flowOf(reminders.first { it.id == id })
     }
 
-    override fun getActiveNotCompletedReminders(nowDateTime: ZonedDateTime): Flow<List<Reminder>> {
+    override fun getActiveReminders(nowDateTime: ZonedDateTime): Flow<List<Reminder>> {
         return flowOf(
             reminders.filter { it.startDateTime.isBefore(nowDateTime) || it.startDateTime.isEqual(nowDateTime) }
         )
     }
 
-    override fun getNotCompletedReminders(): Flow<List<Reminder>> {
+    override fun getAllReminders(): Flow<List<Reminder>> {
         return flowOf(reminders.filter { !it.isComplete })
+    }
+
+    override fun getAllRemindersFilteredSorted(searchFilter: String?, orderBy: String): Flow<List<Reminder>> {
+        TODO("Not yet implemented")
     }
 
     override fun completeReminder(id: Long) {

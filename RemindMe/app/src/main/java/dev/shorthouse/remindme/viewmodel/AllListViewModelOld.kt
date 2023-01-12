@@ -1,25 +1,21 @@
 package dev.shorthouse.remindme.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
+import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.model.Reminder
-import dev.shorthouse.remindme.utilities.ReminderSort
+import dev.shorthouse.remindme.utilities.enums.ReminderSortOrder
 import javax.inject.Inject
 
 @HiltViewModel
-class AllListViewModel @Inject constructor(private val repository: ReminderRepository) : ViewModel() {
+class AllListViewModelOld @Inject constructor(private val repository: ReminderRepository) : ViewModel() {
 
     fun getReminders(
-        currentSort: MutableLiveData<ReminderSort>,
+        currentSort: MutableLiveData<ReminderSortOrder>,
         currentFilter: MutableLiveData<String>
     ): LiveData<List<Reminder>> {
         val allReminders = repository
-            .getNotCompletedReminders()
+            .getAllReminders()
             .asLiveData()
 
         val remindersListData = MediatorLiveData<List<Reminder>>()
@@ -39,7 +35,7 @@ class AllListViewModel @Inject constructor(private val repository: ReminderRepos
 
     private fun sortFilterReminders(
         allReminders: LiveData<List<Reminder>>,
-        currentSort: MutableLiveData<ReminderSort>,
+        currentSort: MutableLiveData<ReminderSortOrder>,
         currentFilter: MutableLiveData<String>
     ): List<Reminder>? {
         val reminders = allReminders.value
@@ -49,7 +45,7 @@ class AllListViewModel @Inject constructor(private val repository: ReminderRepos
         if (reminders == null || sort == null) return null
 
         val sortedReminders = when (sort) {
-            ReminderSort.EARLIEST_DATE_FIRST -> reminders.sortedBy { it.startDateTime }
+            ReminderSortOrder.EARLIEST_DATE_FIRST -> reminders.sortedBy { it.startDateTime }
             else -> reminders.sortedByDescending { it.startDateTime }
         }
 

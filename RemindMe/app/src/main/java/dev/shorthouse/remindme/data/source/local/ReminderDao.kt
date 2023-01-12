@@ -1,11 +1,6 @@
 package dev.shorthouse.remindme.data.source.local
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
-import androidx.room.Update
+import androidx.room.*
 import dev.shorthouse.remindme.model.Reminder
 import kotlinx.coroutines.flow.Flow
 import java.time.ZonedDateTime
@@ -19,10 +14,13 @@ interface ReminderDao {
     fun getReminder(id: Long): Flow<Reminder>
 
     @Query("SELECT * FROM reminder WHERE startDateTime <= :nowDateTime AND isComplete = 0")
-    fun getActiveNotCompletedReminders(nowDateTime: ZonedDateTime): Flow<List<Reminder>>
+    fun getActiveReminders(nowDateTime: ZonedDateTime): Flow<List<Reminder>>
 
     @Query("SELECT * FROM reminder WHERE isComplete = 0")
-    fun getNotCompleteReminders(): Flow<List<Reminder>>
+    fun getAllReminders(): Flow<List<Reminder>>
+
+    @Query("SELECT * FROM reminder WHERE name LIKE '%' || :searchFilter ORDER BY :orderBy")
+    fun getAllRemindersFilteredSorted(searchFilter: String?, orderBy: String): Flow<List<Reminder>>
 
     @Query("UPDATE reminder SET isComplete = 1 WHERE id = :id")
     fun completeReminder(id: Long)
