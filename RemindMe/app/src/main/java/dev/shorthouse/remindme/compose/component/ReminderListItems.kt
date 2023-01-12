@@ -22,7 +22,10 @@ import androidx.compose.ui.unit.sp
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.compose.state.ReminderState
 import dev.shorthouse.remindme.model.Reminder
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.time.LocalTime
+import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
 fun ActiveReminderListItem(
@@ -37,11 +40,17 @@ fun ActiveReminderListItem(
         ReminderListItem(reminderState = reminderState, modifier = Modifier.weight(1f))
 
         var selected by remember { mutableStateOf(false) }
+        val coroutineScope = rememberCoroutineScope()
+
         ReminderListItemCheckbox(
             selected = selected,
             onChecked = {
-                selected = !selected
-                onCompleteChecked(reminderState.toReminder())
+                coroutineScope.launch {
+                    selected = true
+                    delay(200.milliseconds)
+                    onCompleteChecked(reminderState.toReminder())
+                    selected = false
+                }
             }
         )
     }
