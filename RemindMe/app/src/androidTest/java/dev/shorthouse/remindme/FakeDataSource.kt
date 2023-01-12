@@ -27,6 +27,10 @@ class FakeDataSource(private var reminders: MutableList<Reminder> = mutableListO
         return flowOf(reminders.filter { !it.isComplete })
     }
 
+    override fun getAllRemindersFilteredSorted(searchFilter: String?, orderBy: String): Flow<List<Reminder>> {
+        TODO("Not yet implemented")
+    }
+
     override fun insertReminder(reminder: Reminder): Long {
         reminders.add(reminder)
         return reminders.last().id
