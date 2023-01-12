@@ -2,7 +2,7 @@ package dev.shorthouse.remindme.viewmodel
 
 import com.google.common.truth.Truth.assertThat
 import dev.shorthouse.remindme.R
-import dev.shorthouse.remindme.utilities.ReminderSortOrder
+import dev.shorthouse.remindme.utilities.enums.ReminderSortOrder
 import org.junit.Test
 
 class ListContainerViewModelTest {

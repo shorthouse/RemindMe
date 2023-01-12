@@ -7,7 +7,7 @@ import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.di.IoDispatcher
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.utilities.DAYS_IN_WEEK
-import dev.shorthouse.remindme.utilities.ReminderSortOrder
+import dev.shorthouse.remindme.utilities.enums.ReminderSortOrder
 import dev.shorthouse.remindme.utilities.floor
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.delay

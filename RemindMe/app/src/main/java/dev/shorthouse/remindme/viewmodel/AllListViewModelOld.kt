@@ -4,7 +4,7 @@ import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.model.Reminder
-import dev.shorthouse.remindme.utilities.ReminderSortOrder
+import dev.shorthouse.remindme.utilities.enums.ReminderSortOrder
 import javax.inject.Inject
 
 @HiltViewModel

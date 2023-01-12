@@ -9,9 +9,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.android.material.math.MathUtils
 import dev.shorthouse.remindme.R
-import dev.shorthouse.remindme.utilities.ReminderSortOrder
 import dev.shorthouse.remindme.utilities.SCRIM_LERP_MAX
 import dev.shorthouse.remindme.utilities.SCRIM_START_ALPHA
+import dev.shorthouse.remindme.utilities.enums.ReminderSortOrder
 
 class ListContainerViewModel : ViewModel() {
     val currentSort = MutableLiveData(ReminderSortOrder.EARLIEST_DATE_FIRST)

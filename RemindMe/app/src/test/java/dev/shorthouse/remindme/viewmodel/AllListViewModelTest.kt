@@ -5,11 +5,11 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
 import dev.shorthouse.remindme.data.FakeDataSource
 import dev.shorthouse.remindme.data.ReminderRepository
-import dev.shorthouse.remindme.model.RepeatInterval
 import dev.shorthouse.remindme.model.Reminder
+import dev.shorthouse.remindme.model.RepeatInterval
 import dev.shorthouse.remindme.util.TestUtil
 import dev.shorthouse.remindme.util.getOrAwaitValue
-import dev.shorthouse.remindme.utilities.ReminderSortOrder
+import dev.shorthouse.remindme.utilities.enums.ReminderSortOrder
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith

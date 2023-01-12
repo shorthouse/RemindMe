@@ -1,7 +1,7 @@
 package dev.shorthouse.remindme.data
 
 import dev.shorthouse.remindme.model.Reminder
-import dev.shorthouse.remindme.utilities.ReminderSortOrder
+import dev.shorthouse.remindme.utilities.enums.ReminderSortOrder
 import kotlinx.coroutines.flow.Flow
 import java.time.ZonedDateTime
 import javax.inject.Inject
