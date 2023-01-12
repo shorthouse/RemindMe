@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import com.google.android.material.composethemeadapter.MdcTheme
@@ -14,20 +13,11 @@ import com.google.android.material.transition.MaterialFadeThrough
 import dagger.hilt.android.AndroidEntryPoint
 import dev.shorthouse.remindme.compose.screen.ReminderListActiveScreen
 import dev.shorthouse.remindme.databinding.FragmentActiveListBinding
-import dev.shorthouse.remindme.viewmodel.ActiveListViewModelOld
 import dev.shorthouse.remindme.viewmodel.ListActiveViewModel
-import dev.shorthouse.remindme.viewmodel.ListContainerViewModel
-import dev.shorthouse.remindme.viewmodel.ReminderListViewModel
 
 @AndroidEntryPoint
 class ListActiveFragment : Fragment() {
     private lateinit var binding: FragmentActiveListBinding
-
-    private val viewModel: ActiveListViewModelOld by viewModels()
-    private val listContainerViewModel: ListContainerViewModel by activityViewModels()
-
-    private val reminderListViewModel: ReminderListViewModel by viewModels()
-
     private val listActiveViewModel: ListActiveViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,18 +56,19 @@ class ListActiveFragment : Fragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-//        setListAdapter()
-//        setListData()
-//        startReminderRefreshCoroutine()
-    }
-
     private fun setTransitionAnimations() {
         enterTransition = MaterialFadeThrough()
         exitTransition = MaterialFadeThrough()
     }
 
+//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+//        super.onViewCreated(view, savedInstanceState)
+//        setListAdapter()
+//        setListData()
+//        startReminderRefreshCoroutine()
+//    }
+//
+//
 //    private fun setListAdapter() {
 //        listAdapter = ActiveListAdapter(viewModel)
 //        binding.activeReminderRecycler.adapter = listAdapter
