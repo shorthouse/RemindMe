@@ -32,6 +32,10 @@ fun ReminderListActiveScreen(
 
     val onCompleteChecked: (Reminder) -> Unit = { reminder ->
         listActiveViewModel.updateDoneReminder(reminder)
+        listActiveViewModel.removeDisplayingNotification(reminder)
+
+        //TODO
+        // Show the undo snackbar - will already have padding for the list so this is fine
     }
 
     activeReminders?.let { reminders ->
@@ -74,10 +78,7 @@ private fun ReminderListActive(
 ) {
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.margin_large)),
-        contentPadding = PaddingValues(
-            horizontal = dimensionResource(R.dimen.margin_normal),
-            vertical = dimensionResource(R.dimen.margin_normal)
-        ),
+        contentPadding = PaddingValues(dimensionResource(R.dimen.margin_normal)),
         modifier = Modifier.fillMaxWidth()
     ) {
         items(reminderStates) { reminderState ->

@@ -62,10 +62,7 @@ private fun ReminderListAll(
 ) {
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.margin_large)),
-        contentPadding = PaddingValues(
-            horizontal = dimensionResource(R.dimen.margin_normal),
-            vertical = dimensionResource(R.dimen.margin_normal)
-        ),
+        contentPadding = PaddingValues(dimensionResource(R.dimen.margin_normal)),
         modifier = Modifier.fillMaxWidth()
     ) {
         items(reminderStates) { reminderState ->
