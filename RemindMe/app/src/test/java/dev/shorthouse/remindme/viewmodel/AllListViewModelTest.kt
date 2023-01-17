@@ -5,11 +5,11 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
 import dev.shorthouse.remindme.data.FakeDataSource
 import dev.shorthouse.remindme.data.ReminderRepository
-import dev.shorthouse.remindme.model.RepeatInterval
 import dev.shorthouse.remindme.model.Reminder
+import dev.shorthouse.remindme.model.RepeatInterval
 import dev.shorthouse.remindme.util.TestUtil
 import dev.shorthouse.remindme.util.getOrAwaitValue
-import dev.shorthouse.remindme.utilities.ReminderSort
+import dev.shorthouse.remindme.utilities.enums.ReminderSortOrder
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -20,7 +20,7 @@ import java.time.temporal.ChronoUnit
 class AllListViewModelTest {
 
     // Class under test
-    private lateinit var viewModel: AllListViewModel
+    private lateinit var viewModel: AllListViewModelOld
 
     private lateinit var reminders: MutableList<Reminder>
 
@@ -44,12 +44,12 @@ class AllListViewModelTest {
         val dataSource = FakeDataSource(reminders)
         val reminderRepository = ReminderRepository(dataSource)
 
-        viewModel = AllListViewModel(reminderRepository)
+        viewModel = AllListViewModelOld(reminderRepository)
     }
 
     @Test
     fun `Sort all reminders by earliest date first, sorted by date earliest first`() {
-        val sort = MutableLiveData(ReminderSort.EARLIEST_DATE_FIRST)
+        val sort = MutableLiveData(ReminderSortOrder.EARLIEST_DATE_FIRST)
         val filter = MutableLiveData("")
         val expectedSortedReminders = reminders.sortedBy { it.startDateTime }
 
@@ -60,7 +60,7 @@ class AllListViewModelTest {
 
     @Test
     fun `Sort all reminders by oldest date first, sorted by date oldest first`() {
-        val sort = MutableLiveData(ReminderSort.LATEST_DATE_FIRST)
+        val sort = MutableLiveData(ReminderSortOrder.LATEST_DATE_FIRST)
         val filter = MutableLiveData("")
         val expectedSortedReminders = reminders.sortedByDescending { it.startDateTime }
 
@@ -71,7 +71,7 @@ class AllListViewModelTest {
 
     @Test
     fun `Sort is null, returns null`() {
-        val sort = MutableLiveData<ReminderSort>(null)
+        val sort = MutableLiveData<ReminderSortOrder>(null)
         val filter = MutableLiveData<String>(null)
 
         val nullReminders = viewModel.getReminders(sort, filter).getOrAwaitValue()
@@ -81,7 +81,7 @@ class AllListViewModelTest {
 
     @Test
     fun `Filter all reminders by name string, only reminders with that name remain`() {
-        val sort = MutableLiveData(ReminderSort.EARLIEST_DATE_FIRST)
+        val sort = MutableLiveData(ReminderSortOrder.EARLIEST_DATE_FIRST)
         val filter = MutableLiveData("futureReminder")
         val expectedFilteredReminders = listOf(reminders.last())
 
@@ -92,7 +92,7 @@ class AllListViewModelTest {
 
     @Test
     fun `Filter all reminders with no matching reminders, returns no reminders`() {
-        val sort = MutableLiveData(ReminderSort.EARLIEST_DATE_FIRST)
+        val sort = MutableLiveData(ReminderSortOrder.EARLIEST_DATE_FIRST)
         val filter = MutableLiveData("xxxxx")
         val expectedFilteredReminders = emptyList<Reminder>()
 
@@ -103,7 +103,7 @@ class AllListViewModelTest {
 
     @Test
     fun `Filter is null, treats filter as blank`() {
-        val sort = MutableLiveData(ReminderSort.EARLIEST_DATE_FIRST)
+        val sort = MutableLiveData(ReminderSortOrder.EARLIEST_DATE_FIRST)
         val filter = MutableLiveData<String>(null)
 
         val nullFilterReminders = viewModel.getReminders(sort, filter).getOrAwaitValue()
@@ -113,7 +113,7 @@ class AllListViewModelTest {
 
     @Test
     fun `Filter is only whitespace, treats filter as blank`() {
-        val sort = MutableLiveData(ReminderSort.EARLIEST_DATE_FIRST)
+        val sort = MutableLiveData(ReminderSortOrder.EARLIEST_DATE_FIRST)
         val filter = MutableLiveData("      ")
 
         val whitespaceFilterReminders = viewModel.getReminders(sort, filter).getOrAwaitValue()
@@ -123,7 +123,7 @@ class AllListViewModelTest {
 
     @Test
     fun `Sort and filter with valid result, returns valid result`() {
-        val sort = MutableLiveData(ReminderSort.EARLIEST_DATE_FIRST)
+        val sort = MutableLiveData(ReminderSortOrder.EARLIEST_DATE_FIRST)
         val filter = MutableLiveData("pastReminder")
 
         val sortFilterReminders = viewModel.getReminders(sort, filter).getOrAwaitValue()
@@ -133,7 +133,7 @@ class AllListViewModelTest {
 
     @Test
     fun `Sort and filter results in empty list, returns empty list`() {
-        val sort = MutableLiveData(ReminderSort.EARLIEST_DATE_FIRST)
+        val sort = MutableLiveData(ReminderSortOrder.EARLIEST_DATE_FIRST)
         val filter = MutableLiveData("x")
 
         val sortFilterReminders = viewModel.getReminders(sort, filter).getOrAwaitValue()

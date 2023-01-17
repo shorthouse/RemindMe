@@ -1,18 +1,14 @@
 package dev.shorthouse.remindme.viewmodel
 
 import androidx.annotation.VisibleForTesting
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.di.IoDispatcher
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.utilities.DAYS_IN_WEEK
-import dev.shorthouse.remindme.utilities.ReminderSort
+import dev.shorthouse.remindme.utilities.enums.ReminderSortOrder
+import dev.shorthouse.remindme.utilities.floor
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -21,26 +17,26 @@ import java.time.LocalDateTime
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject
-import kotlin.math.floor
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.milliseconds
-import kotlin.time.Duration.Companion.seconds
+import kotlin.time.DurationUnit
 import kotlin.time.times
+import kotlin.time.toDuration
 
 @HiltViewModel
-class ActiveListViewModel @Inject constructor(
+class ActiveListViewModelOld @Inject constructor(
     val repository: ReminderRepository,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
     private val currentAllReminders = repository
-        .getNotCompletedReminders()
+        .getAllReminders()
         .asLiveData()
 
     @VisibleForTesting
     val currentTime = MutableLiveData(ZonedDateTime.now())
 
     fun getReminders(
-        currentSort: MutableLiveData<ReminderSort>,
+        currentSort: MutableLiveData<ReminderSortOrder>,
         currentFilter: MutableLiveData<String>
     ): LiveData<List<Reminder>> {
         val remindersListData = MediatorLiveData<List<Reminder>>()
@@ -62,7 +58,7 @@ class ActiveListViewModel @Inject constructor(
     }
 
     private fun getRemindersListData(
-        currentSort: MutableLiveData<ReminderSort>,
+        currentSort: MutableLiveData<ReminderSortOrder>,
         currentFilter: MutableLiveData<String>
     ): List<Reminder>? {
         val allReminders = currentAllReminders.value
@@ -77,7 +73,7 @@ class ActiveListViewModel @Inject constructor(
         }
 
         val activeSortedReminders = when (sort) {
-            ReminderSort.EARLIEST_DATE_FIRST -> activeReminders.sortedBy { it.startDateTime }
+            ReminderSortOrder.EARLIEST_DATE_FIRST -> activeReminders.sortedBy { it.startDateTime }
             else -> activeReminders.sortedByDescending { it.startDateTime }
         }
 
@@ -118,14 +114,17 @@ class ActiveListViewModel @Inject constructor(
             else -> (repeatInterval.amount * DAYS_IN_WEEK).days
         }
 
-        val epochSecondNow = ZonedDateTime.now().toEpochSecond()
-        val epochSecondStartDateTime = reminder.startDateTime.toEpochSecond()
-        val durationSinceStartDateTime = (epochSecondNow - epochSecondStartDateTime).seconds
+        val secondsToNewStartDateTime = ZonedDateTime.now()
+            .toEpochSecond()
+            .minus(reminder.startDateTime.toEpochSecond())
+            .toDuration(DurationUnit.SECONDS)
+            .div(repeatDuration)
+            .floor()
+            .inc()
+            .times(repeatDuration)
+            .inWholeSeconds
 
-        val passedIntervals = floor(durationSinceStartDateTime.div(repeatDuration)).plus(1)
-        val durationToNewStartDateTime = passedIntervals.times(repeatDuration)
-
-        return reminder.startDateTime.plusSeconds(durationToNewStartDateTime.inWholeSeconds)
+        return reminder.startDateTime.plusSeconds(secondsToNewStartDateTime)
     }
 
     fun undoDoneReminder(reminder: Reminder) {

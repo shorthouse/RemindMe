@@ -4,10 +4,11 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import androidx.core.app.NotificationManagerCompat
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dev.shorthouse.remindme.R
-import dev.shorthouse.remindme.model.RepeatInterval
 import dev.shorthouse.remindme.model.Reminder
+import dev.shorthouse.remindme.model.RepeatInterval
 import dev.shorthouse.remindme.receivers.DisplayReminderNotificationReceiver
 import java.time.Duration
 import java.time.temporal.ChronoUnit
@@ -23,6 +24,18 @@ class NotificationScheduler @Inject constructor(
         } else {
             scheduleRepeatNotification(reminder, reminder.repeatInterval)
         }
+    }
+
+    fun cancelExistingReminderNotification(reminder: Reminder) {
+        val alarmBroadcastIntent = getExistingBroadcastIntent(reminder)
+
+        alarmBroadcastIntent?.let {
+            alarmManager.cancel(alarmBroadcastIntent)
+        }
+    }
+
+    fun removeDisplayingNotification(notificationId: Int) {
+        NotificationManagerCompat.from(context).cancel(notificationId)
     }
 
     private fun scheduleOneTimeNotification(reminder: Reminder) {
@@ -78,14 +91,6 @@ class NotificationScheduler @Inject constructor(
                 context.getString(R.string.intent_key_notificationText),
                 reminder.getFormattedStartTime()
             )
-    }
-
-    fun cancelExistingReminderNotification(reminder: Reminder) {
-        val alarmBroadcastIntent = getExistingBroadcastIntent(reminder)
-
-        alarmBroadcastIntent?.let {
-            alarmManager.cancel(alarmBroadcastIntent)
-        }
     }
 
     private fun getExistingBroadcastIntent(reminder: Reminder): PendingIntent? {

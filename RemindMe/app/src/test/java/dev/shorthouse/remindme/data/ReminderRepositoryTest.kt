@@ -80,7 +80,7 @@ class ReminderRepositoryTest {
     @Test
     fun `Get not completed reminders returns not completed reminders`() {
         val notCompletedReminders = reminderRepository
-            .getNotCompletedReminders()
+            .getAllReminders()
             .asLiveData()
             .getOrAwaitValue()
 

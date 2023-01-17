@@ -57,7 +57,7 @@ class ActiveListFragmentTest {
 
     @Test
     fun when_active_reminder_exists_should_display_correctly() {
-        launchFragmentInHiltContainer<ActiveListFragment>()
+        launchFragmentInHiltContainer<ListActiveFragment>()
 
         onView(withId(R.id.reminder_name)).check(matches(withText("Test Active Reminder")))
         onView(withId(R.id.reminder_date)).check(matches(withText("01 Jan 2000")))

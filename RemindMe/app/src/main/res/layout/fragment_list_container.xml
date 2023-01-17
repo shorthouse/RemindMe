@@ -26,7 +26,7 @@
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fragment_container_list"
-            android:name="dev.shorthouse.remindme.fragments.AllListFragment"
+            android:name="dev.shorthouse.remindme.fragments.ListAllFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:transitionGroup="true"

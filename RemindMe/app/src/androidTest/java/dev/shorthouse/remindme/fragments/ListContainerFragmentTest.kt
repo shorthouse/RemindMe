@@ -86,7 +86,7 @@ class ListContainerFragmentTest {
             ApplicationProvider.getApplicationContext()
         )
 
-        launchFragmentInHiltContainer<ListContainerFragment>(
+        launchFragmentInHiltContainer<ListHomeFragment>(
             navHostController = navController,
         )
     }

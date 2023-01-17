@@ -16,12 +16,16 @@ class ReminderLocalDataSource @Inject constructor(private val reminderDao: Remin
         return reminderDao.getReminder(id)
     }
 
-    override fun getActiveNotCompletedReminders(nowDateTime: ZonedDateTime): Flow<List<Reminder>> {
-        return reminderDao.getActiveNotCompletedReminders(nowDateTime)
+    override fun getActiveReminders(nowDateTime: ZonedDateTime): Flow<List<Reminder>> {
+        return reminderDao.getActiveReminders(nowDateTime)
     }
 
-    override fun getNotCompletedReminders(): Flow<List<Reminder>> {
-        return reminderDao.getNotCompleteReminders()
+    override fun getAllReminders(): Flow<List<Reminder>> {
+        return reminderDao.getAllReminders()
+    }
+
+    override fun getAllRemindersFilteredSorted(searchFilter: String?, orderBy: String): Flow<List<Reminder>> {
+        return reminderDao.getAllRemindersFilteredSorted(searchFilter, orderBy)
     }
 
     override fun completeReminder(id: Long) {
