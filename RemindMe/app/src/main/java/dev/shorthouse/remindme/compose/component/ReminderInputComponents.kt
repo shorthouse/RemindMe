@@ -8,6 +8,8 @@ import androidx.compose.material.Icon
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.RadioButton
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -52,7 +54,7 @@ fun ReminderDateInput(reminderState: ReminderState, modifier: Modifier = Modifie
     )
 
     TextWithLeftIcon(
-        icon = painterResource(R.drawable.ic_calendar),
+        icon = Icons.Rounded.CalendarToday,
         text = reminderState.date,
         modifier = modifier
             .clickable { dateDialogState.show() }
@@ -69,7 +71,7 @@ fun ReminderTimeInput(reminderState: ReminderState, modifier: Modifier = Modifie
     )
 
     TextWithLeftIcon(
-        icon = painterResource(R.drawable.ic_clock),
+        icon = Icons.Rounded.Schedule,
         text = reminderState.time.toString(),
         modifier = modifier
             .clickable { timeDialogState.show() }
@@ -79,7 +81,7 @@ fun ReminderTimeInput(reminderState: ReminderState, modifier: Modifier = Modifie
 @Composable
 fun ReminderNotificationInput(reminderState: ReminderState) {
     ReminderSwitchRow(
-        icon = painterResource(R.drawable.ic_notification_outline),
+        icon = Icons.Rounded.NotificationsNone,
         switchText = stringResource(R.string.title_send_notification),
         isChecked = reminderState.isNotificationSent,
         onCheckedChange = { reminderState.isNotificationSent = it }
@@ -116,7 +118,7 @@ fun ReminderNotesInput(reminderState: ReminderState, modifier: Modifier = Modifi
 @Composable
 fun ReminderRepeatIntervalInput(reminderState: ReminderState) {
     ReminderSwitchRow(
-        icon = painterResource(R.drawable.ic_repeat),
+        icon = Icons.Rounded.Refresh,
         switchText = stringResource(R.string.title_repeat_reminder),
         isChecked = reminderState.isRepeatReminder,
         onCheckedChange = { reminderState.isRepeatReminder = it }

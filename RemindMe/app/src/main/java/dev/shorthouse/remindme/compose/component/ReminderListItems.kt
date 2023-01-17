@@ -8,6 +8,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.NotificationsNone
+import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -96,7 +99,7 @@ fun ReminderListItem(reminderState: ReminderState, modifier: Modifier = Modifier
 
             if (reminderState.isNotificationSent) {
                 Icon(
-                    painter = painterResource(R.drawable.ic_notification_outline),
+                    imageVector = Icons.Rounded.NotificationsNone,
                     contentDescription = stringResource(R.string.cd_notification_sent),
                     tint = colorResource(R.color.subtitle_grey),
                     modifier = Modifier.size(dimensionResource(R.dimen.margin_normal))
@@ -105,7 +108,7 @@ fun ReminderListItem(reminderState: ReminderState, modifier: Modifier = Modifier
 
             if (reminderState.isRepeatReminder) {
                 Icon(
-                    painter = painterResource(R.drawable.ic_repeat),
+                    imageVector = Icons.Rounded.Refresh,
                     contentDescription = stringResource(R.string.cd_repeat_reminder),
                     tint = colorResource(R.color.subtitle_grey),
                     modifier = Modifier.size(dimensionResource(R.dimen.margin_normal))

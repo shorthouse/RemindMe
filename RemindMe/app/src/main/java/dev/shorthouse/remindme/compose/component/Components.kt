@@ -12,7 +12,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.TextStyle
@@ -54,7 +54,7 @@ fun ReminderTextField(
 
 @Composable
 fun TextWithLeftIcon(
-    icon: Painter,
+    icon: ImageVector,
     text: String,
     modifier: Modifier = Modifier
 ) {
@@ -63,7 +63,7 @@ fun TextWithLeftIcon(
         modifier = modifier
     ) {
         Icon(
-            painter = icon,
+            imageVector = icon,
             contentDescription = null,
             tint = colorResource(R.color.icon_grey),
         )
@@ -79,7 +79,7 @@ fun TextWithLeftIcon(
 
 @Composable
 fun ReminderSwitchRow(
-    icon: Painter,
+    icon: ImageVector,
     switchText: String,
     isChecked: Boolean,
     onCheckedChange: (Boolean) -> Unit
