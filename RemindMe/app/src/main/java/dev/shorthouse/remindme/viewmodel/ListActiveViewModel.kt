@@ -30,6 +30,9 @@ class ListActiveViewModel @Inject constructor(
     private val notificationScheduler: NotificationScheduler,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
+    val activeReminders = repository.getActiveReminders().asLiveData()
+    private val currentTime = MutableLiveData(ZonedDateTime.now())
+
     init {
         viewModelScope.launch {
             delay(getMillisUntilNextMinute())
@@ -42,10 +45,6 @@ class ListActiveViewModel @Inject constructor(
             }
         }
     }
-
-    private val currentTime = MutableLiveData(ZonedDateTime.now())
-
-    val activeReminders = repository.getActiveReminders().asLiveData()
 
     fun updateDoneReminder(reminder: Reminder) {
         viewModelScope.launch(ioDispatcher) {

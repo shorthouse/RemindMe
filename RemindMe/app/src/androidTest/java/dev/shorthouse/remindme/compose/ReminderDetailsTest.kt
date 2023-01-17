@@ -83,9 +83,8 @@ class ReminderDetailsTest {
                     reminderState = ReminderState(reminder),
                     onEdit = {},
                     onNavigateUp = {},
-                    onDelete = {},
-                    onComplete = {}
-                )
+                    onDelete = {}
+                ) {}
             }
         }
     }

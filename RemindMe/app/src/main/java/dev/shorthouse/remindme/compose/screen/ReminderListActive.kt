@@ -15,6 +15,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.compose.component.ActiveReminderListItem
 import dev.shorthouse.remindme.compose.component.ReminderEmptyState
@@ -25,8 +26,8 @@ import java.time.LocalTime
 
 @Composable
 fun ReminderListActiveScreen(
-    listActiveViewModel: ListActiveViewModel,
-    onNavigate: (Long) -> Unit,
+    listActiveViewModel: ListActiveViewModel = hiltViewModel(),
+    onNavigateDetails: (Long) -> Unit,
 ) {
     val activeReminders by listActiveViewModel.activeReminders.observeAsState()
 
@@ -43,7 +44,7 @@ fun ReminderListActiveScreen(
 
         ReminderListActiveContent(
             reminderStates = reminderStates,
-            onNavigate = onNavigate,
+            onNavigateDetails = onNavigateDetails,
             onCompleteChecked = onCompleteChecked
         )
     }
@@ -52,7 +53,7 @@ fun ReminderListActiveScreen(
 @Composable
 fun ReminderListActiveContent(
     reminderStates: List<ReminderState>,
-    onNavigate: (Long) -> Unit,
+    onNavigateDetails: (Long) -> Unit,
     onCompleteChecked: (Reminder) -> Unit
 ) {
     if (reminderStates.isEmpty()) {
@@ -64,7 +65,7 @@ fun ReminderListActiveContent(
     } else {
         ReminderListActive(
             reminderStates = reminderStates,
-            onNavigate = onNavigate,
+            onNavigateDetails = onNavigateDetails,
             onCompleteChecked = onCompleteChecked
         )
     }
@@ -73,12 +74,17 @@ fun ReminderListActiveContent(
 @Composable
 private fun ReminderListActive(
     reminderStates: List<ReminderState>,
-    onNavigate: (Long) -> Unit,
+    onNavigateDetails: (Long) -> Unit,
     onCompleteChecked: (Reminder) -> Unit,
 ) {
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.margin_large)),
-        contentPadding = PaddingValues(dimensionResource(R.dimen.margin_normal)),
+        contentPadding = PaddingValues(
+            start = dimensionResource(R.dimen.margin_normal),
+            top = dimensionResource(R.dimen.margin_normal),
+            end = dimensionResource(R.dimen.margin_normal),
+            bottom = dimensionResource(R.dimen.margin_bottom_bar),
+        ),
         modifier = Modifier.fillMaxWidth()
     ) {
         items(reminderStates) { reminderState ->
@@ -87,7 +93,7 @@ private fun ReminderListActive(
                 onCompleteChecked = onCompleteChecked,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable { onNavigate(reminderState.id) })
+                    .clickable { onNavigateDetails(reminderState.id) })
         }
     }
 }
