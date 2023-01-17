@@ -123,7 +123,7 @@ private class ReminderStateImpl(
             return RepeatInterval(
                 amount = repeatAmount.toLongOrNull() ?: 1,
                 unit = when {
-                    repeatUnit.contains("day") -> ChronoUnit.DAYS
+                    repeatUnit.contains("Day") -> ChronoUnit.DAYS
                     else -> ChronoUnit.WEEKS
                 }
             )
