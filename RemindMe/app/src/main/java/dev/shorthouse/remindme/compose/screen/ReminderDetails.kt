@@ -4,6 +4,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
@@ -19,29 +21,31 @@ import com.google.android.material.composethemeadapter.MdcTheme
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.compose.component.ReminderAlertDialog
 import dev.shorthouse.remindme.compose.component.TextWithLeftIcon
+import dev.shorthouse.remindme.compose.state.ReminderDetailItem
 import dev.shorthouse.remindme.compose.state.ReminderState
 import dev.shorthouse.remindme.viewmodel.DetailsViewModel
 import java.time.LocalTime
 
 @Composable
 fun ReminderDetailsScreen(
+    reminderId: Long?,
     detailsViewModel: DetailsViewModel = hiltViewModel(),
     onNavigateUp: () -> Unit,
-    onEdit: () -> Unit,
+    onEdit: (Long) -> Unit,
 ) {
-    val onDelete = {
-        detailsViewModel.deleteReminder()
-        onNavigateUp()
-    }
+    val reminder = reminderId?.let { detailsViewModel.getReminderDetails(it).observeAsState() }
 
-    val onComplete = {
-        detailsViewModel.completeReminder()
-        onNavigateUp()
-    }
+    reminder?.value?.let {
+        val onDelete = {
+            detailsViewModel.deleteReminder(it)
+            onNavigateUp()
+        }
 
-    val reminder by detailsViewModel.reminder.observeAsState()
+        val onComplete = {
+            detailsViewModel.completeReminder(it)
+            onNavigateUp()
+        }
 
-    reminder?.let {
         ReminderDetailsScaffold(
             reminderState = ReminderState(it),
             onNavigateUp = onNavigateUp,
@@ -56,13 +60,14 @@ fun ReminderDetailsScreen(
 fun ReminderDetailsScaffold(
     reminderState: ReminderState,
     onNavigateUp: () -> Unit,
-    onEdit: () -> Unit,
+    onEdit: (Long) -> Unit,
     onDelete: () -> Unit,
     onComplete: () -> Unit,
 ) {
     Scaffold(
         topBar = {
             ReminderDetailsTopBar(
+                reminderState = reminderState,
                 onNavigateUp = onNavigateUp,
                 onEdit = onEdit,
                 onDelete = onDelete,
@@ -80,8 +85,9 @@ fun ReminderDetailsScaffold(
 
 @Composable
 fun ReminderDetailsTopBar(
+    reminderState: ReminderState,
     onNavigateUp: () -> Unit,
-    onEdit: () -> Unit,
+    onEdit: (Long) -> Unit,
     onDelete: () -> Unit,
     onComplete: () -> Unit
 ) {
@@ -124,7 +130,7 @@ fun ReminderDetailsTopBar(
             }
         },
         actions = {
-            IconButton(onClick = onEdit) {
+            IconButton(onClick = { onEdit(reminderState.id) }) {
                 Icon(
                     painter = painterResource(R.drawable.ic_edit),
                     contentDescription = stringResource(R.string.cd_menu_item_edit),
@@ -178,36 +184,55 @@ fun ReminderDetailsContent(
                 bottom = dimensionResource(R.dimen.margin_large)
             )
     ) {
-        ReminderName(
-            name = reminderState.name,
-        )
+        ReminderName(name = reminderState.name)
 
-        val detailIcons = buildList {
-            add(painterResource(R.drawable.ic_calendar))
-            add(painterResource(R.drawable.ic_clock))
-            if (reminderState.isRepeatReminder) add(painterResource(R.drawable.ic_repeat))
-            if (reminderState.isNotificationSent) add(painterResource(R.drawable.ic_notification_outline))
-            reminderState.notes?.let { add(painterResource(R.drawable.ic_notes)) }
-        }
-
-        val detailTexts = buildList {
-            add(reminderState.date)
-            add(reminderState.time.toString())
-            if (reminderState.isRepeatReminder) add(
-                stringResource(
-                    R.string.reminder_details_repeat_interval,
-                    reminderState.repeatAmount,
-                    reminderState.repeatUnit
+        val detailItems = buildList {
+            add(
+                ReminderDetailItem(
+                    Icons.Rounded.CalendarToday,
+                    reminderState.date
                 )
             )
-            if (reminderState.isNotificationSent) add(stringResource(R.string.notifications_on))
-            reminderState.notes?.let { add(it) }
+            add(
+                ReminderDetailItem(
+                    Icons.Rounded.Schedule,
+                    reminderState.time.toString()
+                )
+            )
+            if (reminderState.isNotificationSent) {
+                add(
+                    ReminderDetailItem(
+                        Icons.Rounded.NotificationsNone,
+                        stringResource(R.string.notifications_on)
+                    )
+                )
+            }
+            if (reminderState.isRepeatReminder) {
+                add(
+                    ReminderDetailItem(
+                        Icons.Rounded.Refresh,
+                        stringResource(
+                            R.string.reminder_details_repeat_interval,
+                            reminderState.repeatAmount,
+                            reminderState.repeatUnit
+                        )
+                    )
+                )
+            }
+            reminderState.notes?.let { notes ->
+                add(
+                    ReminderDetailItem(
+                        Icons.Rounded.Notes,
+                        notes
+                    )
+                )
+            }
         }
 
-        repeat(detailIcons.size) { i ->
+        detailItems.forEach { detailItem ->
             TextWithLeftIcon(
-                icon = detailIcons[i],
-                text = detailTexts[i],
+                icon = detailItem.icon,
+                text = detailItem.label,
             )
         }
     }
@@ -246,9 +271,8 @@ private fun ReminderDetailsScreenPreview() {
             reminderState = reminderState,
             onNavigateUp = {},
             onEdit = {},
-            onDelete = {},
-            onComplete = {}
-        )
+            onDelete = {}
+        ) {}
     }
 }
 
