@@ -1,85 +1,12 @@
 package dev.shorthouse.remindme.fragments
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.compose.ui.platform.ViewCompositionStrategy
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
-import androidx.navigation.findNavController
-import com.google.android.material.composethemeadapter.MdcTheme
-import com.google.android.material.transition.MaterialFadeThrough
-import dagger.hilt.android.AndroidEntryPoint
-import dev.shorthouse.remindme.compose.screen.ReminderListAllScreen
-import dev.shorthouse.remindme.databinding.FragmentAllListBinding
-import dev.shorthouse.remindme.viewmodel.AllListViewModelOld
-import dev.shorthouse.remindme.viewmodel.ListContainerViewModel
-import dev.shorthouse.remindme.viewmodel.ReminderListViewModel
-
-@AndroidEntryPoint
-class ListAllFragment : Fragment() {
-    private lateinit var binding: FragmentAllListBinding
-
-    private val viewModel: AllListViewModelOld by viewModels()
-    private val listContainerViewModel: ListContainerViewModel by activityViewModels()
-
-
-    private val reminderListViewModel: ReminderListViewModel by viewModels()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        setTransitionAnimations()
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentAllListBinding.inflate(inflater, container, false).apply {
-            listAllComposeView.apply {
-                setViewCompositionStrategy(
-                    ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed
-                )
-
-                val onNavigate: (Long) -> Unit = { reminderId ->
-                    val action = ListHomeFragmentDirections.actionListContainerToDetails(reminderId)
-                    findNavController().navigate(action)
-                }
-
-                setContent {
-                    MdcTheme {
-                        ReminderListAllScreen(
-                            reminderListViewModel = reminderListViewModel,
-                            onNavigate = onNavigate
-                        )
-                    }
-                }
-            }
-        }
-
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-//        setListAdapter()
-//        setListData()
-    }
-
-    private fun setTransitionAnimations() {
-        enterTransition = MaterialFadeThrough()
-        exitTransition = MaterialFadeThrough()
-    }
-
-//    private fun setListAdapter() {
-//        listAdapter = AllListAdapter()
-//        binding.allReminderRecycler.adapter = listAdapter
-//    }
-
+//import android.view.View
+//import androidx.fragment.app.Fragment
+//import dagger.hilt.android.AndroidEntryPoint
+//import dev.shorthouse.remindme.model.Reminder
+//
+//@AndroidEntryPoint
+//class ListAllFragment : Fragment() {
 //    private fun setListData() {
 //        viewModel.getReminders(
 //            listContainerViewModel.currentSort,
@@ -92,7 +19,7 @@ class ListAllFragment : Fragment() {
 //                }
 //            }
 //    }
-
+//
 //    private fun submitAdapterList(reminders: List<Reminder>) {
 //        val layoutManager = binding.allReminderRecycler.layoutManager
 //
@@ -101,10 +28,8 @@ class ListAllFragment : Fragment() {
 //            layoutManager?.onRestoreInstanceState(savedListScrollPosition)
 //        }
 //    }
-
-//    private fun displayListState(reminders: List<Reminder>) {
-//        hideOldListState()
 //
+//    private fun displayListState(reminders: List<Reminder>) {
 //        val newListState = when {
 //            reminders.isNotEmpty() -> binding.allReminderRecycler
 //            listContainerViewModel.currentFilter.value?.isNotEmpty() == true -> binding.emptyStateSearch
@@ -113,10 +38,4 @@ class ListAllFragment : Fragment() {
 //
 //        newListState.visibility = View.VISIBLE
 //    }
-
-//    private fun hideOldListState() {
-//        binding.allReminderRecycler.visibility = View.GONE
-//        binding.emptyState.visibility = View.GONE
-//        binding.emptyStateSearch.visibility = View.GONE
-//    }
-}
+//}
