@@ -15,6 +15,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.compose.component.AllReminderListItem
 import dev.shorthouse.remindme.compose.component.ReminderEmptyState
@@ -24,8 +25,8 @@ import java.time.LocalTime
 
 @Composable
 fun ReminderListAllScreen(
-    reminderListViewModel: ReminderListViewModel,
-    onNavigate: (Long) -> Unit
+    reminderListViewModel: ReminderListViewModel = hiltViewModel(),
+    onNavigateDetails: (Long) -> Unit,
 ) {
     val allReminders by reminderListViewModel.allReminders.observeAsState()
 
@@ -34,7 +35,7 @@ fun ReminderListAllScreen(
 
         ReminderListAllContent(
             reminderStates = reminderStates,
-            onNavigate = onNavigate
+            onNavigateDetails = onNavigateDetails,
         )
     }
 }
@@ -42,7 +43,7 @@ fun ReminderListAllScreen(
 @Composable
 fun ReminderListAllContent(
     reminderStates: List<ReminderState>,
-    onNavigate: (Long) -> Unit
+    onNavigateDetails: (Long) -> Unit,
 ) {
     if (reminderStates.isEmpty()) {
         ReminderEmptyState(
@@ -51,18 +52,26 @@ fun ReminderListAllContent(
             subtitle = stringResource(R.string.empty_state_all_subtitle)
         )
     } else {
-        ReminderListAll(reminderStates, onNavigate)
+        ReminderListAll(
+            reminderStates = reminderStates,
+            onNavigateDetails = onNavigateDetails,
+        )
     }
 }
 
 @Composable
 private fun ReminderListAll(
     reminderStates: List<ReminderState>,
-    onNavigate: (Long) -> Unit
+    onNavigateDetails: (Long) -> Unit,
 ) {
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.margin_large)),
-        contentPadding = PaddingValues(dimensionResource(R.dimen.margin_normal)),
+        contentPadding = PaddingValues(
+            start = dimensionResource(R.dimen.margin_normal),
+            top = dimensionResource(R.dimen.margin_normal),
+            end = dimensionResource(R.dimen.margin_normal),
+            bottom = dimensionResource(R.dimen.margin_bottom_bar),
+        ),
         modifier = Modifier.fillMaxWidth()
     ) {
         items(reminderStates) { reminderState ->
@@ -70,7 +79,7 @@ private fun ReminderListAll(
                 reminderState = reminderState,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable { onNavigate(reminderState.id) })
+                    .clickable { onNavigateDetails(reminderState.id) })
         }
     }
 }
@@ -115,5 +124,8 @@ fun ReminderListAllPreview() {
         )
     )
 
-    ReminderListAllContent(reminderStates = reminderStates) {}
+    ReminderListAllContent(
+        reminderStates = reminderStates,
+        onNavigateDetails = {},
+    )
 }
