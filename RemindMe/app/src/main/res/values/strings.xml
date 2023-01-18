@@ -9,7 +9,6 @@
     <string name="top_app_bar_search">Search</string>
     <string name="cd_top_app_bar_search">Search reminders</string>
     <string name="top_app_bar_sort">Sort</string>
-    <string name="cd_bottom_app_bar_sort">Sort</string>
     <string name="snackbar_reminder_completed">Reminder completed</string>
     <string name="snackbar_reminder_completed_undo">Undo</string>
 
