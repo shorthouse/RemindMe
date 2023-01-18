@@ -18,40 +18,43 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.android.material.composethemeadapter.MdcTheme
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.compose.component.ReminderAlertDialog
 import dev.shorthouse.remindme.compose.component.TextWithLeftIcon
+import dev.shorthouse.remindme.compose.screen.destinations.ReminderEditScreenDestination
 import dev.shorthouse.remindme.compose.state.ReminderDetailItem
 import dev.shorthouse.remindme.compose.state.ReminderState
 import dev.shorthouse.remindme.viewmodel.DetailsViewModel
 import java.time.LocalTime
 
+@Destination
 @Composable
 fun ReminderDetailsScreen(
-    reminderId: Long?,
+    reminderId: Long,
     detailsViewModel: DetailsViewModel = hiltViewModel(),
-    onNavigateUp: () -> Unit,
-    onEdit: (Long) -> Unit,
+    navigator: DestinationsNavigator
 ) {
-    val reminder = reminderId?.let { detailsViewModel.getReminderDetails(it).observeAsState() }
+    val reminder by detailsViewModel.getReminderDetails(reminderId).observeAsState()
 
-    reminder?.value?.let {
-        val onDelete = {
+    reminder?.let {
+        val onDelete: () -> Unit = {
             detailsViewModel.deleteReminder(it)
-            onNavigateUp()
+            navigator.navigateUp()
         }
 
-        val onComplete = {
+        val onComplete: () -> Unit = {
             detailsViewModel.completeReminder(it)
-            onNavigateUp()
+            navigator.navigateUp()
         }
 
         ReminderDetailsScaffold(
             reminderState = ReminderState(it),
-            onNavigateUp = onNavigateUp,
-            onEdit = onEdit,
             onDelete = onDelete,
-            onComplete = onComplete
+            onComplete = onComplete,
+            navigator = navigator
         )
     }
 }
@@ -59,17 +62,15 @@ fun ReminderDetailsScreen(
 @Composable
 fun ReminderDetailsScaffold(
     reminderState: ReminderState,
-    onNavigateUp: () -> Unit,
-    onEdit: (Long) -> Unit,
     onDelete: () -> Unit,
     onComplete: () -> Unit,
+    navigator: DestinationsNavigator
 ) {
     Scaffold(
         topBar = {
             ReminderDetailsTopBar(
                 reminderState = reminderState,
-                onNavigateUp = onNavigateUp,
-                onEdit = onEdit,
+                navigator = navigator,
                 onDelete = onDelete,
                 onComplete = onComplete
             )
@@ -86,10 +87,9 @@ fun ReminderDetailsScaffold(
 @Composable
 fun ReminderDetailsTopBar(
     reminderState: ReminderState,
-    onNavigateUp: () -> Unit,
-    onEdit: (Long) -> Unit,
     onDelete: () -> Unit,
-    onComplete: () -> Unit
+    onComplete: () -> Unit,
+    navigator: DestinationsNavigator
 ) {
     var isMenuShown by remember { mutableStateOf(false) }
     var isDeleteDialogShown by remember { mutableStateOf(false) }
@@ -121,7 +121,7 @@ fun ReminderDetailsTopBar(
             )
         },
         navigationIcon = {
-            IconButton(onClick = onNavigateUp) {
+            IconButton(onClick = { navigator.navigateUp() }) {
                 Icon(
                     painter = painterResource(R.drawable.ic_back),
                     contentDescription = stringResource(R.string.cd_back),
@@ -130,7 +130,7 @@ fun ReminderDetailsTopBar(
             }
         },
         actions = {
-            IconButton(onClick = { onEdit(reminderState.id) }) {
+            IconButton(onClick = { navigator.navigate(ReminderEditScreenDestination(reminderId = reminderState.id)) }) {
                 Icon(
                     painter = painterResource(R.drawable.ic_edit),
                     contentDescription = stringResource(R.string.cd_menu_item_edit),
@@ -269,10 +269,10 @@ private fun ReminderDetailsScreenPreview() {
 
         ReminderDetailsScaffold(
             reminderState = reminderState,
-            onNavigateUp = {},
-            onEdit = {},
-            onDelete = {}
-        ) {}
+            onDelete = {},
+            onComplete = {},
+            navigator = EmptyDestinationsNavigator
+        )
     }
 }
 

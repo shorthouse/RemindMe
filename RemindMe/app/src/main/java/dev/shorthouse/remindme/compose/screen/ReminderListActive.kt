@@ -16,9 +16,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.compose.component.ActiveReminderListItem
 import dev.shorthouse.remindme.compose.component.ReminderEmptyState
+import dev.shorthouse.remindme.compose.screen.destinations.ReminderDetailsScreenDestination
 import dev.shorthouse.remindme.compose.state.ReminderState
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.viewmodel.ListActiveViewModel
@@ -27,7 +30,7 @@ import java.time.LocalTime
 @Composable
 fun ReminderListActiveScreen(
     listActiveViewModel: ListActiveViewModel = hiltViewModel(),
-    onNavigateDetails: (Long) -> Unit,
+    navigator: DestinationsNavigator
 ) {
     val activeReminders by listActiveViewModel.activeReminders.observeAsState()
 
@@ -44,8 +47,8 @@ fun ReminderListActiveScreen(
 
         ReminderListActiveContent(
             reminderStates = reminderStates,
-            onNavigateDetails = onNavigateDetails,
-            onCompleteChecked = onCompleteChecked
+            onCompleteChecked = onCompleteChecked,
+            navigator = navigator
         )
     }
 }
@@ -53,8 +56,8 @@ fun ReminderListActiveScreen(
 @Composable
 fun ReminderListActiveContent(
     reminderStates: List<ReminderState>,
-    onNavigateDetails: (Long) -> Unit,
-    onCompleteChecked: (Reminder) -> Unit
+    onCompleteChecked: (Reminder) -> Unit,
+    navigator: DestinationsNavigator
 ) {
     if (reminderStates.isEmpty()) {
         ReminderEmptyState(
@@ -65,8 +68,8 @@ fun ReminderListActiveContent(
     } else {
         ReminderListActive(
             reminderStates = reminderStates,
-            onNavigateDetails = onNavigateDetails,
-            onCompleteChecked = onCompleteChecked
+            onCompleteChecked = onCompleteChecked,
+            navigator = navigator
         )
     }
 }
@@ -74,8 +77,8 @@ fun ReminderListActiveContent(
 @Composable
 private fun ReminderListActive(
     reminderStates: List<ReminderState>,
-    onNavigateDetails: (Long) -> Unit,
     onCompleteChecked: (Reminder) -> Unit,
+    navigator: DestinationsNavigator,
 ) {
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.margin_large)),
@@ -93,7 +96,7 @@ private fun ReminderListActive(
                 onCompleteChecked = onCompleteChecked,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable { onNavigateDetails(reminderState.id) })
+                    .clickable { navigator.navigate(ReminderDetailsScreenDestination(reminderId = reminderState.id)) })
         }
     }
 }
@@ -138,5 +141,9 @@ fun ReminderListActivePreview() {
         )
     )
 
-    ReminderListActiveContent(reminderStates = reminderStates, {}, {})
+    ReminderListActiveContent(
+        reminderStates = reminderStates,
+        navigator = EmptyDestinationsNavigator,
+        onCompleteChecked = {}
+    )
 }

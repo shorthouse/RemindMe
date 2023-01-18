@@ -16,9 +16,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.compose.component.AllReminderListItem
 import dev.shorthouse.remindme.compose.component.ReminderEmptyState
+import dev.shorthouse.remindme.compose.screen.destinations.ReminderDetailsScreenDestination
 import dev.shorthouse.remindme.compose.state.ReminderState
 import dev.shorthouse.remindme.viewmodel.ReminderListViewModel
 import java.time.LocalTime
@@ -26,7 +29,7 @@ import java.time.LocalTime
 @Composable
 fun ReminderListAllScreen(
     reminderListViewModel: ReminderListViewModel = hiltViewModel(),
-    onNavigateDetails: (Long) -> Unit,
+    navigator: DestinationsNavigator
 ) {
     val allReminders by reminderListViewModel.allReminders.observeAsState()
 
@@ -35,7 +38,7 @@ fun ReminderListAllScreen(
 
         ReminderListAllContent(
             reminderStates = reminderStates,
-            onNavigateDetails = onNavigateDetails,
+            navigator = navigator
         )
     }
 }
@@ -43,7 +46,7 @@ fun ReminderListAllScreen(
 @Composable
 fun ReminderListAllContent(
     reminderStates: List<ReminderState>,
-    onNavigateDetails: (Long) -> Unit,
+    navigator: DestinationsNavigator
 ) {
     if (reminderStates.isEmpty()) {
         ReminderEmptyState(
@@ -54,7 +57,7 @@ fun ReminderListAllContent(
     } else {
         ReminderListAll(
             reminderStates = reminderStates,
-            onNavigateDetails = onNavigateDetails,
+            navigator = navigator
         )
     }
 }
@@ -62,7 +65,7 @@ fun ReminderListAllContent(
 @Composable
 private fun ReminderListAll(
     reminderStates: List<ReminderState>,
-    onNavigateDetails: (Long) -> Unit,
+    navigator: DestinationsNavigator
 ) {
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.margin_large)),
@@ -79,7 +82,7 @@ private fun ReminderListAll(
                 reminderState = reminderState,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable { onNavigateDetails(reminderState.id) })
+                    .clickable { navigator.navigate(ReminderDetailsScreenDestination(reminderId = reminderState.id)) })
         }
     }
 }
@@ -126,6 +129,6 @@ fun ReminderListAllPreview() {
 
     ReminderListAllContent(
         reminderStates = reminderStates,
-        onNavigateDetails = {},
+        navigator = EmptyDestinationsNavigator
     )
 }
