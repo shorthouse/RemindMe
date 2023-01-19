@@ -30,6 +30,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.android.material.composethemeadapter.MdcTheme
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.compose.component.*
@@ -42,7 +44,7 @@ fun ReminderInputScreen(
     reminderState: ReminderState,
     inputViewModel: InputViewModel,
     topBarTitle: String,
-    onNavigateUp: () -> Unit
+    navigator: DestinationsNavigator
 ) {
     val scaffoldState = rememberScaffoldState()
     val coroutineScope = rememberCoroutineScope()
@@ -54,7 +56,7 @@ fun ReminderInputScreen(
         when {
             inputViewModel.isReminderValid(reminder) -> {
                 inputViewModel.saveReminder(reminder)
-                onNavigateUp()
+                navigator.navigateUp()
             }
             else -> {
                 val errorMessage = inputViewModel.getErrorMessage(reminder).asString(context)
@@ -69,8 +71,8 @@ fun ReminderInputScreen(
         reminderState = reminderState,
         scaffoldState = scaffoldState,
         topBarTitle = topBarTitle,
-        onNavigateUp = onNavigateUp,
-        onSave = onSave
+        onSave = onSave,
+        navigator = navigator
     )
 }
 
@@ -79,16 +81,16 @@ fun ReminderInputScaffold(
     reminderState: ReminderState,
     scaffoldState: ScaffoldState,
     topBarTitle: String,
-    onNavigateUp: () -> Unit,
     onSave: () -> Unit,
+    navigator: DestinationsNavigator,
 ) {
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
             ReminderInputTopBar(
                 topBarTitle = topBarTitle,
-                onNavigateUp = onNavigateUp,
-                onSave = onSave
+                onSave = onSave,
+                navigator = navigator
             )
         },
         content = { scaffoldPadding ->
@@ -106,8 +108,8 @@ fun ReminderInputScaffold(
 @Composable
 fun ReminderInputTopBar(
     topBarTitle: String,
-    onNavigateUp: () -> Unit,
     onSave: () -> Unit,
+    navigator: DestinationsNavigator
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     TopAppBar(
@@ -117,7 +119,7 @@ fun ReminderInputTopBar(
         navigationIcon = {
             IconButton(onClick = {
                 keyboardController?.hide()
-                onNavigateUp()
+                navigator.navigateUp()
             }) {
                 Icon(
                     painter = painterResource(R.drawable.ic_close),
@@ -413,8 +415,8 @@ private fun ReminderAddPreview() {
             reminderState = reminderState,
             scaffoldState = scaffoldState,
             topBarTitle = stringResource(R.string.top_bar_title_add_reminder),
-            onNavigateUp = {},
             onSave = {},
+            navigator = EmptyDestinationsNavigator
         )
     }
 }
@@ -435,8 +437,8 @@ private fun ReminderEditPreview() {
             reminderState = reminderState,
             scaffoldState = scaffoldState,
             topBarTitle = stringResource(R.string.top_bar_title_edit_reminder),
-            onNavigateUp = {},
             onSave = {},
+            navigator = EmptyDestinationsNavigator
         )
     }
 }

@@ -81,10 +81,12 @@ class ReminderDetailsTest {
             MdcTheme {
                 ReminderDetailsScaffold(
                     reminderState = ReminderState(reminder),
-                    onEdit = {},
                     onNavigateUp = {},
-                    onDelete = {}
-                ) {}
+                    onEdit = {},
+                    onDelete = {},
+                    {},
+                    navigator
+                )
             }
         }
     }
