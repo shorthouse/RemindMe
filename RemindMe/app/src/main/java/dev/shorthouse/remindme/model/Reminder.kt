@@ -2,9 +2,7 @@ package dev.shorthouse.remindme.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import dev.shorthouse.remindme.utilities.DATE_PATTERN
 import java.time.ZonedDateTime
-import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
 @Entity
@@ -16,13 +14,8 @@ data class Reminder(
     val isNotificationSent: Boolean,
     val repeatInterval: RepeatInterval?,
     val notes: String?,
-    val isComplete: Boolean
+    val isCompleted: Boolean
 ) {
-    fun getFormattedStartDate() = this.startDateTime
-        .toLocalDate()
-        .format(DateTimeFormatter.ofPattern(DATE_PATTERN))
-        .toString()
-
     fun getFormattedStartTime() = this.startDateTime
         .toLocalTime()
         .toString()

@@ -10,7 +10,7 @@ import com.google.accompanist.permissions.rememberPermissionState
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun NotificationPermissionRequest() {
+fun NotificationPermissionRequester() {
     if (Build.VERSION.SDK_INT >= 33) {
         val notificationPermissionState = rememberPermissionState(Manifest.permission.POST_NOTIFICATIONS)
 

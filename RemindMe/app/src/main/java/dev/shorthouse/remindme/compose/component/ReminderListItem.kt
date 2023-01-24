@@ -2,36 +2,34 @@ package dev.shorthouse.remindme.compose.component
 
 import android.content.res.Configuration
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material.icons.rounded.NotificationsNone
+import androidx.compose.material.icons.rounded.RadioButtonUnchecked
 import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.sp
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.compose.state.ReminderState
 import dev.shorthouse.remindme.model.Reminder
+import dev.shorthouse.remindme.theme.RemindMeTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.LocalTime
 import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
-fun ActiveReminderListItem(
+fun OverdueReminderListItem(
     reminderState: ReminderState,
     onCompleteChecked: (Reminder) -> Unit,
     modifier: Modifier = Modifier
@@ -60,11 +58,21 @@ fun ActiveReminderListItem(
 }
 
 @Composable
-fun AllReminderListItem(
+fun ScheduledReminderListItem(
     reminderState: ReminderState,
     modifier: Modifier = Modifier
 ) {
-    Row(modifier = modifier) {
+    Row(modifier = modifier.fillMaxWidth()) {
+        ReminderListItem(reminderState = reminderState)
+    }
+}
+
+@Composable
+fun CompletedReminderListItem(
+    reminderState: ReminderState,
+    modifier: Modifier = Modifier
+) {
+    Row(modifier = modifier.fillMaxWidth()) {
         ReminderListItem(reminderState = reminderState)
     }
 }
@@ -74,9 +82,7 @@ fun ReminderListItem(reminderState: ReminderState, modifier: Modifier = Modifier
     Column(modifier = modifier) {
         Text(
             text = reminderState.name,
-            color = colorResource(R.color.text_on_surface),
-            fontSize = 17.sp,
-            fontWeight = FontWeight.Bold,
+            style = MaterialTheme.typography.body2,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
         )
@@ -87,14 +93,12 @@ fun ReminderListItem(reminderState: ReminderState, modifier: Modifier = Modifier
         ) {
             Text(
                 text = reminderState.date,
-                color = colorResource(R.color.subtitle_grey),
-                fontSize = 14.sp
+                style = MaterialTheme.typography.subtitle2
             )
 
             Text(
                 text = reminderState.time.toString(),
-                color = colorResource(R.color.subtitle_grey),
-                fontSize = 14.sp
+                style = MaterialTheme.typography.subtitle2
             )
 
             if (reminderState.isNotificationSent) {
@@ -122,8 +126,8 @@ fun ReminderListItem(reminderState: ReminderState, modifier: Modifier = Modifier
 @Composable
 fun ReminderListItemCheckbox(selected: Boolean, onChecked: () -> Unit) {
     val checkboxIcon = when (selected) {
-        false -> painterResource(R.drawable.ic_checkbox_circle)
-        true -> painterResource(R.drawable.ic_check)
+        false -> Icons.Rounded.RadioButtonUnchecked
+        true -> Icons.Rounded.Check
     }
 
     val checkboxIconColor = when (selected) {
@@ -132,7 +136,7 @@ fun ReminderListItemCheckbox(selected: Boolean, onChecked: () -> Unit) {
     }
 
     Icon(
-        painter = checkboxIcon,
+        imageVector = checkboxIcon,
         tint = checkboxIconColor,
         contentDescription = stringResource(R.string.cd_checkbox_complete_reminder),
         modifier = Modifier.clickable { onChecked() }
@@ -142,56 +146,41 @@ fun ReminderListItemCheckbox(selected: Boolean, onChecked: () -> Unit) {
 @Preview(name = "Light Mode", showBackground = true)
 @Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Composable
-fun ActiveReminderListItemPreview() {
-    val reminderState = ReminderState(
-        id = 1,
-        name = "Yoga with Alice",
-        date = "Wed, 14 Mar 2022",
-        time = LocalTime.of(14, 30),
-        isNotificationSent = true,
-        isRepeatReminder = true,
-        repeatAmount = "2",
-        repeatUnit = "Weeks",
-        notes = "Don't forget to warm up!"
-    )
+fun OverdueReminderListItemPreview() {
+    RemindMeTheme {
+        val reminderState = ReminderState(
+            id = 1,
+            name = "Yoga with Alice",
+            date = "Wed, 14 Mar 2022",
+            time = LocalTime.of(14, 30),
+            isNotificationSent = true,
+            isRepeatReminder = true,
+            repeatAmount = "2",
+            repeatUnit = "Weeks",
+            notes = "Don't forget to warm up!"
+        )
 
-    ActiveReminderListItem(reminderState = reminderState, {})
+        OverdueReminderListItem(reminderState = reminderState, {})
+    }
 }
 
 @Preview(name = "Light Mode", showBackground = true)
 @Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Composable
-fun AllReminderListItemPreview() {
-    val reminderState = ReminderState(
-        id = 1,
-        name = "Yoga with Alice",
-        date = "Wed, 14 Mar 2022",
-        time = LocalTime.of(14, 30),
-        isNotificationSent = true,
-        isRepeatReminder = true,
-        repeatAmount = "2",
-        repeatUnit = "Weeks",
-        notes = "Don't forget to warm up!"
-    )
+fun ScheduledReminderListItemPreview() {
+    RemindMeTheme {
+        val reminderState = ReminderState(
+            id = 1,
+            name = "Yoga with Alice",
+            date = "Wed, 14 Mar 2022",
+            time = LocalTime.of(14, 30),
+            isNotificationSent = true,
+            isRepeatReminder = true,
+            repeatAmount = "2",
+            repeatUnit = "Weeks",
+            notes = "Don't forget to warm up!"
+        )
 
-    AllReminderListItem(reminderState = reminderState)
-}
-
-@Preview(name = "Light Mode", showBackground = true)
-@Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
-@Composable
-fun ReminderListItemPreview() {
-    val reminderState = ReminderState(
-        id = 1,
-        name = "Yoga with Alice",
-        date = "Wed, 14 Mar 2022",
-        time = LocalTime.of(14, 30),
-        isNotificationSent = true,
-        isRepeatReminder = true,
-        repeatAmount = "2",
-        repeatUnit = "Weeks",
-        notes = "Don't forget to warm up!"
-    )
-
-    ReminderListItem(reminderState = reminderState)
+        ScheduledReminderListItem(reminderState = reminderState)
+    }
 }
