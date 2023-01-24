@@ -6,7 +6,6 @@
 
     <color name="on_primary">@color/white</color>
 
-    <color name="surface">@color/white</color>
     <color name="on_surface">@color/primary</color>
     <color name="text_on_surface">@color/black</color>
 
@@ -15,11 +14,9 @@
     <color name="light_blue">#FF1387FF</color>
     <color name="blue">#FF2A60EB</color>
 
-    <color name="text_off_black">#212121</color>
     <color name="subtitle_grey">#FF777D7F</color>
     <color name="icon_grey">#FF757575</color>
     <color name="status_bar">@color/primary</color>
-    <color name="search_bar">@color/white</color>
 
     <color name="ic_launcher_background">#FF2A60EB</color>
 </resources>

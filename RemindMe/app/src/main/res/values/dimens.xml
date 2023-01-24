@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="margin_huge">64dp</dimen>
-    <dimen name="margin_x_large">32dp</dimen>
     <dimen name="margin_large">24dp</dimen>
     <dimen name="margin_normal">16dp</dimen>
     <dimen name="margin_small">12dp</dimen>
     <dimen name="margin_tiny">8dp</dimen>
-    <dimen name="margin_none">0dp</dimen>
 
     <dimen name="margin_bottom_bar">96dp</dimen>
 </resources>
