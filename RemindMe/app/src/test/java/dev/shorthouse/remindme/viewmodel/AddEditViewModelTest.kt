@@ -1,5 +1,5 @@
-package dev.shorthouse.remindme.viewmodel
-
+//package dev.shorthouse.remindme.viewmodel
+//
 //import com.google.common.truth.Truth.assertThat
 //import dev.shorthouse.remindme.data.FakeDataSource
 //import dev.shorthouse.remindme.data.ReminderRepository

@@ -17,7 +17,6 @@
 
         <item name="android:statusBarColor">@color/status_bar</item>
 
-        <item name="searchViewStyle">@style/Theme.RemindMe.SearchView</item>
         <item name="navigationViewStyle">@style/Theme.RemindMe.NavigationView</item>
         <item name="materialCalendarTheme">@style/Theme.RemindMe.DatePicker</item>
     </style>
@@ -30,29 +29,9 @@
     </style>
 
     <!-- Alert Dialog -->
-    <style name="Theme.RemindMe.MaterialComponents.MaterialAlertDialog"
-        parent="@style/ThemeOverlay.MaterialComponents.MaterialAlertDialog">
-        <item name="buttonBarPositiveButtonStyle">@style/ButtonStyle</item>
-        <item name="buttonBarNegativeButtonStyle">@style/ButtonStyle</item>
-    </style>
 
     <style name="ButtonStyle" parent="@style/Widget.MaterialComponents.Button.TextButton.Dialog">
         <item name="android:textColor">@color/light_blue</item>
-    </style>
-
-    <!-- Search View -->
-    <style name="Theme.RemindMe.SearchView" parent="Widget.AppCompat.SearchView.ActionBar">
-        <item name="closeIcon">@drawable/ic_close_search</item>
-        <item name="searchHintIcon">@null</item>
-        <item name="queryHint">@string/top_app_bar_search</item>
-        <item name="queryBackground">@color/primary_variant</item>
-        <item name="android:background">@drawable/search_rounded_corner</item>
-    </style>
-
-    <!-- Time Picker -->
-    <style name="Theme.RemindMe.TimePicker" parent="ThemeOverlay.MaterialComponents.TimePicker">
-        <item name="android:buttonBarPositiveButtonStyle">@style/ButtonStyle</item>
-        <item name="android:buttonBarNegativeButtonStyle">@style/ButtonStyle</item>
     </style>
 
     <!-- Date Picker -->
@@ -60,12 +39,6 @@
         <item name="buttonBarPositiveButtonStyle">@style/ButtonStyle</item>
         <item name="buttonBarNegativeButtonStyle">@style/ButtonStyle</item>
         <item name="colorPrimary">@color/secondary</item>
-    </style>
-
-    <!-- Toolbar -->
-    <style name="Theme.RemindMe.Toolbar" parent="ThemeOverlay.MaterialComponents.Toolbar.Primary">
-        <item name="android:editTextColor">@color/black</item>
-        <item name="android:textColorHint">@color/subtitle_grey</item>
     </style>
 
     <!-- Navigation View -->

@@ -2,28 +2,25 @@
     <string name="app_name" translatable="false">RemindMe</string>
     <string name="reminder_database_name">reminder_database</string>
 
-    <!-- List container -->
+    <!-- Bottom Sheets -->
+    <string name="overdue_reminders">Overdue Reminders</string>
+    <string name="scheduled_reminders">Scheduled Reminders</string>
+    <string name="completed_reminders">Completed Reminders</string>
+    <string name="nav_drawer_sort_title">Sort by</string>
     <string name="drawer_title_earliest_date_first">Earliest date first</string>
     <string name="drawer_title_latest_date_first">Latest date first</string>
-    <string name="nav_drawer_sort_title">Sort by</string>
-    <string name="top_app_bar_search">Search</string>
-    <string name="cd_top_app_bar_search">Search reminders</string>
-    <string name="top_app_bar_sort">Sort</string>
-    <string name="snackbar_reminder_completed">Reminder completed</string>
-    <string name="snackbar_reminder_completed_undo">Undo</string>
 
-    <!-- Reminder lists -->
-    <string name="empty_state_active_title">No active reminders</string>
-    <string name="empty_state_active_subtitle">You\'re all caught up</string>
-    <string name="empty_state_search_title">No reminders found</string>
-    <string name="empty_state_search_subtitle">Try adjusting your search</string>
-    <string name="empty_state_all_title">No reminders</string>
-    <string name="empty_state_all_subtitle">Add a reminder to get started</string>
+    <!-- Empty States -->
+    <string name="empty_state_overdue_title">No overdue reminders</string>
+    <string name="empty_state_overdue_subtitle">You\'re all caught up</string>
+    <string name="empty_state_scheduled_title">No scheduled reminders</string>
+    <string name="empty_state_scheduled_subtitle">Add a reminder to get started</string>
+    <string name="empty_state_completed_title">No completed reminders</string>
+    <string name="empty_state_completed_subtitle">Completed reminders will show up here</string>
 
     <!-- Add / edit reminder -->
     <string name="top_bar_title_add_reminder">Add reminder</string>
     <string name="top_bar_title_edit_reminder">Edit reminder</string>
-    <string name="menu_item_Save">Save</string>
     <string name="cd_top_bar_save_reminder">Save reminder</string>
     <string name="hint_reminder_name">RemindMe to…</string>
     <string name="hint_reminder_notes">Add notes</string>
@@ -32,10 +29,8 @@
     <string name="repeats_every_header">Repeats every</string>
     <string name="error_name_empty">The reminder name cannot be empty</string>
     <string name="error_time_past">The reminder start time cannot be in the past</string>
-    <string name="error_input">Error</string>
-    <string name="tag_reminder_date_picker">reminder_date_picker</string>
-    <string name="toast_reminder_saved">Reminder saved</string>
-
+    <string name="day">Day</string>
+    <string name="cd_top_bar_close_reminder">Close</string>
     <plurals name="radio_button_days">
         <item quantity="one">Day</item>
         <item quantity="other">Days</item>
@@ -45,44 +40,14 @@
         <item quantity="other">Weeks</item>
     </plurals>
 
-    <!-- Reminder lists -->
-    <string name="active_reminders">Active Reminders</string>
-    <string name="all_reminders">All Reminders</string>
-    <string name="cd_fab_add_reminder">Add reminder</string>
-
     <!-- Reminder details -->
-    <string name="toolbar_title_details">Details</string>
+    <string name="top_bar_title_details">Details</string>
     <string name="notifications_on">Notifications enabled</string>
-    <string name="cd_icon_calendar">Calendar icon</string>
-    <string name="cd_icon_clock">Clock icon</string>
-    <string name="cd_icon_repeat">Repeat icon</string>
-    <string name="cd_icon_notes">Notes icon</string>
-    <string name="cd_icon_notification">Notification icon</string>
-    <string name="toast_reminder_deleted">Reminder deleted</string>
-    <string name="alert_dialog_complete_reminder_message">Complete this reminder?</string>
-    <string name="alert_dialog_complete_reminder_complete">Complete</string>
-    <string name="alert_dialog_complete_reminder_cancel">Cancel</string>
-    <string name="alert_dialog_delete_reminder_message">Delete this reminder?</string>
-    <string name="alert_dialog_delete_reminder_delete">Delete</string>
-    <string name="alert_dialog_delete_reminder_cancel">Cancel</string>
-    <string name="menu_item_edit">Edit</string>
     <string name="menu_item_complete">Complete</string>
     <string name="menu_item_delete">Delete</string>
-    <string name="cd_menu_item_edit">Edit</string>
-    <string name="cd_menu_item_complete">Complete</string>
-    <string name="cd_menu_item_delete">Delete</string>
-    <string name="toast_reminder_completed">Reminder completed</string>
-
-    <plurals name="interval_days">
-        <item quantity="one">%d day</item>
-        <item quantity="other">%d days</item>
-    </plurals>
-    <plurals name="interval_weeks">
-        <item quantity="one">%d week</item>
-        <item quantity="other">%d weeks</item>
-    </plurals>
-
+    <string name="menu_item_edit">Edit</string>
     <string name="reminder_details_repeat_interval">%1s %2s</string>
+    <string name="cd_more">More</string>
 
     <!-- Notifications -->
     <string name="notification_body_text_reboot_reschedule">Scheduling reminder notifications after reboot</string>
@@ -90,10 +55,6 @@
     <string name="reminder_notification_action_done_text">Done</string>
     <string name="notification_channel_id_reminder">NOTIFICATION_CHANNEL_ID_REMINDER</string>
     <string name="notification_channel_name_reminder">Reminders</string>
-    <string name="notification_channel_id_reboot_reschedule">NOTIFICATION_CHANNEL_ID_REBOOT_RESCHEDULE</string>
-    <string name="notification_channel_name_reboot_reschedule">NOTIFICATION_CHANNEL_NAME_REBOOT_RESCHEDULE</string>
-    <string name="notification_channel_id_time_zone_update">NOTIFICATION_CHANNEL_ID_TIME_ZONE_UPDATE</string>
-    <string name="notification_channel_name_time_zone_update">NOTIFICATION_CHANNEL_NAME_TIME_ZONE_UPDATE</string>
 
     <!-- Intent Keys -->
     <string name="intent_key_reminderId">reminderId</string>
@@ -101,27 +62,20 @@
     <string name="intent_key_notificationText">notificationText</string>
     <string name="intent_key_timeZone">"time-zone"</string>
 
-
+    <!-- List Home -->
+    <string name="cd_fab_add_reminder">Add reminder</string>
     <string name="cd_bottom_app_bar_menu">Menu</string>
-    <string name="day">Day</string>
-    <string name="repeat_unit_week">Week</string>
-    <string name="default_repeat_unit">1</string>
-    <string name="notification_rationale_title">Allow RemindMe to send you notifications?</string>
-    <string name="notification_rationale_message">This allows you to receive notifications for reminders</string>
-    <string name="notification_rationale_positive">Allow</string>
-    <string name="notification_rationale_negative">Deny</string>
     <string name="cd_bottom_app_bar_sort">Sort</string>
     <string name="cd_back">Back</string>
-    <string name="cd_more">More</string>
-    <string name="alert_dialog_cancel">Cancel</string>
-    <string name="cd_top_bar_close_reminder">Close</string>
-    <string name="alert_dialog_title_delete">Delete this reminder?</string>
-    <string name="alert_dialog_confirm_delete">Delete</string>
-    <string name="alert_dialog_title_complete">Complete this reminder?</string>
-    <string name="alert_dialog_confirm_complete">Complete</string>
-    <string name="dialog_ok">Ok</string>
-    <string name="dialog_cancel">Cancel</string>
-    <string name="cd_notification_sent">Notification sent</string>
     <string name="cd_repeat_reminder">Repeat reminder</string>
     <string name="cd_checkbox_complete_reminder">Complete reminder</string>
+    <string name="cd_notification_sent">Notification sent</string>
+
+    <!-- Alert Dialogs -->
+    <string name="alert_dialog_title_delete">Delete this reminder?</string>
+    <string name="alert_dialog_title_complete">Complete this reminder?</string>
+    <string name="dialog_action_complete">Complete</string>
+    <string name="dialog_action_delete">Delete</string>
+    <string name="dialog_action_ok">Ok</string>
+    <string name="dialog_action_cancel">Cancel</string>
 </resources>

@@ -5,7 +5,8 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import com.google.android.material.composethemeadapter.MdcTheme
+import com.google.accompanist.themeadapter.material.MdcTheme
+import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dev.shorthouse.remindme.HiltTestActivity
@@ -81,11 +82,9 @@ class ReminderDetailsTest {
             MdcTheme {
                 ReminderDetailsScaffold(
                     reminderState = ReminderState(reminder),
-                    onNavigateUp = {},
-                    onEdit = {},
                     onDelete = {},
-                    {},
-                    navigator
+                    onComplete = {},
+                    navigator = EmptyDestinationsNavigator
                 )
             }
         }
