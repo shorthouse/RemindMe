@@ -3,9 +3,9 @@ package dev.shorthouse.remindme
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.composethemeadapter.MdcTheme
 import dagger.hilt.android.AndroidEntryPoint
 import dev.shorthouse.remindme.compose.navigation.RemindMeNavHost
+import dev.shorthouse.remindme.theme.RemindMeTheme
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -13,7 +13,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            MdcTheme {
+            RemindMeTheme {
                 RemindMeNavHost()
             }
         }
