@@ -24,15 +24,17 @@ import dev.shorthouse.remindme.compose.component.ReminderEmptyState
 import dev.shorthouse.remindme.compose.screen.destinations.ReminderDetailsScreenDestination
 import dev.shorthouse.remindme.compose.state.ReminderState
 import dev.shorthouse.remindme.model.Reminder
+import dev.shorthouse.remindme.utilities.enums.ReminderSortOrder
 import dev.shorthouse.remindme.viewmodel.ListActiveViewModel
 import java.time.LocalTime
 
 @Composable
 fun ReminderListActiveScreen(
     listActiveViewModel: ListActiveViewModel = hiltViewModel(),
-    navigator: DestinationsNavigator
+    navigator: DestinationsNavigator,
+    selectedReminderSortOrder: ReminderSortOrder
 ) {
-    val activeReminders by listActiveViewModel.activeReminders.observeAsState()
+    val activeReminders by listActiveViewModel.getActiveReminders(selectedReminderSortOrder).observeAsState()
 
     val onCompleteChecked: (Reminder) -> Unit = { reminder ->
         listActiveViewModel.updateDoneReminder(reminder)

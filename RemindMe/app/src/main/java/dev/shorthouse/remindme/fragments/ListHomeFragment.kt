@@ -1,5 +1,5 @@
-package dev.shorthouse.remindme.fragments
-
+//package dev.shorthouse.remindme.fragments
+//
 //import android.os.Build
 //import android.os.Bundle
 //import android.util.Log
@@ -16,53 +16,16 @@ package dev.shorthouse.remindme.fragments
 //
 //@AndroidEntryPoint
 //class ListHomeFragment : Fragment() {
-//    private val requestPermissionLauncher =
-//        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-//            if (isGranted) {
-//                Log.i("Permission: ", "Granted")
-//            } else {
-//                Log.i("Permission: ", "Denied")
-//            }
-//        }
-//
 //    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 //        super.onViewCreated(view, savedInstanceState)
 //
 //        setupSearchView()
 //        setupBottomSheetSort()
-//        requestNotificationPermission()
 //    }
 //
 //    override fun onViewStateRestored(savedInstanceState: Bundle?) {
 //        super.onViewStateRestored(savedInstanceState)
 //        binding.toolbar.menu.findItem(R.id.action_search).collapseActionView()
-//    }
-//
-//
-//
-//    private fun requestNotificationPermission() {
-//        if (Build.VERSION.SDK_INT >= 33) {
-//            when {
-//                shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS) -> {
-//                    showNotificationPermissionRationale()
-//                }
-//
-//                else -> {
-//                    requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
-//                }
-//            }
-//        }
-//    }
-//
-//    private fun showNotificationPermissionRationale() {
-//        AlertDialog.Builder(requireContext())
-//            .setTitle(getString(R.string.notification_rationale_title))
-//            .setMessage(getString(R.string.notification_rationale_message))
-//            .setPositiveButton(getString(R.string.notification_rationale_positive)) { _, _ ->
-//                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
-//            }
-//            .setNegativeButton(getString(R.string.notification_rationale_negative)) { _, _ -> }
-//            .show()
 //    }
 //
 //    private fun setupSearchView() {

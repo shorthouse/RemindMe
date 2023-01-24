@@ -23,15 +23,17 @@ import dev.shorthouse.remindme.compose.component.AllReminderListItem
 import dev.shorthouse.remindme.compose.component.ReminderEmptyState
 import dev.shorthouse.remindme.compose.screen.destinations.ReminderDetailsScreenDestination
 import dev.shorthouse.remindme.compose.state.ReminderState
-import dev.shorthouse.remindme.viewmodel.ReminderListViewModel
+import dev.shorthouse.remindme.utilities.enums.ReminderSortOrder
+import dev.shorthouse.remindme.viewmodel.ListAllViewModel
 import java.time.LocalTime
 
 @Composable
 fun ReminderListAllScreen(
-    reminderListViewModel: ReminderListViewModel = hiltViewModel(),
-    navigator: DestinationsNavigator
+    reminderListViewModel: ListAllViewModel = hiltViewModel(),
+    navigator: DestinationsNavigator,
+    selectedReminderSortOrder: ReminderSortOrder
 ) {
-    val allReminders by reminderListViewModel.allReminders.observeAsState()
+    val allReminders by reminderListViewModel.getAllReminders(selectedReminderSortOrder).observeAsState()
 
     allReminders?.let { reminders ->
         val reminderStates = reminders.map { ReminderState(it) }

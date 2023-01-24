@@ -1,18 +1,17 @@
 package dev.shorthouse.remindme.viewmodel
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.di.IoDispatcher
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.utilities.DAYS_IN_WEEK
 import dev.shorthouse.remindme.utilities.NotificationScheduler
+import dev.shorthouse.remindme.utilities.enums.ReminderSortOrder
 import dev.shorthouse.remindme.utilities.floor
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.time.Duration
 import java.time.LocalDateTime
@@ -30,7 +29,15 @@ class ListActiveViewModel @Inject constructor(
     private val notificationScheduler: NotificationScheduler,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
-    val activeReminders = repository.getActiveReminders().asLiveData()
+    fun getActiveReminders(reminderSortOrder: ReminderSortOrder): LiveData<List<Reminder>> {
+        return repository.getActiveReminders().map { reminders ->
+            when (reminderSortOrder) {
+                ReminderSortOrder.EARLIEST_DATE_FIRST -> reminders.sortedBy { it.startDateTime }
+                else -> reminders.sortedByDescending { it.startDateTime }
+            }
+        }.asLiveData()
+    }
+
     private val currentTime = MutableLiveData(ZonedDateTime.now())
 
     init {
