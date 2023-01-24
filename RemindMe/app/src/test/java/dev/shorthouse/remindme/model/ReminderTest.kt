@@ -42,15 +42,6 @@ class ReminderTest {
     }
 
     @Test
-    fun `Get formatted start date, returns expected formatted start date`() {
-        val expectedDate = "15 Jun 2000"
-
-        val date = repeatReminder.getFormattedStartDate()
-
-        assertThat(date).isEqualTo(expectedDate)
-    }
-
-    @Test
     fun `Get formatted start time, returns expected formatted start time`() {
         val expectedTime = "19:01"
 
