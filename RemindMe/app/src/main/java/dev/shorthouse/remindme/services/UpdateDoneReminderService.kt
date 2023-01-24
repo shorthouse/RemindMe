@@ -75,7 +75,7 @@ class UpdateDoneReminderService : Service() {
             startDateTime = getUpdatedStartDateTime(reminder),
             repeatInterval = reminder.repeatInterval,
             notes = reminder.notes,
-            isComplete = !reminder.isRepeatReminder(),
+            isCompleted = !reminder.isRepeatReminder(),
             isNotificationSent = reminder.isNotificationSent,
         )
     }
