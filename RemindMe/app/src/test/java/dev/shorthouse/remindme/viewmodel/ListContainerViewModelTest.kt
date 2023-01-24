@@ -1,5 +1,5 @@
-package dev.shorthouse.remindme.viewmodel
-
+//package dev.shorthouse.remindme.viewmodel
+//
 //class ListContainerViewModelTest {
 //    // Class under test
 //    private val viewModel = ListContainerViewModel()
