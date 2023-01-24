@@ -80,11 +80,11 @@ class ReminderRepositoryTest {
     @Test
     fun `Get not completed reminders returns not completed reminders`() {
         val notCompletedReminders = reminderRepository
-            .getAllReminders()
+            .getScheduledReminders()
             .asLiveData()
             .getOrAwaitValue()
 
-        assertThat(notCompletedReminders.forEach { it.isComplete.not() })
+        assertThat(notCompletedReminders.forEach { it.isCompleted.not() })
         assertThat(notCompletedReminders).contains(repeatActiveReminder)
     }
 
