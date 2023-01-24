@@ -1,5 +1,6 @@
 package dev.shorthouse.remindme.compose.screen
 
+import android.content.res.Configuration
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -8,34 +9,30 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.CalendarToday
-import androidx.compose.material.icons.rounded.NotificationsNone
-import androidx.compose.material.icons.rounded.Refresh
-import androidx.compose.material.icons.rounded.Schedule
+import androidx.compose.material.icons.rounded.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.*
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.google.android.material.composethemeadapter.MdcTheme
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.compose.component.*
+import dev.shorthouse.remindme.compose.state.PreviewData
 import dev.shorthouse.remindme.compose.state.ReminderState
+import dev.shorthouse.remindme.theme.RemindMeTheme
 import dev.shorthouse.remindme.viewmodel.InputViewModel
 import kotlinx.coroutines.launch
 
@@ -112,9 +109,14 @@ fun ReminderInputTopBar(
     navigator: DestinationsNavigator
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
+
     TopAppBar(
         title = {
-            Text(text = topBarTitle)
+            Text(
+                text = topBarTitle,
+                color = colorResource(R.color.on_primary),
+                style = MaterialTheme.typography.h5
+            )
         },
         navigationIcon = {
             IconButton(onClick = {
@@ -122,7 +124,7 @@ fun ReminderInputTopBar(
                 navigator.navigateUp()
             }) {
                 Icon(
-                    painter = painterResource(R.drawable.ic_close),
+                    imageVector = Icons.Rounded.Close,
                     contentDescription = stringResource(R.string.cd_top_bar_close_reminder),
                     tint = colorResource(R.color.on_primary)
                 )
@@ -134,7 +136,7 @@ fun ReminderInputTopBar(
                 onSave()
             }) {
                 Icon(
-                    painter = painterResource(R.drawable.ic_tick),
+                    imageVector = Icons.Rounded.Done,
                     contentDescription = stringResource(R.string.cd_top_bar_save_reminder),
                     tint = colorResource(R.color.on_primary)
                 )
@@ -189,11 +191,11 @@ fun ReminderInputContent(
         )
     }
 
-//    if (reminderState.id == 0L) {
-//        LaunchedEffect(Unit) {
-//            focusRequester.requestFocus()
-//        }
-//    }
+    if (reminderState.id == 0L) {
+        LaunchedEffect(Unit) {
+            focusRequester.requestFocus()
+        }
+    }
 }
 
 @Composable
@@ -203,7 +205,7 @@ fun ReminderNameInput(reminderState: ReminderState, focusRequester: FocusRequest
     ReminderTextField(
         text = reminderState.name,
         onTextChange = { if (it.length <= nameMaxLength) reminderState.name = it },
-        textStyle = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.Bold),
+        textStyle = MaterialTheme.typography.h6,
         hintText = stringResource(R.string.hint_reminder_name),
         imeAction = ImeAction.Done,
         modifier = modifier
@@ -247,6 +249,32 @@ fun ReminderTimeInput(reminderState: ReminderState, modifier: Modifier = Modifie
 }
 
 @Composable
+fun ReminderSwitchRow(
+    icon: ImageVector,
+    switchText: String,
+    isChecked: Boolean,
+    onCheckedChange: (Boolean) -> Unit
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+    ) {
+        TextWithLeftIcon(
+            icon = icon,
+            text = switchText,
+        )
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        Switch(
+            checked = isChecked,
+            onCheckedChange = onCheckedChange,
+        )
+    }
+}
+
+@Composable
 fun ReminderNotificationInput(reminderState: ReminderState) {
     ReminderSwitchRow(
         icon = Icons.Rounded.NotificationsNone,
@@ -265,7 +293,7 @@ fun ReminderNotesInput(reminderState: ReminderState, modifier: Modifier = Modifi
         modifier = modifier
     ) {
         Icon(
-            painter = painterResource(R.drawable.ic_notes),
+            imageVector = Icons.Rounded.Notes,
             contentDescription = null,
             tint = colorResource(R.color.icon_grey),
         )
@@ -275,7 +303,7 @@ fun ReminderNotesInput(reminderState: ReminderState, modifier: Modifier = Modifi
         ReminderTextField(
             text = reminderState.notes.orEmpty(),
             onTextChange = { if (it.length <= notesMaxLength) reminderState.notes = it },
-            textStyle = TextStyle(fontSize = 18.sp, fontWeight = FontWeight.Normal),
+            textStyle = MaterialTheme.typography.body1,
             hintText = stringResource(R.string.hint_reminder_notes),
             imeAction = ImeAction.None,
         )
@@ -342,7 +370,7 @@ private fun RepeatIntervalHeader(modifier: Modifier = Modifier) {
     ) {
         Text(
             text = stringResource(R.string.repeats_every_header),
-            color = colorResource(R.color.subtitle_grey)
+            style = MaterialTheme.typography.subtitle1
         )
     }
 }
@@ -356,7 +384,7 @@ private fun RepeatAmountInput(reminderState: ReminderState) {
         onValueChange = {
             if (it.length <= repeatAmountMaxLength) reminderState.repeatAmount = sanitiseRepeatAmount(it)
         },
-        textStyle = TextStyle(textAlign = TextAlign.Center),
+        textStyle = MaterialTheme.typography.body1.copy(textAlign = TextAlign.Center),
         keyboardOptions = KeyboardOptions(
             imeAction = ImeAction.Done,
             keyboardType = KeyboardType.Number
@@ -398,45 +426,27 @@ private fun RepeatUnitInput(reminderState: ReminderState) {
 
                 Spacer(modifier = Modifier.width(dimensionResource(R.dimen.margin_tiny)))
 
-                Text(text = text)
+                Text(
+                    text = text,
+                    style = MaterialTheme.typography.body1
+                )
             }
         }
     }
 }
 
-@Preview
+@Preview(name = "Light Mode", showBackground = true)
+@Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Composable
-private fun ReminderAddPreview() {
-    MdcTheme {
-        val reminderState by remember { mutableStateOf(ReminderState()) }
-        val scaffoldState = rememberScaffoldState()
+private fun ReminderInputPreview() {
+    val reminderState by remember { mutableStateOf(PreviewData.reminderState) }
+    val scaffoldState = rememberScaffoldState()
 
+    RemindMeTheme {
         ReminderInputScaffold(
             reminderState = reminderState,
             scaffoldState = scaffoldState,
-            topBarTitle = stringResource(R.string.top_bar_title_add_reminder),
-            onSave = {},
-            navigator = EmptyDestinationsNavigator
-        )
-    }
-}
-
-@Preview
-@Composable
-private fun ReminderEditPreview() {
-    MdcTheme {
-        val reminderState by remember { mutableStateOf(ReminderState()) }
-        val scaffoldState = rememberScaffoldState()
-
-        reminderState.name = "Yoga with Alice"
-        reminderState.isRepeatReminder = true
-        reminderState.isNotificationSent = true
-        reminderState.notes = "Don't forget the yoga mat!"
-
-        ReminderInputScaffold(
-            reminderState = reminderState,
-            scaffoldState = scaffoldState,
-            topBarTitle = stringResource(R.string.top_bar_title_edit_reminder),
+            topBarTitle = "Reminder Input",
             onSave = {},
             navigator = EmptyDestinationsNavigator
         )
