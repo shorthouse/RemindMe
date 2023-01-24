@@ -1,8 +1,10 @@
 package dev.shorthouse.remindme.compose.component
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.material.AlertDialog
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
@@ -11,16 +13,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.sp
+import androidx.compose.ui.tooling.preview.Preview
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.MaterialDialogState
 import com.vanpra.composematerialdialogs.datetime.date.datepicker
 import com.vanpra.composematerialdialogs.datetime.time.TimePickerDefaults
 import com.vanpra.composematerialdialogs.datetime.time.timepicker
 import dev.shorthouse.remindme.R
+import dev.shorthouse.remindme.compose.state.PreviewData
 import dev.shorthouse.remindme.compose.state.ReminderState
+import dev.shorthouse.remindme.theme.RemindMeTheme
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -31,18 +33,31 @@ fun ReminderAlertDialog(
     onConfirm: () -> Unit,
     onDismiss: () -> Unit
 ) {
+    val textButtonColor = colorResource(R.color.blue)
+
     AlertDialog(
         title = {
-            Text(text = title, fontSize = 18.sp)
+            Text(
+                text = title,
+                style = MaterialTheme.typography.body1
+            )
         },
         confirmButton = {
             TextButton(onClick = onConfirm) {
-                Text(text = confirmText, fontSize = 16.sp)
+                Text(
+                    text = confirmText,
+                    style = MaterialTheme.typography.button,
+                    color = textButtonColor
+                )
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text(text = stringResource(R.string.alert_dialog_cancel), fontSize = 16.sp)
+                Text(
+                    text = stringResource(R.string.dialog_action_cancel),
+                    style = MaterialTheme.typography.button,
+                    color = textButtonColor
+                )
             }
         },
         onDismissRequest = onDismiss,
@@ -54,21 +69,16 @@ fun ReminderDatePickerDialog(
     reminderState: ReminderState,
     dialogState: MaterialDialogState
 ) {
-    val dialogButtonTextStyle = TextStyle(
-        color = colorResource(R.color.on_surface),
-        fontWeight = FontWeight.Bold
-    )
-
     MaterialDialog(
         dialogState = dialogState,
         buttons = {
             positiveButton(
-                text = stringResource(R.string.dialog_ok),
-                textStyle = dialogButtonTextStyle
+                text = stringResource(R.string.dialog_action_ok),
+                textStyle = MaterialTheme.typography.button
             )
             negativeButton(
-                text = stringResource(R.string.dialog_cancel),
-                textStyle = dialogButtonTextStyle
+                text = stringResource(R.string.dialog_action_cancel),
+                textStyle = MaterialTheme.typography.button
             )
         },
     ) {
@@ -86,21 +96,16 @@ fun ReminderTimePickerDialog(
     reminderState: ReminderState,
     dialogState: MaterialDialogState
 ) {
-    val dialogButtonTextStyle = TextStyle(
-        color = colorResource(R.color.on_surface),
-        fontWeight = FontWeight.Bold
-    )
-
     MaterialDialog(
         dialogState = dialogState,
         buttons = {
             positiveButton(
-                text = stringResource(R.string.dialog_ok),
-                textStyle = dialogButtonTextStyle
+                text = stringResource(R.string.dialog_action_ok),
+                textStyle = MaterialTheme.typography.button
             )
             negativeButton(
-                text = stringResource(R.string.dialog_cancel),
-                textStyle = dialogButtonTextStyle
+                text = stringResource(R.string.dialog_action_cancel),
+                textStyle = MaterialTheme.typography.button
             )
         },
     ) {
@@ -117,6 +122,44 @@ fun ReminderTimePickerDialog(
                 inactiveTextColor = Color.Black,
                 selectorColor = colorResource(R.color.blue),
             ),
+        )
+    }
+}
+
+@Preview(name = "Light Mode")
+@Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun ReminderAlertDialogPreview() {
+    RemindMeTheme {
+        ReminderAlertDialog(
+            title = "Do this action?",
+            confirmText = "Confirm",
+            onConfirm = {},
+            onDismiss = {}
+        )
+    }
+}
+
+@Preview(name = "Light Mode")
+@Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun ReminderDatePickerDialogPreview() {
+    RemindMeTheme {
+        ReminderDatePickerDialog(
+            reminderState = PreviewData.reminderState,
+            dialogState = MaterialDialogState(initialValue = true)
+        )
+    }
+}
+
+@Preview(name = "Light Mode")
+@Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun ReminderTimePickerDialogPreview() {
+    RemindMeTheme {
+        ReminderTimePickerDialog(
+            reminderState = PreviewData.reminderState,
+            dialogState = MaterialDialogState(initialValue = true)
         )
     }
 }
