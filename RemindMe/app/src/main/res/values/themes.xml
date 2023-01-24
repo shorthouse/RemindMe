@@ -8,8 +8,6 @@
         <item name="colorOnSecondary">@color/white</item>
 
         <item name="android:statusBarColor">@color/primary</item>
-
-        <item name="searchViewStyle">@style/Theme.RemindMe.SearchView</item>
     </style>
 
     <!-- Splash screen -->
@@ -18,16 +16,4 @@
         <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
         <item name="postSplashScreenTheme">@style/Theme.RemindMe</item>
     </style>
-
-    <!-- Search View -->
-    <style name="Theme.RemindMe.SearchView" parent="Widget.AppCompat.SearchView">
-        <item name="closeIcon">@drawable/ic_close_search</item>
-        <item name="searchHintIcon">@null</item>
-        <item name="queryHint">@string/top_app_bar_search</item>
-        <item name="queryBackground">@color/white</item>
-        <item name="android:background">@drawable/search_rounded_corner</item>
-    </style>
-
-    <!-- Time Picker -->
-    <style name="Theme.RemindMe.TimePicker" parent="ThemeOverlay.Material3.MaterialTimePicker" />
 </resources>
