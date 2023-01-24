@@ -1,5 +1,6 @@
 package dev.shorthouse.remindme.compose.screen
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -11,13 +12,9 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.google.android.material.composethemeadapter.MdcTheme
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
@@ -25,18 +22,20 @@ import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.compose.component.ReminderAlertDialog
 import dev.shorthouse.remindme.compose.component.TextWithLeftIcon
 import dev.shorthouse.remindme.compose.screen.destinations.ReminderEditScreenDestination
+import dev.shorthouse.remindme.compose.state.PreviewData
 import dev.shorthouse.remindme.compose.state.ReminderDetailItem
 import dev.shorthouse.remindme.compose.state.ReminderState
+import dev.shorthouse.remindme.theme.RemindMeTheme
 import dev.shorthouse.remindme.viewmodel.DetailsViewModel
-import java.time.LocalTime
 
 @Destination
 @Composable
 fun ReminderDetailsScreen(
     reminderId: Long,
-    detailsViewModel: DetailsViewModel = hiltViewModel(),
     navigator: DestinationsNavigator
 ) {
+    val detailsViewModel: DetailsViewModel = hiltViewModel()
+
     val reminder by detailsViewModel.getReminderDetails(reminderId).observeAsState()
 
     reminder?.let {
@@ -98,7 +97,7 @@ fun ReminderDetailsTopBar(
     if (isDeleteDialogShown) {
         ReminderAlertDialog(
             title = stringResource(R.string.alert_dialog_title_delete),
-            confirmText = stringResource(R.string.alert_dialog_confirm_delete),
+            confirmText = stringResource(R.string.dialog_action_delete),
             onConfirm = onDelete,
             onDismiss = { isDeleteDialogShown = false }
         )
@@ -107,7 +106,7 @@ fun ReminderDetailsTopBar(
     if (isCompleteDialogShown) {
         ReminderAlertDialog(
             title = stringResource(R.string.alert_dialog_title_complete),
-            confirmText = stringResource(R.string.alert_dialog_confirm_complete),
+            confirmText = stringResource(R.string.dialog_action_complete),
             onConfirm = onComplete,
             onDismiss = { isCompleteDialogShown = false }
         )
@@ -116,14 +115,15 @@ fun ReminderDetailsTopBar(
     TopAppBar(
         title = {
             Text(
-                text = stringResource(R.string.toolbar_title_details),
-                color = colorResource(R.color.on_primary)
+                text = stringResource(R.string.top_bar_title_details),
+                color = colorResource(R.color.on_primary),
+                style = MaterialTheme.typography.h5
             )
         },
         navigationIcon = {
             IconButton(onClick = { navigator.navigateUp() }) {
                 Icon(
-                    painter = painterResource(R.drawable.ic_back),
+                    imageVector = Icons.Rounded.ArrowBack,
                     contentDescription = stringResource(R.string.cd_back),
                     tint = colorResource(R.color.on_primary)
                 )
@@ -132,14 +132,14 @@ fun ReminderDetailsTopBar(
         actions = {
             IconButton(onClick = { navigator.navigate(ReminderEditScreenDestination(reminderId = reminderState.id)) }) {
                 Icon(
-                    painter = painterResource(R.drawable.ic_edit),
-                    contentDescription = stringResource(R.string.cd_menu_item_edit),
+                    imageVector = Icons.Rounded.Edit,
+                    contentDescription = stringResource(R.string.menu_item_edit),
                     tint = colorResource(R.color.on_primary)
                 )
             }
             IconButton(onClick = { isMenuShown = !isMenuShown }) {
                 Icon(
-                    painter = painterResource(R.drawable.ic_more),
+                    imageVector = Icons.Rounded.MoreVert,
                     contentDescription = stringResource(R.string.cd_more),
                     tint = colorResource(R.color.on_primary)
                 )
@@ -153,14 +153,24 @@ fun ReminderDetailsTopBar(
                         isDeleteDialogShown = true
                         isMenuShown = false
                     },
-                    content = { Text(text = stringResource(R.string.menu_item_delete)) }
+                    content = {
+                        Text(
+                            text = stringResource(R.string.menu_item_delete),
+                            style = MaterialTheme.typography.body1
+                        )
+                    }
                 )
                 DropdownMenuItem(
                     onClick = {
                         isCompleteDialogShown = true
                         isMenuShown = false
                     },
-                    content = { Text(text = stringResource(R.string.menu_item_complete)) }
+                    content = {
+                        Text(
+                            text = stringResource(R.string.menu_item_complete),
+                            style = MaterialTheme.typography.body1
+                        )
+                    }
                 )
             }
         }
@@ -184,7 +194,10 @@ fun ReminderDetailsContent(
                 bottom = dimensionResource(R.dimen.margin_large)
             )
     ) {
-        ReminderName(name = reminderState.name)
+        Text(
+            text = reminderState.name,
+            style = MaterialTheme.typography.h6
+        )
 
         val detailItems = buildList {
             add(
@@ -238,34 +251,11 @@ fun ReminderDetailsContent(
     }
 }
 
-@Composable
-fun ReminderName(name: String) {
-    Text(
-        text = name,
-        fontWeight = FontWeight.Bold,
-        fontSize = 20.sp,
-    )
-}
-
 @Preview(showBackground = true)
 @Composable
 private fun ReminderDetailsScreenPreview() {
-    MdcTheme {
-        val reminderState by remember {
-            mutableStateOf(
-                ReminderState(
-                    id = 1,
-                    name = "Yoga with Alice",
-                    date = "Wed, 22 Mar 2000",
-                    time = LocalTime.of(14, 30),
-                    isNotificationSent = true,
-                    isRepeatReminder = true,
-                    repeatAmount = "2",
-                    repeatUnit = "Weeks",
-                    notes = "Don't forget to warm up!"
-                )
-            )
-        }
+    RemindMeTheme {
+        val reminderState by remember { mutableStateOf(PreviewData.reminderState) }
 
         ReminderDetailsScaffold(
             reminderState = reminderState,
@@ -276,13 +266,28 @@ private fun ReminderDetailsScreenPreview() {
     }
 }
 
-@Preview
+@Preview(name = "Light Mode", showBackground = true)
+@Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Composable
-private fun DetailsAlertDialogPreview() {
-    MdcTheme {
+private fun ReminderDetailsCompleteDialogPreview() {
+    RemindMeTheme {
+        ReminderAlertDialog(
+            title = stringResource(R.string.alert_dialog_title_complete),
+            confirmText = stringResource(R.string.dialog_action_complete),
+            onConfirm = {},
+            onDismiss = {}
+        )
+    }
+}
+
+@Preview(name = "Light Mode", showBackground = true)
+@Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
+@Composable
+private fun ReminderDetailsDeleteDialogPreview() {
+    RemindMeTheme {
         ReminderAlertDialog(
             title = stringResource(R.string.alert_dialog_title_delete),
-            confirmText = stringResource(R.string.alert_dialog_confirm_delete),
+            confirmText = stringResource(R.string.dialog_action_delete),
             onConfirm = {},
             onDismiss = {}
         )

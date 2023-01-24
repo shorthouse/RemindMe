@@ -72,7 +72,7 @@ class UpdateReminderTimeZoneService : Service() {
                 reminder.isNotificationSent,
                 reminder.repeatInterval,
                 reminder.notes,
-                reminder.isComplete,
+                reminder.isCompleted,
             )
 
             CoroutineScope(ioDispatcher).launch {
@@ -100,7 +100,7 @@ class UpdateReminderTimeZoneService : Service() {
         )
             .setContentTitle(getString(R.string.app_name))
             .setContentText(getString(R.string.notification_body_text_time_zone_update))
-            .setSmallIcon(R.drawable.ic_bell)
+            .setSmallIcon(R.drawable.ic_user_notification)
             .build()
     }
 

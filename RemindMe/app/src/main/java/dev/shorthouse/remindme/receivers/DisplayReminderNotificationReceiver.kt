@@ -64,13 +64,13 @@ class DisplayReminderNotificationReceiver : BroadcastReceiver() {
             context,
             context.getString(R.string.notification_channel_id_reminder)
         )
-            .setSmallIcon(R.drawable.ic_bell)
+            .setSmallIcon(R.drawable.ic_user_notification)
             .setContentTitle(notificationTitle)
             .setContentText(notificationText)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setContentIntent(contentPendingIntent)
             .addAction(
-                R.drawable.ic_clock,
+                R.drawable.ic_user_notification_action,
                 context.getString(R.string.reminder_notification_action_done_text),
                 getDonePendingIntent(context, reminderId)
             )

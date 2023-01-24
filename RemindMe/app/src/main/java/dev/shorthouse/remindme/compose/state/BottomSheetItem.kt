@@ -1,8 +1,8 @@
 package dev.shorthouse.remindme.compose.state
 
-import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.ImageVector
 
 data class BottomSheetItem(
-    val icon: Painter,
+    val icon: ImageVector,
     val label: String
 )

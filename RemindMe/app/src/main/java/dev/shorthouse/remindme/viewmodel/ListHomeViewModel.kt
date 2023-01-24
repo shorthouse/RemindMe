@@ -12,12 +12,19 @@ class ListHomeViewModel : ViewModel() {
     var selectedSortIndex by mutableStateOf(0)
 
     val selectedReminderSortOrder by derivedStateOf {
-        if (selectedSortIndex == 0) ReminderSortOrder.EARLIEST_DATE_FIRST else ReminderSortOrder.LATEST_DATE_FIRST
+        when (selectedSortIndex) {
+            0 -> ReminderSortOrder.EARLIEST_DATE_FIRST
+            else -> ReminderSortOrder.LATEST_DATE_FIRST
+        }
     }
 
     var selectedNavigateIndex by mutableStateOf(0)
 
     val selectedReminderList by derivedStateOf {
-        if (selectedNavigateIndex == 0) ReminderList.ACTIVE else ReminderList.ALL
+        when (selectedNavigateIndex) {
+            0 -> ReminderList.OVERDUE
+            1 -> ReminderList.SCHEDULED
+            else -> ReminderList.COMPLETED
+        }
     }
 }

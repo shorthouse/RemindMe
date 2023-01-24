@@ -11,15 +11,18 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 @HiltViewModel
-class ListAllViewModel @Inject constructor(
+class ListCompletedViewModel @Inject constructor(
     private val repository: ReminderRepository
 ) : ViewModel() {
-    fun getAllReminders(reminderSortOrder: ReminderSortOrder): LiveData<List<Reminder>> {
-        return repository.getAllReminders().map { reminders ->
-            when (reminderSortOrder) {
-                ReminderSortOrder.EARLIEST_DATE_FIRST -> reminders.sortedBy { it.startDateTime }
-                else -> reminders.sortedByDescending { it.startDateTime }
+    fun getCompletedReminders(reminderSortOrder: ReminderSortOrder): LiveData<List<Reminder>> {
+        return repository
+            .getCompletedReminders()
+            .map { reminders ->
+                when (reminderSortOrder) {
+                    ReminderSortOrder.EARLIEST_DATE_FIRST -> reminders.sortedBy { it.startDateTime }
+                    else -> reminders.sortedByDescending { it.startDateTime }
+                }
             }
-        }.asLiveData()
+            .asLiveData()
     }
 }
