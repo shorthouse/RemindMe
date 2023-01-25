@@ -11,7 +11,9 @@ import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
 fun ReminderState(): ReminderState = ReminderStateImpl()
+
 fun ReminderState(reminder: Reminder): ReminderState = ReminderStateImpl(reminder)
+
 fun ReminderState(
     id: Long,
     name: String,
@@ -138,7 +140,7 @@ private class ReminderStateImpl(
             isNotificationSent = _isNotificationSent,
             repeatInterval = if (isRepeatReminder) getReminderRepeatInterval(_repeatAmount, _repeatUnit) else null,
             notes = _notes?.trim()?.ifBlank { null },
-            isComplete = false
+            isCompleted = false
         )
     }
 
