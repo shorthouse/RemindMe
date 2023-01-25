@@ -33,6 +33,7 @@ import dev.shorthouse.remindme.compose.component.*
 import dev.shorthouse.remindme.compose.state.PreviewData
 import dev.shorthouse.remindme.compose.state.ReminderState
 import dev.shorthouse.remindme.theme.RemindMeTheme
+import dev.shorthouse.remindme.theme.SubtitleGrey
 import dev.shorthouse.remindme.viewmodel.InputViewModel
 import kotlinx.coroutines.launch
 
@@ -114,7 +115,6 @@ fun ReminderInputTopBar(
         title = {
             Text(
                 text = topBarTitle,
-                color = colorResource(R.color.on_primary),
                 style = MaterialTheme.typography.h5
             )
         },
@@ -126,7 +126,6 @@ fun ReminderInputTopBar(
                 Icon(
                     imageVector = Icons.Rounded.Close,
                     contentDescription = stringResource(R.string.cd_top_bar_close_reminder),
-                    tint = colorResource(R.color.on_primary)
                 )
             }
         },
@@ -138,7 +137,7 @@ fun ReminderInputTopBar(
                 Icon(
                     imageVector = Icons.Rounded.Done,
                     contentDescription = stringResource(R.string.cd_top_bar_save_reminder),
-                    tint = colorResource(R.color.on_primary)
+                    tint = MaterialTheme.colors.onPrimary
                 )
             }
         }
@@ -295,7 +294,7 @@ fun ReminderNotesInput(reminderState: ReminderState, modifier: Modifier = Modifi
         Icon(
             imageVector = Icons.Rounded.Notes,
             contentDescription = null,
-            tint = colorResource(R.color.icon_grey),
+            tint = SubtitleGrey
         )
 
         Spacer(Modifier.width(dimensionResource(R.dimen.margin_normal)))
@@ -439,10 +438,10 @@ private fun RepeatUnitInput(reminderState: ReminderState) {
 @Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Composable
 private fun ReminderInputPreview() {
-    val reminderState by remember { mutableStateOf(PreviewData.reminderState) }
-    val scaffoldState = rememberScaffoldState()
-
     RemindMeTheme {
+        val reminderState by remember { mutableStateOf(PreviewData.reminderState) }
+        val scaffoldState = rememberScaffoldState()
+
         ReminderInputScaffold(
             reminderState = reminderState,
             scaffoldState = scaffoldState,

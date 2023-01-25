@@ -10,7 +10,6 @@ import androidx.compose.material.icons.rounded.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -116,7 +115,6 @@ fun ReminderDetailsTopBar(
         title = {
             Text(
                 text = stringResource(R.string.top_bar_title_details),
-                color = colorResource(R.color.on_primary),
                 style = MaterialTheme.typography.h5
             )
         },
@@ -125,7 +123,7 @@ fun ReminderDetailsTopBar(
                 Icon(
                     imageVector = Icons.Rounded.ArrowBack,
                     contentDescription = stringResource(R.string.cd_back),
-                    tint = colorResource(R.color.on_primary)
+                    tint = MaterialTheme.colors.onPrimary
                 )
             }
         },
@@ -134,14 +132,14 @@ fun ReminderDetailsTopBar(
                 Icon(
                     imageVector = Icons.Rounded.Edit,
                     contentDescription = stringResource(R.string.menu_item_edit),
-                    tint = colorResource(R.color.on_primary)
+                    tint = MaterialTheme.colors.onPrimary
                 )
             }
             IconButton(onClick = { isMenuShown = !isMenuShown }) {
                 Icon(
                     imageVector = Icons.Rounded.MoreVert,
                     contentDescription = stringResource(R.string.cd_more),
-                    tint = colorResource(R.color.on_primary)
+                    tint = MaterialTheme.colors.onPrimary
                 )
             }
             DropdownMenu(
@@ -251,7 +249,8 @@ fun ReminderDetailsContent(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(name = "Light Mode", showBackground = true)
+@Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Composable
 private fun ReminderDetailsScreenPreview() {
     RemindMeTheme {
