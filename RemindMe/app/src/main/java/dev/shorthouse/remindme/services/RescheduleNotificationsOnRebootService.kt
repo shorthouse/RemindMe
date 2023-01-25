@@ -26,6 +26,7 @@ class RescheduleNotificationsOnRebootService : Service() {
     lateinit var notificationScheduler: NotificationScheduler
 
     override fun onCreate() {
+        super.onCreate()
         createServiceNotificationChannel()
     }
 

@@ -32,6 +32,7 @@ class UpdateReminderTimeZoneService : Service() {
     lateinit var repository: ReminderRepository
 
     override fun onCreate() {
+        super.onCreate()
         createServiceNotificationChannel()
     }
 

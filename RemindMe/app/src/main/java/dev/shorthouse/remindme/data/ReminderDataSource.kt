@@ -9,11 +9,11 @@ interface ReminderDataSource {
 
     fun getReminder(id: Long): Flow<Reminder>
 
-    fun getActiveReminders(nowDateTime: ZonedDateTime): Flow<List<Reminder>>
+    fun getOverdueReminders(nowDateTime: ZonedDateTime): Flow<List<Reminder>>
 
-    fun getAllReminders(): Flow<List<Reminder>>
+    fun getScheduledReminders(): Flow<List<Reminder>>
 
-    fun getAllRemindersFilteredSorted(searchFilter: String?, orderBy: String): Flow<List<Reminder>>
+    fun getCompletedReminders(): Flow<List<Reminder>>
 
     fun insertReminder(reminder: Reminder): Long
 

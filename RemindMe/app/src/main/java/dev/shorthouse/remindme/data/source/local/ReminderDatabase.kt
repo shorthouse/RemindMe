@@ -9,7 +9,7 @@ import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.data.Converters
 import dev.shorthouse.remindme.model.Reminder
 
-@Database(version = 1, exportSchema = false, entities = [Reminder::class])
+@Database(version = 2, exportSchema = false, entities = [Reminder::class])
 @TypeConverters(Converters::class)
 abstract class ReminderDatabase : RoomDatabase() {
     abstract fun reminderDao(): ReminderDao
@@ -25,6 +25,7 @@ abstract class ReminderDatabase : RoomDatabase() {
                     ReminderDatabase::class.java,
                     context.getString(R.string.reminder_database_name)
                 )
+                    .fallbackToDestructiveMigration()
                     .build()
                 INSTANCE = instance
 

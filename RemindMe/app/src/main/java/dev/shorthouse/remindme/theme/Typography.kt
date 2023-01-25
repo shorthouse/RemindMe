@@ -44,7 +44,7 @@ val RemindMeTypography = Typography(
         color = SubtitleGrey
     ),
     button = TextStyle(
-        fontSize = 18.sp,
+        fontSize = 15.sp,
         fontWeight = FontWeight.Bold,
     ),
     caption = TextStyle(
