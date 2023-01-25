@@ -13,7 +13,7 @@ import androidx.compose.material.icons.rounded.Menu
 import androidx.compose.material.icons.rounded.SwapVert
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -77,6 +77,7 @@ fun ReminderListHomeScreen(
                 )
             }
         },
+        scrimColor = Color.Black.copy(alpha = 0.32f),
         content = {
             BackHandler(enabled = sheetState.isVisible) {
                 closeSheet()
@@ -164,7 +165,6 @@ fun ReminderListHomeTopBar(
             Text(
                 text = title,
                 style = MaterialTheme.typography.h5,
-                color = colorResource(R.color.on_primary)
             )
         }
     )
@@ -180,7 +180,7 @@ fun ReminderListHomeBottomBar(
             Icon(
                 imageVector = Icons.Rounded.Menu,
                 contentDescription = stringResource(R.string.cd_bottom_app_bar_menu),
-                tint = colorResource(R.color.on_primary)
+                tint = MaterialTheme.colors.onPrimary
             )
         }
 
@@ -190,7 +190,7 @@ fun ReminderListHomeBottomBar(
             Icon(
                 imageVector = Icons.Rounded.SwapVert,
                 contentDescription = stringResource(R.string.cd_bottom_app_bar_sort),
-                tint = colorResource(R.color.on_primary)
+                tint = MaterialTheme.colors.onPrimary
             )
         }
     }
