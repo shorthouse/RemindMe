@@ -7,12 +7,12 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
-import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.theme.RemindMeTheme
+import dev.shorthouse.remindme.theme.SubtitleGrey
 
 @Composable
 fun ReminderTextField(
@@ -26,7 +26,8 @@ fun ReminderTextField(
     BasicTextField(
         value = text,
         onValueChange = onTextChange,
-        textStyle = textStyle,
+        textStyle = textStyle.copy(color = MaterialTheme.colors.onBackground),
+        cursorBrush = SolidColor(MaterialTheme.colors.onBackground),
         keyboardOptions = KeyboardOptions(
             imeAction = imeAction,
             autoCorrect = true
@@ -36,7 +37,7 @@ fun ReminderTextField(
                 Text(
                     text = hintText,
                     style = textStyle,
-                    color = colorResource(R.color.subtitle_grey)
+                    color = SubtitleGrey
                 )
             }
             innerTextField()

@@ -1,52 +1,5 @@
 <resources>
     <style name="Theme.RemindMe" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="colorPrimary">@color/primary</item>
-        <item name="colorPrimaryVariant">@color/primary_variant</item>
-        <item name="colorOnPrimary">@color/white</item>
-
-        <item name="colorSecondary">@color/secondary</item>
-        <item name="colorOnSecondary">@color/white</item>
-
-        <item name="android:colorBackground">@color/primary_variant</item>
-        <item name="colorOnBackground">@color/white</item>
-
-        <item name="colorSurface">@color/primary</item>
-        <item name="colorOnSurface">@color/white</item>
-
-        <item name="colorOnError">@color/black</item>
-
         <item name="android:statusBarColor">@color/status_bar</item>
-
-        <item name="navigationViewStyle">@style/Theme.RemindMe.NavigationView</item>
-        <item name="materialCalendarTheme">@style/Theme.RemindMe.DatePicker</item>
-    </style>
-
-    <!-- Splash screen -->
-    <style name="Theme.RemindMe.SplashScreen" parent="Theme.SplashScreen">
-        <item name="windowSplashScreenBackground">@color/secondary</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
-        <item name="postSplashScreenTheme">@style/Theme.RemindMe</item>
-    </style>
-
-    <!-- Alert Dialog -->
-
-    <style name="ButtonStyle" parent="@style/Widget.MaterialComponents.Button.TextButton.Dialog">
-        <item name="android:textColor">@color/light_blue</item>
-    </style>
-
-    <!-- Date Picker -->
-    <style name="Theme.RemindMe.DatePicker" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
-        <item name="buttonBarPositiveButtonStyle">@style/ButtonStyle</item>
-        <item name="buttonBarNegativeButtonStyle">@style/ButtonStyle</item>
-        <item name="colorPrimary">@color/secondary</item>
-    </style>
-
-    <!-- Navigation View -->
-    <style name="Theme.RemindMe.NavigationView" parent="Widget.MaterialComponents.NavigationView">
-        <item name="materialThemeOverlay">@style/ThemeOverlay.RemindMe.NavigationView</item>
-    </style>
-
-    <style name="ThemeOverlay.RemindMe.NavigationView" parent="">
-        <item name="colorPrimary">@color/light_blue</item>
     </style>
 </resources>

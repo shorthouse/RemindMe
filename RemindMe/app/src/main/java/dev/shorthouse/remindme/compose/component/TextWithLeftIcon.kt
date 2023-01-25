@@ -13,11 +13,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.theme.RemindMeTheme
+import dev.shorthouse.remindme.theme.SubtitleGrey
 
 @Composable
 fun TextWithLeftIcon(
@@ -32,14 +32,15 @@ fun TextWithLeftIcon(
         Icon(
             imageVector = icon,
             contentDescription = null,
-            tint = colorResource(R.color.icon_grey),
+            tint = SubtitleGrey,
         )
 
         Spacer(Modifier.width(dimensionResource(R.dimen.margin_normal)))
 
         Text(
             text = text,
-            style = MaterialTheme.typography.body1
+            style = MaterialTheme.typography.body1,
+            color = MaterialTheme.colors.onBackground
         )
     }
 }

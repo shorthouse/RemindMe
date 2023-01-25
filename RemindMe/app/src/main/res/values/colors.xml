@@ -1,22 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="primary">#FF2A60EB</color>
-    <color name="primary_variant">#FF1387FF</color>
-    <color name="secondary">@color/primary_variant</color>
+    <color name="emptyStateBorder">#FF3F3D56</color>
+    <color name="emptyStateFill">#FF2A60EB</color>
 
-    <color name="on_primary">@color/white</color>
-
-    <color name="on_surface">@color/primary</color>
-    <color name="text_on_surface">@color/black</color>
-
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
-    <color name="light_blue">#FF1387FF</color>
-    <color name="blue">#FF2A60EB</color>
-
-    <color name="subtitle_grey">#FF777D7F</color>
-    <color name="icon_grey">#FF757575</color>
-    <color name="status_bar">@color/primary</color>
-
+    <color name="status_bar">#FF2A60EB</color>
     <color name="ic_launcher_background">#FF2A60EB</color>
 </resources>

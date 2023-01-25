@@ -3,6 +3,10 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/RemindMe.iml" filepath="$PROJECT_DIR$/.idea/modules/RemindMe.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/RemindMe.RemindMe.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/RemindMe.RemindMe.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/RemindMe.RemindMe.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/RemindMe.RemindMe.app.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/RemindMe.RemindMe.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/RemindMe.RemindMe.app.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/RemindMe.RemindMe.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/RemindMe.RemindMe.app.unitTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/RemindMe.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/RemindMe.app.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/RemindMe.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/RemindMe.app.androidTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/RemindMe.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/RemindMe.app.main.iml" />
