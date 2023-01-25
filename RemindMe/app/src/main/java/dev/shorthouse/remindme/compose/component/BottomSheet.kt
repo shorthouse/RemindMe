@@ -14,7 +14,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -120,14 +119,14 @@ fun BottomSheetButton(
     onSelected: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val itemColor = if (isSelected) {
-        colorResource(R.color.blue)
+    val textIconColor = if (isSelected) {
+        MaterialTheme.colors.primaryVariant
     } else {
-        colorResource(R.color.text_on_surface)
+        MaterialTheme.colors.onSurface
     }
 
     val backgroundColor = if (isSelected) {
-        colorResource(R.color.blue).copy(alpha = 0.12f)
+        MaterialTheme.colors.primary.copy(alpha = 0.12f)
     } else {
         Color.Transparent
     }
@@ -149,7 +148,7 @@ fun BottomSheetButton(
         ) {
             Icon(
                 imageVector = buttonIcon,
-                tint = itemColor,
+                tint = textIconColor,
                 contentDescription = null
             )
 
@@ -157,7 +156,7 @@ fun BottomSheetButton(
 
             Text(
                 text = buttonLabel,
-                color = itemColor,
+                color = textIconColor,
                 style = MaterialTheme.typography.caption
             )
         }

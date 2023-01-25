@@ -9,8 +9,6 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -22,7 +20,10 @@ import com.vanpra.composematerialdialogs.datetime.time.timepicker
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.compose.state.PreviewData
 import dev.shorthouse.remindme.compose.state.ReminderState
+import dev.shorthouse.remindme.theme.Black
 import dev.shorthouse.remindme.theme.RemindMeTheme
+import dev.shorthouse.remindme.theme.SubtitleGreyLighter
+import dev.shorthouse.remindme.theme.White
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -33,8 +34,6 @@ fun ReminderAlertDialog(
     onConfirm: () -> Unit,
     onDismiss: () -> Unit
 ) {
-    val textButtonColor = colorResource(R.color.blue)
-
     AlertDialog(
         title = {
             Text(
@@ -47,7 +46,7 @@ fun ReminderAlertDialog(
                 Text(
                     text = confirmText,
                     style = MaterialTheme.typography.button,
-                    color = textButtonColor
+                    color = MaterialTheme.colors.primary
                 )
             }
         },
@@ -56,7 +55,7 @@ fun ReminderAlertDialog(
                 Text(
                     text = stringResource(R.string.dialog_action_cancel),
                     style = MaterialTheme.typography.button,
-                    color = textButtonColor
+                    color = MaterialTheme.colors.primary
                 )
             }
         },
@@ -117,11 +116,13 @@ fun ReminderTimePickerDialog(
             is24HourClock = true,
             onTimeChange = { reminderState.time = it },
             colors = TimePickerDefaults.colors(
-                activeBackgroundColor = colorResource(R.color.blue),
-                inactiveBackgroundColor = Color.LightGray,
-                inactiveTextColor = Color.Black,
-                selectorColor = colorResource(R.color.blue),
-            ),
+                activeBackgroundColor = MaterialTheme.colors.primary,
+                activeTextColor = White,
+                inactiveBackgroundColor = SubtitleGreyLighter,
+                inactiveTextColor = Black,
+                selectorColor = MaterialTheme.colors.primary,
+                selectorTextColor = White,
+            )
         )
     }
 }

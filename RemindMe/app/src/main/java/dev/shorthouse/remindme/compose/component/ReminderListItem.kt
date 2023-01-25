@@ -14,7 +14,6 @@ import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -23,6 +22,7 @@ import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.compose.state.ReminderState
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.theme.RemindMeTheme
+import dev.shorthouse.remindme.theme.SubtitleGrey
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.LocalTime
@@ -105,7 +105,7 @@ fun ReminderListItem(reminderState: ReminderState, modifier: Modifier = Modifier
                 Icon(
                     imageVector = Icons.Rounded.NotificationsNone,
                     contentDescription = stringResource(R.string.cd_notification_sent),
-                    tint = colorResource(R.color.subtitle_grey),
+                    tint = SubtitleGrey,
                     modifier = Modifier.size(dimensionResource(R.dimen.margin_normal))
                 )
             }
@@ -114,7 +114,7 @@ fun ReminderListItem(reminderState: ReminderState, modifier: Modifier = Modifier
                 Icon(
                     imageVector = Icons.Rounded.Refresh,
                     contentDescription = stringResource(R.string.cd_repeat_reminder),
-                    tint = colorResource(R.color.subtitle_grey),
+                    tint = SubtitleGrey,
                     modifier = Modifier.size(dimensionResource(R.dimen.margin_normal))
                 )
             }
@@ -131,8 +131,8 @@ fun ReminderListItemCheckbox(selected: Boolean, onChecked: () -> Unit) {
     }
 
     val checkboxIconColor = when (selected) {
-        false -> colorResource(R.color.subtitle_grey)
-        true -> colorResource(R.color.blue)
+        false -> SubtitleGrey
+        true -> MaterialTheme.colors.primary
     }
 
     Icon(
