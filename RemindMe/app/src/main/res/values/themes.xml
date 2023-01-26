@@ -1,5 +1,5 @@
 <resources>
     <style name="Theme.RemindMe" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="android:statusBarColor">@color/primary</item>
+        <item name="android:statusBarColor">@color/status_bar</item>
     </style>
 </resources>
