@@ -2,7 +2,5 @@
 <resources>
     <color name="emptyStateBorder">#FF3F3D56</color>
     <color name="emptyStateFill">#FF2A60EB</color>
-
-    <color name="status_bar">#FF2A60EB</color>
     <color name="ic_launcher_background">#FF2A60EB</color>
 </resources>
