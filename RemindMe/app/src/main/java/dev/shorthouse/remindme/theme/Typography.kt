@@ -8,17 +8,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import dev.shorthouse.remindme.R
 
-private val Inter = FontFamily(
-    Font(R.font.inter_light, FontWeight.Light),
-    Font(R.font.inter_regular, FontWeight.Normal),
-    Font(R.font.inter_bold, FontWeight.Bold),
-    Font(R.font.inter_tight_medium, FontWeight.SemiBold)
+private val Roboto = FontFamily(
+    Font(R.font.roboto_regular, FontWeight.Normal),
+    Font(R.font.roboto_medium, FontWeight.Medium),
+    Font(R.font.roboto_bold, FontWeight.Bold)
 )
 
 val RemindMeTypography = Typography(
-    defaultFontFamily = Inter,
+    defaultFontFamily = Roboto,
     h5 = TextStyle(
-        fontSize = 20.sp,
+        fontSize = 26.sp,
         fontWeight = FontWeight.Bold,
     ),
     h6 = TextStyle(
@@ -49,6 +48,7 @@ val RemindMeTypography = Typography(
     ),
     caption = TextStyle(
         fontSize = 16.sp,
-        fontWeight = FontWeight.SemiBold
+        letterSpacing = 0.2.sp,
+        fontWeight = FontWeight.Bold
     )
 )
