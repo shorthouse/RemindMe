@@ -17,8 +17,8 @@ private val Roboto = FontFamily(
 val RemindMeTypography = Typography(
     defaultFontFamily = Roboto,
     h5 = TextStyle(
-        fontSize = 26.sp,
-        fontWeight = FontWeight.Bold,
+        fontSize = 20.sp,
+        fontWeight = FontWeight.Medium,
     ),
     h6 = TextStyle(
         fontSize = 20.sp,
@@ -47,7 +47,7 @@ val RemindMeTypography = Typography(
         fontWeight = FontWeight.Bold,
     ),
     caption = TextStyle(
-        fontSize = 16.sp,
+        fontSize = 15.sp,
         letterSpacing = 0.2.sp,
         fontWeight = FontWeight.Bold
     )
