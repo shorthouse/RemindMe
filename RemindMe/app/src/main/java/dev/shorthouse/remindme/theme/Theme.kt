@@ -5,6 +5,8 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 private val LightColors = lightColors(
     primary = Blue500,
@@ -41,6 +43,14 @@ fun RemindMeTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
+    val systemUiController = rememberSystemUiController()
+    SideEffect {
+        systemUiController.setSystemBarsColor(
+            color = if (darkTheme) Grey300 else Blue500,
+            darkIcons = !darkTheme,
+        )
+    }
+
     MaterialTheme(
         colors = if (darkTheme) DarkColors else LightColors,
         shapes = RemindMeShapes,
