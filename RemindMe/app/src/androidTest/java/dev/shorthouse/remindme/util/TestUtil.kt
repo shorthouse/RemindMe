@@ -23,14 +23,14 @@ class TestUtil {
 
         val reminderEditState = ReminderState(
             id = 1,
-            name = "",
-            date = "Sat, 01 Jan 2000",
-            time = LocalTime.of(14, 30),
-            isNotificationSent = false,
-            isRepeatReminder = false,
-            repeatAmount = "1",
-            repeatUnit = "Day",
-            notes = "",
+            name = "Reminder name",
+            date = "Sun, 02 Jan 2000",
+            time = LocalTime.of(18, 30),
+            isNotificationSent = true,
+            isRepeatReminder = true,
+            repeatAmount = "2",
+            repeatUnit = "Weeks",
+            notes = "Reminder notes",
             isCompleted = false
         )
 
