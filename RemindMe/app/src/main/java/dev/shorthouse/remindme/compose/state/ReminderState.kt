@@ -23,7 +23,8 @@ fun ReminderState(
     isRepeatReminder: Boolean,
     repeatAmount: String,
     repeatUnit: String,
-    notes: String?
+    notes: String?,
+    isCompleted: Boolean
 ): ReminderState = ReminderStateImpl(
     id = id,
     name = name,
@@ -33,7 +34,8 @@ fun ReminderState(
     isRepeatReminder = isRepeatReminder,
     repeatAmount = repeatAmount,
     repeatUnit = repeatUnit,
-    notes = notes
+    notes = notes,
+    isCompleted = isCompleted
 )
 
 @Stable
@@ -47,6 +49,7 @@ interface ReminderState {
     var repeatAmount: String
     var repeatUnit: String
     var notes: String?
+    var isCompleted: Boolean
 
     fun toReminder(): Reminder
 }
@@ -60,7 +63,8 @@ private class ReminderStateImpl(
     isRepeatReminder: Boolean = false,
     repeatAmount: String = "1",
     repeatUnit: String = "Day",
-    notes: String? = ""
+    notes: String? = "",
+    isCompleted: Boolean = false
 ) : ReminderState {
     constructor(reminder: Reminder) : this(
         id = reminder.id,
@@ -71,7 +75,8 @@ private class ReminderStateImpl(
         isRepeatReminder = reminder.repeatInterval != null,
         repeatAmount = reminder.repeatInterval?.amount?.toString() ?: "1",
         repeatUnit = getStateRepeatUnit(reminder.repeatInterval),
-        notes = reminder.notes
+        notes = reminder.notes,
+        isCompleted = reminder.isCompleted
     )
 
     companion object {
@@ -140,7 +145,7 @@ private class ReminderStateImpl(
             isNotificationSent = _isNotificationSent,
             repeatInterval = if (isRepeatReminder) getReminderRepeatInterval(_repeatAmount, _repeatUnit) else null,
             notes = _notes?.trim()?.ifBlank { null },
-            isCompleted = false
+            isCompleted = _isCompleted
         )
     }
 
@@ -205,5 +210,12 @@ private class ReminderStateImpl(
         get() = _notes
         set(value) {
             _notes = value
+        }
+
+    private var _isCompleted by mutableStateOf(isCompleted, structuralEqualityPolicy())
+    override var isCompleted: Boolean
+        get() = _isCompleted
+        set(value) {
+            _isCompleted = value
         }
 }
