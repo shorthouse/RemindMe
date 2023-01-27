@@ -16,12 +16,11 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.compose.component.EmptyStateScheduledReminders
 import dev.shorthouse.remindme.compose.component.ScheduledReminderListItem
-import dev.shorthouse.remindme.compose.screen.destinations.ReminderDetailsScreenDestination
 import dev.shorthouse.remindme.compose.preview.PreviewData
+import dev.shorthouse.remindme.compose.screen.destinations.ReminderDetailsScreenDestination
 import dev.shorthouse.remindme.compose.state.ReminderState
 import dev.shorthouse.remindme.theme.RemindMeTheme
 import dev.shorthouse.remindme.utilities.enums.ReminderSortOrder
@@ -37,12 +36,16 @@ fun ReminderListScheduledScreen(
 
     val scheduledReminders by listScheduledViewModel.getScheduledReminders(selectedReminderSortOrder).observeAsState()
 
+    val onNavigateDetails: (Long) -> Unit = { reminderId ->
+        navigator.navigate(ReminderDetailsScreenDestination(reminderId = reminderId))
+    }
+
     scheduledReminders?.let { reminders ->
         val reminderStates = reminders.map { ReminderState(it) }
 
         ReminderListScheduledContent(
             reminderStates = reminderStates,
-            navigator = navigator,
+            onNavigateDetails = onNavigateDetails,
             modifier = modifier
         )
     }
@@ -51,7 +54,7 @@ fun ReminderListScheduledScreen(
 @Composable
 fun ReminderListScheduledContent(
     reminderStates: List<ReminderState>,
-    navigator: DestinationsNavigator,
+    onNavigateDetails: (Long) -> Unit,
     modifier: Modifier = Modifier
 ) {
     if (reminderStates.isEmpty()) {
@@ -59,7 +62,7 @@ fun ReminderListScheduledContent(
     } else {
         ReminderListScheduled(
             reminderStates = reminderStates,
-            navigator = navigator
+            onNavigateDetails = onNavigateDetails
         )
     }
 }
@@ -67,7 +70,7 @@ fun ReminderListScheduledContent(
 @Composable
 private fun ReminderListScheduled(
     reminderStates: List<ReminderState>,
-    navigator: DestinationsNavigator
+    onNavigateDetails: (Long) -> Unit,
 ) {
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.margin_large)),
@@ -82,8 +85,7 @@ private fun ReminderListScheduled(
         items(reminderStates) { reminderState ->
             ScheduledReminderListItem(
                 reminderState = reminderState,
-                modifier = Modifier
-                    .clickable { navigator.navigate(ReminderDetailsScreenDestination(reminderId = reminderState.id)) })
+                modifier = Modifier.clickable { onNavigateDetails(reminderState.id) })
         }
     }
 }
@@ -97,7 +99,7 @@ fun ReminderListScheduledPreview() {
 
         ReminderListScheduledContent(
             reminderStates = reminderStates,
-            navigator = EmptyDestinationsNavigator
+            onNavigateDetails = {}
         )
     }
 }
