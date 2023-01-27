@@ -104,7 +104,7 @@ fun ReminderListItem(reminderState: ReminderState, modifier: Modifier = Modifier
             if (reminderState.isNotificationSent) {
                 Icon(
                     imageVector = Icons.Rounded.NotificationsNone,
-                    contentDescription = stringResource(R.string.cd_notification_sent),
+                    contentDescription = stringResource(R.string.cd_notifications_enabled),
                     tint = SubtitleGrey,
                     modifier = Modifier.size(dimensionResource(R.dimen.margin_normal))
                 )
