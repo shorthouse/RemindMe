@@ -19,6 +19,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.*
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -26,11 +27,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.compose.component.*
-import dev.shorthouse.remindme.compose.state.PreviewData
+import dev.shorthouse.remindme.compose.preview.PreviewData
 import dev.shorthouse.remindme.compose.state.ReminderState
 import dev.shorthouse.remindme.theme.RemindMeTheme
 import dev.shorthouse.remindme.theme.SubtitleGrey
@@ -48,13 +48,17 @@ fun ReminderInputScreen(
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
 
+    val onNavigateUp: () -> Unit = {
+        navigator.navigateUp()
+    }
+
     val onSave: () -> Unit = {
         val reminder = reminderState.toReminder()
 
         when {
             inputViewModel.isReminderValid(reminder) -> {
                 inputViewModel.saveReminder(reminder)
-                navigator.navigateUp()
+                onNavigateUp()
             }
             else -> {
                 val errorMessage = inputViewModel.getErrorMessage(reminder).asString(context)
@@ -69,8 +73,8 @@ fun ReminderInputScreen(
         reminderState = reminderState,
         scaffoldState = scaffoldState,
         topBarTitle = topBarTitle,
+        onNavigateUp = onNavigateUp,
         onSave = onSave,
-        navigator = navigator
     )
 }
 
@@ -79,8 +83,8 @@ fun ReminderInputScaffold(
     reminderState: ReminderState,
     scaffoldState: ScaffoldState,
     topBarTitle: String,
-    onSave: () -> Unit,
-    navigator: DestinationsNavigator,
+    onNavigateUp: () -> Unit,
+    onSave: () -> Unit
 ) {
     Scaffold(
         scaffoldState = scaffoldState,
@@ -88,7 +92,7 @@ fun ReminderInputScaffold(
             ReminderInputTopBar(
                 topBarTitle = topBarTitle,
                 onSave = onSave,
-                navigator = navigator
+                onNavigateUp = onNavigateUp,
             )
         },
         content = { scaffoldPadding ->
@@ -106,8 +110,8 @@ fun ReminderInputScaffold(
 @Composable
 fun ReminderInputTopBar(
     topBarTitle: String,
-    onSave: () -> Unit,
-    navigator: DestinationsNavigator
+    onNavigateUp: () -> Unit,
+    onSave: () -> Unit
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
 
@@ -121,7 +125,7 @@ fun ReminderInputTopBar(
         navigationIcon = {
             IconButton(onClick = {
                 keyboardController?.hide()
-                navigator.navigateUp()
+                onNavigateUp()
             }) {
                 Icon(
                     imageVector = Icons.Rounded.Close,
@@ -225,8 +229,8 @@ fun ReminderDateInput(reminderState: ReminderState, modifier: Modifier = Modifie
     TextWithLeftIcon(
         icon = Icons.Rounded.CalendarToday,
         text = reminderState.date,
-        modifier = modifier
-            .clickable { dateDialogState.show() }
+        modifier = modifier.clickable { dateDialogState.show() },
+        contentDescription = stringResource(R.string.cd_details_date)
     )
 }
 
@@ -242,26 +246,28 @@ fun ReminderTimeInput(reminderState: ReminderState, modifier: Modifier = Modifie
     TextWithLeftIcon(
         icon = Icons.Rounded.Schedule,
         text = reminderState.time.toString(),
-        modifier = modifier
-            .clickable { timeDialogState.show() }
+        modifier = modifier.clickable { timeDialogState.show() },
+        contentDescription = stringResource(R.string.cd_details_time)
     )
 }
 
 @Composable
 fun ReminderSwitchRow(
     icon: ImageVector,
+    iconContentDescription: String,
     switchText: String,
+    switchTestTag: String,
     isChecked: Boolean,
     onCheckedChange: (Boolean) -> Unit
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .fillMaxWidth()
+        modifier = Modifier.fillMaxWidth()
     ) {
         TextWithLeftIcon(
             icon = icon,
             text = switchText,
+            contentDescription = iconContentDescription
         )
 
         Spacer(modifier = Modifier.weight(1f))
@@ -269,6 +275,7 @@ fun ReminderSwitchRow(
         Switch(
             checked = isChecked,
             onCheckedChange = onCheckedChange,
+            modifier = Modifier.testTag(switchTestTag)
         )
     }
 }
@@ -277,7 +284,9 @@ fun ReminderSwitchRow(
 fun ReminderNotificationInput(reminderState: ReminderState) {
     ReminderSwitchRow(
         icon = Icons.Rounded.NotificationsNone,
+        iconContentDescription = stringResource(R.string.cd_details_notification),
         switchText = stringResource(R.string.title_send_notification),
+        switchTestTag = stringResource(R.string.test_tag_switch_notification),
         isChecked = reminderState.isNotificationSent,
         onCheckedChange = { reminderState.isNotificationSent = it }
     )
@@ -293,7 +302,7 @@ fun ReminderNotesInput(reminderState: ReminderState, modifier: Modifier = Modifi
     ) {
         Icon(
             imageVector = Icons.Rounded.Notes,
-            contentDescription = null,
+            contentDescription = stringResource(R.string.cd_details_notes),
             tint = SubtitleGrey
         )
 
@@ -314,7 +323,9 @@ fun ReminderNotesInput(reminderState: ReminderState, modifier: Modifier = Modifi
 fun ReminderRepeatIntervalInput(reminderState: ReminderState) {
     ReminderSwitchRow(
         icon = Icons.Rounded.Refresh,
+        iconContentDescription = stringResource(R.string.cd_details_repeat_interval),
         switchText = stringResource(R.string.title_repeat_reminder),
+        switchTestTag = stringResource(R.string.test_tag_switch_repeat_interval),
         isChecked = reminderState.isRepeatReminder,
         onCheckedChange = { reminderState.isRepeatReminder = it }
     )
@@ -391,6 +402,7 @@ private fun RepeatAmountInput(reminderState: ReminderState) {
         modifier = Modifier
             .width(72.dp)
             .padding(end = dimensionResource(R.dimen.margin_normal))
+            .testTag(stringResource(R.string.test_tag_text_field_repeat_amount))
     )
 }
 
@@ -420,7 +432,8 @@ private fun RepeatUnitInput(reminderState: ReminderState) {
             ) {
                 RadioButton(
                     selected = (text == reminderState.repeatUnit),
-                    onClick = { reminderState.repeatUnit = text }
+                    onClick = { reminderState.repeatUnit = text },
+                    modifier = Modifier.testTag(text)
                 )
 
                 Spacer(modifier = Modifier.width(dimensionResource(R.dimen.margin_tiny)))
@@ -446,8 +459,8 @@ private fun ReminderInputPreview() {
             reminderState = reminderState,
             scaffoldState = scaffoldState,
             topBarTitle = "Reminder Input",
+            onNavigateUp = {},
             onSave = {},
-            navigator = EmptyDestinationsNavigator
         )
     }
 }

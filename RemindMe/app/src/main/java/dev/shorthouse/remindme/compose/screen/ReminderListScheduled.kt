@@ -21,7 +21,7 @@ import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.compose.component.EmptyStateScheduledReminders
 import dev.shorthouse.remindme.compose.component.ScheduledReminderListItem
 import dev.shorthouse.remindme.compose.screen.destinations.ReminderDetailsScreenDestination
-import dev.shorthouse.remindme.compose.state.PreviewData
+import dev.shorthouse.remindme.compose.preview.PreviewData
 import dev.shorthouse.remindme.compose.state.ReminderState
 import dev.shorthouse.remindme.theme.RemindMeTheme
 import dev.shorthouse.remindme.utilities.enums.ReminderSortOrder

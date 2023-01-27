@@ -11,17 +11,17 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.compose.component.ReminderAlertDialog
 import dev.shorthouse.remindme.compose.component.TextWithLeftIcon
 import dev.shorthouse.remindme.compose.screen.destinations.ReminderEditScreenDestination
-import dev.shorthouse.remindme.compose.state.PreviewData
+import dev.shorthouse.remindme.compose.preview.PreviewData
 import dev.shorthouse.remindme.compose.state.ReminderDetailItem
 import dev.shorthouse.remindme.compose.state.ReminderState
 import dev.shorthouse.remindme.theme.RemindMeTheme
@@ -38,21 +38,30 @@ fun ReminderDetailsScreen(
     val reminder by detailsViewModel.getReminderDetails(reminderId).observeAsState()
 
     reminder?.let {
+        val onNavigateUp: () -> Unit = {
+            navigator.navigateUp()
+        }
+
+        val onEdit: () -> Unit = {
+            navigator.navigate(ReminderEditScreenDestination(reminderId = it.id))
+        }
+
         val onDelete: () -> Unit = {
             detailsViewModel.deleteReminder(it)
-            navigator.navigateUp()
+            onNavigateUp()
         }
 
         val onComplete: () -> Unit = {
             detailsViewModel.completeReminder(it)
-            navigator.navigateUp()
+            onNavigateUp()
         }
 
         ReminderDetailsScaffold(
             reminderState = ReminderState(it),
+            onNavigateUp = onNavigateUp,
+            onEdit = onEdit,
             onDelete = onDelete,
             onComplete = onComplete,
-            navigator = navigator
         )
     }
 }
@@ -60,18 +69,27 @@ fun ReminderDetailsScreen(
 @Composable
 fun ReminderDetailsScaffold(
     reminderState: ReminderState,
+    onNavigateUp: () -> Unit,
+    onEdit: () -> Unit,
     onDelete: () -> Unit,
-    onComplete: () -> Unit,
-    navigator: DestinationsNavigator
+    onComplete: () -> Unit
 ) {
     Scaffold(
         topBar = {
-            ReminderDetailsTopBar(
-                reminderState = reminderState,
-                navigator = navigator,
-                onDelete = onDelete,
-                onComplete = onComplete
-            )
+            if (reminderState.isCompleted) {
+                CompletedReminderDetailsTopBar(
+                    onNavigateUp = onNavigateUp,
+                    onDelete = onDelete
+                )
+            } else {
+                ReminderDetailsTopBar(
+                    onNavigateUp = onNavigateUp,
+                    onEdit = onEdit,
+                    onDelete = onDelete,
+                    onComplete = onComplete
+                )
+            }
+
         },
         content = { innerPadding ->
             ReminderDetailsContent(
@@ -84,10 +102,10 @@ fun ReminderDetailsScaffold(
 
 @Composable
 fun ReminderDetailsTopBar(
-    reminderState: ReminderState,
+    onNavigateUp: () -> Unit,
+    onEdit: () -> Unit,
     onDelete: () -> Unit,
     onComplete: () -> Unit,
-    navigator: DestinationsNavigator
 ) {
     var isMenuShown by remember { mutableStateOf(false) }
     var isDeleteDialogShown by remember { mutableStateOf(false) }
@@ -119,7 +137,7 @@ fun ReminderDetailsTopBar(
             )
         },
         navigationIcon = {
-            IconButton(onClick = { navigator.navigateUp() }) {
+            IconButton(onClick = onNavigateUp) {
                 Icon(
                     imageVector = Icons.Rounded.ArrowBack,
                     contentDescription = stringResource(R.string.cd_back),
@@ -128,7 +146,7 @@ fun ReminderDetailsTopBar(
             }
         },
         actions = {
-            IconButton(onClick = { navigator.navigate(ReminderEditScreenDestination(reminderId = reminderState.id)) }) {
+            IconButton(onClick = onEdit) {
                 Icon(
                     imageVector = Icons.Rounded.Edit,
                     contentDescription = stringResource(R.string.menu_item_edit),
@@ -176,6 +194,49 @@ fun ReminderDetailsTopBar(
 }
 
 @Composable
+fun CompletedReminderDetailsTopBar(
+    onNavigateUp: () -> Unit,
+    onDelete: () -> Unit
+) {
+    var isDeleteDialogShown by remember { mutableStateOf(false) }
+
+    if (isDeleteDialogShown) {
+        ReminderAlertDialog(
+            title = stringResource(R.string.alert_dialog_title_delete),
+            confirmText = stringResource(R.string.dialog_action_delete),
+            onConfirm = onDelete,
+            onDismiss = { isDeleteDialogShown = false }
+        )
+    }
+
+    TopAppBar(
+        title = {
+            Text(
+                text = stringResource(R.string.top_bar_title_details),
+                style = MaterialTheme.typography.h5
+            )
+        },
+        navigationIcon = {
+            IconButton(onClick = onNavigateUp) {
+                Icon(
+                    imageVector = Icons.Rounded.ArrowBack,
+                    contentDescription = stringResource(R.string.cd_back),
+                )
+            }
+        },
+        actions = {
+            IconButton(onClick = { isDeleteDialogShown = true }) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_delete),
+                    contentDescription = stringResource(R.string.menu_item_delete),
+                    tint = MaterialTheme.colors.onPrimary
+                )
+            }
+        }
+    )
+}
+
+@Composable
 fun ReminderDetailsContent(
     innerPadding: PaddingValues,
     reminderState: ReminderState
@@ -201,20 +262,23 @@ fun ReminderDetailsContent(
             add(
                 ReminderDetailItem(
                     Icons.Rounded.CalendarToday,
-                    reminderState.date
+                    reminderState.date,
+                    stringResource(R.string.cd_details_date)
                 )
             )
             add(
                 ReminderDetailItem(
                     Icons.Rounded.Schedule,
-                    reminderState.time.toString()
+                    reminderState.time.toString(),
+                    stringResource(R.string.cd_details_time)
                 )
             )
             if (reminderState.isNotificationSent) {
                 add(
                     ReminderDetailItem(
                         Icons.Rounded.NotificationsNone,
-                        stringResource(R.string.notifications_on)
+                        stringResource(R.string.notifications_on),
+                        stringResource(R.string.cd_details_notification)
                     )
                 )
             }
@@ -226,7 +290,8 @@ fun ReminderDetailsContent(
                             R.string.reminder_details_repeat_interval,
                             reminderState.repeatAmount,
                             reminderState.repeatUnit
-                        )
+                        ),
+                        stringResource(R.string.cd_details_repeat_interval)
                     )
                 )
             }
@@ -234,7 +299,8 @@ fun ReminderDetailsContent(
                 add(
                     ReminderDetailItem(
                         Icons.Rounded.Notes,
-                        notes
+                        notes,
+                        stringResource(R.string.cd_details_notes)
                     )
                 )
             }
@@ -244,6 +310,7 @@ fun ReminderDetailsContent(
             TextWithLeftIcon(
                 icon = detailItem.icon,
                 text = detailItem.label,
+                contentDescription = detailItem.contentDescription
             )
         }
     }
@@ -258,9 +325,28 @@ private fun ReminderDetailsScreenPreview() {
 
         ReminderDetailsScaffold(
             reminderState = reminderState,
+            onNavigateUp = {},
+            onEdit = {},
             onDelete = {},
-            onComplete = {},
-            navigator = EmptyDestinationsNavigator
+            onComplete = {}
+        )
+    }
+}
+
+@Preview(name = "Light Mode", showBackground = true)
+@Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
+@Composable
+private fun CompletedReminderDetailsScreenPreview() {
+    RemindMeTheme {
+        val reminderState by remember { mutableStateOf(PreviewData.reminderState) }
+        reminderState.isCompleted = true
+
+        ReminderDetailsScaffold(
+            reminderState = reminderState,
+            onNavigateUp = {},
+            onEdit = {},
+            onDelete = {},
+            onComplete = {}
         )
     }
 }

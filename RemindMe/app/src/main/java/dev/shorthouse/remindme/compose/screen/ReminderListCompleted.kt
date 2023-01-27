@@ -20,8 +20,8 @@ import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.compose.component.CompletedReminderListItem
 import dev.shorthouse.remindme.compose.component.EmptyStateCompletedReminders
-import dev.shorthouse.remindme.compose.screen.destinations.ReminderCompletedDetailsScreenDestination
-import dev.shorthouse.remindme.compose.state.PreviewData
+import dev.shorthouse.remindme.compose.screen.destinations.ReminderDetailsScreenDestination
+import dev.shorthouse.remindme.compose.preview.PreviewData
 import dev.shorthouse.remindme.compose.state.ReminderState
 import dev.shorthouse.remindme.theme.RemindMeTheme
 import dev.shorthouse.remindme.utilities.enums.ReminderSortOrder
@@ -84,7 +84,7 @@ private fun ReminderListComplete(
                 reminderState = reminderState,
                 modifier = Modifier.clickable {
                     navigator.navigate(
-                        ReminderCompletedDetailsScreenDestination(reminderId = reminderState.id)
+                        ReminderDetailsScreenDestination(reminderId = reminderState.id)
                     )
                 })
         }

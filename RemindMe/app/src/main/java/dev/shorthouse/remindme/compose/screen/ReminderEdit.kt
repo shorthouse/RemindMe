@@ -12,9 +12,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 import dev.shorthouse.remindme.R
-import dev.shorthouse.remindme.compose.state.PreviewData
+import dev.shorthouse.remindme.compose.preview.PreviewData
 import dev.shorthouse.remindme.compose.state.ReminderState
 import dev.shorthouse.remindme.theme.RemindMeTheme
 import dev.shorthouse.remindme.viewmodel.EditViewModel
@@ -53,8 +52,8 @@ private fun ReminderEditPreview() {
             reminderState = reminderState,
             scaffoldState = scaffoldState,
             topBarTitle = stringResource(R.string.top_bar_title_edit_reminder),
+            onNavigateUp = {},
             onSave = {},
-            navigator = EmptyDestinationsNavigator
         )
     }
 }

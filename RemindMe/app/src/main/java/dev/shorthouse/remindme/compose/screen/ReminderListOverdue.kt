@@ -16,12 +16,11 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.compose.component.EmptyStateOverdueReminders
 import dev.shorthouse.remindme.compose.component.OverdueReminderListItem
+import dev.shorthouse.remindme.compose.preview.PreviewData
 import dev.shorthouse.remindme.compose.screen.destinations.ReminderDetailsScreenDestination
-import dev.shorthouse.remindme.compose.state.PreviewData
 import dev.shorthouse.remindme.compose.state.ReminderState
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.theme.RemindMeTheme
@@ -38,6 +37,10 @@ fun ReminderListOverdueScreen(
 
     val overdueReminders by listOverdueViewModel.getOverdueReminders(selectedReminderSortOrder).observeAsState()
 
+    val onNavigateDetails: (Long) -> Unit = { reminderId ->
+        navigator.navigate(ReminderDetailsScreenDestination(reminderId = reminderId))
+    }
+
     val onCompleteChecked: (Reminder) -> Unit = { reminder ->
         listOverdueViewModel.updateDoneReminder(reminder)
         listOverdueViewModel.removeDisplayingNotification(reminder)
@@ -48,8 +51,8 @@ fun ReminderListOverdueScreen(
 
         ReminderListOverdueContent(
             reminderStates = reminderStates,
+            onNavigateDetails = onNavigateDetails,
             onCompleteChecked = onCompleteChecked,
-            navigator = navigator,
             modifier = modifier
         )
     }
@@ -58,8 +61,8 @@ fun ReminderListOverdueScreen(
 @Composable
 fun ReminderListOverdueContent(
     reminderStates: List<ReminderState>,
+    onNavigateDetails: (Long) -> Unit,
     onCompleteChecked: (Reminder) -> Unit,
-    navigator: DestinationsNavigator,
     modifier: Modifier = Modifier
 ) {
     if (reminderStates.isEmpty()) {
@@ -67,8 +70,8 @@ fun ReminderListOverdueContent(
     } else {
         ReminderListOverdue(
             reminderStates = reminderStates,
+            onNavigateDetails = onNavigateDetails,
             onCompleteChecked = onCompleteChecked,
-            navigator = navigator
         )
     }
 }
@@ -76,8 +79,8 @@ fun ReminderListOverdueContent(
 @Composable
 private fun ReminderListOverdue(
     reminderStates: List<ReminderState>,
+    onNavigateDetails: (Long) -> Unit,
     onCompleteChecked: (Reminder) -> Unit,
-    navigator: DestinationsNavigator,
 ) {
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.margin_large)),
@@ -95,7 +98,7 @@ private fun ReminderListOverdue(
                 onCompleteChecked = onCompleteChecked,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable { navigator.navigate(ReminderDetailsScreenDestination(reminderId = reminderState.id)) })
+                    .clickable { onNavigateDetails(reminderState.id) })
         }
     }
 }
@@ -109,8 +112,8 @@ fun ReminderListOverduePreview() {
 
         ReminderListOverdueContent(
             reminderStates = reminderStates,
-            navigator = EmptyDestinationsNavigator,
-            onCompleteChecked = {}
+            onNavigateDetails = {},
+            onCompleteChecked = {},
         )
     }
 
