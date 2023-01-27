@@ -1,6 +1,5 @@
 package dev.shorthouse.remindme.util
 
-import dev.shorthouse.remindme.compose.preview.PreviewData
 import dev.shorthouse.remindme.compose.state.ReminderState
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.model.RepeatInterval
@@ -35,59 +34,17 @@ class TestUtil {
             isCompleted = false
         )
 
-        val reminderListStates = listOf(
-            PreviewData.reminderState,
-            ReminderState(
-                id = 2,
-                name = "Feed the fish",
-                date = "Fri, 27 Jun 2017",
-                time = LocalTime.of(18, 15),
-                isNotificationSent = true,
-                isRepeatReminder = false,
-                repeatAmount = "",
-                repeatUnit = "",
-                notes = null,
-                isCompleted = false
-            ),
-            ReminderState(
-                id = 3,
-                name = "Go for a run",
-                date = "Wed, 07 Jan 2022",
-                time = LocalTime.of(7, 15),
-                isNotificationSent = false,
-                isRepeatReminder = false,
-                repeatAmount = "",
-                repeatUnit = "",
-                notes = "The cardio will be worth it!",
-                isCompleted = false
-            )
-        )
-        val reminderStateList = listOf(
-            PreviewData.reminderState,
-            ReminderState(
-                id = 2,
-                name = "Feed the fish",
-                date = "Fri, 27 Jun 2017",
-                time = LocalTime.of(18, 15),
-                isNotificationSent = true,
-                isRepeatReminder = false,
-                repeatAmount = "",
-                repeatUnit = "",
-                notes = null,
-                isCompleted = false
-            ),
-            ReminderState(
-                id = 3,
-                name = "Go for a run",
-                date = "Wed, 07 Jan 2022",
-                time = LocalTime.of(7, 15),
-                isNotificationSent = false,
-                isRepeatReminder = false,
-                repeatAmount = "",
-                repeatUnit = "",
-                notes = "The cardio will be worth it!",
-                isCompleted = false
-            )
+        val defaultReminderState = ReminderState(
+            id = 1,
+            name = "Yoga with Alice",
+            date = "Wed, 22 Mar 2000",
+            time = LocalTime.of(14, 30),
+            isNotificationSent = false,
+            isRepeatReminder = false,
+            repeatAmount = "2",
+            repeatUnit = "Weeks",
+            notes = "Don't forget to warm up!",
+            isCompleted = false,
         )
     }
 
@@ -111,33 +68,21 @@ class TestUtil {
         )
     }
 
-    fun createReminderAddState(): ReminderState {
+    fun createReminderListItemState(
+        isNotificationSent: Boolean = false,
+        isRepeatReminder: Boolean = false,
+    ): ReminderState {
         return ReminderState(
             id = 1,
-            name = "",
-            date = "Sat, 01 Jan 2000",
+            name = "Yoga with Alice",
+            date = "Wed, 22 Mar 2000",
             time = LocalTime.of(14, 30),
-            isNotificationSent = false,
-            isRepeatReminder = false,
-            repeatAmount = "1",
-            repeatUnit = "Day",
-            notes = "",
-            isCompleted = false
-        )
-    }
-
-    fun createReminderEditState(): ReminderState {
-        return ReminderState(
-            id = 1,
-            name = "Reminder name",
-            date = "Sun, 02 Jan 2000",
-            time = LocalTime.of(18, 30),
-            isNotificationSent = true,
-            isRepeatReminder = true,
+            isNotificationSent = isNotificationSent,
+            isRepeatReminder = isRepeatReminder,
             repeatAmount = "2",
             repeatUnit = "Weeks",
-            notes = "Reminder notes",
-            isCompleted = false
+            notes = "Don't forget to warm up!",
+            isCompleted = false,
         )
     }
 }
