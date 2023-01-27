@@ -56,6 +56,16 @@ class ReminderListScheduledTest {
     }
 
     @Test
+    fun when_scheduled_reminder_list_empty_should_show_empty_state() {
+        setContent(emptyList())
+
+        composeTestRule.apply {
+            onNodeWithText("No scheduled reminders").assertIsDisplayed()
+            onNodeWithText("Add a reminder to get started").assertIsDisplayed()
+        }
+    }
+
+    @Test
     fun when_scheduled_reminder_state_changes_should_show_expected_icons() {
         val notificationReminder = TestUtil().createReminderListItemState(isNotificationSent = true)
         setContent(listOf(notificationReminder))

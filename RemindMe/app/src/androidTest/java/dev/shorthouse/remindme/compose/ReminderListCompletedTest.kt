@@ -55,6 +55,16 @@ class ReminderListCompletedTest {
     }
 
     @Test
+    fun when_completed_reminder_list_empty_should_show_empty_state() {
+        setContent(emptyList())
+
+        composeTestRule.apply {
+            onNodeWithText("No completed reminders").assertIsDisplayed()
+            onNodeWithText("Completed reminders will show up here").assertIsDisplayed()
+        }
+    }
+
+    @Test
     fun when_scheduled_reminder_state_changes_should_show_expected_icons() {
         val notificationReminder = TestUtil().createReminderListItemState(isNotificationSent = true)
         setContent(listOf(notificationReminder))

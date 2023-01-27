@@ -57,6 +57,16 @@ class ReminderListOverdueTest {
     }
 
     @Test
+    fun when_overdue_reminder_list_empty_should_show_empty_state() {
+        setContent(emptyList())
+
+        composeTestRule.apply {
+            onNodeWithText("No overdue reminders").assertIsDisplayed()
+            onNodeWithText("You're all caught up").assertIsDisplayed()
+        }
+    }
+
+    @Test
     fun when_overdue_reminder_state_changes_should_show_expected_icons() {
         val notificationReminder = TestUtil().createReminderListItemState(isNotificationSent = true)
         setContent(listOf(notificationReminder))
