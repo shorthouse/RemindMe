@@ -69,7 +69,7 @@
     <string name="cd_back">Back</string>
     <string name="cd_repeat_reminder">Repeat reminder</string>
     <string name="cd_checkbox_complete_reminder">Complete reminder</string>
-    <string name="cd_notification_sent">Notification sent</string>
+    <string name="cd_notifications_enabled">Notifications enabled</string>
 
     <!-- Alert Dialogs -->
     <string name="alert_dialog_title_delete">Delete this reminder?</string>
