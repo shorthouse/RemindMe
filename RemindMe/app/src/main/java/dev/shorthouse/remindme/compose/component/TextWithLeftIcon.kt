@@ -23,7 +23,8 @@ import dev.shorthouse.remindme.theme.SubtitleGrey
 fun TextWithLeftIcon(
     icon: ImageVector,
     text: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    contentDescription: String? = null
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -31,7 +32,7 @@ fun TextWithLeftIcon(
     ) {
         Icon(
             imageVector = icon,
-            contentDescription = null,
+            contentDescription = contentDescription,
             tint = SubtitleGrey,
         )
 
