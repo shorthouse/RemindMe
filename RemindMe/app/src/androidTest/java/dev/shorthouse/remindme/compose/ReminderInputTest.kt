@@ -27,14 +27,11 @@ class ReminderInputTest {
         hiltTestRule.inject()
     }
 
-    private val reminderAddState = TestUtil.createReminderAddState()
-    private val reminderEditState = TestUtil.createReminderEditState()
-
     private fun setAddContent() {
         composeTestRule.setContent {
             RemindMeTheme {
                 ReminderInputScaffold(
-                    reminderState = reminderAddState,
+                    reminderState = TestUtil.reminderAddState,
                     scaffoldState = rememberScaffoldState(),
                     topBarTitle = "Add reminder",
                     onNavigateUp = {},
@@ -48,7 +45,7 @@ class ReminderInputTest {
         composeTestRule.setContent {
             RemindMeTheme {
                 ReminderInputScaffold(
-                    reminderState = reminderEditState,
+                    reminderState = TestUtil.reminderEditState,
                     scaffoldState = rememberScaffoldState(),
                     topBarTitle = "Edit reminder",
                     onNavigateUp = {},
