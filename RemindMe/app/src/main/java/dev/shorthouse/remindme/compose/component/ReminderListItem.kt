@@ -104,7 +104,7 @@ fun ReminderListItem(reminderState: ReminderState, modifier: Modifier = Modifier
             if (reminderState.isNotificationSent) {
                 Icon(
                     imageVector = Icons.Rounded.NotificationsNone,
-                    contentDescription = stringResource(R.string.cd_notification_sent),
+                    contentDescription = stringResource(R.string.cd_notifications_enabled),
                     tint = SubtitleGrey,
                     modifier = Modifier.size(dimensionResource(R.dimen.margin_normal))
                 )
@@ -157,7 +157,8 @@ fun OverdueReminderListItemPreview() {
             isRepeatReminder = true,
             repeatAmount = "2",
             repeatUnit = "Weeks",
-            notes = "Don't forget to warm up!"
+            notes = "Don't forget to warm up!",
+            isCompleted = false
         )
 
         OverdueReminderListItem(reminderState = reminderState, {})
@@ -178,9 +179,32 @@ fun ScheduledReminderListItemPreview() {
             isRepeatReminder = true,
             repeatAmount = "2",
             repeatUnit = "Weeks",
-            notes = "Don't forget to warm up!"
+            notes = "Don't forget to warm up!",
+            isCompleted = false
         )
 
         ScheduledReminderListItem(reminderState = reminderState)
+    }
+}
+
+@Preview(name = "Light Mode", showBackground = true)
+@Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
+@Composable
+fun CompletedReminderListItemPreview() {
+    RemindMeTheme {
+        val reminderState = ReminderState(
+            id = 1,
+            name = "Yoga with Alice",
+            date = "Wed, 14 Mar 2022",
+            time = LocalTime.of(14, 30),
+            isNotificationSent = true,
+            isRepeatReminder = true,
+            repeatAmount = "2",
+            repeatUnit = "Weeks",
+            notes = "Don't forget to warm up!",
+            isCompleted = true
+        )
+
+        CompletedReminderListItem(reminderState = reminderState)
     }
 }

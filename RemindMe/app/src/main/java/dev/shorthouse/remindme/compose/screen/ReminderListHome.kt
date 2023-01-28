@@ -14,6 +14,7 @@ import androidx.compose.material.icons.rounded.SwapVert
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -51,6 +52,7 @@ fun ReminderListHomeScreen(
         selectedSheet.value = selectedBottomSheet
         coroutineScope.launch { sheetState.show() }
     }
+
     val closeSheet: () -> Unit = {
         coroutineScope.launch { sheetState.hide() }
     }
@@ -165,6 +167,7 @@ fun ReminderListHomeTopBar(
             Text(
                 text = title,
                 style = MaterialTheme.typography.h5,
+                modifier = Modifier.testTag(stringResource(R.string.test_tag_list_home_title, title))
             )
         }
     )

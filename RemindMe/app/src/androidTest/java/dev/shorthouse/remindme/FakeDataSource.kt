@@ -28,7 +28,7 @@ class FakeDataSource(private var reminders: MutableList<Reminder> = mutableListO
     }
 
     override fun getCompletedReminders(): Flow<List<Reminder>> {
-        TODO("Not yet implemented")
+        return flowOf(reminders.filter { it.isCompleted })
     }
 
     override fun insertReminder(reminder: Reminder): Long {

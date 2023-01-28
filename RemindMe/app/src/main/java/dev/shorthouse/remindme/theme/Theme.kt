@@ -46,8 +46,7 @@ fun RemindMeTheme(
     val systemUiController = rememberSystemUiController()
     SideEffect {
         systemUiController.setSystemBarsColor(
-            color = if (darkTheme) Grey300 else Blue500,
-            darkIcons = !darkTheme,
+            color = if (darkTheme) Grey300 else Blue500
         )
     }
 
