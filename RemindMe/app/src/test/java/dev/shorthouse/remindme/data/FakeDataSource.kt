@@ -16,7 +16,9 @@ class FakeDataSource(private var reminders: MutableList<Reminder> = mutableListO
 
     override fun getOverdueReminders(nowDateTime: ZonedDateTime): Flow<List<Reminder>> {
         return flowOf(
-            reminders.filter { it.startDateTime.isBefore(nowDateTime) || it.startDateTime.isEqual(nowDateTime) }
+            reminders.filter {
+                it.startDateTime.isBefore(nowDateTime) || it.startDateTime.isEqual(nowDateTime)
+            }
         )
     }
 
@@ -25,24 +27,7 @@ class FakeDataSource(private var reminders: MutableList<Reminder> = mutableListO
     }
 
     override fun getCompletedReminders(): Flow<List<Reminder>> {
-        TODO("Not yet implemented")
-    }
-
-    override fun completeReminder(id: Long) {
-        val reminderToCompleteIndex = reminders.indexOfFirst { it.id == id }
-        val reminderToComplete = reminders[reminderToCompleteIndex]
-
-        val completedReminder = Reminder(
-            reminderToComplete.id,
-            reminderToComplete.name,
-            reminderToComplete.startDateTime,
-            reminderToComplete.isNotificationSent,
-            reminderToComplete.repeatInterval,
-            reminderToComplete.notes,
-            isCompleted = true,
-        )
-
-        reminders[reminderToCompleteIndex] = completedReminder
+        return flowOf(reminders.filter { it.isCompleted })
     }
 
     override fun insertReminder(reminder: Reminder): Long {
@@ -58,5 +43,14 @@ class FakeDataSource(private var reminders: MutableList<Reminder> = mutableListO
     override fun deleteReminder(reminder: Reminder) {
         val reminderToDeleteIndex = reminders.indexOfFirst { it.id == reminder.id }
         reminders.removeAt(reminderToDeleteIndex)
+    }
+
+    override fun completeReminder(id: Long) {
+        val reminderToCompleteIndex = reminders.indexOfFirst { it.id == id }
+        val uncompletedReminder = reminders[reminderToCompleteIndex]
+
+        val completedReminder = uncompletedReminder.copy(isCompleted = true)
+
+        reminders[reminderToCompleteIndex] = completedReminder
     }
 }

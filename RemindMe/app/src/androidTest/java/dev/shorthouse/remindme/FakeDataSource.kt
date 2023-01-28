@@ -49,15 +49,8 @@ class FakeDataSource(private var reminders: MutableList<Reminder> = mutableListO
     override fun completeReminder(id: Long) {
         val reminderToCompleteIndex = reminders.indexOfFirst { it.id == id }
         val uncompletedReminder = reminders[reminderToCompleteIndex]
-        val completedReminder = Reminder(
-            uncompletedReminder.id,
-            uncompletedReminder.name,
-            uncompletedReminder.startDateTime,
-            uncompletedReminder.isNotificationSent,
-            uncompletedReminder.repeatInterval,
-            uncompletedReminder.notes,
-            true,
-        )
+
+        val completedReminder = uncompletedReminder.copy(isCompleted = true)
 
         reminders[reminderToCompleteIndex] = completedReminder
     }
