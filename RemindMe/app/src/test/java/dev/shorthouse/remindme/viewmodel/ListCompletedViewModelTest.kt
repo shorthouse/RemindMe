@@ -2,17 +2,19 @@ package dev.shorthouse.remindme.viewmodel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.google.common.truth.Truth.assertThat
 import dev.shorthouse.remindme.data.FakeDataSource
 import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.util.TestUtil
+import dev.shorthouse.remindme.util.getOrAwaitValue
+import dev.shorthouse.remindme.utilities.enums.ReminderSortOrder
 import io.mockk.MockKAnnotations
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.time.ZonedDateTime
 
-@OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(AndroidJUnit4::class)
 class ListCompletedViewModelTest {
     @get:Rule
@@ -23,19 +25,21 @@ class ListCompletedViewModelTest {
     private lateinit var reminderRepository: ReminderRepository
 
     private val completedReminderEarlierDate = TestUtil.createReminder(
-        id = 0,
+        id = 1,
         name = "completedReminderEarlierDate",
+        startDateTime = ZonedDateTime.parse("2020-01-01T08:00:00Z"),
         isCompleted = true
     )
 
     private val completedReminderLaterDate = TestUtil.createReminder(
-        id = 1,
+        id = 2,
         name = "completedReminderLaterDate",
+        startDateTime = ZonedDateTime.parse("2020-02-01T09:00:00Z"),
         isCompleted = true
     )
 
     private val uncompletedReminder = TestUtil.createReminder(
-        id = 1,
+        id = 3,
         name = "reminderToEdit",
         isCompleted = false
     )
@@ -60,10 +64,26 @@ class ListCompletedViewModelTest {
 
     @Test
     fun `Get completed reminders, returns only completed reminders`() {
-//        val emptyNameReminder = reminderToAdd.copy(name = "")
-//
-//        val isReminderValid = inputViewModel.isReminderValid(emptyNameReminder)
-//
-//        Truth.assertThat(isReminderValid).isFalse()
+        val completedReminders =
+            listCompletedViewModel.getCompletedReminders(ReminderSortOrder.EARLIEST_DATE_FIRST).getOrAwaitValue()
+
+        assertThat(completedReminders).contains(completedReminderEarlierDate)
+        assertThat(completedReminders).contains(completedReminderLaterDate)
+    }
+
+    @Test
+    fun `Get completed reminders earliest date first, returns reminders sorted by date ascending`() {
+        val completedReminders =
+            listCompletedViewModel.getCompletedReminders(ReminderSortOrder.EARLIEST_DATE_FIRST).getOrAwaitValue()
+
+        assertThat(completedReminders).isEqualTo(listOf(completedReminderEarlierDate, completedReminderLaterDate))
+    }
+
+    @Test
+    fun `Get completed reminders latest date first, returns reminders sorted by date descending`() {
+        val completedReminders =
+            listCompletedViewModel.getCompletedReminders(ReminderSortOrder.LATEST_DATE_FIRST).getOrAwaitValue()
+
+        assertThat(completedReminders).isEqualTo(listOf(completedReminderLaterDate, completedReminderEarlierDate))
     }
 }
