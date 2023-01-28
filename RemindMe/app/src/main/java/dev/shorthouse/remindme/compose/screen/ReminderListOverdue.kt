@@ -42,7 +42,7 @@ fun ReminderListOverdueScreen(
     }
 
     val onCompleteChecked: (Reminder) -> Unit = { reminder ->
-        listOverdueViewModel.updateDoneReminder(reminder)
+        listOverdueViewModel.updateCompletedReminder(reminder)
         listOverdueViewModel.removeDisplayingNotification(reminder)
     }
 

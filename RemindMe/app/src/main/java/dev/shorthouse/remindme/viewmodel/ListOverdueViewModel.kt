@@ -41,7 +41,7 @@ class ListOverdueViewModel @Inject constructor(
             .asLiveData()
     }
 
-    fun updateDoneReminder(reminder: Reminder) {
+    fun updateCompletedReminder(reminder: Reminder) {
         viewModelScope.launch(ioDispatcher) {
             val updatedReminder = Reminder(
                 id = reminder.id,

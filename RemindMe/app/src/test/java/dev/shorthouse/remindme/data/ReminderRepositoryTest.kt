@@ -4,16 +4,14 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.asLiveData
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
-import dev.shorthouse.remindme.model.RepeatInterval
+import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.util.TestUtil
 import dev.shorthouse.remindme.util.getOrAwaitValue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.time.ZonedDateTime
-import java.time.temporal.ChronoUnit
 
 @ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)
@@ -21,121 +19,200 @@ class ReminderRepositoryTest {
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
 
-    private val repeatActiveReminder = TestUtil.createReminder(
-        id = 1L,
-        name = "repeatActiveReminder",
-        startDateTime = ZonedDateTime.parse("2000-06-15T19:01:00Z"),
-        repeatInterval = RepeatInterval(1, ChronoUnit.DAYS),
-    )
-
-    private val completedRepeatReminder = TestUtil.createReminder(
-        id = 2L,
-        name = "completedRepeatReminder",
-        startDateTime = ZonedDateTime.parse("2000-06-15T19:01:00Z"),
-        repeatInterval = RepeatInterval(1, ChronoUnit.DAYS),
-        isComplete = true,
-    )
-
-    private val oneOffNotActiveReminder = TestUtil.createReminder(
-        id = 3L,
-        name = "oneOffNotActiveReminder",
-        startDateTime = ZonedDateTime.parse("3000-06-15T19:01:00Z"),
-    )
-
-    private val reminderToComplete = TestUtil.createReminder(
-        id = 4L,
-        name = "reminderToComplete",
-        startDateTime = ZonedDateTime.parse("2000-06-15T19:01:00Z"),
-        isComplete = false
-    )
-
-    private val localReminders =
-        listOf(repeatActiveReminder, completedRepeatReminder, reminderToComplete).sortedBy { it.id }
-
-    private lateinit var reminderLocalDataSource: FakeDataSource
-
-    // Class under test
     private lateinit var reminderRepository: ReminderRepository
 
-    @Before
-    fun createRepository() {
-        reminderLocalDataSource = FakeDataSource(localReminders.toMutableList())
-        reminderRepository = ReminderRepository(reminderLocalDataSource)
+    private fun setRepositoryReminders(reminders: List<Reminder>) {
+        reminderRepository = ReminderRepository(FakeDataSource(reminders.toMutableList()))
     }
 
     @Test
-    fun `Get reminders returns all reminders`() {
-        val reminders = reminderRepository.getReminders().asLiveData().getOrAwaitValue()
-
-        assertThat(reminders).isEqualTo(localReminders)
-    }
-
-    @Test
-    fun `Get reminder returns correct reminder`() {
-        val reminder = reminderRepository.getReminder(1).asLiveData().getOrAwaitValue()
-
-        assertThat(reminder).isEqualTo(localReminders.first())
-    }
-
-    @Test
-    fun `Get not completed reminders returns not completed reminders`() {
-        val notCompletedReminders = reminderRepository
-            .getScheduledReminders()
-            .asLiveData()
-            .getOrAwaitValue()
-
-        assertThat(notCompletedReminders.forEach { it.isCompleted.not() })
-        assertThat(notCompletedReminders).contains(repeatActiveReminder)
-    }
-
-    @Test
-    fun `Complete reminder completes specified reminder`() {
-        val expectedCompletedReminder = TestUtil.createReminder(
-            reminderToComplete.id,
-            reminderToComplete.name,
-            reminderToComplete.startDateTime,
-            isComplete = true
+    fun `Get reminders, returns all reminders`() {
+        val reminderOne = TestUtil.createReminder(
+            id = 1,
+            name = "reminderOne",
         )
 
-        reminderRepository.completeReminder(4L)
-        val completedReminder = reminderRepository.getReminder(4L).asLiveData().getOrAwaitValue()
+        val reminderTwo = TestUtil.createReminder(
+            id = 2,
+            name = "reminderTwo",
+        )
 
-        assertThat(completedReminder).isEqualTo(expectedCompletedReminder)
+        val repositoryReminders = listOf(reminderOne, reminderTwo)
+        setRepositoryReminders(repositoryReminders)
+
+        val reminders = reminderRepository.getReminders().asLiveData().getOrAwaitValue()
+
+        assertThat(reminders).isEqualTo(repositoryReminders)
     }
 
     @Test
-    fun `Insert reminder inserts specified reminder`() {
-        val insertedReminderId = reminderRepository.insertReminder(oneOffNotActiveReminder)
-        val allReminders = reminderRepository.getReminders().asLiveData().getOrAwaitValue()
+    fun `Get reminder, returns correct reminder`() {
+        val reminderToGet = TestUtil.createReminder(
+            id = 1,
+            name = "reminderToGet",
+        )
 
-        assertThat(insertedReminderId).isEqualTo(oneOffNotActiveReminder.id)
-        assertThat(allReminders).contains(oneOffNotActiveReminder)
-        assertThat(allReminders).hasSize(4)
+        val repositoryReminders = listOf(reminderToGet)
+        setRepositoryReminders(repositoryReminders)
+
+        val reminder = reminderRepository.getReminder(reminderToGet.id).asLiveData().getOrAwaitValue()
+
+        assertThat(reminder).isEqualTo(reminderToGet)
     }
 
     @Test
-    fun `Update reminder updates specified reminder`() {
-        val updatedReminder = TestUtil.createReminder(
-            id = repeatActiveReminder.id,
-            name = "updatedReminder",
-            startDateTime = ZonedDateTime.parse("2700-06-15T19:01:00Z"),
-            repeatInterval = RepeatInterval(1, ChronoUnit.WEEKS),
-            notes = "updatedNotes",
+    fun `Get overdue reminders, returns only overdue reminders`() {
+        val overdueReminder = TestUtil.createReminder(
+            id = 1,
+            name = "overdueReminder",
+            startDateTime = ZonedDateTime.parse("2000-01-01T00:00:00Z"),
+        )
+
+        val notOverdueReminder = TestUtil.createReminder(
+            id = 2,
+            name = "notOverdueReminder",
+            startDateTime = ZonedDateTime.parse("3000-01-01T00:00:00Z"),
+        )
+
+        val expectedOverdueReminders = listOf(overdueReminder)
+
+        val repositoryReminders = listOf(overdueReminder, notOverdueReminder)
+        setRepositoryReminders(repositoryReminders)
+
+        val overdueReminders = reminderRepository.getOverdueReminders().asLiveData().getOrAwaitValue()
+
+        assertThat(overdueReminders).isEqualTo(expectedOverdueReminders)
+    }
+
+    @Test
+    fun `Get scheduled reminders, returns only scheduled reminders`() {
+        val overdueReminder = TestUtil.createReminder(
+            id = 1,
+            name = "overdueReminder",
+            startDateTime = ZonedDateTime.parse("3000-01-01T00:00:00Z"),
+        )
+
+        val scheduledReminder = TestUtil.createReminder(
+            id = 2,
+            name = "scheduledReminder",
+            startDateTime = ZonedDateTime.parse("2000-01-01T00:00:00Z"),
+        )
+
+        val completedReminder = TestUtil.createReminder(
+            id = 3,
+            name = "completedReminder",
+            isCompleted = true
+        )
+
+        val expectedScheduledReminders = listOf(overdueReminder, scheduledReminder)
+
+        val repositoryReminders = listOf(overdueReminder, scheduledReminder, completedReminder)
+        setRepositoryReminders(repositoryReminders)
+
+        val scheduledReminders = reminderRepository.getScheduledReminders().asLiveData().getOrAwaitValue()
+
+        assertThat(scheduledReminders).isEqualTo(expectedScheduledReminders)
+    }
+
+    @Test
+    fun `Get completed reminders, returns only completed reminders`() {
+        val completedReminder = TestUtil.createReminder(
+            id = 1,
+            name = "completedReminder",
+            isCompleted = true
+        )
+
+        val uncompletedReminder = TestUtil.createReminder(
+            id = 2,
+            name = "uncompletedReminder",
+            isCompleted = false
+        )
+
+
+        val expectedCompletedReminders = listOf(completedReminder)
+
+        val repositoryReminders = listOf(completedReminder, uncompletedReminder)
+        setRepositoryReminders(repositoryReminders)
+
+        val completedReminders = reminderRepository.getCompletedReminders().asLiveData().getOrAwaitValue()
+
+        assertThat(completedReminders).isEqualTo(expectedCompletedReminders)
+    }
+
+    @Test
+    fun `Insert reminder, inserts specified reminder`() {
+        val reminderToInsert = TestUtil.createReminder(
+            id = 1,
+            name = "reminderToInsert",
+        )
+
+        setRepositoryReminders(emptyList())
+
+        val insertedReminderId = reminderRepository.insertReminder(reminderToInsert)
+
+        val insertedReminder = reminderRepository.getReminder(insertedReminderId).asLiveData().getOrAwaitValue()
+
+        assertThat(insertedReminder).isEqualTo(reminderToInsert)
+    }
+
+    @Test
+    fun `Update reminder, updates specified reminder`() {
+        val reminderToUpdate = TestUtil.createReminder(
+            id = 1,
+            name = "reminderToUpdate"
+        )
+
+        val repositoryReminders = listOf(reminderToUpdate)
+        setRepositoryReminders(repositoryReminders)
+
+        val updatedReminder = reminderToUpdate.copy(
+            name = "updatedReminder"
         )
 
         reminderRepository.updateReminder(updatedReminder)
-        val allReminders = reminderRepository.getReminders().asLiveData().getOrAwaitValue()
 
-        assertThat(allReminders).contains(updatedReminder)
-        assertThat(allReminders.first().name).isEqualTo("updatedReminder")
+        val updatedReminderFromRepository =
+            reminderRepository.getReminder(updatedReminder.id).asLiveData().getOrAwaitValue()
+
+        assertThat(updatedReminderFromRepository).isEqualTo(updatedReminder)
     }
 
     @Test
-    fun `Delete reminder deletes specified reminder`() {
-        reminderRepository.deleteReminder(repeatActiveReminder)
-        val allReminders = reminderRepository.getReminders().asLiveData().getOrAwaitValue()
+    fun `Delete reminder, deletes specified reminder`() {
+        val reminderToDelete = TestUtil.createReminder(
+            id = 1,
+            name = "reminderToDelete"
+        )
 
-        assertThat(allReminders).doesNotContain(repeatActiveReminder)
-        assertThat(allReminders).hasSize(localReminders.size.dec())
+        val repositoryReminders = listOf(reminderToDelete)
+        setRepositoryReminders(repositoryReminders)
+
+        reminderRepository.deleteReminder(reminderToDelete)
+
+        val reminders = reminderRepository.getReminders().asLiveData().getOrAwaitValue()
+
+        assertThat(reminders).doesNotContain(reminderToDelete)
+    }
+
+    @Test
+    fun `Complete reminder, completes specified reminder`() {
+        val reminderToComplete = TestUtil.createReminder(
+            id = 7,
+            name = "reminderToComplete",
+            isCompleted = false
+        )
+
+        val repositoryReminders = listOf(reminderToComplete)
+        setRepositoryReminders(repositoryReminders)
+
+        val expectedCompletedReminder = reminderToComplete.copy(
+            isCompleted = true
+        )
+
+        reminderRepository.completeReminder(reminderToComplete.id)
+
+        val completedReminder = reminderRepository.getReminder(reminderToComplete.id).asLiveData().getOrAwaitValue()
+
+        assertThat(completedReminder).isEqualTo(expectedCompletedReminder)
     }
 }

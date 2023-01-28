@@ -1,7 +1,7 @@
 package dev.shorthouse.remindme.util
 
-import dev.shorthouse.remindme.model.RepeatInterval
 import dev.shorthouse.remindme.model.Reminder
+import dev.shorthouse.remindme.model.RepeatInterval
 import java.time.ZonedDateTime
 
 object TestUtil {
@@ -11,7 +11,7 @@ object TestUtil {
         startDateTime: ZonedDateTime = ZonedDateTime.now(),
         repeatInterval: RepeatInterval? = null,
         notes: String? = null,
-        isComplete: Boolean = false,
+        isCompleted: Boolean = false,
         isNotificationSent: Boolean = false
     ): Reminder {
         return Reminder(
@@ -20,7 +20,7 @@ object TestUtil {
             startDateTime = startDateTime,
             repeatInterval = repeatInterval,
             notes = notes,
-            isCompleted = isComplete,
+            isCompleted = isCompleted,
             isNotificationSent = isNotificationSent
         )
     }
