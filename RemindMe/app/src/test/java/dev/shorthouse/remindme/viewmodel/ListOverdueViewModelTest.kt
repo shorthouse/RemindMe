@@ -123,7 +123,11 @@ class ListOverdueViewModelTest {
         val overdueReminders =
             listOverdueViewModel.getOverdueReminders(ReminderSortOrder.EARLIEST_DATE_FIRST).getOrAwaitValue()
 
-        assertThat(overdueReminders).isEqualTo(listOf(overdueReminderEarlierDate, overdueReminderLaterDate))
+        assertThat(overdueReminders).isEqualTo(
+            listOf(
+                overdueReminderEarlierDate, overdueReminderLaterDate, repeatReminderToComplete, oneOffReminderToComplete
+            )
+        )
     }
 
     @Test
@@ -131,7 +135,11 @@ class ListOverdueViewModelTest {
         val overdueReminders =
             listOverdueViewModel.getOverdueReminders(ReminderSortOrder.LATEST_DATE_FIRST).getOrAwaitValue()
 
-        assertThat(overdueReminders).isEqualTo(listOf(overdueReminderLaterDate, overdueReminderEarlierDate))
+        assertThat(overdueReminders).isEqualTo(
+            listOf(
+                oneOffReminderToComplete, repeatReminderToComplete, overdueReminderLaterDate, overdueReminderLaterDate
+            )
+        )
     }
 
     @Test
