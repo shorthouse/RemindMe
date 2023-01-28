@@ -33,7 +33,7 @@ class ReminderRepositoryTest {
         name = "completedRepeatReminder",
         startDateTime = ZonedDateTime.parse("2000-06-15T19:01:00Z"),
         repeatInterval = RepeatInterval(1, ChronoUnit.DAYS),
-        isComplete = true,
+        isCompleted = true,
     )
 
     private val oneOffNotActiveReminder = TestUtil.createReminder(
@@ -46,7 +46,7 @@ class ReminderRepositoryTest {
         id = 4L,
         name = "reminderToComplete",
         startDateTime = ZonedDateTime.parse("2000-06-15T19:01:00Z"),
-        isComplete = false
+        isCompleted = false
     )
 
     private val localReminders =
@@ -94,7 +94,7 @@ class ReminderRepositoryTest {
             reminderToComplete.id,
             reminderToComplete.name,
             reminderToComplete.startDateTime,
-            isComplete = true
+            isCompleted = true
         )
 
         reminderRepository.completeReminder(4L)

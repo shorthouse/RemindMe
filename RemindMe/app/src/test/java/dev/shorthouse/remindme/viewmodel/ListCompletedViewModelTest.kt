@@ -25,19 +25,19 @@ class ListCompletedViewModelTest {
     private val completedReminderEarlierDate = TestUtil.createReminder(
         id = 0,
         name = "completedReminderEarlierDate",
-        isComplete = true
+        isCompleted = true
     )
 
     private val completedReminderLaterDate = TestUtil.createReminder(
         id = 1,
         name = "completedReminderLaterDate",
-        isComplete = true
+        isCompleted = true
     )
 
     private val uncompletedReminder = TestUtil.createReminder(
         id = 1,
         name = "reminderToEdit",
-        isComplete = false
+        isCompleted = false
     )
 
     @Before
