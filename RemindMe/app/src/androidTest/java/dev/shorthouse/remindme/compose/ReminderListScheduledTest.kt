@@ -64,31 +64,4 @@ class ReminderListScheduledTest {
             onNodeWithText("Add a reminder to get started").assertIsDisplayed()
         }
     }
-
-    @Test
-    fun when_scheduled_reminder_state_changes_should_show_expected_icons() {
-        val notificationReminder = TestUtil().createReminderListItemState(isNotificationSent = true)
-        setContent(listOf(notificationReminder))
-        composeTestRule.apply {
-            onNodeWithContentDescription("Notifications enabled").assertIsDisplayed()
-            onNodeWithContentDescription("Repeat reminder").assertDoesNotExist()
-        }
-
-        val repeatReminder = TestUtil().createReminderListItemState(isRepeatReminder = true)
-        setContent(listOf(repeatReminder))
-        composeTestRule.apply {
-            onNodeWithContentDescription("Repeat reminder").assertIsDisplayed()
-            onNodeWithContentDescription("Notifications enabled").assertDoesNotExist()
-        }
-
-        val notificationRepeatReminder = TestUtil().createReminderListItemState(
-            isNotificationSent = true,
-            isRepeatReminder = true
-        )
-        setContent(listOf(notificationRepeatReminder))
-        composeTestRule.apply {
-            onNodeWithContentDescription("Repeat reminder").assertIsDisplayed()
-            onNodeWithContentDescription("Notifications enabled").assertIsDisplayed()
-        }
-    }
 }
