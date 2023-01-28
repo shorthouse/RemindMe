@@ -7,7 +7,7 @@ import java.time.ZonedDateTime
 object TestUtil {
     fun createReminder(
         id: Long = 1L,
-        name: String = "test reminder",
+        name: String = "Test Reminder",
         startDateTime: ZonedDateTime = ZonedDateTime.now(),
         repeatInterval: RepeatInterval? = null,
         notes: String? = null,
