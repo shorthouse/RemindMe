@@ -5,9 +5,9 @@ import java.time.LocalTime
 
 class PreviewData {
     companion object {
-        val reminderStateEmpty = ReminderState()
+        val previewEmptyReminderState = ReminderState()
 
-        val reminderState = ReminderState(
+        val previewReminderState = ReminderState(
             id = 1,
             name = "Yoga with Alice",
             date = "Wed, 22 Mar 2000",
@@ -20,8 +20,8 @@ class PreviewData {
             isCompleted = false
         )
 
-        val reminderStateList = listOf(
-            reminderState,
+        val previewReminderStates = listOf(
+            previewReminderState,
             ReminderState(
                 id = 2,
                 name = "Feed the fish",

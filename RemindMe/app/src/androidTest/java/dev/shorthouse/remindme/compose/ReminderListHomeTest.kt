@@ -10,13 +10,13 @@ import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.UninstallModules
 import dagger.hilt.components.SingletonComponent
-import dev.shorthouse.remindme.FakeDataSource
 import dev.shorthouse.remindme.HiltTestActivity
 import dev.shorthouse.remindme.compose.screen.ReminderListHomeScreen
 import dev.shorthouse.remindme.data.ReminderDataSource
 import dev.shorthouse.remindme.di.DataSourceModule
+import dev.shorthouse.remindme.fake.FakeDataSource
 import dev.shorthouse.remindme.theme.RemindMeTheme
-import dev.shorthouse.remindme.util.TestUtil
+import dev.shorthouse.remindme.util.ReminderTestUtil
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -39,15 +39,15 @@ class ReminderListHomeTest {
         @Provides
         fun provideReminderDataSource(): ReminderDataSource {
             val reminders = mutableListOf(
-                TestUtil().createReminder(
+                ReminderTestUtil().createReminder(
                     name = "Test Overdue Reminder",
                     startDateTime = ZonedDateTime.parse("2000-01-01T08:00:00Z")
                 ),
-                TestUtil().createReminder(
+                ReminderTestUtil().createReminder(
                     name = "Test Scheduled Reminder",
                     startDateTime = ZonedDateTime.parse("3000-01-01T09:00:00Z")
                 ),
-                TestUtil().createReminder(
+                ReminderTestUtil().createReminder(
                     name = "Test Completed Reminder",
                     startDateTime = ZonedDateTime.parse("1000-01-01T10:00:00Z"),
                     isCompleted = true

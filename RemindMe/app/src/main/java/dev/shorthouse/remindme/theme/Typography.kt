@@ -18,11 +18,11 @@ val RemindMeTypography = Typography(
     defaultFontFamily = Roboto,
     h5 = TextStyle(
         fontSize = 20.sp,
-        fontWeight = FontWeight.Medium,
+        fontWeight = FontWeight.Bold,
     ),
     h6 = TextStyle(
         fontSize = 20.sp,
-        fontWeight = FontWeight.Bold,
+        fontWeight = FontWeight.Medium,
     ),
     body1 = TextStyle(
         fontSize = 18.sp,
@@ -30,7 +30,7 @@ val RemindMeTypography = Typography(
     ),
     body2 = TextStyle(
         fontSize = 18.sp,
-        fontWeight = FontWeight.Bold,
+        fontWeight = FontWeight.Medium,
     ),
     subtitle1 = TextStyle(
         fontSize = 18.sp,
@@ -40,7 +40,6 @@ val RemindMeTypography = Typography(
     subtitle2 = TextStyle(
         fontSize = 14.sp,
         fontWeight = FontWeight.Normal,
-        color = SubtitleGrey
     ),
     button = TextStyle(
         fontSize = 15.sp,
@@ -49,6 +48,6 @@ val RemindMeTypography = Typography(
     caption = TextStyle(
         fontSize = 15.sp,
         letterSpacing = 0.2.sp,
-        fontWeight = FontWeight.Bold
+        fontWeight = FontWeight.Medium
     )
 )

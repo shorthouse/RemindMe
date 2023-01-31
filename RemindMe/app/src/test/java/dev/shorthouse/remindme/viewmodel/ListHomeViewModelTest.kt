@@ -19,7 +19,7 @@ class ListHomeViewModelTest {
 
     @Test
     fun `Set sort index to 0, sort order is set to earliest date first`() {
-        listHomeViewModel.selectedSortIndex = 0
+        listHomeViewModel.selectedSortItemIndex = 0
         val expectedSortOrder = ReminderSortOrder.EARLIEST_DATE_FIRST
 
         val sortOrder = listHomeViewModel.selectedReminderSortOrder
@@ -29,7 +29,7 @@ class ListHomeViewModelTest {
 
     @Test
     fun `Set sort index to 1, sort order is set to latest date first`() {
-        listHomeViewModel.selectedSortIndex = 1
+        listHomeViewModel.selectedSortItemIndex = 1
         val expectedSortOrder = ReminderSortOrder.LATEST_DATE_FIRST
 
         val sortOrder = listHomeViewModel.selectedReminderSortOrder
@@ -39,7 +39,7 @@ class ListHomeViewModelTest {
 
     @Test
     fun `Set navigate index to 0, list becomes overdue reminders`() {
-        listHomeViewModel.selectedNavigateIndex = 0
+        listHomeViewModel.selectedNavigateItemIndex = 0
         val expectedReminderList = ReminderList.OVERDUE
 
         val reminderList = listHomeViewModel.selectedReminderList
@@ -49,7 +49,7 @@ class ListHomeViewModelTest {
 
     @Test
     fun `Set navigate index to 1, list becomes scheduled reminders`() {
-        listHomeViewModel.selectedNavigateIndex = 1
+        listHomeViewModel.selectedNavigateItemIndex = 1
         val expectedReminderList = ReminderList.SCHEDULED
 
         val reminderList = listHomeViewModel.selectedReminderList
@@ -59,7 +59,7 @@ class ListHomeViewModelTest {
 
     @Test
     fun `Set navigate index to 2, list becomes completed reminders`() {
-        listHomeViewModel.selectedNavigateIndex = 2
+        listHomeViewModel.selectedNavigateItemIndex = 2
         val expectedReminderList = ReminderList.COMPLETED
 
         val reminderList = listHomeViewModel.selectedReminderList

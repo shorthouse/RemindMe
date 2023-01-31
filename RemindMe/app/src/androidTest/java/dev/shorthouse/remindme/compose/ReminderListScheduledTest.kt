@@ -10,10 +10,11 @@ import dev.shorthouse.remindme.HiltTestActivity
 import dev.shorthouse.remindme.compose.screen.ReminderListScheduledContent
 import dev.shorthouse.remindme.compose.state.ReminderState
 import dev.shorthouse.remindme.theme.RemindMeTheme
-import dev.shorthouse.remindme.util.TestUtil
+import dev.shorthouse.remindme.util.ReminderTestUtil
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import java.time.LocalTime
 
 @HiltAndroidTest
 class ReminderListScheduledTest {
@@ -42,7 +43,14 @@ class ReminderListScheduledTest {
 
     @Test
     fun when_scheduled_reminder_list_created_should_display_expected_content() {
-        setContent(listOf(TestUtil.defaultReminderState))
+        val reminderState = ReminderTestUtil().createReminderState(
+            name = "Yoga with Alice",
+            date = "Wed, 22 Mar 2000",
+            time = LocalTime.of(14, 30),
+            isNotificationSent = false,
+            isRepeatReminder = false
+        )
+        setContent(listOf(reminderState))
 
         composeTestRule.apply {
             onNodeWithText("Yoga with Alice").assertIsDisplayed()

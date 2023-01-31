@@ -5,7 +5,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
 import dev.shorthouse.remindme.data.FakeDataSource
 import dev.shorthouse.remindme.data.ReminderRepository
-import dev.shorthouse.remindme.util.TestUtil
+import dev.shorthouse.remindme.util.ReminderTestUtil
 import dev.shorthouse.remindme.util.getOrAwaitValue
 import io.mockk.MockKAnnotations
 import org.junit.Before
@@ -22,7 +22,7 @@ class EditViewModelTest {
 
     private lateinit var reminderRepository: ReminderRepository
 
-    private val reminderToEdit = TestUtil.createReminder(
+    private val reminderToEdit = ReminderTestUtil().createReminder(
         id = 1,
         name = "reminderToEdit"
     )

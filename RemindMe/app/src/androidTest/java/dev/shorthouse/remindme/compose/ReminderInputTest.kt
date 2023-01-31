@@ -7,11 +7,12 @@ import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dev.shorthouse.remindme.HiltTestActivity
 import dev.shorthouse.remindme.compose.screen.ReminderInputScaffold
+import dev.shorthouse.remindme.compose.state.ReminderState
 import dev.shorthouse.remindme.theme.RemindMeTheme
-import dev.shorthouse.remindme.util.TestUtil
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import java.time.LocalTime
 
 @HiltAndroidTest
 class ReminderInputTest {
@@ -27,11 +28,37 @@ class ReminderInputTest {
         hiltTestRule.inject()
     }
 
+    private val reminderAddState = ReminderState(
+        id = 1,
+        name = "",
+        date = "Sat, 01 Jan 2000",
+        time = LocalTime.of(14, 30),
+        isNotificationSent = false,
+        isRepeatReminder = false,
+        repeatAmount = "1",
+        repeatUnit = "Day",
+        notes = "",
+        isCompleted = false
+    )
+
+    private val reminderEditState = ReminderState(
+        id = 1,
+        name = "Reminder name",
+        date = "Sun, 02 Jan 2000",
+        time = LocalTime.of(18, 30),
+        isNotificationSent = true,
+        isRepeatReminder = true,
+        repeatAmount = "2",
+        repeatUnit = "Weeks",
+        notes = "Reminder notes",
+        isCompleted = false
+    )
+
     private fun setAddContent() {
         composeTestRule.setContent {
             RemindMeTheme {
                 ReminderInputScaffold(
-                    reminderState = TestUtil.reminderAddState,
+                    reminderState = reminderAddState,
                     scaffoldState = rememberScaffoldState(),
                     topBarTitle = "Add reminder",
                     onNavigateUp = {},
@@ -45,7 +72,7 @@ class ReminderInputTest {
         composeTestRule.setContent {
             RemindMeTheme {
                 ReminderInputScaffold(
-                    reminderState = TestUtil.reminderEditState,
+                    reminderState = reminderEditState,
                     scaffoldState = rememberScaffoldState(),
                     topBarTitle = "Edit reminder",
                     onNavigateUp = {},

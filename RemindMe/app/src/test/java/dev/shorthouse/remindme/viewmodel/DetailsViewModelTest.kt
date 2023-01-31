@@ -6,7 +6,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
 import dev.shorthouse.remindme.data.FakeDataSource
 import dev.shorthouse.remindme.data.ReminderRepository
-import dev.shorthouse.remindme.util.TestUtil
+import dev.shorthouse.remindme.util.ReminderTestUtil
 import dev.shorthouse.remindme.util.getOrAwaitValue
 import dev.shorthouse.remindme.utilities.NotificationScheduler
 import io.mockk.MockKAnnotations
@@ -37,17 +37,17 @@ class DetailsViewModelTest {
     @MockK
     private lateinit var notificationScheduler: NotificationScheduler
 
-    private val reminderToGet = TestUtil.createReminder(
+    private val reminderToGet = ReminderTestUtil().createReminder(
         id = 1,
         name = "reminderToGet"
     )
 
-    private val reminderToDelete = TestUtil.createReminder(
+    private val reminderToDelete = ReminderTestUtil().createReminder(
         id = 2,
         name = "reminderToDelete"
     )
 
-    private val reminderToComplete = TestUtil.createReminder(
+    private val reminderToComplete = ReminderTestUtil().createReminder(
         id = 3,
         name = "reminderToComplete"
     )

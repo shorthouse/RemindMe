@@ -1,7 +1,7 @@
 package dev.shorthouse.remindme.model
 
 import com.google.common.truth.Truth.assertThat
-import dev.shorthouse.remindme.util.TestUtil
+import dev.shorthouse.remindme.util.ReminderTestUtil
 import org.junit.Before
 import org.junit.Test
 import java.time.ZonedDateTime
@@ -13,14 +13,14 @@ class ReminderTest {
 
     @Before
     fun setUp() {
-        repeatReminder = TestUtil.createReminder(
+        repeatReminder = ReminderTestUtil().createReminder(
             id = 1L,
             name = "repeatReminder",
             startDateTime = ZonedDateTime.parse("2000-06-15T19:01:00Z"),
             repeatInterval = RepeatInterval(1, ChronoUnit.DAYS),
         )
 
-        oneOffReminder = TestUtil.createReminder(
+        oneOffReminder = ReminderTestUtil().createReminder(
             id = 2L,
             name = "oneOffReminder",
             startDateTime = ZonedDateTime.now(),

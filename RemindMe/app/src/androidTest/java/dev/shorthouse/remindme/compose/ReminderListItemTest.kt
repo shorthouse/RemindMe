@@ -9,7 +9,7 @@ import dev.shorthouse.remindme.HiltTestActivity
 import dev.shorthouse.remindme.compose.component.ReminderListItem
 import dev.shorthouse.remindme.compose.state.ReminderState
 import dev.shorthouse.remindme.theme.RemindMeTheme
-import dev.shorthouse.remindme.util.TestUtil
+import dev.shorthouse.remindme.util.ReminderTestUtil
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -37,7 +37,7 @@ class ReminderListItemTest {
 
     @Test
     fun when_reminder_has_notification_should_show_notification_icon() {
-        val notificationReminder = TestUtil().createReminderListItemState(
+        val notificationReminder = ReminderTestUtil().createReminderListItemState(
             isNotificationSent = true,
             isRepeatReminder = false
         )
@@ -51,7 +51,7 @@ class ReminderListItemTest {
 
     @Test
     fun when_reminder_is_repeating_should_show_repeat_icon() {
-        val repeatReminder = TestUtil().createReminderListItemState(
+        val repeatReminder = ReminderTestUtil().createReminderListItemState(
             isNotificationSent = false,
             isRepeatReminder = true
         )
@@ -65,7 +65,7 @@ class ReminderListItemTest {
 
     @Test
     fun when_reminder_is_repeating_and_has_notification_should_show_both_icons() {
-        val notificationRepeatReminder = TestUtil().createReminderListItemState(
+        val notificationRepeatReminder = ReminderTestUtil().createReminderListItemState(
             isNotificationSent = true,
             isRepeatReminder = true
         )
@@ -78,7 +78,7 @@ class ReminderListItemTest {
 
     @Test
     fun when_reminder_is_not_repeating_and_does_not_have_notification_should_show_no_icons() {
-        val noNotificationNotRepeatReminder = TestUtil().createReminderListItemState(
+        val noNotificationNotRepeatReminder = ReminderTestUtil().createReminderListItemState(
             isNotificationSent = false,
             isRepeatReminder = false
         )

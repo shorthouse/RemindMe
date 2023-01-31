@@ -5,7 +5,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
 import dev.shorthouse.remindme.data.FakeDataSource
 import dev.shorthouse.remindme.data.ReminderRepository
-import dev.shorthouse.remindme.util.TestUtil
+import dev.shorthouse.remindme.util.ReminderTestUtil
 import dev.shorthouse.remindme.util.getOrAwaitValue
 import dev.shorthouse.remindme.utilities.enums.ReminderSortOrder
 import io.mockk.MockKAnnotations
@@ -24,21 +24,21 @@ class ListCompletedViewModelTest {
 
     private lateinit var reminderRepository: ReminderRepository
 
-    private val completedReminderEarlierDate = TestUtil.createReminder(
+    private val completedReminderEarlierDate = ReminderTestUtil().createReminder(
         id = 1,
         name = "completedReminderEarlierDate",
         startDateTime = ZonedDateTime.parse("2020-01-01T08:00:00Z"),
         isCompleted = true
     )
 
-    private val completedReminderLaterDate = TestUtil.createReminder(
+    private val completedReminderLaterDate = ReminderTestUtil().createReminder(
         id = 2,
         name = "completedReminderLaterDate",
         startDateTime = ZonedDateTime.parse("2020-02-01T09:00:00Z"),
         isCompleted = true
     )
 
-    private val uncompletedReminder = TestUtil.createReminder(
+    private val uncompletedReminder = ReminderTestUtil().createReminder(
         id = 3,
         name = "reminderToEdit",
         isCompleted = false
