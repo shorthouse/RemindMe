@@ -5,7 +5,7 @@ import androidx.lifecycle.asLiveData
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
 import dev.shorthouse.remindme.model.Reminder
-import dev.shorthouse.remindme.util.TestUtil
+import dev.shorthouse.remindme.util.ReminderTestUtil
 import dev.shorthouse.remindme.util.getOrAwaitValue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Rule
@@ -27,12 +27,12 @@ class ReminderRepositoryTest {
 
     @Test
     fun `Get reminders, returns all reminders`() {
-        val reminderOne = TestUtil.createReminder(
+        val reminderOne = ReminderTestUtil().createReminder(
             id = 1,
             name = "reminderOne",
         )
 
-        val reminderTwo = TestUtil.createReminder(
+        val reminderTwo = ReminderTestUtil().createReminder(
             id = 2,
             name = "reminderTwo",
         )
@@ -47,7 +47,7 @@ class ReminderRepositoryTest {
 
     @Test
     fun `Get reminder, returns correct reminder`() {
-        val reminderToGet = TestUtil.createReminder(
+        val reminderToGet = ReminderTestUtil().createReminder(
             id = 1,
             name = "reminderToGet",
         )
@@ -62,13 +62,13 @@ class ReminderRepositoryTest {
 
     @Test
     fun `Get overdue reminders, returns only overdue reminders`() {
-        val overdueReminder = TestUtil.createReminder(
+        val overdueReminder = ReminderTestUtil().createReminder(
             id = 1,
             name = "overdueReminder",
             startDateTime = ZonedDateTime.parse("2000-01-01T00:00:00Z"),
         )
 
-        val notOverdueReminder = TestUtil.createReminder(
+        val notOverdueReminder = ReminderTestUtil().createReminder(
             id = 2,
             name = "notOverdueReminder",
             startDateTime = ZonedDateTime.parse("3000-01-01T00:00:00Z"),
@@ -86,19 +86,19 @@ class ReminderRepositoryTest {
 
     @Test
     fun `Get scheduled reminders, returns only scheduled reminders`() {
-        val overdueReminder = TestUtil.createReminder(
+        val overdueReminder = ReminderTestUtil().createReminder(
             id = 1,
             name = "overdueReminder",
             startDateTime = ZonedDateTime.parse("3000-01-01T00:00:00Z"),
         )
 
-        val scheduledReminder = TestUtil.createReminder(
+        val scheduledReminder = ReminderTestUtil().createReminder(
             id = 2,
             name = "scheduledReminder",
             startDateTime = ZonedDateTime.parse("2000-01-01T00:00:00Z"),
         )
 
-        val completedReminder = TestUtil.createReminder(
+        val completedReminder = ReminderTestUtil().createReminder(
             id = 3,
             name = "completedReminder",
             isCompleted = true
@@ -116,13 +116,13 @@ class ReminderRepositoryTest {
 
     @Test
     fun `Get completed reminders, returns only completed reminders`() {
-        val completedReminder = TestUtil.createReminder(
+        val completedReminder = ReminderTestUtil().createReminder(
             id = 1,
             name = "completedReminder",
             isCompleted = true
         )
 
-        val uncompletedReminder = TestUtil.createReminder(
+        val uncompletedReminder = ReminderTestUtil().createReminder(
             id = 2,
             name = "uncompletedReminder",
             isCompleted = false
@@ -141,7 +141,7 @@ class ReminderRepositoryTest {
 
     @Test
     fun `Insert reminder, inserts specified reminder`() {
-        val reminderToInsert = TestUtil.createReminder(
+        val reminderToInsert = ReminderTestUtil().createReminder(
             id = 1,
             name = "reminderToInsert",
         )
@@ -157,7 +157,7 @@ class ReminderRepositoryTest {
 
     @Test
     fun `Update reminder, updates specified reminder`() {
-        val reminderToUpdate = TestUtil.createReminder(
+        val reminderToUpdate = ReminderTestUtil().createReminder(
             id = 1,
             name = "reminderToUpdate"
         )
@@ -179,7 +179,7 @@ class ReminderRepositoryTest {
 
     @Test
     fun `Delete reminder, deletes specified reminder`() {
-        val reminderToDelete = TestUtil.createReminder(
+        val reminderToDelete = ReminderTestUtil().createReminder(
             id = 1,
             name = "reminderToDelete"
         )
@@ -196,7 +196,7 @@ class ReminderRepositoryTest {
 
     @Test
     fun `Complete reminder, completes specified reminder`() {
-        val reminderToComplete = TestUtil.createReminder(
+        val reminderToComplete = ReminderTestUtil().createReminder(
             id = 7,
             name = "reminderToComplete",
             isCompleted = false
