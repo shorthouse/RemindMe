@@ -6,7 +6,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
 import dev.shorthouse.remindme.data.FakeDataSource
 import dev.shorthouse.remindme.data.ReminderRepository
-import dev.shorthouse.remindme.util.TestUtil
+import dev.shorthouse.remindme.util.ReminderTestUtil
 import dev.shorthouse.remindme.util.getOrAwaitValue
 import dev.shorthouse.remindme.utilities.NotificationScheduler
 import io.mockk.MockKAnnotations
@@ -37,12 +37,12 @@ class InputViewModelTest {
     @MockK
     private lateinit var notificationScheduler: NotificationScheduler
 
-    private val reminderToAdd = TestUtil.createReminder(
+    private val reminderToAdd = ReminderTestUtil().createReminder(
         id = 0,
         name = "reminderToAdd"
     )
 
-    private val reminderToEdit = TestUtil.createReminder(
+    private val reminderToEdit = ReminderTestUtil().createReminder(
         id = 1,
         name = "reminderToEdit"
     )
@@ -111,7 +111,7 @@ class InputViewModelTest {
 
     @Test
     fun `Save reminder called with new reminder, adds reminder to database`() = runTest(ioDispatcher) {
-        val reminderToAdd = TestUtil.createReminder(
+        val reminderToAdd = ReminderTestUtil().createReminder(
             id = 0,
             name = "reminderToAdd"
         )

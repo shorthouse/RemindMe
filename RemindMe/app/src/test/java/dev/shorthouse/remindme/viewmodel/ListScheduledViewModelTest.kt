@@ -5,7 +5,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
 import dev.shorthouse.remindme.data.FakeDataSource
 import dev.shorthouse.remindme.data.ReminderRepository
-import dev.shorthouse.remindme.util.TestUtil
+import dev.shorthouse.remindme.util.ReminderTestUtil
 import dev.shorthouse.remindme.util.getOrAwaitValue
 import dev.shorthouse.remindme.utilities.enums.ReminderSortOrder
 import io.mockk.MockKAnnotations
@@ -24,19 +24,19 @@ class ListScheduledViewModelTest {
 
     private lateinit var reminderRepository: ReminderRepository
 
-    private val scheduledReminderEarlierDate = TestUtil.createReminder(
+    private val scheduledReminderEarlierDate = ReminderTestUtil().createReminder(
         id = 1,
         name = "scheduledReminderEarlierDate",
         startDateTime = ZonedDateTime.parse("2020-01-01T08:00:00Z")
     )
 
-    private val scheduledReminderLaterDate = TestUtil.createReminder(
+    private val scheduledReminderLaterDate = ReminderTestUtil().createReminder(
         id = 2,
         name = "scheduledReminderLaterDate",
         startDateTime = ZonedDateTime.parse("2020-02-01T09:00:00Z")
     )
 
-    private val completedReminder = TestUtil.createReminder(
+    private val completedReminder = ReminderTestUtil().createReminder(
         id = 3,
         name = "completedReminder",
         isCompleted = true
@@ -62,7 +62,7 @@ class ListScheduledViewModelTest {
     }
 
     @Test
-    fun `Get completed reminders, returns only completed reminders`() {
+    fun `Get scheduled reminders, returns only scheduled reminders`() {
         val scheduledReminders =
             listScheduledViewModel.getScheduledReminders(ReminderSortOrder.EARLIEST_DATE_FIRST).getOrAwaitValue()
 
@@ -71,7 +71,7 @@ class ListScheduledViewModelTest {
     }
 
     @Test
-    fun `Get completed reminders earliest date first, returns reminders sorted by date ascending`() {
+    fun `Get scheduled reminders earliest date first, returns reminders sorted by date ascending`() {
         val scheduledReminders =
             listScheduledViewModel.getScheduledReminders(ReminderSortOrder.EARLIEST_DATE_FIRST).getOrAwaitValue()
 
@@ -79,7 +79,7 @@ class ListScheduledViewModelTest {
     }
 
     @Test
-    fun `Get completed reminders latest date first, returns reminders sorted by date descending`() {
+    fun `Get scheduled reminders latest date first, returns reminders sorted by date descending`() {
         val scheduledReminders =
             listScheduledViewModel.getScheduledReminders(ReminderSortOrder.LATEST_DATE_FIRST).getOrAwaitValue()
 

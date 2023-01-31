@@ -7,7 +7,7 @@ import com.google.common.truth.Truth.assertThat
 import dev.shorthouse.remindme.data.FakeDataSource
 import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.model.RepeatInterval
-import dev.shorthouse.remindme.util.TestUtil
+import dev.shorthouse.remindme.util.ReminderTestUtil
 import dev.shorthouse.remindme.util.getOrAwaitValue
 import dev.shorthouse.remindme.utilities.NotificationScheduler
 import dev.shorthouse.remindme.utilities.enums.ReminderSortOrder
@@ -40,41 +40,42 @@ class ListOverdueViewModelTest {
     @MockK
     private lateinit var notificationScheduler: NotificationScheduler
 
-    private val overdueReminderEarlierDate = TestUtil.createReminder(
+    private val overdueReminderEarlierDate = ReminderTestUtil().createReminder(
         id = 1,
         name = "overdueReminderEarlierDate",
         startDateTime = ZonedDateTime.parse("2000-01-01T08:00:00Z"),
         isCompleted = false
     )
 
-    private val overdueReminderLaterDate = TestUtil.createReminder(
+    private val overdueReminderLaterDate = ReminderTestUtil().createReminder(
         id = 2,
         name = "overdueReminderLaterDate",
         startDateTime = ZonedDateTime.parse("2010-01-01T08:00:00Z"),
         isCompleted = false
     )
 
-    private val scheduledReminder = TestUtil.createReminder(
+    private val scheduledReminder = ReminderTestUtil().createReminder(
         id = 3,
         name = "scheduledReminder",
         startDateTime = ZonedDateTime.parse("3000-01-01T08:00:00Z"),
         isCompleted = false
     )
 
-    private val completedReminder = TestUtil.createReminder(
+    private val completedReminder = ReminderTestUtil().createReminder(
         id = 4,
         name = "completedReminder",
         isCompleted = true
     )
 
-    private val oneOffReminderToComplete = TestUtil.createReminder(
+    private val oneOffReminderToComplete = ReminderTestUtil().createReminder(
         id = 5,
         name = "oneOffReminderToComplete",
+        startDateTime = ZonedDateTime.parse("3000-01-01T08:00:00Z"),
         repeatInterval = null,
         isCompleted = false
     )
 
-    private val repeatReminderToComplete = TestUtil.createReminder(
+    private val repeatReminderToComplete = ReminderTestUtil().createReminder(
         id = 6,
         name = "repeatReminderToComplete",
         repeatInterval = RepeatInterval(1, ChronoUnit.DAYS),
@@ -125,13 +126,13 @@ class ListOverdueViewModelTest {
 
         assertThat(overdueReminders).isEqualTo(
             listOf(
-                overdueReminderEarlierDate, overdueReminderLaterDate, repeatReminderToComplete, oneOffReminderToComplete
+                overdueReminderEarlierDate, overdueReminderLaterDate
             )
         )
     }
 
     @Test
-    fun `Get scheduled reminders latest date first, returns reminders sorted by date descending`() {
+    fun `Get overdue reminders latest date first, returns reminders sorted by date descending`() {
         val overdueReminders =
             listOverdueViewModel.getOverdueReminders(ReminderSortOrder.LATEST_DATE_FIRST).getOrAwaitValue()
 
