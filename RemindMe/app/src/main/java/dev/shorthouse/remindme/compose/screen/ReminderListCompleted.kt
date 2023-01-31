@@ -95,7 +95,7 @@ private fun ReminderListComplete(
 @Composable
 fun ReminderListCompletePreview() {
     RemindMeTheme {
-        val reminderStates = PreviewData.reminderStateList
+        val reminderStates = PreviewData.previewReminderStates
 
         ReminderListCompletedContent(
             reminderStates = reminderStates,
