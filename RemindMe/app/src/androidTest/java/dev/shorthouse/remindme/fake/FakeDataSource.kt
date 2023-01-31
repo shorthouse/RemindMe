@@ -1,4 +1,4 @@
-package dev.shorthouse.remindme
+package dev.shorthouse.remindme.fake
 
 import dev.shorthouse.remindme.data.ReminderDataSource
 import dev.shorthouse.remindme.model.Reminder
