@@ -4,7 +4,7 @@ import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.model.RepeatInterval
 import java.time.ZonedDateTime
 
-object TestUtil {
+class ReminderTestUtil {
     fun createReminder(
         id: Long = 1L,
         name: String = "Test Reminder",
