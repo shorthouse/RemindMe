@@ -10,15 +10,12 @@ import dagger.hilt.android.testing.HiltAndroidTest
 import dev.shorthouse.remindme.HiltTestActivity
 import dev.shorthouse.remindme.compose.screen.ReminderDetailsScaffold
 import dev.shorthouse.remindme.compose.state.ReminderState
-import dev.shorthouse.remindme.model.Reminder
-import dev.shorthouse.remindme.model.RepeatInterval
 import dev.shorthouse.remindme.theme.RemindMeTheme
-import dev.shorthouse.remindme.util.TestUtil
+import dev.shorthouse.remindme.util.ReminderTestUtil
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import java.time.ZonedDateTime
-import java.time.temporal.ChronoUnit
+import java.time.LocalTime
 
 @HiltAndroidTest
 class ReminderDetailsTest {
@@ -29,67 +26,16 @@ class ReminderDetailsTest {
     @get:Rule(order = 2)
     var composeTestRule = createAndroidComposeRule<HiltTestActivity>()
 
-    private val reminders = listOf(
-        TestUtil().createReminder(
-            id = 1L,
-            name = "Test Reminder Details",
-            startDateTime = ZonedDateTime.parse("2000-01-01T14:02:00Z")
-        ),
-        TestUtil().createReminder(
-            id = 2L,
-            name = "Test Reminder Details with Repeat Interval",
-            startDateTime = ZonedDateTime.parse("2000-01-01T14:02:00Z"),
-            repeatInterval = RepeatInterval(2, ChronoUnit.WEEKS)
-        ),
-        TestUtil().createReminder(
-            id = 3L,
-            name = "Test Reminder Details with Notes",
-            notes = "notes"
-        ),
-        TestUtil().createReminder(
-            id = 4L,
-            name = "Test Reminder Details with Notification Enabled",
-            isNotificationSent = true
-        ),
-        TestUtil().createReminder(
-            id = 5L,
-            name = "Test Reminder Details with Everything",
-            startDateTime = ZonedDateTime.parse("2000-01-01T14:02:00Z"),
-            repeatInterval = RepeatInterval(2, ChronoUnit.WEEKS),
-            isNotificationSent = true,
-            notes = "notes"
-        ),
-        TestUtil().createReminder(
-            id = 6L,
-            name = "m".repeat(200)
-        ),
-        TestUtil().createReminder(
-            id = 7L,
-            name = "Test Reminder Large Notes",
-            notes = "m".repeat(1000),
-            isNotificationSent = true
-        ),
-        TestUtil().createReminder(
-            id = 8L,
-            name = "Test Completed Reminder Details",
-            startDateTime = ZonedDateTime.parse("2000-01-01T14:02:00Z"),
-            repeatInterval = RepeatInterval(2, ChronoUnit.WEEKS),
-            isNotificationSent = true,
-            notes = "notes",
-            isCompleted = true
-        )
-    )
-
     @Before
     fun setup() {
         hiltTestRule.inject()
     }
 
-    private fun setContent(reminder: Reminder) {
+    private fun setContent(reminderState: ReminderState) {
         composeTestRule.setContent {
             RemindMeTheme {
                 ReminderDetailsScaffold(
-                    reminderState = ReminderState(reminder),
+                    reminderState = reminderState,
                     onNavigateUp = {},
                     onEdit = {},
                     onDelete = {},
@@ -101,7 +47,8 @@ class ReminderDetailsTest {
 
     @Test
     fun when_reminder_details_created_should_display_top_app_bar() {
-        setContent(reminders[0])
+        val reminder = ReminderTestUtil().createReminderState()
+        setContent(reminder)
 
         composeTestRule.apply {
             onNodeWithText("Details").assertIsDisplayed()
@@ -117,7 +64,8 @@ class ReminderDetailsTest {
 
     @Test
     fun when_completed_reminder_details_created_should_display_top_app_bar() {
-        setContent(reminders[7])
+        val completedReminder = ReminderTestUtil().createReminderState(isCompleted = true)
+        setContent(completedReminder)
 
         composeTestRule.apply {
             onNodeWithText("Details").assertIsDisplayed()
@@ -130,26 +78,31 @@ class ReminderDetailsTest {
     }
 
     @Test
-    fun when_reminder_details_created_should_display_base_details() {
-        setContent(reminders[0])
+    fun when_reminder_details_created_should_display_mandatory_details() {
+        val baseReminder = ReminderTestUtil().createReminderState(
+            name = "Test reminder name",
+            date = "Wed, 22 Mar 2000",
+            time = LocalTime.of(14, 30)
+        )
+        setContent(baseReminder)
 
         composeTestRule.apply {
-            onNodeWithText("Test Reminder Details").assertIsDisplayed()
+            onNodeWithText("Test reminder name").assertIsDisplayed()
 
             onNodeWithContentDescription("Date").assertIsDisplayed()
-            onNodeWithText("Sat, 01 Jan 2000").assertIsDisplayed()
+            onNodeWithText("Wed, 22 Mar 2000").assertIsDisplayed()
 
             onNodeWithContentDescription("Time").assertIsDisplayed()
-            onNodeWithText("14:02").assertIsDisplayed()
+            onNodeWithText("14:30").assertIsDisplayed()
         }
     }
 
     @Test
     fun when_reminder_has_notification_enabled_should_display_notification_section() {
-        setContent(reminders[3])
+        val notifyingReminder = ReminderTestUtil().createReminderState(isNotificationSent = true)
+        setContent(notifyingReminder)
 
         composeTestRule.apply {
-            onNodeWithText("Test Reminder Details with Notification Enabled").assertIsDisplayed()
             onNodeWithContentDescription("Notification").assertIsDisplayed()
             onNodeWithText("Notifications enabled").assertIsDisplayed()
         }
@@ -157,10 +110,14 @@ class ReminderDetailsTest {
 
     @Test
     fun when_reminder_has_repeat_interval_should_display_repeat_interval_section() {
-        setContent(reminders[1])
+        val repeatReminder = ReminderTestUtil().createReminderState(
+            repeatAmount = "2",
+            repeatUnit = "Weeks",
+            isRepeatReminder = true
+        )
+        setContent(repeatReminder)
 
         composeTestRule.apply {
-            onNodeWithText("Test Reminder Details with Repeat Interval").assertIsDisplayed()
             onNodeWithContentDescription("Repeat Interval").assertIsDisplayed()
             onNodeWithText("2 Weeks").assertIsDisplayed()
         }
@@ -168,39 +125,43 @@ class ReminderDetailsTest {
 
     @Test
     fun when_reminder_has_notes_should_display_notes_section() {
-        setContent(reminders[2])
+        val notesReminder = ReminderTestUtil().createReminderState(notes = "Reminder notes")
+        setContent(notesReminder)
 
         composeTestRule.apply {
-            onNodeWithText("Test Reminder Details with Notes").assertIsDisplayed()
             onNodeWithContentDescription("Notes").assertIsDisplayed()
-            onNodeWithText("notes").assertIsDisplayed()
+            onNodeWithText("Reminder notes").assertIsDisplayed()
         }
     }
 
     @Test
     fun when_reminder_has_all_optional_parts_enabled_should_display_all_optional_parts() {
-        setContent(reminders[4])
+        val notifyingRepeatNotesReminder = ReminderTestUtil().createReminderState(
+            isNotificationSent = true,
+            repeatAmount = "2",
+            repeatUnit = "Weeks",
+            isRepeatReminder = true,
+            notes = "Reminder notes"
+        )
+        setContent(notifyingRepeatNotesReminder)
 
         composeTestRule.apply {
-            onNodeWithText("Test Reminder Details with Everything").assertIsDisplayed()
-
-            onNodeWithContentDescription("Date").assertIsDisplayed()
-            onNodeWithContentDescription("Time").assertIsDisplayed()
             onNodeWithContentDescription("Notification").assertIsDisplayed()
             onNodeWithContentDescription("Repeat Interval").assertIsDisplayed()
             onNodeWithContentDescription("Notes").assertIsDisplayed()
 
-            onNodeWithText("Sat, 01 Jan 2000").assertIsDisplayed()
-            onNodeWithText("14:02").assertIsDisplayed()
             onNodeWithText("Notifications enabled").assertIsDisplayed()
             onNodeWithText("2 Weeks").assertIsDisplayed()
-            onNodeWithText("notes").assertIsDisplayed()
+            onNodeWithText("Reminder notes").assertIsDisplayed()
         }
     }
 
     @Test
     fun when_reminder_with_largest_possible_name_should_display_correctly() {
-        setContent(reminders[5])
+        val longNameReminder = ReminderTestUtil().createReminderState(
+            name = "m".repeat(200)
+        )
+        setContent(longNameReminder)
 
         composeTestRule.apply {
             onNodeWithText("m".repeat(200)).assertIsDisplayed()
@@ -209,7 +170,8 @@ class ReminderDetailsTest {
 
     @Test
     fun when_delete_overflow_menu_text_clicked_should_show_alert_dialog() {
-        setContent(reminders[0])
+        val reminder = ReminderTestUtil().createReminderState()
+        setContent(reminder)
 
         composeTestRule.apply {
             onNodeWithContentDescription("More").performClick()
@@ -223,7 +185,8 @@ class ReminderDetailsTest {
 
     @Test
     fun when_delete_dialog_cancel_button_clicked_should_dismiss_dialog() {
-        setContent(reminders[0])
+        val reminder = ReminderTestUtil().createReminderState()
+        setContent(reminder)
 
         composeTestRule.apply {
             onNodeWithContentDescription("More").performClick()
@@ -239,8 +202,8 @@ class ReminderDetailsTest {
 
     @Test
     fun when_complete_overflow_menu_text_clicked_should_show_alert_dialog() {
-        setContent(reminders[0])
-
+        val reminder = ReminderTestUtil().createReminderState()
+        setContent(reminder)
         composeTestRule.apply {
             onNodeWithContentDescription("More").performClick()
             onNodeWithText("Complete").performClick()
@@ -253,7 +216,8 @@ class ReminderDetailsTest {
 
     @Test
     fun when_complete_dialog_cancel_button_clicked_should_dismiss_dialog() {
-        setContent(reminders[0])
+        val reminder = ReminderTestUtil().createReminderState()
+        setContent(reminder)
 
         composeTestRule.apply {
             onNodeWithContentDescription("More").performClick()
