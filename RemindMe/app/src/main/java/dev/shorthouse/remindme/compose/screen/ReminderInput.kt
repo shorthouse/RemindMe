@@ -102,7 +102,7 @@ fun ReminderInputScaffold(
                     .padding(scaffoldPadding)
                     .fillMaxSize()
             )
-        }
+        },
     )
 }
 
@@ -119,7 +119,7 @@ fun ReminderInputTopBar(
         title = {
             Text(
                 text = topBarTitle,
-                style = MaterialTheme.typography.h5
+                style = MaterialTheme.typography.h6
             )
         },
         navigationIcon = {
@@ -155,43 +155,45 @@ fun ReminderInputContent(
 ) {
     val focusRequester = remember { FocusRequester() }
 
-    Column(
-        modifier = modifier
-            .verticalScroll(rememberScrollState())
-            .padding(horizontal = dimensionResource(R.dimen.margin_normal))
-    ) {
-        val spacingModifier = Modifier
-            .padding(vertical = dimensionResource(R.dimen.margin_small))
-            .fillMaxWidth()
+    Surface {
+        Column(
+            modifier = modifier
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = dimensionResource(R.dimen.margin_normal))
+        ) {
+            val spacingModifier = Modifier
+                .padding(vertical = dimensionResource(R.dimen.margin_small))
+                .fillMaxWidth()
 
-        ReminderNameInput(
-            reminderState = reminderState,
-            focusRequester = focusRequester,
-            modifier = spacingModifier
-        )
+            ReminderNameInput(
+                reminderState = reminderState,
+                focusRequester = focusRequester,
+                modifier = spacingModifier
+            )
 
-        ReminderDateInput(
-            reminderState = reminderState,
-            modifier = spacingModifier
-        )
+            ReminderDateInput(
+                reminderState = reminderState,
+                modifier = spacingModifier
+            )
 
-        ReminderTimeInput(
-            reminderState = reminderState,
-            modifier = spacingModifier
-        )
+            ReminderTimeInput(
+                reminderState = reminderState,
+                modifier = spacingModifier
+            )
 
-        ReminderNotificationInput(
-            reminderState = reminderState
-        )
+            ReminderNotificationInput(
+                reminderState = reminderState
+            )
 
-        ReminderRepeatIntervalInput(
-            reminderState = reminderState
-        )
+            ReminderRepeatIntervalInput(
+                reminderState = reminderState
+            )
 
-        ReminderNotesInput(
-            reminderState = reminderState,
-            modifier = spacingModifier
-        )
+            ReminderNotesInput(
+                reminderState = reminderState,
+                modifier = spacingModifier
+            )
+        }
     }
 
     if (reminderState.id == 0L) {
@@ -296,10 +298,7 @@ fun ReminderNotificationInput(reminderState: ReminderState) {
 fun ReminderNotesInput(reminderState: ReminderState, modifier: Modifier = Modifier) {
     val notesMaxLength = integerResource(R.integer.reminder_notes_max_length)
 
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier
-    ) {
+    Row(modifier = modifier) {
         Icon(
             imageVector = Icons.Rounded.Notes,
             contentDescription = stringResource(R.string.cd_details_notes),
@@ -314,6 +313,7 @@ fun ReminderNotesInput(reminderState: ReminderState, modifier: Modifier = Modifi
             textStyle = MaterialTheme.typography.body1,
             hintText = stringResource(R.string.hint_reminder_notes),
             imeAction = ImeAction.None,
+            modifier = Modifier.fillMaxWidth()
         )
     }
 }
@@ -447,12 +447,39 @@ private fun RepeatUnitInput(reminderState: ReminderState) {
     }
 }
 
+@Composable
+fun TextWithLeftIcon(
+    icon: ImageVector,
+    text: String,
+    modifier: Modifier = Modifier,
+    contentDescription: String? = null
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = contentDescription,
+            tint = SubtitleGrey,
+        )
+
+        Spacer(Modifier.width(dimensionResource(R.dimen.margin_normal)))
+
+        Text(
+            text = text,
+            style = MaterialTheme.typography.body1,
+            color = MaterialTheme.colors.onBackground
+        )
+    }
+}
+
 @Preview(name = "Light Mode", showBackground = true)
 @Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Composable
 private fun ReminderInputPreview() {
     RemindMeTheme {
-        val reminderState by remember { mutableStateOf(PreviewData.reminderState) }
+        val reminderState by remember { mutableStateOf(PreviewData.previewReminderState) }
         val scaffoldState = rememberScaffoldState()
 
         ReminderInputScaffold(
