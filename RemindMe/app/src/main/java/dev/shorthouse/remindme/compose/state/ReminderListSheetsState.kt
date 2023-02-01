@@ -74,37 +74,4 @@ private class ReminderListSheetsStateImpl(
     )
     override val selectedReminderSortOrder: ReminderSortOrder
         get() = _selectedReminderSortOrder
-
-//    private val _selectedReminderList by derivedStateOf(
-//        policy = structuralEqualityPolicy(),
-//        calculation = {
-//            ReminderList.SCHEDULED
-//        }
-//    )
-//    override val selectedReminderList: ReminderList
-//        get() = _selectedReminderList
-//        set(value) {
-//            _selectedReminderList = value
-//        }
-
-
-//    private var _sortSheetSelectionIndex by mutableStateOf(sortSheetSelectionIndex, structuralEqualityPolicy())
-//    override var sortSheetSelectionIndex: Int
-//        get() = _sortSheetSelectionIndex
-//        set(value) {
-//            _sortSheetSelectionIndex = value
-//        }
-
-//    private var _reminderSortOrder by derivedStateOf(structuralEqualityPolicy(),
-//        when (_sortSheetSelectionIndex) {
-//            0 -> _reminderSortOrder = ReminderList.OVERDUE
-//            1 -> _reminderSortOrder =  ReminderList.SCHEDULED
-//            else -> _reminderSortOrder =  ReminderList.COMPLETED
-//        }
-//    )
-//    override var reminderSortOrder: ReminderSortOrder
-//        get() = _reminderSortOrder
-//        set(value) {
-//            _reminderSortOrder = value
-//        }
 }

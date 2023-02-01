@@ -6,12 +6,15 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.shorthouse.remindme.compose.state.ReminderListSheetsState
 import dev.shorthouse.remindme.compose.state.ReminderState
 import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.di.IoDispatcher
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.utilities.DAYS_IN_WEEK
 import dev.shorthouse.remindme.utilities.NotificationScheduler
+import dev.shorthouse.remindme.utilities.enums.ReminderAction
+import dev.shorthouse.remindme.utilities.enums.ReminderBottomSheet
 import dev.shorthouse.remindme.utilities.floor
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
@@ -29,9 +32,37 @@ class ListHomeViewModel @Inject constructor(
     private val notificationScheduler: NotificationScheduler,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
+    val reminderListSheetsState = mutableStateOf(
+        ReminderListSheetsState(
+            selectedSheet = ReminderBottomSheet.NAVIGATE,
+            selectedReminderListIndex = 0,
+            selectedReminderSortOrderIndex = 0
+        )
+    )
+
     var selectedReminderState by mutableStateOf(ReminderState())
 
-    fun completeOnetimeReminder(reminderState: ReminderState) {
+    fun processReminderAction(reminderAction: ReminderAction, onNavigateEdit: (Long) -> Unit) {
+        when (reminderAction) {
+            ReminderAction.EDIT -> {
+                onNavigateEdit(selectedReminderState.id)
+            }
+            ReminderAction.COMPLETE_ONETIME -> {
+                completeOnetimeReminder(selectedReminderState)
+            }
+            ReminderAction.COMPLETE_REPEAT_OCCURRENCE -> {
+                completeRepeatReminderOccurrence(selectedReminderState)
+            }
+            ReminderAction.COMPLETE_REPEAT_SERIES -> {
+                completeRepeatReminderSeries(selectedReminderState)
+            }
+            ReminderAction.DELETE -> {
+                deleteReminder(selectedReminderState)
+            }
+        }
+    }
+
+    private fun completeOnetimeReminder(reminderState: ReminderState) {
         val reminder = reminderState.toReminder()
 
         removeReminderNotification(reminder)
@@ -41,7 +72,7 @@ class ListHomeViewModel @Inject constructor(
         }
     }
 
-    fun completeRepeatReminderOccurrence(reminderState: ReminderState) {
+    private fun completeRepeatReminderOccurrence(reminderState: ReminderState) {
         val reminder = reminderState.toReminder()
 
         val updatedReminder = reminder.copy(
@@ -53,7 +84,7 @@ class ListHomeViewModel @Inject constructor(
         }
     }
 
-    fun completeRepeatReminderSeries(reminderState: ReminderState) {
+    private fun completeRepeatReminderSeries(reminderState: ReminderState) {
         val reminder = reminderState.toReminder()
 
         removeReminderNotification(reminder)
@@ -63,7 +94,7 @@ class ListHomeViewModel @Inject constructor(
         }
     }
 
-    fun deleteReminder(reminderState: ReminderState) {
+    private fun deleteReminder(reminderState: ReminderState) {
         val reminder = reminderState.toReminder()
 
         removeReminderNotification(reminder)
