@@ -39,7 +39,7 @@ fun ReminderAddScreen(
 @Composable
 private fun ReminderAddPreview() {
     RemindMeTheme {
-        val reminderState by remember { mutableStateOf(PreviewData.reminderStateEmpty) }
+        val reminderState by remember { mutableStateOf(PreviewData.previewEmptyReminderState) }
         val scaffoldState = rememberScaffoldState()
 
         ReminderInputScaffold(
