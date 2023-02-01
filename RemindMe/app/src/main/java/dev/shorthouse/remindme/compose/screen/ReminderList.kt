@@ -1,7 +1,7 @@
 package dev.shorthouse.remindme.compose.screen
 
 import android.content.res.Configuration
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -30,7 +31,7 @@ import dev.shorthouse.remindme.theme.RemindMeTheme
 import dev.shorthouse.remindme.theme.SubtitleGrey
 import dev.shorthouse.remindme.utilities.enums.ReminderList
 import dev.shorthouse.remindme.utilities.enums.ReminderSortOrder
-import dev.shorthouse.remindme.viewmodel.ReminderListViewModel
+import dev.shorthouse.remindme.viewmodel.ListViewModel
 
 @Composable
 fun ReminderListScreen(
@@ -39,7 +40,7 @@ fun ReminderListScreen(
     onReminderActions: (ReminderState) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val reminderListViewModel: ReminderListViewModel = hiltViewModel()
+    val reminderListViewModel: ListViewModel = hiltViewModel()
 
     val reminderStates by reminderListViewModel
         .getReminderStates(
@@ -69,10 +70,11 @@ fun ReminderListContent(
         ReminderList(
             reminderStates = reminderStates,
             onReminderActions = onReminderActions,
-            modifier = modifier,
         )
     } else {
-        val emptyStateModifier = modifier.fillMaxSize()
+        val emptyStateModifier = modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colors.surface)
 
         when (selectedReminderList) {
             ReminderList.OVERDUE -> EmptyStateOverdueReminders(modifier = emptyStateModifier)
@@ -89,14 +91,14 @@ fun ReminderList(
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
-        verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.margin_normal)),
+        verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.margin_small)),
         contentPadding = PaddingValues(
-            start = dimensionResource(R.dimen.margin_normal),
-            top = dimensionResource(R.dimen.margin_normal),
-            end = dimensionResource(R.dimen.margin_normal),
-            bottom = dimensionResource(R.dimen.margin_huge)
+            start = dimensionResource(R.dimen.margin_tiny),
+            top = dimensionResource(R.dimen.margin_tiny),
+            end = dimensionResource(R.dimen.margin_tiny),
+            bottom = dimensionResource(R.dimen.margin_bottom_bar)
         ),
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier.fillMaxSize()
     ) {
         items(reminderStates) { reminderState ->
             ReminderListCard(
@@ -107,17 +109,21 @@ fun ReminderList(
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ReminderListCard(
     reminderState: ReminderState,
     onReminderActions: (ReminderState) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Card(modifier = modifier.fillMaxWidth()) {
+    Card(
+        onClick = { onReminderActions(reminderState) },
+        modifier = modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(8.dp)
+    ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.margin_normal)),
-            modifier = modifier
-                .padding(dimensionResource(R.dimen.margin_normal))
+            modifier = modifier.padding(dimensionResource(R.dimen.margin_normal))
         ) {
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -130,7 +136,7 @@ fun ReminderListCard(
                 ) {
                     Text(
                         text = reminderState.name,
-                        style = MaterialTheme.typography.body2,
+                        style = MaterialTheme.typography.body1.copy(fontWeight = FontWeight.Medium),
                         color = MaterialTheme.colors.onPrimary,
                         modifier = Modifier.padding(
                             vertical = 1.dp,
@@ -138,13 +144,6 @@ fun ReminderListCard(
                         )
                     )
                 }
-
-                Icon(
-                    imageVector = Icons.Rounded.MoreVert,
-                    tint = SubtitleGrey,
-                    contentDescription = stringResource(R.string.cd_reminder_actions),
-                    modifier = Modifier.clickable { onReminderActions(reminderState) }
-                )
             }
 
             Row {
@@ -186,7 +185,7 @@ fun ReminderListCard(
                             text = stringResource(
                                 R.string.reminder_details_repeat_interval,
                                 reminderState.repeatAmount,
-                                reminderState.repeatUnit
+                                reminderState.repeatUnit.lowercase()
                             ),
                             contentDescription = stringResource(R.string.cd_details_repeat_interval),
                             modifier = Modifier.weight(1f)
