@@ -29,8 +29,9 @@ val RemindMeTypography = Typography(
         fontWeight = FontWeight.Normal,
     ),
     body2 = TextStyle(
-        fontSize = 18.sp,
-        fontWeight = FontWeight.Medium,
+        fontSize = 14.sp,
+        fontWeight = FontWeight.Normal,
+        letterSpacing = 0.25.sp
     ),
     subtitle1 = TextStyle(
         fontSize = 18.sp,
