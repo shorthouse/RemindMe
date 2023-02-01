@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.shorthouse.remindme.R
@@ -177,34 +178,36 @@ fun BottomSheetReminderActions(
     modifier: Modifier = Modifier
 ) {
     val reminderActionItems = buildList {
-        add(
-            BottomSheetActionItem(
-                icon = Icons.Outlined.Edit,
-                label = stringResource(R.string.drawer_item_edit),
-                action = ReminderAction.EDIT
-            )
-        )
-        if (reminderState.isRepeatReminder) {
-            add(
-                BottomSheetActionItem(
-                    icon = Icons.Rounded.TaskAlt,
-                    label = stringResource(R.string.drawer_item_complete),
-                    action = ReminderAction.COMPLETE_REPEAT_OCCURRENCE
+        if (!reminderState.isCompleted) {
+            if (reminderState.isRepeatReminder) {
+                add(
+                    BottomSheetActionItem(
+                        icon = Icons.Rounded.TaskAlt,
+                        label = stringResource(R.string.drawer_item_complete),
+                        action = ReminderAction.COMPLETE_REPEAT_OCCURRENCE
+                    )
                 )
-            )
-            add(
-                BottomSheetActionItem(
-                    icon = Icons.Rounded.ChecklistRtl,
-                    label = stringResource(R.string.drawer_item_complete_series),
-                    action = ReminderAction.COMPLETE_REPEAT_SERIES
+                add(
+                    BottomSheetActionItem(
+                        icon = Icons.Rounded.ChecklistRtl,
+                        label = stringResource(R.string.drawer_item_complete_series),
+                        action = ReminderAction.COMPLETE_REPEAT_SERIES
+                    )
                 )
-            )
-        } else {
+            } else {
+                add(
+                    BottomSheetActionItem(
+                        icon = Icons.Rounded.TaskAlt,
+                        label = stringResource(R.string.drawer_item_complete),
+                        action = ReminderAction.COMPLETE_ONETIME
+                    )
+                )
+            }
             add(
                 BottomSheetActionItem(
-                    icon = Icons.Rounded.TaskAlt,
-                    label = stringResource(R.string.drawer_item_complete),
-                    action = ReminderAction.COMPLETE_ONETIME
+                    icon = Icons.Outlined.Edit,
+                    label = stringResource(R.string.drawer_item_edit),
+                    action = ReminderAction.EDIT
                 )
             )
         }
@@ -224,8 +227,10 @@ fun BottomSheetReminderActions(
                 .padding(dimensionResource(R.dimen.margin_tiny))
         ) {
             Text(
-                text = "Reminder actions",
+                text = reminderState.name,
                 style = MaterialTheme.typography.h5,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
                 modifier = Modifier
                     .padding(
                         start = dimensionResource(R.dimen.margin_tiny),
