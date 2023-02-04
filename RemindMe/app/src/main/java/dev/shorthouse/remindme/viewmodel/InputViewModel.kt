@@ -1,6 +1,8 @@
 package dev.shorthouse.remindme.viewmodel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.shorthouse.remindme.R
@@ -20,6 +22,10 @@ class InputViewModel @Inject constructor(
     private val notificationScheduler: NotificationScheduler,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : ViewModel() {
+    fun getReminder(reminderId: Long): LiveData<Reminder> {
+        return repository.getReminder(reminderId).asLiveData()
+    }
+
     fun isReminderValid(reminder: Reminder): Boolean {
         return reminder.name.isNotBlank() &&
                 reminder.startDateTime.isAfter(ZonedDateTime.now())
@@ -53,7 +59,7 @@ class InputViewModel @Inject constructor(
     private fun editReminder(reminder: Reminder) {
         viewModelScope.launch(ioDispatcher) {
             repository.updateReminder(reminder)
-            notificationScheduler.cancelExistingReminderNotification(reminder)
+            notificationScheduler.cancelScheduledReminderNotification(reminder)
 
             if (reminder.isNotificationSent) {
                 notificationScheduler.scheduleReminderNotification(reminder)

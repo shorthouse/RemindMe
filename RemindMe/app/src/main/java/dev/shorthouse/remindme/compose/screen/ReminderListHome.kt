@@ -17,20 +17,23 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.compose.component.BottomSheetNavigate
+import dev.shorthouse.remindme.compose.component.BottomSheetReminderActions
 import dev.shorthouse.remindme.compose.component.BottomSheetSort
 import dev.shorthouse.remindme.compose.component.NotificationPermissionRequester
 import dev.shorthouse.remindme.compose.screen.destinations.ReminderAddScreenDestination
+import dev.shorthouse.remindme.compose.screen.destinations.ReminderEditScreenDestination
+import dev.shorthouse.remindme.compose.state.ReminderListSheetsState
+import dev.shorthouse.remindme.compose.state.ReminderState
 import dev.shorthouse.remindme.theme.RemindMeTheme
+import dev.shorthouse.remindme.utilities.enums.ReminderAction
 import dev.shorthouse.remindme.utilities.enums.ReminderBottomSheet
 import dev.shorthouse.remindme.utilities.enums.ReminderList
-import dev.shorthouse.remindme.utilities.enums.ReminderSortOrder
 import dev.shorthouse.remindme.viewmodel.ListHomeViewModel
 import kotlinx.coroutines.launch
 
@@ -38,115 +41,114 @@ import kotlinx.coroutines.launch
 @Destination
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun ReminderListHomeScreen(
-    navigator: DestinationsNavigator
-) {
-    val listHomeViewModel: ListHomeViewModel = viewModel()
+fun ReminderListHomeScreen(navigator: DestinationsNavigator) {
+    val listHomeViewModel: ListHomeViewModel = hiltViewModel()
 
+    val reminderListSheetsState by remember { listHomeViewModel.reminderListSheetsState }
     val sheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
-    val selectedSheet = remember { mutableStateOf(ReminderBottomSheet.NAVIGATE) }
-
     val coroutineScope = rememberCoroutineScope()
 
-    val openSheet: (ReminderBottomSheet) -> Unit = { selectedBottomSheet ->
-        selectedSheet.value = selectedBottomSheet
-        coroutineScope.launch { sheetState.show() }
+    val toggleSheet = {
+        coroutineScope.launch {
+            if (sheetState.isVisible) sheetState.hide() else sheetState.show()
+        }
     }
 
-    val closeSheet: () -> Unit = {
-        coroutineScope.launch { sheetState.hide() }
+    val openSheet: (ReminderBottomSheet) -> Unit = {
+        reminderListSheetsState.selectedSheet = it
+        toggleSheet()
+    }
+
+    val onNavigateItemSelected: (Int) -> Unit = {
+        reminderListSheetsState.selectedReminderListIndex = it
+        toggleSheet()
+    }
+
+    val onSortItemSelected: (Int) -> Unit = {
+        reminderListSheetsState.selectedReminderSortOrderIndex = it
+        toggleSheet()
+    }
+
+    val onNavigateEdit: (Long) -> Unit = {
+        navigator.navigate(
+            ReminderEditScreenDestination(
+                reminderId = listHomeViewModel.selectedReminderState.id
+            )
+        )
+    }
+
+    val onReminderActionItemSelected: (ReminderAction) -> Unit = { reminderAction ->
+        coroutineScope.launch {
+            sheetState.hide()
+            listHomeViewModel.processReminderAction(reminderAction, onNavigateEdit)
+        }
     }
 
     NotificationPermissionRequester()
 
     ModalBottomSheetLayout(
-        sheetState = sheetState,
-        sheetContent = {
-            when (selectedSheet.value) {
-                ReminderBottomSheet.NAVIGATE -> BottomSheetNavigate(
-                    selectedIndex = listHomeViewModel.selectedNavigateIndex,
-                    onSelected = {
-                        listHomeViewModel.selectedNavigateIndex = it
-                        closeSheet()
-                    }
-                )
-                ReminderBottomSheet.SORT -> BottomSheetSort(
-                    selectedIndex = listHomeViewModel.selectedSortIndex,
-                    onSelected = {
-                        listHomeViewModel.selectedSortIndex = it
-                        closeSheet()
-                    }
-                )
-            }
-        },
-        scrimColor = Color.Black.copy(alpha = 0.32f),
         content = {
-            BackHandler(enabled = sheetState.isVisible) {
-                closeSheet()
-            }
-
             ReminderListHomeScaffold(
+                reminderListSheetsState = reminderListSheetsState,
                 onNavigationMenu = { openSheet(ReminderBottomSheet.NAVIGATE) },
                 onSort = { openSheet(ReminderBottomSheet.SORT) },
-                selectedReminderList = listHomeViewModel.selectedReminderList,
-                navigator = navigator,
-                selectedReminderSortOrder = listHomeViewModel.selectedReminderSortOrder
+                onNavigateAdd = { navigator.navigate(ReminderAddScreenDestination()) },
+                onReminderActions = { reminderState ->
+                    listHomeViewModel.selectedReminderState = reminderState
+                    openSheet(ReminderBottomSheet.REMINDER_ACTIONS)
+                },
             )
-        }
+        },
+        sheetContent = {
+            BackHandler(enabled = sheetState.isVisible) {
+                coroutineScope.launch { sheetState.hide() }
+            }
+
+            BottomSheetContent(
+                reminderListSheetsState = reminderListSheetsState,
+                selectedReminderState = listHomeViewModel.selectedReminderState,
+                onNavigateItemSelected = onNavigateItemSelected,
+                onSortItemSelected = onSortItemSelected,
+                onReminderActionItemSelected = onReminderActionItemSelected
+            )
+        },
+        sheetState = sheetState,
+        scrimColor = Color.Black.copy(alpha = 0.32f),
     )
 }
 
 @Composable
 fun ReminderListHomeScaffold(
+    reminderListSheetsState: ReminderListSheetsState,
     onNavigationMenu: () -> Unit,
     onSort: () -> Unit,
-    selectedReminderList: ReminderList,
-    navigator: DestinationsNavigator,
-    selectedReminderSortOrder: ReminderSortOrder
+    onNavigateAdd: () -> Unit,
+    onReminderActions: (ReminderState) -> Unit,
 ) {
-    val topBarTitle = when (selectedReminderList) {
-        ReminderList.OVERDUE -> stringResource(R.string.overdue_reminders)
-        ReminderList.SCHEDULED -> stringResource(R.string.scheduled_reminders)
-        ReminderList.COMPLETED -> stringResource(R.string.completed_reminders)
-    }
-
     Scaffold(
         topBar = {
-            ReminderListHomeTopBar(
-                title = topBarTitle
-            )
+            ReminderListHomeTopBar(selectedReminderList = reminderListSheetsState.selectedReminderList)
         },
         bottomBar = {
             ReminderListHomeBottomBar(
                 onNavigationMenu = onNavigationMenu,
-                onSort = onSort,
+                onSort = onSort
             )
         },
         content = { scaffoldPadding ->
             val modifier = Modifier.padding(scaffoldPadding)
 
-            Crossfade(targetState = selectedReminderList) { reminderList ->
-                when (reminderList) {
-                    ReminderList.OVERDUE -> ReminderListOverdueScreen(
-                        navigator = navigator,
-                        selectedReminderSortOrder = selectedReminderSortOrder,
-                        modifier = modifier
-                    )
-                    ReminderList.SCHEDULED -> ReminderListScheduledScreen(
-                        navigator = navigator,
-                        selectedReminderSortOrder = selectedReminderSortOrder,
-                        modifier = modifier
-                    )
-                    ReminderList.COMPLETED -> ReminderListCompletedScreen(
-                        navigator = navigator,
-                        selectedReminderSortOrder = selectedReminderSortOrder,
-                        modifier = modifier
-                    )
-                }
+            Crossfade(targetState = reminderListSheetsState.selectedReminderList) { selectedReminderList ->
+                ReminderListScreen(
+                    selectedReminderList = selectedReminderList,
+                    selectedReminderSortOrder = reminderListSheetsState.selectedReminderSortOrder,
+                    onReminderActions = onReminderActions,
+                    modifier = modifier
+                )
             }
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = { navigator.navigate(ReminderAddScreenDestination()) }) {
+            FloatingActionButton(onClick = onNavigateAdd) {
                 Icon(
                     imageVector = Icons.Filled.Add,
                     contentDescription = stringResource(R.string.cd_fab_add_reminder)
@@ -159,15 +161,19 @@ fun ReminderListHomeScaffold(
 }
 
 @Composable
-fun ReminderListHomeTopBar(
-    title: String,
-) {
+fun ReminderListHomeTopBar(selectedReminderList: ReminderList) {
+    val topBarTitle = when (selectedReminderList) {
+        ReminderList.OVERDUE -> stringResource(R.string.overdue_reminders)
+        ReminderList.SCHEDULED -> stringResource(R.string.scheduled_reminders)
+        ReminderList.COMPLETED -> stringResource(R.string.completed_reminders)
+    }
+
     TopAppBar(
         title = {
             Text(
-                text = title,
-                style = MaterialTheme.typography.h5,
-                modifier = Modifier.testTag(stringResource(R.string.test_tag_list_home_title, title))
+                text = topBarTitle,
+                style = MaterialTheme.typography.h6,
+                modifier = Modifier.testTag(stringResource(R.string.test_tag_list_home_title, topBarTitle))
             )
         }
     )
@@ -176,7 +182,7 @@ fun ReminderListHomeTopBar(
 @Composable
 fun ReminderListHomeBottomBar(
     onNavigationMenu: () -> Unit,
-    onSort: () -> Unit,
+    onSort: () -> Unit
 ) {
     BottomAppBar(cutoutShape = CircleShape) {
         IconButton(onClick = onNavigationMenu) {
@@ -199,17 +205,46 @@ fun ReminderListHomeBottomBar(
     }
 }
 
+@Composable
+private fun BottomSheetContent(
+    reminderListSheetsState: ReminderListSheetsState,
+    selectedReminderState: ReminderState,
+    onNavigateItemSelected: (Int) -> Unit,
+    onSortItemSelected: (Int) -> Unit,
+    onReminderActionItemSelected: (ReminderAction) -> Unit
+) {
+    when (reminderListSheetsState.selectedSheet) {
+        ReminderBottomSheet.NAVIGATE -> BottomSheetNavigate(
+            selectedItemIndex = reminderListSheetsState.selectedReminderListIndex,
+            onItemSelected = onNavigateItemSelected
+        )
+        ReminderBottomSheet.SORT -> BottomSheetSort(
+            selectedItemIndex = reminderListSheetsState.selectedReminderSortOrderIndex,
+            onItemSelected = onSortItemSelected
+        )
+        ReminderBottomSheet.REMINDER_ACTIONS -> BottomSheetReminderActions(
+            reminderState = selectedReminderState,
+            onItemSelected = onReminderActionItemSelected
+        )
+    }
+}
+
 @Preview(name = "Light Mode", showBackground = true)
 @Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Composable
 fun ReminderListHomePreview() {
     RemindMeTheme {
+        val reminderListSheetsState = ReminderListSheetsState(
+            selectedSheet = ReminderBottomSheet.NAVIGATE,
+            selectedReminderListIndex = 0,
+            selectedReminderSortOrderIndex = 0
+        )
         ReminderListHomeScaffold(
+            reminderListSheetsState = reminderListSheetsState,
             onNavigationMenu = {},
             onSort = {},
-            selectedReminderList = ReminderList.OVERDUE,
-            navigator = EmptyDestinationsNavigator,
-            selectedReminderSortOrder = ReminderSortOrder.EARLIEST_DATE_FIRST
+            onNavigateAdd = {},
+            onReminderActions = {},
         )
     }
 }

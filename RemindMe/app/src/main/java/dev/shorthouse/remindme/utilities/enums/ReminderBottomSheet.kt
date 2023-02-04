@@ -2,5 +2,6 @@ package dev.shorthouse.remindme.utilities.enums
 
 enum class ReminderBottomSheet {
     NAVIGATE,
-    SORT
+    SORT,
+    REMINDER_ACTIONS
 }

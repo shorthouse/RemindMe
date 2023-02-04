@@ -15,9 +15,11 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.theme.RemindMeTheme
+import dev.shorthouse.remindme.theme.SubtitleGrey
 
 @Composable
 fun EmptyStateOverdueReminders(modifier: Modifier = Modifier) {
@@ -70,12 +72,13 @@ fun EmptyState(
 
         Text(
             text = title,
-            style = MaterialTheme.typography.body2
+            style = MaterialTheme.typography.body1.copy(fontWeight = FontWeight.Medium)
         )
 
         Text(
             text = subtitle,
-            style = MaterialTheme.typography.subtitle2
+            style = MaterialTheme.typography.caption,
+            color = SubtitleGrey
         )
     }
 }

@@ -26,7 +26,7 @@ class NotificationScheduler @Inject constructor(
         }
     }
 
-    fun cancelExistingReminderNotification(reminder: Reminder) {
+    fun cancelScheduledReminderNotification(reminder: Reminder) {
         val alarmBroadcastIntent = getExistingBroadcastIntent(reminder)
 
         alarmBroadcastIntent?.let {

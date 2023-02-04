@@ -147,7 +147,7 @@ fun ReminderAlertDialogPreview() {
 fun ReminderDatePickerDialogPreview() {
     RemindMeTheme {
         ReminderDatePickerDialog(
-            reminderState = PreviewData.reminderState,
+            reminderState = PreviewData.previewReminderState,
             dialogState = MaterialDialogState(initialValue = true)
         )
     }
@@ -159,7 +159,7 @@ fun ReminderDatePickerDialogPreview() {
 fun ReminderTimePickerDialogPreview() {
     RemindMeTheme {
         ReminderTimePickerDialog(
-            reminderState = PreviewData.reminderState,
+            reminderState = PreviewData.previewReminderState,
             dialogState = MaterialDialogState(initialValue = true)
         )
     }

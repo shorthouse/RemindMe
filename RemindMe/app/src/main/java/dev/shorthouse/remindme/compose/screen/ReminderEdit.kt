@@ -16,7 +16,6 @@ import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.compose.preview.PreviewData
 import dev.shorthouse.remindme.compose.state.ReminderState
 import dev.shorthouse.remindme.theme.RemindMeTheme
-import dev.shorthouse.remindme.viewmodel.EditViewModel
 import dev.shorthouse.remindme.viewmodel.InputViewModel
 
 @Destination
@@ -26,9 +25,8 @@ fun ReminderEditScreen(
     navigator: DestinationsNavigator
 ) {
     val inputViewModel: InputViewModel = hiltViewModel()
-    val editViewModel: EditViewModel = hiltViewModel()
 
-    val reminder by editViewModel.getReminder(reminderId).observeAsState()
+    val reminder by inputViewModel.getReminder(reminderId).observeAsState()
 
     reminder?.let {
         ReminderInputScreen(
@@ -45,7 +43,7 @@ fun ReminderEditScreen(
 @Composable
 private fun ReminderEditPreview() {
     RemindMeTheme {
-        val reminderState by remember { mutableStateOf(PreviewData.reminderState) }
+        val reminderState by remember { mutableStateOf(PreviewData.previewReminderState) }
         val scaffoldState = rememberScaffoldState()
 
         ReminderInputScaffold(

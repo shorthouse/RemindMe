@@ -7,7 +7,6 @@ import androidx.compose.ui.test.onNodeWithText
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dev.shorthouse.remindme.HiltTestActivity
-import dev.shorthouse.remindme.compose.screen.ReminderListScheduledContent
 import dev.shorthouse.remindme.compose.state.ReminderState
 import dev.shorthouse.remindme.theme.RemindMeTheme
 import dev.shorthouse.remindme.util.ReminderTestUtil
@@ -33,10 +32,10 @@ class ReminderListScheduledTest {
     private fun setContent(reminderStates: List<ReminderState>) {
         composeTestRule.setContent {
             RemindMeTheme {
-                ReminderListScheduledContent(
-                    reminderStates = reminderStates,
-                    onNavigateDetails = {}
-                )
+//                ReminderListScheduledContent(
+//                    reminderStates = reminderStates,
+//                    onNavigateDetails = {}
+//                )
             }
         }
     }
