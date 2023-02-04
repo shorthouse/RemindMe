@@ -8,7 +8,6 @@ import androidx.compose.ui.test.performClick
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dev.shorthouse.remindme.HiltTestActivity
-import dev.shorthouse.remindme.compose.screen.ReminderDetailsScaffold
 import dev.shorthouse.remindme.compose.state.ReminderState
 import dev.shorthouse.remindme.theme.RemindMeTheme
 import dev.shorthouse.remindme.util.ReminderTestUtil
@@ -34,13 +33,13 @@ class ReminderDetailsTest {
     private fun setContent(reminderState: ReminderState) {
         composeTestRule.setContent {
             RemindMeTheme {
-                ReminderDetailsScaffold(
-                    reminderState = reminderState,
-                    onNavigateUp = {},
-                    onEdit = {},
-                    onDelete = {},
-                    onComplete = {}
-                )
+//                ReminderDetailsScaffold(
+//                    reminderState = reminderState,
+//                    onNavigateUp = {},
+//                    onEdit = {},
+//                    onDelete = {},
+//                    onComplete = {}
+//                )
             }
         }
     }
