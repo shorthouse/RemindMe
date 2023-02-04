@@ -89,41 +89,41 @@ class ReminderListCardProvider : PreviewParameterProvider<ReminderState> {
             notes = null,
             isCompleted = true
         ),
-//        ReminderState(
-//            id = 4,
-//            name = "Add notification",
-//            date = "Sat, 01 Jan 3020",
-//            time = LocalTime.of(8, 30),
-//            isNotificationSent = true,
-//            isRepeatReminder = false,
-//            repeatAmount = "",
-//            repeatUnit = "",
-//            notes = null,
-//            isCompleted = false
-//        ),
-//        ReminderState(
-//            id = 5,
-//            name = "Add repeat interval",
-//            date = "Sat, 01 Jan 3020",
-//            time = LocalTime.of(8, 30),
-//            isNotificationSent = true,
-//            isRepeatReminder = true,
-//            repeatAmount = "4",
-//            repeatUnit = "days",
-//            notes = null,
-//            isCompleted = false
-//        ),
-//        ReminderState(
-//            id = 6,
-//            name = "Add notes",
-//            date = "Sat, 01 Jan 3020",
-//            time = LocalTime.of(8, 30),
-//            isNotificationSent = true,
-//            isRepeatReminder = true,
-//            repeatAmount = "4",
-//            repeatUnit = "days",
-//            notes = "Don't forget to do this thing",
-//            isCompleted = false
-//        ),
+        ReminderState(
+            id = 4,
+            name = "Add notification",
+            date = "Sat, 01 Jan 3020",
+            time = LocalTime.of(8, 30),
+            isNotificationSent = true,
+            isRepeatReminder = false,
+            repeatAmount = "",
+            repeatUnit = "",
+            notes = null,
+            isCompleted = false
+        ),
+        ReminderState(
+            id = 5,
+            name = "Add repeat interval",
+            date = "Sat, 01 Jan 3020",
+            time = LocalTime.of(8, 30),
+            isNotificationSent = true,
+            isRepeatReminder = true,
+            repeatAmount = "4",
+            repeatUnit = "days",
+            notes = null,
+            isCompleted = false
+        ),
+        ReminderState(
+            id = 6,
+            name = "Add notes",
+            date = "Sat, 01 Jan 3020",
+            time = LocalTime.of(8, 30),
+            isNotificationSent = true,
+            isRepeatReminder = true,
+            repeatAmount = "4",
+            repeatUnit = "days",
+            notes = "Don't forget to do this thing",
+            isCompleted = false
+        ),
     )
 }
