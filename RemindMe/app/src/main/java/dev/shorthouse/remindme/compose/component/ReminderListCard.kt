@@ -16,9 +16,9 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import dev.shorthouse.remindme.R
-import dev.shorthouse.remindme.compose.preview.PreviewData
+import dev.shorthouse.remindme.compose.preview.ReminderListCardProvider
 import dev.shorthouse.remindme.compose.state.ReminderState
 import dev.shorthouse.remindme.theme.*
 
@@ -45,15 +45,15 @@ fun ReminderListCard(
                 style = MaterialTheme.typography.body1.copy(fontWeight = FontWeight.Medium),
             )
 
-            Row(horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.margin_minuscule))) {
-                Text(text = reminderState.date)
+            Text(
+                text = stringResource(
+                    R.string.reminder_list_card_date_time,
+                    reminderState.date,
+                    reminderState.time
+                )
+            )
 
-                Text(text = stringResource(R.string.dot_spacer))
-
-                Text(text = reminderState.time.toString())
-            }
-
-            Spacer(Modifier.height(dimensionResource(R.dimen.margin_tiny)))
+            Spacer(Modifier.height(dimensionResource(R.dimen.margin_small)))
 
             Row(
                 horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.margin_small)),
@@ -84,7 +84,7 @@ fun ReminderListCard(
             }
 
             reminderState.notes?.let { notes ->
-                Spacer(Modifier.height(8.dp))
+                Spacer(Modifier.height(dimensionResource(R.dimen.margin_small)))
 
                 ReminderListCardDetail(
                     icon = Icons.Rounded.Notes,
@@ -154,10 +154,10 @@ private fun ReminderListCardDetail(
 @Composable
 @Preview(name = "Light Mode", showBackground = true)
 @Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
-fun ReminderListCardPreview() {
+fun ReminderListCardPreview(
+    @PreviewParameter(ReminderListCardProvider::class) reminderState: ReminderState
+) {
     RemindMeTheme {
-        val reminderState = PreviewData.previewReminderState
-
         ReminderListCard(
             reminderState = reminderState,
             onReminderActions = {}
