@@ -8,4 +8,5 @@
     <dimen name="margin_none">0dp</dimen>
 
     <dimen name="margin_bottom_bar">92dp</dimen>
+    <dimen name="margin_reminder_status_chip">2dp</dimen>
 </resources>
