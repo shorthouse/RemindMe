@@ -182,7 +182,7 @@ fun ReminderListHomeTopBar(selectedReminderList: ReminderList) {
 @Composable
 fun ReminderListHomeBottomBar(
     onNavigationMenu: () -> Unit,
-    onSort: () -> Unit,
+    onSort: () -> Unit
 ) {
     BottomAppBar(cutoutShape = CircleShape) {
         IconButton(onClick = onNavigationMenu) {
