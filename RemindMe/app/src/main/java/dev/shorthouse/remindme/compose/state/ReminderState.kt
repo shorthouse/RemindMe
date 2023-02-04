@@ -52,6 +52,7 @@ interface ReminderState {
     var isCompleted: Boolean
 
     fun toReminder(): Reminder
+    fun isOverdue(): Boolean
 }
 
 private class ReminderStateImpl(
@@ -147,6 +148,10 @@ private class ReminderStateImpl(
             notes = _notes?.trim()?.ifBlank { null },
             isCompleted = _isCompleted
         )
+    }
+
+    override fun isOverdue(): Boolean {
+        return getReminderStartDateTime(_date, _time).isBefore(ZonedDateTime.now())
     }
 
     private var _id by mutableStateOf(id, structuralEqualityPolicy())
