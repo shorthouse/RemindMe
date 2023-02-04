@@ -120,6 +120,10 @@ class ListHomeViewModel @Inject constructor(
             else -> (repeatInterval.amount * DAYS_IN_WEEK).days
         }
 
+        if (reminder.startDateTime.isAfter(ZonedDateTime.now())) {
+            return reminder.startDateTime.plusSeconds(repeatDuration.inWholeSeconds)
+        }
+
         val secondsToNewStartDateTime = ZonedDateTime.now()
             .toEpochSecond()
             .minus(reminder.startDateTime.toEpochSecond())
