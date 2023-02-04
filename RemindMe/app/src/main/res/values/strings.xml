@@ -99,6 +99,8 @@
     <string name="drawer_item_complete_series">Complete Series</string>
 
     <string name="reminder_list_card_date_time">%1$s • %2$s</string>
+    <string name="dot_spacer">•</string>
+    <string name="reminder_list_card_condensed_date_time">%1$s • %2$s • </string>
     <string name="reminder_status_completed">Completed</string>
     <string name="reminder_status_overdue">Overdue</string>
     <string name="reminder_status_scheduled">Scheduled</string>

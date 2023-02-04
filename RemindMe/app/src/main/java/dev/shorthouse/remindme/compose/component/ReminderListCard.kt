@@ -7,7 +7,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Notes
 import androidx.compose.material.icons.rounded.NotificationsNone
-import androidx.compose.material.icons.rounded.Refresh
+import androidx.compose.material.icons.rounded.Repeat
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,8 +31,8 @@ fun ReminderListCard(
 ) {
     Card(
         shape = RoundedCornerShape(dimensionResource(R.dimen.margin_small)),
+        elevation = dimensionResource(R.dimen.reminder_list_card_elevation),
         onClick = { onReminderActions(reminderState) },
-        elevation = 4.dp,
         modifier = modifier.fillMaxWidth()
     ) {
         Column(
@@ -43,43 +43,36 @@ fun ReminderListCard(
             Text(
                 text = reminderState.name,
                 style = MaterialTheme.typography.body1.copy(fontWeight = FontWeight.Medium),
-                color = MaterialTheme.colors.onSurface,
             )
 
-            Text(
-                text = stringResource(R.string.reminder_list_card_date_time, reminderState.date, reminderState.time),
-                style = MaterialTheme.typography.subtitle2
-            )
+            Row(horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.margin_minuscule))) {
+                Text(text = reminderState.date)
 
+                Text(text = stringResource(R.string.dot_spacer))
 
-            Divider(
-                color = SubtitleGrey,
-                thickness = 1.dp,
-                modifier = Modifier.padding(
-                    top = dimensionResource(R.dimen.margin_small),
-                    bottom = dimensionResource(R.dimen.margin_large),
-                )
-            )
+                Text(text = reminderState.time.toString())
+            }
 
+            Spacer(Modifier.height(dimensionResource(R.dimen.margin_tiny)))
 
-            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.margin_small)),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 ReminderCardStatus(reminderState = reminderState)
 
-                val notificationText = if (reminderState.isNotificationSent) {
-                    stringResource(R.string.reminder_card_notification_on)
-                } else {
-                    stringResource(R.string.reminder_card_notification_off)
+                if (reminderState.isNotificationSent) {
+                    Icon(
+                        imageVector = Icons.Rounded.NotificationsNone,
+                        tint = SubtitleGrey,
+                        contentDescription = stringResource(R.string.cd_details_notification),
+                        modifier = Modifier.size(dimensionResource(R.dimen.reminder_list_card_icon_size))
+                    )
                 }
-
-                ReminderListCardDetail(
-                    icon = Icons.Rounded.NotificationsNone,
-                    text = notificationText,
-                    contentDescription = stringResource(R.string.cd_details_notification),
-                )
 
                 if (reminderState.isRepeatReminder) {
                     ReminderListCardDetail(
-                        icon = Icons.Rounded.Refresh,
+                        icon = Icons.Rounded.Repeat,
                         text = stringResource(
                             R.string.reminder_details_repeat_interval,
                             reminderState.repeatAmount,
@@ -88,14 +81,16 @@ fun ReminderListCard(
                         contentDescription = stringResource(R.string.cd_details_repeat_interval),
                     )
                 }
+            }
 
-                reminderState.notes?.let { notes ->
-                    ReminderListCardDetail(
-                        icon = Icons.Rounded.Notes,
-                        text = notes,
-                        contentDescription = stringResource(R.string.cd_details_notes)
-                    )
-                }
+            reminderState.notes?.let { notes ->
+                Spacer(Modifier.height(8.dp))
+
+                ReminderListCardDetail(
+                    icon = Icons.Rounded.Notes,
+                    text = notes,
+                    contentDescription = stringResource(R.string.cd_details_notes)
+                )
             }
         }
     }
@@ -123,10 +118,7 @@ private fun ReminderCardStatus(reminderState: ReminderState) {
             text = statusText,
             style = MaterialTheme.typography.subtitle2,
             color = MaterialTheme.colors.onPrimary,
-            modifier = Modifier.padding(
-                horizontal = dimensionResource(R.dimen.margin_tiny),
-                vertical = dimensionResource(R.dimen.margin_reminder_status_chip),
-            )
+            modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.reminder_list_card_status_padding))
         )
     }
 }
@@ -146,6 +138,7 @@ private fun ReminderListCardDetail(
             imageVector = icon,
             contentDescription = contentDescription,
             tint = SubtitleGrey,
+            modifier = Modifier.size(dimensionResource(R.dimen.reminder_list_card_icon_size))
         )
 
         Spacer(Modifier.width(dimensionResource(R.dimen.margin_tiny)))
