@@ -17,14 +17,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.compose.component.EmptyStateCompletedReminders
-import dev.shorthouse.remindme.compose.component.EmptyStateOverdueReminders
 import dev.shorthouse.remindme.compose.component.EmptyStateScheduledReminders
 import dev.shorthouse.remindme.compose.component.ReminderListCard
 import dev.shorthouse.remindme.compose.preview.PreviewData
 import dev.shorthouse.remindme.compose.state.ReminderState
 import dev.shorthouse.remindme.theme.RemindMeTheme
-import dev.shorthouse.remindme.utilities.enums.ReminderList
-import dev.shorthouse.remindme.utilities.enums.ReminderSortOrder
+import dev.shorthouse.remindme.util.enums.ReminderList
+import dev.shorthouse.remindme.util.enums.ReminderSortOrder
 import dev.shorthouse.remindme.viewmodel.ListViewModel
 
 @Composable
@@ -71,7 +70,6 @@ fun ReminderListContent(
             .background(MaterialTheme.colors.surface)
 
         when (selectedReminderList) {
-            ReminderList.OVERDUE -> EmptyStateOverdueReminders(modifier = emptyStateModifier)
             ReminderList.SCHEDULED -> EmptyStateScheduledReminders(modifier = emptyStateModifier)
             ReminderList.COMPLETED -> EmptyStateCompletedReminders(modifier = emptyStateModifier)
         }

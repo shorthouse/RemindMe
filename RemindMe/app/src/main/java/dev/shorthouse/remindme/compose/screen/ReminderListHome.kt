@@ -31,9 +31,9 @@ import dev.shorthouse.remindme.compose.screen.destinations.ReminderEditScreenDes
 import dev.shorthouse.remindme.compose.state.ReminderListSheetsState
 import dev.shorthouse.remindme.compose.state.ReminderState
 import dev.shorthouse.remindme.theme.RemindMeTheme
-import dev.shorthouse.remindme.utilities.enums.ReminderAction
-import dev.shorthouse.remindme.utilities.enums.ReminderBottomSheet
-import dev.shorthouse.remindme.utilities.enums.ReminderList
+import dev.shorthouse.remindme.util.enums.ReminderAction
+import dev.shorthouse.remindme.util.enums.ReminderBottomSheet
+import dev.shorthouse.remindme.util.enums.ReminderList
 import dev.shorthouse.remindme.viewmodel.ListHomeViewModel
 import kotlinx.coroutines.launch
 
@@ -163,7 +163,6 @@ fun ReminderListHomeScaffold(
 @Composable
 fun ReminderListHomeTopBar(selectedReminderList: ReminderList) {
     val topBarTitle = when (selectedReminderList) {
-        ReminderList.OVERDUE -> stringResource(R.string.overdue_reminders)
         ReminderList.SCHEDULED -> stringResource(R.string.scheduled_reminders)
         ReminderList.COMPLETED -> stringResource(R.string.completed_reminders)
     }

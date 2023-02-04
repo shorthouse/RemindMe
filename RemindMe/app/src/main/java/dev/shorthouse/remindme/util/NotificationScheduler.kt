@@ -1,4 +1,4 @@
-package dev.shorthouse.remindme.utilities
+package dev.shorthouse.remindme.util
 
 import android.app.AlarmManager
 import android.app.PendingIntent

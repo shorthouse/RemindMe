@@ -27,7 +27,7 @@ import dev.shorthouse.remindme.compose.state.BottomSheetActionItem
 import dev.shorthouse.remindme.compose.state.BottomSheetSelectableItem
 import dev.shorthouse.remindme.compose.state.ReminderState
 import dev.shorthouse.remindme.theme.RemindMeTheme
-import dev.shorthouse.remindme.utilities.enums.ReminderAction
+import dev.shorthouse.remindme.util.enums.ReminderAction
 
 @Composable
 fun BottomSheetNavigate(
@@ -36,10 +36,6 @@ fun BottomSheetNavigate(
     modifier: Modifier = Modifier
 ) {
     val items = listOf(
-        BottomSheetSelectableItem(
-            Icons.Rounded.NotificationImportant,
-            stringResource(R.string.overdue_reminders)
-        ),
         BottomSheetSelectableItem(
             Icons.Rounded.NotificationsActive,
             stringResource(R.string.scheduled_reminders)

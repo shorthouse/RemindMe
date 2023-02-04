@@ -1,4 +1,4 @@
-package dev.shorthouse.remindme.utilities.enums
+package dev.shorthouse.remindme.util.enums
 
 enum class ReminderBottomSheet {
     NAVIGATE,

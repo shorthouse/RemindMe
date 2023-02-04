@@ -9,8 +9,8 @@ import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.di.IoDispatcher
 import dev.shorthouse.remindme.model.Reminder
-import dev.shorthouse.remindme.utilities.NotificationScheduler
-import dev.shorthouse.remindme.utilities.UiText
+import dev.shorthouse.remindme.util.NotificationScheduler
+import dev.shorthouse.remindme.util.UiText
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 import java.time.ZonedDateTime

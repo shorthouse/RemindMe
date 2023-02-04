@@ -1,4 +1,4 @@
-package dev.shorthouse.remindme.utilities
+package dev.shorthouse.remindme.util
 
 import android.content.Context
 import androidx.annotation.StringRes

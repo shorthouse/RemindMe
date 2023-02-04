@@ -16,10 +16,6 @@ class ReminderRepository @Inject constructor(private val reminderLocalDataSource
         return reminderLocalDataSource.getReminder(id)
     }
 
-    fun getOverdueReminders(): Flow<List<Reminder>> {
-        return reminderLocalDataSource.getOverdueReminders(ZonedDateTime.now())
-    }
-
     fun getScheduledReminders(): Flow<List<Reminder>> {
         return reminderLocalDataSource.getScheduledReminders()
     }

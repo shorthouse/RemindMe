@@ -11,7 +11,7 @@ import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.di.IoDispatcher
 import dev.shorthouse.remindme.model.Reminder
-import dev.shorthouse.remindme.utilities.DAYS_IN_WEEK
+import dev.shorthouse.remindme.util.DAYS_IN_WEEK
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
