@@ -15,6 +15,7 @@ import dev.shorthouse.remindme.util.DAYS_IN_WEEK
 import dev.shorthouse.remindme.util.NotificationScheduler
 import dev.shorthouse.remindme.util.enums.ReminderAction
 import dev.shorthouse.remindme.util.enums.ReminderBottomSheet
+import dev.shorthouse.remindme.util.enums.ReminderSortOrder
 import dev.shorthouse.remindme.util.floor
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
@@ -36,7 +37,7 @@ class ListHomeViewModel @Inject constructor(
         ReminderListSheetsState(
             selectedSheet = ReminderBottomSheet.NAVIGATE,
             selectedReminderListIndex = 0,
-            selectedReminderSortOrderIndex = 0
+            selectedReminderSortOrder = ReminderSortOrder.EARLIEST_DATE_FIRST
         )
     )
 
