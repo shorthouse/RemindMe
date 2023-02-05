@@ -43,7 +43,7 @@ val RemindMeTypography = Typography(
         fontWeight = FontWeight.Normal,
     ),
     button = TextStyle(
-        fontSize = 15.sp,
+        fontSize = 18.sp,
         fontWeight = FontWeight.Bold,
     ),
     caption = TextStyle(
