@@ -107,4 +107,8 @@
     <string name="sort_dialog_option_date_latest">Date (Latest first)</string>
     <string name="dropdown_menu_sort">Sort</string>
     <string name="dropdown_menu_completed">Completed</string>
+    <string name="cd_top_app_bar_back">Back</string>
+    <string name="cd_top_bar_delete_completed_reminders">Delete all completed reminders</string>
+    <string name="alert_dialog_title_delete_all_completed">Delete all completed reminders?</string>
+    <string name="alert_dialog_title_delete_completed">Delete completed reminder?</string>
 </resources>
