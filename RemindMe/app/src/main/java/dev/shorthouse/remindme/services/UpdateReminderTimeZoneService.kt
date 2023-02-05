@@ -46,7 +46,7 @@ class UpdateReminderTimeZoneService : Service() {
 
         startForeground(System.currentTimeMillis().toInt(), getServiceNotification())
 
-        val remindersLiveData = repository.getAllReminders().asLiveData()
+        val remindersLiveData = repository.getReminders().asLiveData()
 
         remindersLiveData.observeForever(object : Observer<List<Reminder>> {
             override fun onChanged(reminders: List<Reminder>?) {
