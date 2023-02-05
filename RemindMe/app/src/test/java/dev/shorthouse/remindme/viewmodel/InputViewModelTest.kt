@@ -116,12 +116,12 @@ class InputViewModelTest {
             name = "reminderToAdd"
         )
 
-        val numRemindersBefore = reminderRepository.getReminders().asLiveData().getOrAwaitValue().size
+        val numRemindersBefore = reminderRepository.getAllReminders().asLiveData().getOrAwaitValue().size
 
         inputViewModel.saveReminder(reminderToAdd)
         advanceUntilIdle()
 
-        val numRemindersAfter = reminderRepository.getReminders().asLiveData().getOrAwaitValue().size
+        val numRemindersAfter = reminderRepository.getAllReminders().asLiveData().getOrAwaitValue().size
         assertThat(numRemindersBefore.plus(1)).isEqualTo(numRemindersAfter)
     }
 
@@ -129,12 +129,12 @@ class InputViewModelTest {
     fun `Save reminder called with existing reminder, edits reminder in database`() = runTest(ioDispatcher) {
         val editedReminder = reminderToEdit.copy(name = "Edited Reminder Name")
 
-        val numRemindersBefore = reminderRepository.getReminders().asLiveData().getOrAwaitValue().size
+        val numRemindersBefore = reminderRepository.getAllReminders().asLiveData().getOrAwaitValue().size
 
         inputViewModel.saveReminder(editedReminder)
         advanceUntilIdle()
 
-        val numRemindersAfter = reminderRepository.getReminders().asLiveData().getOrAwaitValue().size
+        val numRemindersAfter = reminderRepository.getAllReminders().asLiveData().getOrAwaitValue().size
         assertThat(numRemindersBefore).isEqualTo(numRemindersAfter)
 
         val fetchedEditedReminder = reminderRepository.getReminder(1).asLiveData().getOrAwaitValue()
