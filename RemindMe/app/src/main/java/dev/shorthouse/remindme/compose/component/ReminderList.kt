@@ -1,4 +1,4 @@
-package dev.shorthouse.remindme.compose.screen
+package dev.shorthouse.remindme.compose.component
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
@@ -11,7 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
 import dev.shorthouse.remindme.R
-import dev.shorthouse.remindme.compose.component.ReminderListCard
 import dev.shorthouse.remindme.compose.preview.PreviewData
 import dev.shorthouse.remindme.compose.state.ReminderState
 import dev.shorthouse.remindme.theme.RemindMeTheme
