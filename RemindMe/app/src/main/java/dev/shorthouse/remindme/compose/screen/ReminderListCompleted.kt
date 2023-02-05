@@ -18,7 +18,8 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.compose.component.EmptyStateCompletedReminders
-import dev.shorthouse.remindme.compose.component.ReminderAlertDialog
+import dev.shorthouse.remindme.compose.component.dialog.RemindMeAlertDialog
+import dev.shorthouse.remindme.compose.component.ReminderListContent
 import dev.shorthouse.remindme.compose.state.ReminderState
 import dev.shorthouse.remindme.theme.RemindMeTheme
 import dev.shorthouse.remindme.util.enums.ReminderSortOrder
@@ -31,7 +32,7 @@ fun ReminderListCompletedScreen(navigator: DestinationsNavigator) {
 
     var isDeleteDialogOpen by remember { mutableStateOf(false) }
     if (isDeleteDialogOpen) {
-        ReminderAlertDialog(
+        RemindMeAlertDialog(
             title = stringResource(R.string.alert_dialog_title_delete_completed),
             confirmText = stringResource(R.string.dialog_action_delete),
             onConfirm = {
@@ -103,7 +104,7 @@ fun ReminderListCompletedTopBar(
 ) {
     var isDeleteAllDialogOpen by remember { mutableStateOf(false) }
     if (isDeleteAllDialogOpen) {
-        ReminderAlertDialog(
+        RemindMeAlertDialog(
             title = stringResource(R.string.alert_dialog_title_delete_all_completed),
             confirmText = stringResource(R.string.dialog_action_delete),
             onConfirm = {
