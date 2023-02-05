@@ -13,9 +13,6 @@ interface ReminderDao {
     @Query("SELECT * FROM reminder WHERE id = :id")
     fun getReminder(id: Long): Flow<Reminder>
 
-    @Query("SELECT * FROM reminder WHERE startDateTime <= :nowDateTime AND isCompleted = 0")
-    fun getOverdueReminders(nowDateTime: ZonedDateTime): Flow<List<Reminder>>
-
     @Query("SELECT * FROM reminder WHERE isCompleted = 0")
     fun getScheduledReminders(): Flow<List<Reminder>>
 

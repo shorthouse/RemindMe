@@ -1,9 +1,9 @@
 package dev.shorthouse.remindme.compose.state
 
 import androidx.compose.runtime.*
-import dev.shorthouse.remindme.utilities.enums.ReminderBottomSheet
-import dev.shorthouse.remindme.utilities.enums.ReminderList
-import dev.shorthouse.remindme.utilities.enums.ReminderSortOrder
+import dev.shorthouse.remindme.util.enums.ReminderBottomSheet
+import dev.shorthouse.remindme.util.enums.ReminderList
+import dev.shorthouse.remindme.util.enums.ReminderSortOrder
 
 fun ReminderListSheetsState(
     selectedSheet: ReminderBottomSheet,
@@ -47,8 +47,7 @@ private class ReminderListSheetsStateImpl(
         policy = structuralEqualityPolicy(),
         calculation = {
             when (_selectedReminderListIndex) {
-                0 -> ReminderList.OVERDUE
-                1 -> ReminderList.SCHEDULED
+                0 -> ReminderList.SCHEDULED
                 else -> ReminderList.COMPLETED
             }
         }

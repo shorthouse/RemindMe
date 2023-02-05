@@ -11,11 +11,11 @@ import dev.shorthouse.remindme.compose.state.ReminderState
 import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.di.IoDispatcher
 import dev.shorthouse.remindme.model.Reminder
-import dev.shorthouse.remindme.utilities.DAYS_IN_WEEK
-import dev.shorthouse.remindme.utilities.NotificationScheduler
-import dev.shorthouse.remindme.utilities.enums.ReminderAction
-import dev.shorthouse.remindme.utilities.enums.ReminderBottomSheet
-import dev.shorthouse.remindme.utilities.floor
+import dev.shorthouse.remindme.util.DAYS_IN_WEEK
+import dev.shorthouse.remindme.util.NotificationScheduler
+import dev.shorthouse.remindme.util.enums.ReminderAction
+import dev.shorthouse.remindme.util.enums.ReminderBottomSheet
+import dev.shorthouse.remindme.util.floor
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 import java.time.ZonedDateTime
@@ -118,6 +118,10 @@ class ListHomeViewModel @Inject constructor(
         val repeatDuration = when (repeatInterval.unit) {
             ChronoUnit.DAYS -> repeatInterval.amount.days
             else -> (repeatInterval.amount * DAYS_IN_WEEK).days
+        }
+
+        if (reminder.startDateTime.isAfter(ZonedDateTime.now())) {
+            return reminder.startDateTime.plusSeconds(repeatDuration.inWholeSeconds)
         }
 
         val secondsToNewStartDateTime = ZonedDateTime.now()

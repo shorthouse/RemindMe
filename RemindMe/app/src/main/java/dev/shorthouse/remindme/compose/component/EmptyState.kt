@@ -22,16 +22,6 @@ import dev.shorthouse.remindme.theme.RemindMeTheme
 import dev.shorthouse.remindme.theme.SubtitleGrey
 
 @Composable
-fun EmptyStateOverdueReminders(modifier: Modifier = Modifier) {
-    EmptyState(
-        painter = painterResource(R.drawable.empty_state_overdue),
-        title = stringResource(R.string.empty_state_overdue_title),
-        subtitle = stringResource(R.string.empty_state_overdue_subtitle),
-        modifier = modifier
-    )
-}
-
-@Composable
 fun EmptyStateScheduledReminders(modifier: Modifier = Modifier) {
     EmptyState(
         painter = painterResource(R.drawable.empty_state_scheduled),
@@ -80,15 +70,6 @@ fun EmptyState(
             style = MaterialTheme.typography.caption,
             color = SubtitleGrey
         )
-    }
-}
-
-@Preview(name = "Light Mode", showBackground = true)
-@Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
-@Composable
-fun EmptyStateOverdueRemindersPreview() {
-    RemindMeTheme {
-        EmptyStateOverdueReminders()
     }
 }
 

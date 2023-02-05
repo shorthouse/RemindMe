@@ -8,7 +8,7 @@ import dev.shorthouse.remindme.data.FakeDataSource
 import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.util.ReminderTestUtil
 import dev.shorthouse.remindme.util.getOrAwaitValue
-import dev.shorthouse.remindme.utilities.NotificationScheduler
+import dev.shorthouse.remindme.util.NotificationScheduler
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.CoroutineDispatcher

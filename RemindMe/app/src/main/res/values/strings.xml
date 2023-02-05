@@ -3,7 +3,6 @@
     <string name="reminder_database_name">reminder_database</string>
 
     <!-- Bottom Sheets -->
-    <string name="overdue_reminders">Overdue Reminders</string>
     <string name="scheduled_reminders">Scheduled Reminders</string>
     <string name="completed_reminders">Completed Reminders</string>
     <string name="nav_drawer_sort_title">Sort by</string>
@@ -11,8 +10,6 @@
     <string name="drawer_title_latest_date_first">Latest date first</string>
 
     <!-- Empty States -->
-    <string name="empty_state_overdue_title">No overdue reminders</string>
-    <string name="empty_state_overdue_subtitle">You\'re all caught up</string>
     <string name="empty_state_scheduled_title">No scheduled reminders</string>
     <string name="empty_state_scheduled_subtitle">Add a reminder to get started</string>
     <string name="empty_state_completed_title">No completed reminders</string>

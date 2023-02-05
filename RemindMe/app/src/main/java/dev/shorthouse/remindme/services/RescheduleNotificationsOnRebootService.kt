@@ -13,7 +13,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.model.Reminder
-import dev.shorthouse.remindme.utilities.NotificationScheduler
+import dev.shorthouse.remindme.util.NotificationScheduler
 import javax.inject.Inject
 
 @AndroidEntryPoint
