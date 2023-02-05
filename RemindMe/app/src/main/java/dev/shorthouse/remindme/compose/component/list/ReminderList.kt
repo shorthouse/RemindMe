@@ -1,4 +1,4 @@
-package dev.shorthouse.remindme.compose.component
+package dev.shorthouse.remindme.compose.component.list
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement

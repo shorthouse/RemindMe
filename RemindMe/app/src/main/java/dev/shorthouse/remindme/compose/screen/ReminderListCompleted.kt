@@ -17,9 +17,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import dev.shorthouse.remindme.R
-import dev.shorthouse.remindme.compose.component.EmptyStateCompletedReminders
+import dev.shorthouse.remindme.compose.component.emptystate.EmptyStateCompletedReminders
 import dev.shorthouse.remindme.compose.component.dialog.RemindMeAlertDialog
-import dev.shorthouse.remindme.compose.component.ReminderListContent
+import dev.shorthouse.remindme.compose.component.list.ReminderListContent
 import dev.shorthouse.remindme.compose.state.ReminderState
 import dev.shorthouse.remindme.theme.RemindMeTheme
 import dev.shorthouse.remindme.util.enums.ReminderSortOrder

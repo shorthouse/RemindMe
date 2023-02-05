@@ -1,4 +1,4 @@
-package dev.shorthouse.remindme.compose.component
+package dev.shorthouse.remindme.compose.component.dialog
 
 import android.Manifest
 import android.os.Build
