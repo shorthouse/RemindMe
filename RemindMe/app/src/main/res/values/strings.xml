@@ -75,6 +75,7 @@
     <string name="dialog_action_delete">Delete</string>
     <string name="dialog_action_ok">Ok</string>
     <string name="dialog_action_cancel">Cancel</string>
+    <string name="dialog_action_apply">Apply</string>
     <string name="cd_details_date">Date</string>
     <string name="cd_details_time">Time</string>
     <string name="cd_details_notification">Notification</string>
@@ -101,4 +102,9 @@
     <string name="reminder_status_completed">Completed</string>
     <string name="reminder_status_overdue">Overdue</string>
     <string name="reminder_status_scheduled">Scheduled</string>
+    <string name="sort_dialog_title">Sort reminders by</string>
+    <string name="sort_dialog_option_date_earliest">Date (Earliest first)</string>
+    <string name="sort_dialog_option_date_latest">Date (Latest first)</string>
+    <string name="dropdown_menu_sort">Sort</string>
+    <string name="dropdown_menu_completed">Completed</string>
 </resources>
