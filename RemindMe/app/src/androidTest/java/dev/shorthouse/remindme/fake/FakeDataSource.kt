@@ -21,14 +21,6 @@ class FakeDataSource(private var reminders: MutableList<Reminder> = mutableListO
         )
     }
 
-    override fun getOverdueReminders(nowDateTime: ZonedDateTime): Flow<List<Reminder>> {
-        return flowOf(
-            reminders.filter { reminder ->
-                !reminder.startDateTime.isAfter(nowDateTime) && !reminder.isCompleted
-            }
-        )
-    }
-
     override fun getScheduledReminders(): Flow<List<Reminder>> {
         return flowOf(
             reminders.filter { reminder ->

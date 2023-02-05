@@ -8,11 +8,11 @@ import dev.shorthouse.remindme.util.enums.ReminderSortOrder
 fun ReminderListSheetsState(
     selectedSheet: ReminderBottomSheet,
     selectedReminderListIndex: Int,
-    selectedReminderSortOrderIndex: Int,
+    selectedReminderSortOrder: ReminderSortOrder
 ): ReminderListSheetsState = ReminderListSheetsStateImpl(
     selectedSheet = selectedSheet,
     selectedReminderListIndex = selectedReminderListIndex,
-    selectedReminderSortOrderIndex = selectedReminderSortOrderIndex
+    selectedReminderSortOrder = selectedReminderSortOrder
 )
 
 @Stable
@@ -20,14 +20,13 @@ interface ReminderListSheetsState {
     var selectedSheet: ReminderBottomSheet
     var selectedReminderListIndex: Int
     val selectedReminderList: ReminderList
-    var selectedReminderSortOrderIndex: Int
-    val selectedReminderSortOrder: ReminderSortOrder
+    var selectedReminderSortOrder: ReminderSortOrder
 }
 
 private class ReminderListSheetsStateImpl(
     selectedSheet: ReminderBottomSheet,
     selectedReminderListIndex: Int,
-    selectedReminderSortOrderIndex: Int,
+    selectedReminderSortOrder: ReminderSortOrder
 ) : ReminderListSheetsState {
     private var _selectedSheet by mutableStateOf(selectedSheet)
     override var selectedSheet: ReminderBottomSheet
@@ -55,22 +54,10 @@ private class ReminderListSheetsStateImpl(
     override val selectedReminderList: ReminderList
         get() = _selectedReminderList
 
-    private var _selectedReminderSortOrderIndex by mutableStateOf(selectedReminderSortOrderIndex)
-    override var selectedReminderSortOrderIndex: Int
-        get() = _selectedReminderSortOrderIndex
-        set(value) {
-            _selectedReminderSortOrderIndex = value
-        }
-
-    private val _selectedReminderSortOrder by derivedStateOf(
-        policy = structuralEqualityPolicy(),
-        calculation = {
-            when (_selectedReminderSortOrderIndex) {
-                0 -> ReminderSortOrder.EARLIEST_DATE_FIRST
-                else -> ReminderSortOrder.LATEST_DATE_FIRST
-            }
-        }
-    )
-    override val selectedReminderSortOrder: ReminderSortOrder
+    private var _selectedReminderSortOrder by mutableStateOf(selectedReminderSortOrder)
+    override var selectedReminderSortOrder: ReminderSortOrder
         get() = _selectedReminderSortOrder
+        set(value) {
+            _selectedReminderSortOrder = value
+        }
 }

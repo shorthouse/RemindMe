@@ -3,14 +3,13 @@ package dev.shorthouse.remindme.compose.screen
 import android.content.res.Configuration
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.Crossfade
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.rounded.Menu
-import androidx.compose.material.icons.rounded.SwapVert
+import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,10 +21,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import dev.shorthouse.remindme.R
-import dev.shorthouse.remindme.compose.component.BottomSheetNavigate
-import dev.shorthouse.remindme.compose.component.BottomSheetReminderActions
-import dev.shorthouse.remindme.compose.component.BottomSheetSort
-import dev.shorthouse.remindme.compose.component.NotificationPermissionRequester
+import dev.shorthouse.remindme.compose.component.*
 import dev.shorthouse.remindme.compose.screen.destinations.ReminderAddScreenDestination
 import dev.shorthouse.remindme.compose.screen.destinations.ReminderEditScreenDestination
 import dev.shorthouse.remindme.compose.state.ReminderListSheetsState
@@ -34,6 +30,7 @@ import dev.shorthouse.remindme.theme.RemindMeTheme
 import dev.shorthouse.remindme.util.enums.ReminderAction
 import dev.shorthouse.remindme.util.enums.ReminderBottomSheet
 import dev.shorthouse.remindme.util.enums.ReminderList
+import dev.shorthouse.remindme.util.enums.ReminderSortOrder
 import dev.shorthouse.remindme.viewmodel.ListHomeViewModel
 import kotlinx.coroutines.launch
 
@@ -64,11 +61,6 @@ fun ReminderListHomeScreen(navigator: DestinationsNavigator) {
         toggleSheet()
     }
 
-    val onSortItemSelected: (Int) -> Unit = {
-        reminderListSheetsState.selectedReminderSortOrderIndex = it
-        toggleSheet()
-    }
-
     val onNavigateEdit: (Long) -> Unit = {
         navigator.navigate(
             ReminderEditScreenDestination(
@@ -91,7 +83,6 @@ fun ReminderListHomeScreen(navigator: DestinationsNavigator) {
             ReminderListHomeScaffold(
                 reminderListSheetsState = reminderListSheetsState,
                 onNavigationMenu = { openSheet(ReminderBottomSheet.NAVIGATE) },
-                onSort = { openSheet(ReminderBottomSheet.SORT) },
                 onNavigateAdd = { navigator.navigate(ReminderAddScreenDestination()) },
                 onReminderActions = { reminderState ->
                     listHomeViewModel.selectedReminderState = reminderState
@@ -108,7 +99,6 @@ fun ReminderListHomeScreen(navigator: DestinationsNavigator) {
                 reminderListSheetsState = reminderListSheetsState,
                 selectedReminderState = listHomeViewModel.selectedReminderState,
                 onNavigateItemSelected = onNavigateItemSelected,
-                onSortItemSelected = onSortItemSelected,
                 onReminderActionItemSelected = onReminderActionItemSelected
             )
         },
@@ -121,18 +111,16 @@ fun ReminderListHomeScreen(navigator: DestinationsNavigator) {
 fun ReminderListHomeScaffold(
     reminderListSheetsState: ReminderListSheetsState,
     onNavigationMenu: () -> Unit,
-    onSort: () -> Unit,
     onNavigateAdd: () -> Unit,
     onReminderActions: (ReminderState) -> Unit,
 ) {
     Scaffold(
         topBar = {
-            ReminderListHomeTopBar(selectedReminderList = reminderListSheetsState.selectedReminderList)
+            ReminderListHomeTopBar(reminderListSheetsState = reminderListSheetsState)
         },
         bottomBar = {
             ReminderListHomeBottomBar(
                 onNavigationMenu = onNavigationMenu,
-                onSort = onSort
             )
         },
         content = { scaffoldPadding ->
@@ -161,8 +149,21 @@ fun ReminderListHomeScaffold(
 }
 
 @Composable
-fun ReminderListHomeTopBar(selectedReminderList: ReminderList) {
-    val topBarTitle = when (selectedReminderList) {
+fun ReminderListHomeTopBar(reminderListSheetsState: ReminderListSheetsState) {
+    var isOverflowMenuShown by remember { mutableStateOf(false) }
+
+    var isSortDialogOpen by remember { mutableStateOf(false) }
+    if (isSortDialogOpen) {
+        ReminderSortDialog(
+            initialSort = reminderListSheetsState.selectedReminderSortOrder,
+            onApplySort = { selectedSortOrder ->
+                reminderListSheetsState.selectedReminderSortOrder = selectedSortOrder
+            },
+            onDismiss = { isSortDialogOpen = false }
+        )
+    }
+
+    val topBarTitle = when (reminderListSheetsState.selectedReminderList) {
         ReminderList.SCHEDULED -> stringResource(R.string.scheduled_reminders)
         ReminderList.COMPLETED -> stringResource(R.string.completed_reminders)
     }
@@ -174,6 +175,40 @@ fun ReminderListHomeTopBar(selectedReminderList: ReminderList) {
                 style = MaterialTheme.typography.h6,
                 modifier = Modifier.testTag(stringResource(R.string.test_tag_list_home_title, topBarTitle))
             )
+        },
+        actions = {
+            IconButton(onClick = { isOverflowMenuShown = !isOverflowMenuShown }) {
+                Icon(
+                    imageVector = Icons.Rounded.MoreVert,
+                    contentDescription = stringResource(R.string.cd_more),
+                    tint = MaterialTheme.colors.onPrimary
+                )
+            }
+            DropdownMenu(
+                expanded = isOverflowMenuShown,
+                onDismissRequest = { isOverflowMenuShown = false },
+            ) {
+                DropdownMenuItem(
+                    onClick = {
+                        isOverflowMenuShown = false
+                        isSortDialogOpen = true
+                    }) {
+                    Text(
+                        text = stringResource(R.string.dropdown_menu_sort),
+                        color = MaterialTheme.colors.onSurface
+                    )
+                }
+                DropdownMenuItem(
+                    onClick = {
+                        isOverflowMenuShown = false
+                        //isSortDialogOpen = true
+                    }) {
+                    Text(
+                        text = stringResource(R.string.dropdown_menu_completed),
+                        color = MaterialTheme.colors.onSurface
+                    )
+                }
+            }
         }
     )
 }
@@ -181,23 +216,12 @@ fun ReminderListHomeTopBar(selectedReminderList: ReminderList) {
 @Composable
 fun ReminderListHomeBottomBar(
     onNavigationMenu: () -> Unit,
-    onSort: () -> Unit
 ) {
     BottomAppBar(cutoutShape = CircleShape) {
         IconButton(onClick = onNavigationMenu) {
             Icon(
                 imageVector = Icons.Rounded.Menu,
                 contentDescription = stringResource(R.string.cd_bottom_app_bar_menu),
-                tint = MaterialTheme.colors.onPrimary
-            )
-        }
-
-        Spacer(Modifier.weight(1f))
-
-        IconButton(onClick = onSort) {
-            Icon(
-                imageVector = Icons.Rounded.SwapVert,
-                contentDescription = stringResource(R.string.cd_bottom_app_bar_sort),
                 tint = MaterialTheme.colors.onPrimary
             )
         }
@@ -209,17 +233,12 @@ private fun BottomSheetContent(
     reminderListSheetsState: ReminderListSheetsState,
     selectedReminderState: ReminderState,
     onNavigateItemSelected: (Int) -> Unit,
-    onSortItemSelected: (Int) -> Unit,
     onReminderActionItemSelected: (ReminderAction) -> Unit
 ) {
     when (reminderListSheetsState.selectedSheet) {
         ReminderBottomSheet.NAVIGATE -> BottomSheetNavigate(
             selectedItemIndex = reminderListSheetsState.selectedReminderListIndex,
             onItemSelected = onNavigateItemSelected
-        )
-        ReminderBottomSheet.SORT -> BottomSheetSort(
-            selectedItemIndex = reminderListSheetsState.selectedReminderSortOrderIndex,
-            onItemSelected = onSortItemSelected
         )
         ReminderBottomSheet.REMINDER_ACTIONS -> BottomSheetReminderActions(
             reminderState = selectedReminderState,
@@ -236,12 +255,11 @@ fun ReminderListHomePreview() {
         val reminderListSheetsState = ReminderListSheetsState(
             selectedSheet = ReminderBottomSheet.NAVIGATE,
             selectedReminderListIndex = 0,
-            selectedReminderSortOrderIndex = 0
+            selectedReminderSortOrder = ReminderSortOrder.EARLIEST_DATE_FIRST
         )
         ReminderListHomeScaffold(
             reminderListSheetsState = reminderListSheetsState,
             onNavigationMenu = {},
-            onSort = {},
             onNavigateAdd = {},
             onReminderActions = {},
         )
