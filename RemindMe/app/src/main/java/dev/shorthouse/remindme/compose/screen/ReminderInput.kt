@@ -30,7 +30,10 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.compose.component.*
-import dev.shorthouse.remindme.compose.preview.PreviewData
+import dev.shorthouse.remindme.compose.component.dialog.DatePickerDialog
+import dev.shorthouse.remindme.compose.component.dialog.TimePickerDialog
+import dev.shorthouse.remindme.compose.component.text.ReminderTextField
+import dev.shorthouse.remindme.compose.previewdata.PreviewData
 import dev.shorthouse.remindme.compose.state.ReminderState
 import dev.shorthouse.remindme.theme.RemindMeTheme
 import dev.shorthouse.remindme.theme.SubtitleGrey
@@ -223,7 +226,7 @@ fun ReminderNameInput(reminderState: ReminderState, focusRequester: FocusRequest
 fun ReminderDateInput(reminderState: ReminderState, modifier: Modifier = Modifier) {
     val dateDialogState = rememberMaterialDialogState()
 
-    ReminderDatePickerDialog(
+    DatePickerDialog(
         reminderState = reminderState,
         dialogState = dateDialogState
     )
@@ -240,7 +243,7 @@ fun ReminderDateInput(reminderState: ReminderState, modifier: Modifier = Modifie
 fun ReminderTimeInput(reminderState: ReminderState, modifier: Modifier = Modifier) {
     val timeDialogState = rememberMaterialDialogState()
 
-    ReminderTimePickerDialog(
+    TimePickerDialog(
         reminderState = reminderState,
         dialogState = timeDialogState,
     )

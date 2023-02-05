@@ -1,4 +1,4 @@
-package dev.shorthouse.remindme.compose.component
+package dev.shorthouse.remindme.compose.component.list
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.*
@@ -18,7 +18,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import dev.shorthouse.remindme.R
-import dev.shorthouse.remindme.compose.preview.ReminderListCardProvider
+import dev.shorthouse.remindme.compose.previewdata.ReminderListCardProvider
 import dev.shorthouse.remindme.compose.state.ReminderState
 import dev.shorthouse.remindme.theme.*
 
@@ -26,13 +26,13 @@ import dev.shorthouse.remindme.theme.*
 @Composable
 fun ReminderListCard(
     reminderState: ReminderState,
-    onReminderActions: (ReminderState) -> Unit,
+    onReminderCard: (ReminderState) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
         shape = RoundedCornerShape(dimensionResource(R.dimen.margin_small)),
         elevation = dimensionResource(R.dimen.reminder_list_card_elevation),
-        onClick = { onReminderActions(reminderState) },
+        onClick = { onReminderCard(reminderState) },
         modifier = modifier.fillMaxWidth()
     ) {
         Column(
@@ -160,7 +160,7 @@ fun ReminderListCardPreview(
     RemindMeTheme {
         ReminderListCard(
             reminderState = reminderState,
-            onReminderActions = {}
+            onReminderCard = {}
         )
     }
 }

@@ -28,7 +28,7 @@ class FakeDataSource(private var reminders: MutableList<Reminder> = mutableListO
         )
     }
 
-    override fun getScheduledReminders(): Flow<List<Reminder>> {
+    override fun getActiveReminders(): Flow<List<Reminder>> {
         return flowOf(
             reminders.filter { reminder ->
                 !reminder.isCompleted

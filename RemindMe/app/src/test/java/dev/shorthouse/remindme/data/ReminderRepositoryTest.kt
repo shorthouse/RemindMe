@@ -40,7 +40,7 @@ class ReminderRepositoryTest {
         val repositoryReminders = listOf(reminderOne, reminderTwo)
         setRepositoryReminders(repositoryReminders)
 
-        val reminders = reminderRepository.getReminders().asLiveData().getOrAwaitValue()
+        val reminders = reminderRepository.getAllReminders().asLiveData().getOrAwaitValue()
 
         assertThat(reminders).isEqualTo(repositoryReminders)
     }
@@ -109,7 +109,7 @@ class ReminderRepositoryTest {
         val repositoryReminders = listOf(overdueReminder, scheduledReminder, completedReminder)
         setRepositoryReminders(repositoryReminders)
 
-        val scheduledReminders = reminderRepository.getScheduledReminders().asLiveData().getOrAwaitValue()
+        val scheduledReminders = reminderRepository.getReminders().asLiveData().getOrAwaitValue()
 
         assertThat(scheduledReminders).isEqualTo(expectedScheduledReminders)
     }
@@ -189,7 +189,7 @@ class ReminderRepositoryTest {
 
         reminderRepository.deleteReminder(reminderToDelete)
 
-        val reminders = reminderRepository.getReminders().asLiveData().getOrAwaitValue()
+        val reminders = reminderRepository.getAllReminders().asLiveData().getOrAwaitValue()
 
         assertThat(reminders).doesNotContain(reminderToDelete)
     }

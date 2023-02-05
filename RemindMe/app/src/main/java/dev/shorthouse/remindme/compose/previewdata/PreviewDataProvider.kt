@@ -1,4 +1,4 @@
-package dev.shorthouse.remindme.compose.preview
+package dev.shorthouse.remindme.compose.previewdata
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import dev.shorthouse.remindme.compose.state.ReminderState

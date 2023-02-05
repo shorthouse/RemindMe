@@ -2,26 +2,29 @@ package dev.shorthouse.remindme.data
 
 import dev.shorthouse.remindme.model.Reminder
 import kotlinx.coroutines.flow.Flow
-import java.time.ZonedDateTime
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class ReminderRepository @Inject constructor(private val reminderLocalDataSource: ReminderDataSource) {
-    fun getReminders(): Flow<List<Reminder>> {
-        return reminderLocalDataSource.getReminders()
-    }
-
     fun getReminder(id: Long): Flow<Reminder> {
         return reminderLocalDataSource.getReminder(id)
     }
 
-    fun getScheduledReminders(): Flow<List<Reminder>> {
-        return reminderLocalDataSource.getScheduledReminders()
+    fun getReminders(): Flow<List<Reminder>> {
+        return reminderLocalDataSource.getReminders()
+    }
+
+    fun getActiveReminders(): Flow<List<Reminder>> {
+        return reminderLocalDataSource.getActiveReminders()
     }
 
     fun getCompletedReminders(): Flow<List<Reminder>> {
         return reminderLocalDataSource.getCompletedReminders()
+    }
+
+    fun deleteCompletedReminders() {
+        return reminderLocalDataSource.deleteCompletedReminders()
     }
 
     fun insertReminder(reminder: Reminder): Long {

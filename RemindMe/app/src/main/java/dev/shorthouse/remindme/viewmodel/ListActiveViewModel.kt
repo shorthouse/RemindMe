@@ -3,10 +3,11 @@ package dev.shorthouse.remindme.viewmodel
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.shorthouse.remindme.compose.state.ReminderListSheetsState
 import dev.shorthouse.remindme.compose.state.ReminderState
 import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.di.IoDispatcher
@@ -14,10 +15,10 @@ import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.util.DAYS_IN_WEEK
 import dev.shorthouse.remindme.util.NotificationScheduler
 import dev.shorthouse.remindme.util.enums.ReminderAction
-import dev.shorthouse.remindme.util.enums.ReminderBottomSheet
 import dev.shorthouse.remindme.util.enums.ReminderSortOrder
 import dev.shorthouse.remindme.util.floor
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
@@ -28,20 +29,19 @@ import kotlin.time.times
 import kotlin.time.toDuration
 
 @HiltViewModel
-class ListHomeViewModel @Inject constructor(
+class ListActiveViewModel @Inject constructor(
     private val repository: ReminderRepository,
     private val notificationScheduler: NotificationScheduler,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
-    val reminderListSheetsState = mutableStateOf(
-        ReminderListSheetsState(
-            selectedSheet = ReminderBottomSheet.NAVIGATE,
-            selectedReminderListIndex = 0,
-            selectedReminderSortOrder = ReminderSortOrder.EARLIEST_DATE_FIRST
-        )
-    )
-
     var selectedReminderState by mutableStateOf(ReminderState())
+
+    fun getActiveReminderStates(reminderSortOrder: ReminderSortOrder): LiveData<List<ReminderState>> {
+        return repository.getActiveReminders()
+            .map { sortReminders(it, reminderSortOrder) }
+            .map { it.map { reminder -> ReminderState(reminder) } }
+            .asLiveData()
+    }
 
     fun processReminderAction(reminderAction: ReminderAction, onNavigateEdit: (Long) -> Unit) {
         when (reminderAction) {
@@ -60,6 +60,13 @@ class ListHomeViewModel @Inject constructor(
             ReminderAction.DELETE -> {
                 deleteReminder(selectedReminderState)
             }
+        }
+    }
+
+    private fun sortReminders(reminders: List<Reminder>, reminderSortOrder: ReminderSortOrder): List<Reminder> {
+        return when (reminderSortOrder) {
+            ReminderSortOrder.EARLIEST_DATE_FIRST -> reminders.sortedBy { it.startDateTime }
+            else -> reminders.sortedByDescending { it.startDateTime }
         }
     }
 

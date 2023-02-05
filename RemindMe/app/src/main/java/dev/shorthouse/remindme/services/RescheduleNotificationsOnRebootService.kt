@@ -33,7 +33,7 @@ class RescheduleNotificationsOnRebootService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         startForeground(System.currentTimeMillis().toInt(), getServiceNotification())
 
-        val remindersLiveData = repository.getScheduledReminders().asLiveData()
+        val remindersLiveData = repository.getReminders().asLiveData()
 
         remindersLiveData.observeForever(object : Observer<List<Reminder>> {
             override fun onChanged(reminders: List<Reminder>?) {

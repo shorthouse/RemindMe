@@ -1,4 +1,4 @@
-package dev.shorthouse.remindme.compose.component
+package dev.shorthouse.remindme.compose.component.sheet
 
 import android.content.res.Configuration
 import androidx.compose.foundation.clickable
@@ -9,163 +9,24 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Edit
-import androidx.compose.material.icons.rounded.*
-import androidx.compose.runtime.*
+import androidx.compose.material.icons.rounded.ChecklistRtl
+import androidx.compose.material.icons.rounded.DeleteOutline
+import androidx.compose.material.icons.rounded.TaskAlt
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import dev.shorthouse.remindme.R
-import dev.shorthouse.remindme.compose.preview.PreviewData
+import dev.shorthouse.remindme.compose.previewdata.PreviewData
 import dev.shorthouse.remindme.compose.state.BottomSheetActionItem
-import dev.shorthouse.remindme.compose.state.BottomSheetSelectableItem
 import dev.shorthouse.remindme.compose.state.ReminderState
 import dev.shorthouse.remindme.theme.RemindMeTheme
 import dev.shorthouse.remindme.util.enums.ReminderAction
-
-@Composable
-fun BottomSheetNavigate(
-    selectedItemIndex: Int,
-    onItemSelected: (Int) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    val items = listOf(
-        BottomSheetSelectableItem(
-            Icons.Rounded.NotificationsActive,
-            stringResource(R.string.scheduled_reminders)
-        ),
-        BottomSheetSelectableItem(
-            Icons.Rounded.NotificationsNone,
-            stringResource(R.string.completed_reminders)
-        )
-    )
-
-    BottomSheetSelectable(
-        title = stringResource(R.string.app_name),
-        items = items,
-        selectedItemIndex = selectedItemIndex,
-        onItemSelected = onItemSelected,
-        modifier = modifier
-    )
-}
-
-@Composable
-fun BottomSheetSort(
-    selectedItemIndex: Int,
-    onItemSelected: (Int) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    val items = listOf(
-        BottomSheetSelectableItem(
-            Icons.Rounded.ExpandLess,
-            stringResource(R.string.drawer_title_earliest_date_first)
-        ),
-        BottomSheetSelectableItem(
-            Icons.Rounded.ExpandMore,
-            stringResource(R.string.drawer_title_latest_date_first)
-        )
-    )
-
-    BottomSheetSelectable(
-        title = stringResource(R.string.nav_drawer_sort_title),
-        items = items,
-        selectedItemIndex = selectedItemIndex,
-        onItemSelected = onItemSelected,
-        modifier = modifier
-    )
-}
-
-@Composable
-fun BottomSheetSelectable(
-    title: String,
-    items: List<BottomSheetSelectableItem>,
-    selectedItemIndex: Int,
-    onItemSelected: (Int) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Surface(modifier = modifier.fillMaxWidth()) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp)
-        ) {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.h5,
-                modifier = Modifier
-                    .padding(start = 8.dp, bottom = 12.dp, top = 12.dp)
-            )
-
-            items.forEachIndexed { index, bottomSheetItem ->
-                BottomSheetSelectableButton(
-                    buttonIcon = bottomSheetItem.icon,
-                    buttonLabel = bottomSheetItem.label,
-                    isSelected = selectedItemIndex == index,
-                    onSelected = { onItemSelected(index) }
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun BottomSheetSelectableButton(
-    buttonIcon: ImageVector,
-    buttonLabel: String,
-    isSelected: Boolean,
-    onSelected: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    val textIconColor = if (isSelected) {
-        MaterialTheme.colors.primaryVariant
-    } else {
-        MaterialTheme.colors.onSurface
-    }
-
-    val backgroundColor = if (isSelected) {
-        MaterialTheme.colors.primary.copy(alpha = 0.12f)
-    } else {
-        Color.Transparent
-    }
-
-    Surface(
-        color = backgroundColor,
-        shape = MaterialTheme.shapes.small,
-        modifier = modifier
-            .fillMaxWidth()
-            .clickable(onClick = onSelected)
-            .testTag(buttonLabel)
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .padding(
-                    horizontal = dimensionResource(R.dimen.margin_tiny),
-                    vertical = dimensionResource(R.dimen.margin_small)
-                )
-        ) {
-            Icon(
-                imageVector = buttonIcon,
-                tint = textIconColor,
-                contentDescription = null
-            )
-
-            Spacer(Modifier.width(dimensionResource(R.dimen.margin_normal)))
-
-            Text(
-                text = buttonLabel,
-                color = textIconColor,
-                style = MaterialTheme.typography.caption
-            )
-        }
-    }
-}
 
 @Composable
 fun BottomSheetReminderActions(
@@ -236,7 +97,7 @@ fun BottomSheetReminderActions(
             )
 
             reminderActionItems.forEach { bottomSheetItem ->
-                BottomSheetActionButton(
+                BottomSheetButton(
                     buttonIcon = bottomSheetItem.icon,
                     buttonLabel = bottomSheetItem.label,
                     onSelected = { onItemSelected(bottomSheetItem.action) }
@@ -247,7 +108,7 @@ fun BottomSheetReminderActions(
 }
 
 @Composable
-fun BottomSheetActionButton(
+fun BottomSheetButton(
     buttonIcon: ImageVector,
     buttonLabel: String,
     onSelected: () -> Unit,
@@ -282,34 +143,6 @@ fun BottomSheetActionButton(
                 style = MaterialTheme.typography.caption
             )
         }
-    }
-}
-
-@Preview(name = "Light Mode", showBackground = true)
-@Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
-@Composable
-fun BottomSheetNavigatePreview() {
-    RemindMeTheme {
-        var selectedNavigateIndex by remember { mutableStateOf(0) }
-
-        BottomSheetNavigate(
-            selectedItemIndex = selectedNavigateIndex,
-            onItemSelected = { selectedNavigateIndex = it }
-        )
-    }
-}
-
-@Preview(name = "Light Mode", showBackground = true)
-@Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
-@Composable
-fun BottomSheetSortPreview() {
-    RemindMeTheme {
-        var selectedSortIndex by remember { mutableStateOf(0) }
-
-        BottomSheetSort(
-            selectedItemIndex = selectedSortIndex,
-            onItemSelected = { selectedSortIndex = it }
-        )
     }
 }
 
