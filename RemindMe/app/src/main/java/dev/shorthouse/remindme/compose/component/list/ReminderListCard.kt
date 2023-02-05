@@ -18,7 +18,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import dev.shorthouse.remindme.R
-import dev.shorthouse.remindme.compose.preview.ReminderListCardProvider
+import dev.shorthouse.remindme.compose.previewdata.ReminderListCardProvider
 import dev.shorthouse.remindme.compose.state.ReminderState
 import dev.shorthouse.remindme.theme.*
 
