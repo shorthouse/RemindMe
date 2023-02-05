@@ -26,13 +26,13 @@ import dev.shorthouse.remindme.theme.*
 @Composable
 fun ReminderListCard(
     reminderState: ReminderState,
-    onReminderActions: (ReminderState) -> Unit,
+    onReminderCard: (ReminderState) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
         shape = RoundedCornerShape(dimensionResource(R.dimen.margin_small)),
         elevation = dimensionResource(R.dimen.reminder_list_card_elevation),
-        onClick = { onReminderActions(reminderState) },
+        onClick = { onReminderCard(reminderState) },
         modifier = modifier.fillMaxWidth()
     ) {
         Column(
@@ -160,7 +160,7 @@ fun ReminderListCardPreview(
     RemindMeTheme {
         ReminderListCard(
             reminderState = reminderState,
-            onReminderActions = {}
+            onReminderCard = {}
         )
     }
 }
