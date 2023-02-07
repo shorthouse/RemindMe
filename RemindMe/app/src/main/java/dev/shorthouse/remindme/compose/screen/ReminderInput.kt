@@ -2,6 +2,7 @@ package dev.shorthouse.remindme.compose.screen
 
 import android.content.res.Configuration
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
@@ -32,7 +33,7 @@ import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.compose.component.*
 import dev.shorthouse.remindme.compose.component.dialog.DatePickerDialog
 import dev.shorthouse.remindme.compose.component.dialog.TimePickerDialog
-import dev.shorthouse.remindme.compose.component.text.ReminderTextField
+import dev.shorthouse.remindme.compose.component.text.RemindMeTextField
 import dev.shorthouse.remindme.compose.previewdata.PreviewData
 import dev.shorthouse.remindme.compose.state.ReminderState
 import dev.shorthouse.remindme.theme.RemindMeTheme
@@ -158,7 +159,9 @@ fun ReminderInputContent(
 ) {
     val focusRequester = remember { FocusRequester() }
 
-    Surface {
+    Surface(
+        color = if (isSystemInDarkTheme()) MaterialTheme.colors.background else MaterialTheme.colors.surface
+    ) {
         Column(
             modifier = modifier
                 .verticalScroll(rememberScrollState())
@@ -210,10 +213,10 @@ fun ReminderInputContent(
 fun ReminderNameInput(reminderState: ReminderState, focusRequester: FocusRequester, modifier: Modifier = Modifier) {
     val nameMaxLength = integerResource(R.integer.reminder_name_max_length)
 
-    ReminderTextField(
+    RemindMeTextField(
         text = reminderState.name,
         onTextChange = { if (it.length <= nameMaxLength) reminderState.name = it },
-        textStyle = MaterialTheme.typography.h6,
+        textStyle = MaterialTheme.typography.h6.copy(color = MaterialTheme.colors.onSurface),
         hintText = stringResource(R.string.hint_reminder_name),
         imeAction = ImeAction.Done,
         modifier = modifier
@@ -310,7 +313,7 @@ fun ReminderNotesInput(reminderState: ReminderState, modifier: Modifier = Modifi
 
         Spacer(Modifier.width(dimensionResource(R.dimen.margin_normal)))
 
-        ReminderTextField(
+        RemindMeTextField(
             text = reminderState.notes.orEmpty(),
             onTextChange = { if (it.length <= notesMaxLength) reminderState.notes = it },
             textStyle = MaterialTheme.typography.body1,
@@ -432,6 +435,7 @@ private fun RepeatUnitInput(reminderState: ReminderState) {
                         selected = (text == reminderState.repeatUnit),
                         onClick = { reminderState.repeatUnit = text }
                     )
+                    .fillMaxWidth(0.8f)
             ) {
                 RadioButton(
                     selected = (text == reminderState.repeatUnit),
