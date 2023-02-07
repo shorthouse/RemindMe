@@ -31,7 +31,7 @@ import dev.shorthouse.remindme.util.enums.ReminderAction
 @Composable
 fun BottomSheetReminderActions(
     reminderState: ReminderState,
-    onItemSelected: (ReminderAction) -> Unit,
+    onReminderActionItemSelected: (ReminderAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val reminderActionItems = buildList {
@@ -100,7 +100,7 @@ fun BottomSheetReminderActions(
                 BottomSheetButton(
                     buttonIcon = bottomSheetItem.icon,
                     buttonLabel = bottomSheetItem.label,
-                    onSelected = { onItemSelected(bottomSheetItem.action) }
+                    onSelected = { onReminderActionItemSelected(bottomSheetItem.action) }
                 )
             }
         }
@@ -154,7 +154,7 @@ fun BottomSheetReminderActionsPreview() {
 
         BottomSheetReminderActions(
             reminderState = PreviewData.previewReminderState,
-            onItemSelected = {}
+            onReminderActionItemSelected = {}
         )
     }
 }
