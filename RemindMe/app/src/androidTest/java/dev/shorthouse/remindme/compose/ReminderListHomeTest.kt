@@ -11,7 +11,7 @@ import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.UninstallModules
 import dagger.hilt.components.SingletonComponent
 import dev.shorthouse.remindme.HiltTestActivity
-import dev.shorthouse.remindme.compose.screen.ReminderListHomeScreen
+import dev.shorthouse.remindme.compose.screen.ReminderListContainer
 import dev.shorthouse.remindme.data.ReminderDataSource
 import dev.shorthouse.remindme.di.DataSourceModule
 import dev.shorthouse.remindme.fake.FakeDataSource
@@ -66,7 +66,7 @@ class ReminderListHomeTest {
     private fun setContent() {
         composeTestRule.setContent {
             RemindMeTheme {
-                ReminderListHomeScreen(
+                ReminderListContainer(
                     navigator = EmptyDestinationsNavigator
                 )
             }
