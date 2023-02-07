@@ -18,17 +18,17 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.theme.RemindMeTheme
-import dev.shorthouse.remindme.util.enums.ReminderSortOrder
+import dev.shorthouse.remindme.util.enums.ReminderListOrder
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ReminderSortDialog(
-    initialSort: ReminderSortOrder,
-    onApplySort: (ReminderSortOrder) -> Unit,
+    initialSort: ReminderListOrder,
+    onApplySort: (ReminderListOrder) -> Unit,
     onDismiss: () -> Unit,
 ) {
     var selectedSortOption by remember { mutableStateOf(initialSort) }
-    val sortOptions = ReminderSortOrder.values()
+    val sortOptions = ReminderListOrder.values()
 
     Dialog(
         properties = DialogProperties(usePlatformDefaultWidth = false),
@@ -104,7 +104,7 @@ fun ReminderSortDialog(
 fun ReminderSortDialogPreview() {
     RemindMeTheme {
         ReminderSortDialog(
-            initialSort = ReminderSortOrder.EARLIEST_DATE_FIRST,
+            initialSort = ReminderListOrder.EARLIEST_DATE_FIRST,
             onApplySort = {},
             onDismiss = {}
         )
