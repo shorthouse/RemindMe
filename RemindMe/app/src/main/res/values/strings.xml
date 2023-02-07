@@ -10,8 +10,8 @@
     <string name="drawer_title_latest_date_first">Latest date first</string>
 
     <!-- Empty States -->
-    <string name="empty_state_scheduled_title">No scheduled reminders</string>
-    <string name="empty_state_scheduled_subtitle">Add a reminder to get started</string>
+    <string name="empty_state_active_title">No reminders</string>
+    <string name="empty_state_active_subtitle">Add a reminder to get started</string>
     <string name="empty_state_completed_title">No completed reminders</string>
     <string name="empty_state_completed_subtitle">Completed reminders will show up here</string>
 
@@ -108,7 +108,15 @@
     <string name="dropdown_menu_sort">Sort</string>
     <string name="dropdown_menu_completed">Completed</string>
     <string name="cd_top_app_bar_back">Back</string>
-    <string name="cd_top_bar_delete_completed_reminders">Delete all completed reminders</string>
-    <string name="alert_dialog_title_delete_all_completed">Delete all completed reminders?</string>
+    <string name="cd_top_bar_delete_completed_reminders">Delete completed reminders</string>
+    <string name="alert_dialog_title_delete_all_completed">Delete completed reminders?</string>
     <string name="alert_dialog_title_delete_completed">Delete completed reminder?</string>
+    <string name="cd_search_reminders">Search reminders</string>
+    <string name="cd_sort_reminders">Sort reminders</string>
+    <string name="cd_completed_reminders">Completed reminders</string>
+    <string name="empty_state_search_title">No reminders found</string>
+    <string name="empty_state_search_subtitle">Try adjusting your search</string>
+    <string name="top_bar_title_completed_reminders">Completed</string>
+    <string name="top_app_bar_search_hint">Search...</string>
+    <string name="cd_clear_search">Clear Search</string>
 </resources>

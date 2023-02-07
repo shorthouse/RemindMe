@@ -54,6 +54,7 @@ interface ReminderState {
     fun toReminder(): Reminder
     fun isOverdue(): Boolean
     fun hasOptionalParts(): Boolean
+    fun copy(): ReminderState
 }
 
 private class ReminderStateImpl(
@@ -157,6 +158,21 @@ private class ReminderStateImpl(
 
     override fun hasOptionalParts(): Boolean {
         return _isNotificationSent || _isRepeatReminder || !_notes.isNullOrBlank()
+    }
+
+    override fun copy(): ReminderState {
+        return ReminderState(
+            id = _id,
+            name = _name,
+            date = _date,
+            time = _time,
+            isNotificationSent = _isNotificationSent,
+            isRepeatReminder = _isRepeatReminder,
+            repeatAmount = _repeatAmount,
+            repeatUnit = _repeatUnit,
+            notes = _notes,
+            isCompleted = _isCompleted
+        )
     }
 
     private var _id by mutableStateOf(id, structuralEqualityPolicy())

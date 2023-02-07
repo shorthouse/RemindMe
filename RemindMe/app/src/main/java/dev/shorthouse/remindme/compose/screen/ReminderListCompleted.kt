@@ -1,98 +1,116 @@
 package dev.shorthouse.remindme.compose.screen
 
-import android.content.res.Configuration
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.DeleteOutline
 import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import dev.shorthouse.remindme.R
-import dev.shorthouse.remindme.compose.component.emptystate.EmptyStateCompletedReminders
 import dev.shorthouse.remindme.compose.component.dialog.RemindMeAlertDialog
-import dev.shorthouse.remindme.compose.component.list.ReminderListContent
+import dev.shorthouse.remindme.compose.component.emptystate.EmptyStateCompletedReminders
+import dev.shorthouse.remindme.compose.component.list.ReminderList
+import dev.shorthouse.remindme.compose.component.sheet.BottomSheetReminderActions
+import dev.shorthouse.remindme.compose.screen.destinations.ReminderEditScreenDestination
 import dev.shorthouse.remindme.compose.state.ReminderState
-import dev.shorthouse.remindme.theme.RemindMeTheme
-import dev.shorthouse.remindme.util.enums.ReminderSortOrder
+import dev.shorthouse.remindme.theme.Scrim
 import dev.shorthouse.remindme.viewmodel.ListCompletedViewModel
+import dev.shorthouse.remindme.viewmodel.ListViewModel
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterialApi::class, ExperimentalLifecycleComposeApi::class)
 @Destination
 @Composable
 fun ReminderListCompletedScreen(navigator: DestinationsNavigator) {
+    val listViewModel: ListViewModel = hiltViewModel()
     val listCompletedViewModel: ListCompletedViewModel = hiltViewModel()
 
-    var isDeleteDialogOpen by remember { mutableStateOf(false) }
-    if (isDeleteDialogOpen) {
-        RemindMeAlertDialog(
-            title = stringResource(R.string.alert_dialog_title_delete_completed),
-            confirmText = stringResource(R.string.dialog_action_delete),
-            onConfirm = {
-                isDeleteDialogOpen = false
-                listCompletedViewModel.deleteSelectedReminder()
-            },
-            onDismiss = { isDeleteDialogOpen = false }
-        )
-    }
+    var selectedReminderState by remember { mutableStateOf(ReminderState()) }
 
-    var reminderListSortOrder by remember { mutableStateOf(ReminderSortOrder.EARLIEST_DATE_FIRST) }
+    val coroutineScope = rememberCoroutineScope()
 
-    val completedReminderStates = listCompletedViewModel
-        .getCompletedReminderStates(reminderListSortOrder)
-        .observeAsState()
+    val bottomSheetState = rememberModalBottomSheetState(
+        initialValue = ModalBottomSheetValue.Hidden,
+        skipHalfExpanded = true
+    )
 
-    completedReminderStates.value?.let {
-        ReminderListCompletedScaffold(
-            reminderStates = it,
-            onNavigateUp = { navigator.navigateUp() },
-            onDeleteAll = { listCompletedViewModel.deleteCompletedReminders() },
-            onReminderCard = { reminderState ->
-                listCompletedViewModel.selectedReminderState = reminderState
-                isDeleteDialogOpen = true
-            },
-            emptyStateContent = {
-                EmptyStateCompletedReminders(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(MaterialTheme.colors.surface)
-                )
+    val completedReminderStates: List<ReminderState> by listCompletedViewModel
+        .completedReminderStates
+        .collectAsStateWithLifecycle(initialValue = emptyList())
+
+    ModalBottomSheetLayout(
+        content = {
+            ReminderListCompletedScaffold(
+                completedReminderStates = completedReminderStates,
+                onNavigateUp = { navigator.navigateUp() },
+                onDeleteCompletedReminders = { listCompletedViewModel.deleteCompletedReminders() },
+                onReminderCard = { reminderState ->
+                    selectedReminderState = reminderState
+                    coroutineScope.launch { bottomSheetState.show() }
+                },
+            )
+        },
+        sheetContent = {
+            BackHandler(enabled = bottomSheetState.isVisible) {
+                coroutineScope.launch { bottomSheetState.hide() }
             }
-        )
-    }
+
+            BottomSheetReminderActions(
+                reminderState = selectedReminderState,
+                onReminderActionItemSelected = { reminderAction ->
+                    coroutineScope.launch {
+                        bottomSheetState.hide()
+
+                        listViewModel.processReminderAction(
+                            selectedReminderState = selectedReminderState.copy(),
+                            reminderAction = reminderAction,
+                            onEdit = {
+                                navigator.navigate(ReminderEditScreenDestination(reminderId = selectedReminderState.id))
+                            }
+                        )
+                    }
+                }
+            )
+        },
+        sheetState = bottomSheetState,
+        scrimColor = Scrim,
+    )
 }
 
 @Composable
 fun ReminderListCompletedScaffold(
-    reminderStates: List<ReminderState>,
+    completedReminderStates: List<ReminderState>,
     onNavigateUp: () -> Unit,
-    onDeleteAll: () -> Unit,
-    onReminderCard: (ReminderState) -> Unit,
-    emptyStateContent: @Composable () -> Unit,
+    onDeleteCompletedReminders: () -> Unit,
+    onReminderCard: (ReminderState) -> Unit
 ) {
     Scaffold(
         topBar = {
             ReminderListCompletedTopBar(
                 onNavigateUp = onNavigateUp,
-                onDeleteAll = onDeleteAll
+                onDeleteCompletedReminders = onDeleteCompletedReminders
             )
         },
         content = { scaffoldPadding ->
             val modifier = Modifier.padding(scaffoldPadding)
 
-            ReminderListContent(
-                reminderStates = reminderStates,
-                emptyStateContent = emptyStateContent,
-                onReminderCard = onReminderCard,
-                modifier = modifier
-            )
+            if (completedReminderStates.isEmpty()) {
+                EmptyStateCompletedReminders()
+            } else {
+                ReminderList(
+                    reminderStates = completedReminderStates,
+                    onReminderCard = onReminderCard,
+                    modifier = modifier
+                )
+            }
         }
     )
 }
@@ -100,7 +118,7 @@ fun ReminderListCompletedScaffold(
 @Composable
 fun ReminderListCompletedTopBar(
     onNavigateUp: () -> Unit,
-    onDeleteAll: () -> Unit
+    onDeleteCompletedReminders: () -> Unit
 ) {
     var isDeleteAllDialogOpen by remember { mutableStateOf(false) }
     if (isDeleteAllDialogOpen) {
@@ -109,7 +127,7 @@ fun ReminderListCompletedTopBar(
             confirmText = stringResource(R.string.dialog_action_delete),
             onConfirm = {
                 isDeleteAllDialogOpen = false
-                onDeleteAll()
+                onDeleteCompletedReminders()
             },
             onDismiss = { isDeleteAllDialogOpen = false }
         )
@@ -118,7 +136,7 @@ fun ReminderListCompletedTopBar(
     TopAppBar(
         title = {
             Text(
-                text = stringResource(R.string.completed_reminders),
+                text = stringResource(R.string.top_bar_title_completed_reminders),
                 style = MaterialTheme.typography.h6,
             )
         },
@@ -140,19 +158,4 @@ fun ReminderListCompletedTopBar(
             }
         }
     )
-}
-
-@Preview(name = "Light Mode", showBackground = true)
-@Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
-@Composable
-fun ReminderListCompletedPreview() {
-    RemindMeTheme {
-        ReminderListCompletedScaffold(
-            reminderStates = emptyList(),
-            onNavigateUp = {},
-            onDeleteAll = {},
-            emptyStateContent = {},
-            onReminderCard = {}
-        )
-    }
 }

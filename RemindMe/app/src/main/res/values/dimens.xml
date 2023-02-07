@@ -13,4 +13,6 @@
     <dimen name="reminder_list_card_icon_size">20dp</dimen>
     <dimen name="reminder_list_card_elevation">4dp</dimen>
     <dimen name="reminder_list_card_status_padding">6dp</dimen>
+    <dimen name="search_text_field_padding_horizontal">6dp</dimen>
+    <dimen name="search_text_field_padding_vertical">6dp</dimen>
 </resources>
