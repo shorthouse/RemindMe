@@ -20,7 +20,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.compose.component.dialog.RemindMeAlertDialog
 import dev.shorthouse.remindme.compose.component.emptystate.EmptyStateCompletedReminders
-import dev.shorthouse.remindme.compose.component.list.ReminderList
+import dev.shorthouse.remindme.compose.component.list.ReminderListContent
 import dev.shorthouse.remindme.compose.component.sheet.BottomSheetReminderActions
 import dev.shorthouse.remindme.compose.previewdata.ReminderListProvider
 import dev.shorthouse.remindme.compose.screen.destinations.ReminderEditScreenDestination
@@ -107,15 +107,12 @@ fun ReminderListCompletedScaffold(
         content = { scaffoldPadding ->
             val modifier = Modifier.padding(scaffoldPadding)
 
-            if (completedReminderStates.isEmpty()) {
-                EmptyStateCompletedReminders()
-            } else {
-                ReminderList(
-                    reminderStates = completedReminderStates,
-                    onReminderCard = onReminderCard,
-                    modifier = modifier
-                )
-            }
+            ReminderListContent(
+                reminderStates = completedReminderStates,
+                emptyStateContent = { EmptyStateCompletedReminders() },
+                onReminderCard = onReminderCard,
+                modifier = modifier
+            )
         }
     )
 }

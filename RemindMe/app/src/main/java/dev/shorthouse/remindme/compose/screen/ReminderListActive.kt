@@ -24,7 +24,7 @@ import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.compose.component.dialog.NotificationPermissionRequester
 import dev.shorthouse.remindme.compose.component.dialog.ReminderSortDialog
 import dev.shorthouse.remindme.compose.component.emptystate.EmptyStateActiveReminders
-import dev.shorthouse.remindme.compose.component.list.ReminderList
+import dev.shorthouse.remindme.compose.component.list.ReminderListContent
 import dev.shorthouse.remindme.compose.component.sheet.BottomSheetReminderActions
 import dev.shorthouse.remindme.compose.previewdata.ReminderListProvider
 import dev.shorthouse.remindme.compose.screen.destinations.ReminderAddScreenDestination
@@ -126,15 +126,12 @@ fun ReminderListActiveScaffold(
         content = { scaffoldPadding ->
             val modifier = Modifier.padding(scaffoldPadding)
 
-            if (activeReminderStates.isEmpty()) {
-                EmptyStateActiveReminders()
-            } else {
-                ReminderList(
-                    reminderStates = activeReminderStates,
-                    onReminderCard = onReminderCard,
-                    modifier = modifier
-                )
-            }
+            ReminderListContent(
+                reminderStates = activeReminderStates,
+                emptyStateContent = { EmptyStateActiveReminders() },
+                onReminderCard = onReminderCard,
+                modifier = modifier
+            )
         },
         floatingActionButton = {
             FloatingActionButton(onClick = onNavigateAdd) {
