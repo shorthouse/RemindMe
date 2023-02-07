@@ -1,5 +1,6 @@
 package dev.shorthouse.remindme.compose.screen
 
+import android.content.res.Configuration
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
@@ -11,6 +12,8 @@ import androidx.compose.material.icons.rounded.SwapVert
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -23,11 +26,13 @@ import dev.shorthouse.remindme.compose.component.dialog.ReminderSortDialog
 import dev.shorthouse.remindme.compose.component.emptystate.EmptyStateActiveReminders
 import dev.shorthouse.remindme.compose.component.list.ReminderList
 import dev.shorthouse.remindme.compose.component.sheet.BottomSheetReminderActions
+import dev.shorthouse.remindme.compose.previewdata.ReminderListProvider
 import dev.shorthouse.remindme.compose.screen.destinations.ReminderAddScreenDestination
 import dev.shorthouse.remindme.compose.screen.destinations.ReminderEditScreenDestination
 import dev.shorthouse.remindme.compose.screen.destinations.ReminderListCompletedScreenDestination
 import dev.shorthouse.remindme.compose.screen.destinations.ReminderListSearchScreenDestination
 import dev.shorthouse.remindme.compose.state.ReminderState
+import dev.shorthouse.remindme.theme.RemindMeTheme
 import dev.shorthouse.remindme.theme.Scrim
 import dev.shorthouse.remindme.util.enums.ReminderListOrder
 import dev.shorthouse.remindme.viewmodel.ListActiveViewModel
@@ -191,4 +196,23 @@ fun ReminderListActiveTopBar(
             }
         }
     )
+}
+
+@Composable
+@Preview(name = "Light Mode")
+@Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
+fun ReminderListActivePreview(
+    @PreviewParameter(ReminderListProvider::class) reminderStates: List<ReminderState>
+) {
+    RemindMeTheme {
+        ReminderListActiveScaffold(
+            activeReminderStates = reminderStates,
+            reminderListOrder = ReminderListOrder.EARLIEST_DATE_FIRST,
+            onNavigateCompletedReminders = {},
+            onNavigateSearch = {},
+            onReminderCard = {},
+            onApplySort = {},
+            onNavigateAdd = {}
+        )
+    }
 }

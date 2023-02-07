@@ -23,6 +23,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -32,6 +33,7 @@ import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.compose.component.emptystate.EmptyStateSearchReminders
 import dev.shorthouse.remindme.compose.component.list.ReminderList
 import dev.shorthouse.remindme.compose.component.sheet.BottomSheetReminderActions
+import dev.shorthouse.remindme.compose.previewdata.ReminderListProvider
 import dev.shorthouse.remindme.compose.screen.destinations.ReminderEditScreenDestination
 import dev.shorthouse.remindme.compose.state.ReminderState
 import dev.shorthouse.remindme.theme.RemindMeTheme
@@ -222,13 +224,15 @@ fun ReminderListSearchTopBar(
     )
 }
 
+@Composable
 @Preview(name = "Light Mode")
 @Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-private fun ReminderListSearchPreview() {
+private fun ReminderListSearchPreview(
+    @PreviewParameter(ReminderListProvider::class) reminderStates: List<ReminderState>
+) {
     RemindMeTheme {
         ReminderListSearchScaffold(
-            searchReminderStates = emptyList(),
+            searchReminderStates = reminderStates,
             onNavigateUp = {},
             searchQuery = "",
             onSearchQueryChange = {},

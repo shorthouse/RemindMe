@@ -1,5 +1,6 @@
 package dev.shorthouse.remindme.compose.screen
 
+import android.content.res.Configuration
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
@@ -9,6 +10,8 @@ import androidx.compose.material.icons.rounded.DeleteOutline
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -19,8 +22,10 @@ import dev.shorthouse.remindme.compose.component.dialog.RemindMeAlertDialog
 import dev.shorthouse.remindme.compose.component.emptystate.EmptyStateCompletedReminders
 import dev.shorthouse.remindme.compose.component.list.ReminderList
 import dev.shorthouse.remindme.compose.component.sheet.BottomSheetReminderActions
+import dev.shorthouse.remindme.compose.previewdata.ReminderListProvider
 import dev.shorthouse.remindme.compose.screen.destinations.ReminderEditScreenDestination
 import dev.shorthouse.remindme.compose.state.ReminderState
+import dev.shorthouse.remindme.theme.RemindMeTheme
 import dev.shorthouse.remindme.theme.Scrim
 import dev.shorthouse.remindme.viewmodel.ListCompletedViewModel
 import dev.shorthouse.remindme.viewmodel.ListViewModel
@@ -158,4 +163,20 @@ fun ReminderListCompletedTopBar(
             }
         }
     )
+}
+
+@Composable
+@Preview(name = "Light Mode")
+@Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
+private fun ReminderListCompletedPreview(
+    @PreviewParameter(ReminderListProvider::class) reminderStates: List<ReminderState>
+) {
+    RemindMeTheme {
+        ReminderListCompletedScaffold(
+            completedReminderStates = reminderStates,
+            onNavigateUp = {},
+            onDeleteCompletedReminders = {},
+            onReminderCard = {},
+        )
+    }
 }
