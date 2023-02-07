@@ -18,7 +18,7 @@ import dev.shorthouse.remindme.compose.previewdata.PreviewData
 import dev.shorthouse.remindme.compose.state.ReminderState
 import dev.shorthouse.remindme.theme.Black
 import dev.shorthouse.remindme.theme.RemindMeTheme
-import dev.shorthouse.remindme.theme.SubtitleGreyLighter
+import dev.shorthouse.remindme.theme.LightGrey
 import dev.shorthouse.remindme.theme.White
 
 @Composable
@@ -49,7 +49,7 @@ fun TimePickerDialog(
             colors = TimePickerDefaults.colors(
                 activeBackgroundColor = MaterialTheme.colors.primary,
                 activeTextColor = White,
-                inactiveBackgroundColor = SubtitleGreyLighter,
+                inactiveBackgroundColor = LightGrey,
                 inactiveTextColor = Black,
                 selectorColor = MaterialTheme.colors.primary,
                 selectorTextColor = White,
