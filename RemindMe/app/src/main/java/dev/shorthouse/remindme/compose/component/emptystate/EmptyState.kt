@@ -2,10 +2,8 @@ package dev.shorthouse.remindme.compose.component.emptystate
 
 import android.content.res.Configuration
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -22,12 +20,14 @@ import dev.shorthouse.remindme.theme.RemindMeTheme
 import dev.shorthouse.remindme.theme.SubtitleGrey
 
 @Composable
-fun EmptyStateScheduledReminders(modifier: Modifier = Modifier) {
+fun EmptyStateActiveReminders(modifier: Modifier = Modifier) {
     EmptyState(
-        painter = painterResource(R.drawable.empty_state_scheduled),
-        title = stringResource(R.string.empty_state_scheduled_title),
-        subtitle = stringResource(R.string.empty_state_scheduled_subtitle),
+        painter = painterResource(R.drawable.empty_state_active),
+        title = stringResource(R.string.empty_state_active_title),
+        subtitle = stringResource(R.string.empty_state_active_subtitle),
         modifier = modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colors.background)
     )
 }
 
@@ -38,6 +38,20 @@ fun EmptyStateCompletedReminders(modifier: Modifier = Modifier) {
         title = stringResource(R.string.empty_state_completed_title),
         subtitle = stringResource(R.string.empty_state_completed_subtitle),
         modifier = modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colors.background)
+    )
+}
+
+@Composable
+fun EmptyStateSearchReminders(modifier: Modifier = Modifier) {
+    EmptyState(
+        painter = painterResource(R.drawable.empty_state_search),
+        title = stringResource(R.string.empty_state_search_title),
+        subtitle = stringResource(R.string.empty_state_search_subtitle),
+        modifier = modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colors.background)
     )
 }
 
@@ -78,7 +92,7 @@ fun EmptyState(
 @Composable
 fun EmptyStateScheduledRemindersPreview() {
     RemindMeTheme {
-        EmptyStateScheduledReminders()
+        EmptyStateActiveReminders()
     }
 }
 
