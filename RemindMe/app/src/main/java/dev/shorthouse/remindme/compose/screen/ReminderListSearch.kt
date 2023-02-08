@@ -43,7 +43,7 @@ import dev.shorthouse.remindme.viewmodel.ListSearchViewModel
 import dev.shorthouse.remindme.viewmodel.ListViewModel
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalLifecycleComposeApi::class, ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalComposeUiApi::class, ExperimentalLifecycleComposeApi::class)
 @Destination
 @Composable
 fun ReminderListSearchScreen(navigator: DestinationsNavigator) {
