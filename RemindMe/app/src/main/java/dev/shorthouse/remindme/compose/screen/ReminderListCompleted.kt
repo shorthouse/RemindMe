@@ -30,6 +30,7 @@ import dev.shorthouse.remindme.theme.Scrim
 import dev.shorthouse.remindme.viewmodel.ListCompletedViewModel
 import dev.shorthouse.remindme.viewmodel.ListViewModel
 import kotlinx.coroutines.launch
+import java.util.Collections.emptyList
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalLifecycleComposeApi::class)
 @Destination

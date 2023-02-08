@@ -34,7 +34,7 @@ import dev.shorthouse.remindme.compose.screen.destinations.ReminderListSearchScr
 import dev.shorthouse.remindme.compose.state.ReminderState
 import dev.shorthouse.remindme.theme.RemindMeTheme
 import dev.shorthouse.remindme.theme.Scrim
-import dev.shorthouse.remindme.util.enums.ReminderListOrder
+import dev.shorthouse.remindme.util.enums.ReminderSortOrderOld
 import dev.shorthouse.remindme.viewmodel.ListActiveViewModel
 import dev.shorthouse.remindme.viewmodel.ListViewModel
 import kotlinx.coroutines.launch
@@ -107,11 +107,11 @@ fun ReminderListActiveScreen(navigator: DestinationsNavigator) {
 @Composable
 fun ReminderListActiveScaffold(
     activeReminderStates: List<ReminderState>,
-    reminderListOrder: ReminderListOrder,
+    reminderListOrder: ReminderSortOrderOld,
     onNavigateCompletedReminders: () -> Unit,
     onNavigateAdd: () -> Unit,
     onReminderCard: (ReminderState) -> Unit,
-    onApplySort: (ReminderListOrder) -> Unit,
+    onApplySort: (ReminderSortOrderOld) -> Unit,
     onNavigateSearch: () -> Unit
 ) {
     Scaffold(
@@ -147,8 +147,8 @@ fun ReminderListActiveScaffold(
 
 @Composable
 fun ReminderListActiveTopBar(
-    reminderListOrder: ReminderListOrder,
-    onApplySort: (ReminderListOrder) -> Unit,
+    reminderListOrder: ReminderSortOrderOld,
+    onApplySort: (ReminderSortOrderOld) -> Unit,
     onNavigateCompletedReminders: () -> Unit,
     onNavigateSearch: () -> Unit
 ) {
@@ -204,7 +204,7 @@ fun ReminderListActivePreview(
     RemindMeTheme {
         ReminderListActiveScaffold(
             activeReminderStates = reminderStates,
-            reminderListOrder = ReminderListOrder.EARLIEST_DATE_FIRST,
+            reminderListOrder = ReminderSortOrderOld.BY_EARLIEST_DATE_FIRST,
             onNavigateCompletedReminders = {},
             onNavigateSearch = {},
             onReminderCard = {},

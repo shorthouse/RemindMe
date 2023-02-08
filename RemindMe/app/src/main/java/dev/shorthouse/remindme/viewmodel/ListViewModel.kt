@@ -11,7 +11,7 @@ import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.util.DAYS_IN_WEEK
 import dev.shorthouse.remindme.util.NotificationScheduler
 import dev.shorthouse.remindme.util.enums.ReminderAction
-import dev.shorthouse.remindme.util.enums.ReminderListOrder
+import dev.shorthouse.remindme.util.enums.ReminderSortOrderOld
 import dev.shorthouse.remindme.util.floor
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
@@ -29,7 +29,7 @@ class ListViewModel @Inject constructor(
     private val notificationScheduler: NotificationScheduler,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
-    val reminderListOrder = mutableStateOf(ReminderListOrder.EARLIEST_DATE_FIRST)
+    val reminderListOrder = mutableStateOf(ReminderSortOrderOld.BY_EARLIEST_DATE_FIRST)
 
     fun processReminderAction(
         selectedReminderState: ReminderState,
