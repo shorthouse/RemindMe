@@ -5,6 +5,7 @@ plugins {
     id 'dagger.hilt.android.plugin'
     id 'io.gitlab.arturbosch.detekt' version '1.22.0-RC1'
     id 'com.google.devtools.ksp' version '1.7.20-1.0.7'
+    id 'com.google.protobuf' version '0.8.17'
 }
 
 android {
@@ -109,6 +110,10 @@ dependencies {
     debugImplementation 'androidx.fragment:fragment-testing:1.5.5'
     kapt 'androidx.room:room-compiler:2.5.0'
 
+    // Proto Datastore
+    implementation  'androidx.datastore:datastore:1.0.0'
+    implementation  'com.google.protobuf:protobuf-javalite:3.18.0'
+
     // Work Manager
     implementation 'androidx.work:work-runtime-ktx:2.7.1'
     androidTestImplementation 'androidx.work:work-testing:2.7.1'
@@ -153,4 +158,20 @@ dependencies {
 
 kapt {
     correctErrorTypes = true
+}
+
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:3.14.0"
+    }
+
+    generateProtoTasks {
+        all().each { task ->
+            task.builtins {
+                java {
+                    option 'lite'
+                }
+            }
+        }
+    }
 }
