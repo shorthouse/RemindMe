@@ -34,9 +34,6 @@ class InputViewModelTest {
 
     private lateinit var ioDispatcher: CoroutineDispatcher
 
-    @MockK
-    private lateinit var notificationScheduler: NotificationScheduler
-
     private val reminderToAdd = ReminderTestUtil().createReminder(
         id = 0,
         name = "reminderToAdd"
@@ -62,7 +59,6 @@ class InputViewModelTest {
 
         inputViewModel = InputViewModel(
             reminderRepository = reminderRepository,
-            notificationScheduler = notificationScheduler,
             ioDispatcher = ioDispatcher
         )
     }

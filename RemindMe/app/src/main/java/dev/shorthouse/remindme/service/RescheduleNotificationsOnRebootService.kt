@@ -11,7 +11,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.di.IoDispatcher
-import dev.shorthouse.remindme.util.NotificationScheduler
+import dev.shorthouse.remindme.domain.notification.ScheduleNotificationUseCase
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
@@ -29,7 +29,7 @@ class RescheduleNotificationsOnRebootService : Service() {
     lateinit var repository: ReminderRepository
 
     @Inject
-    lateinit var notificationScheduler: NotificationScheduler
+    lateinit var scheduleNotificationUseCase: ScheduleNotificationUseCase
 
     override fun onCreate() {
         super.onCreate()
@@ -50,7 +50,7 @@ class RescheduleNotificationsOnRebootService : Service() {
 
             reminders
                 .filter { reminder -> reminder.isNotificationSent }
-                .forEach { reminder -> notificationScheduler.scheduleReminderNotification(reminder) }
+                .forEach { reminder -> scheduleNotificationUseCase(reminder) }
 
             stopForeground(STOP_FOREGROUND_REMOVE)
             stopSelf()
