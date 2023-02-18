@@ -6,6 +6,7 @@ plugins {
     id 'io.gitlab.arturbosch.detekt' version '1.22.0-RC1'
     id 'com.google.devtools.ksp' version '1.7.20-1.0.7'
     id 'com.google.protobuf' version '0.8.17'
+    id 'org.jetbrains.kotlin.plugin.serialization' version '1.8.10'
 }
 
 android {
@@ -113,6 +114,7 @@ dependencies {
     // Proto Datastore
     implementation  'androidx.datastore:datastore:1.0.0'
     implementation  'com.google.protobuf:protobuf-javalite:3.18.0'
+    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1'
 
     // Work Manager
     implementation 'androidx.work:work-runtime-ktx:2.7.1'

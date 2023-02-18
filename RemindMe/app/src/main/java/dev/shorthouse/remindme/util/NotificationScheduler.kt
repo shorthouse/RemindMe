@@ -8,73 +8,60 @@ import androidx.core.app.NotificationManagerCompat
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.model.Reminder
-import dev.shorthouse.remindme.model.RepeatInterval
-import dev.shorthouse.remindme.receivers.DisplayReminderNotificationReceiver
-import java.time.Duration
-import java.time.temporal.ChronoUnit
+import dev.shorthouse.remindme.receiver.DisplayReminderNotificationReceiver
 import javax.inject.Inject
 
 class NotificationScheduler @Inject constructor(
-    @ApplicationContext private val context: Context,
-    private val alarmManager: AlarmManager
+    private val alarmManager: AlarmManager,
+    @ApplicationContext private val context: Context
 ) {
     fun scheduleReminderNotification(reminder: Reminder) {
-        if (reminder.repeatInterval == null) {
-            scheduleOneTimeNotification(reminder)
-        } else {
-            scheduleRepeatNotification(reminder, reminder.repeatInterval)
-        }
-    }
+        val alarmType = AlarmManager.RTC_WAKEUP
 
-    fun cancelScheduledReminderNotification(reminder: Reminder) {
-        val alarmBroadcastIntent = getExistingBroadcastIntent(reminder)
+        val triggerAtMillis = reminder.startDateTime.toInstant().toEpochMilli()
 
-        alarmBroadcastIntent?.let {
-            alarmManager.cancel(alarmBroadcastIntent)
-        }
-    }
-
-    fun removeDisplayingNotification(notificationId: Int) {
-        NotificationManagerCompat.from(context).cancel(notificationId)
-    }
-
-    private fun scheduleOneTimeNotification(reminder: Reminder) {
-        alarmManager.setExactAndAllowWhileIdle(
-            AlarmManager.RTC_WAKEUP,
-            getAlarmTriggerTime(reminder),
-            getNotificationBroadcastIntent(reminder)
-        )
-    }
-
-    private fun scheduleRepeatNotification(reminder: Reminder, repeatInterval: RepeatInterval) {
-        alarmManager.setRepeating(
-            AlarmManager.RTC_WAKEUP,
-            getAlarmTriggerTime(reminder),
-            getAlarmRepeatInterval(repeatInterval),
-            getNotificationBroadcastIntent(reminder)
-        )
-    }
-
-    private fun getAlarmTriggerTime(reminder: Reminder): Long {
-        return reminder.startDateTime.toInstant().toEpochMilli()
-    }
-
-    private fun getAlarmRepeatInterval(repeatInterval: RepeatInterval): Long {
-        val repeatIntervalDays = when (repeatInterval.unit) {
-            ChronoUnit.DAYS -> repeatInterval.amount
-            else -> repeatInterval.amount * DAYS_IN_WEEK
-        }
-
-        return Duration.ofDays(repeatIntervalDays).toMillis()
-    }
-
-    private fun getNotificationBroadcastIntent(reminder: Reminder): PendingIntent {
-        return PendingIntent.getBroadcast(
+        val notificationBroadcastIntent = PendingIntent.getBroadcast(
             context,
             reminder.id.toInt(),
             getAlarmIntent(reminder),
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_CANCEL_CURRENT,
         )
+
+        if (reminder.repeatInterval != null) {
+            val repeatIntervalMillis = reminder.repeatInterval.unit.duration
+                .multipliedBy(reminder.repeatInterval.amount)
+                .toMillis()
+
+            alarmManager.setRepeating(
+                alarmType,
+                triggerAtMillis,
+                repeatIntervalMillis,
+                notificationBroadcastIntent
+            )
+        } else {
+            alarmManager.setExactAndAllowWhileIdle(
+                alarmType,
+                triggerAtMillis,
+                notificationBroadcastIntent
+            )
+        }
+    }
+
+    fun cancelScheduledReminderNotification(reminder: Reminder) {
+        val scheduledBroadcastIntent = PendingIntent.getBroadcast(
+            context,
+            reminder.id.toInt(),
+            getAlarmIntent(reminder),
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_NO_CREATE
+        )
+
+        alarmManager.cancel(scheduledBroadcastIntent)
+    }
+
+    fun removeDisplayingReminderNotification(reminder: Reminder) {
+        val notificationId = reminder.id.toInt()
+
+        NotificationManagerCompat.from(context).cancel(notificationId)
     }
 
     private fun getAlarmIntent(reminder: Reminder): Intent {
@@ -91,14 +78,5 @@ class NotificationScheduler @Inject constructor(
                 context.getString(R.string.intent_key_notificationText),
                 reminder.getFormattedStartTime()
             )
-    }
-
-    private fun getExistingBroadcastIntent(reminder: Reminder): PendingIntent? {
-        return PendingIntent.getBroadcast(
-            context,
-            reminder.id.toInt(),
-            getAlarmIntent(reminder),
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_NO_CREATE
-        )
     }
 }
