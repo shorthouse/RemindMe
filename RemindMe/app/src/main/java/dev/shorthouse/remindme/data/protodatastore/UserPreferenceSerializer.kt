@@ -1,24 +1,34 @@
 package dev.shorthouse.remindme.data.protodatastore
 
-import androidx.datastore.core.CorruptionException
 import androidx.datastore.core.Serializer
-import com.google.protobuf.InvalidProtocolBufferException
-import dev.shorthouse.remindme.protodatastore.UserPreferences
+import kotlinx.serialization.SerializationException
+import kotlinx.serialization.json.Json
 import java.io.InputStream
 import java.io.OutputStream
 
+@Suppress("BlockingMethodInNonBlockingContext")
 object UserPreferencesSerializer : Serializer<UserPreferences> {
-    override val defaultValue: UserPreferences = UserPreferences.getDefaultInstance()
+    override val defaultValue: UserPreferences
+        get() = UserPreferences()
 
     override suspend fun readFrom(input: InputStream): UserPreferences {
-        try {
-            return UserPreferences.parseFrom(input)
-        } catch (exception: InvalidProtocolBufferException) {
-            throw CorruptionException("Cannot read proto.", exception)
+        return try {
+            Json.decodeFromString(
+                deserializer = UserPreferences.serializer(),
+                string = input.readBytes().decodeToString()
+            )
+        } catch (e: SerializationException) {
+            e.printStackTrace()
+            defaultValue
         }
     }
 
     override suspend fun writeTo(t: UserPreferences, output: OutputStream) {
-        return t.writeTo(output)
+        output.write(
+            Json.encodeToString(
+                serializer = UserPreferences.serializer(),
+                value = t
+            ).encodeToByteArray()
+        )
     }
 }
