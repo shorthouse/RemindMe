@@ -22,6 +22,7 @@ fun ReminderListContent(
     reminderStates: List<ReminderState>,
     emptyStateContent: @Composable () -> Unit,
     onReminderCard: (ReminderState) -> Unit,
+    contentPadding: PaddingValues,
     modifier: Modifier = Modifier,
 ) {
     if (reminderStates.isEmpty()) {
@@ -30,6 +31,7 @@ fun ReminderListContent(
         ReminderList(
             reminderStates = reminderStates,
             onReminderCard = onReminderCard,
+            contentPadding = contentPadding,
             modifier = modifier
         )
     }
@@ -39,16 +41,12 @@ fun ReminderListContent(
 fun ReminderList(
     reminderStates: List<ReminderState>,
     onReminderCard: (ReminderState) -> Unit,
+    contentPadding: PaddingValues,
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.margin_tiny)),
-        contentPadding = PaddingValues(
-            start = dimensionResource(R.dimen.margin_tiny),
-            top = dimensionResource(R.dimen.margin_tiny),
-            end = dimensionResource(R.dimen.margin_tiny),
-            bottom = dimensionResource(R.dimen.margin_bottom_bar)
-        ),
+        contentPadding = contentPadding,
         modifier = modifier.fillMaxSize()
     ) {
         items(reminderStates) { reminderState ->
@@ -70,6 +68,7 @@ fun ReminderListContentPreview(
         ReminderListContent(
             reminderStates = reminderStates,
             emptyStateContent = { EmptyStateActiveReminders() },
+            contentPadding = PaddingValues(dimensionResource(R.dimen.margin_tiny)),
             onReminderCard = {},
         )
     }
