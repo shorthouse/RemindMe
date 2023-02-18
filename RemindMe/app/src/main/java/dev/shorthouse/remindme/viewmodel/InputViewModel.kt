@@ -6,8 +6,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.compose.state.ReminderState
 import dev.shorthouse.remindme.data.ReminderRepository
-import dev.shorthouse.remindme.domain.AddReminderUseCase
-import dev.shorthouse.remindme.domain.EditReminderUseCase
+import dev.shorthouse.remindme.domain.reminder.AddReminderUseCase
+import dev.shorthouse.remindme.domain.reminder.EditReminderUseCase
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.util.UiText
 import kotlinx.coroutines.flow.MutableStateFlow

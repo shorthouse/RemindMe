@@ -3,10 +3,10 @@ package dev.shorthouse.remindme.viewmodel
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.shorthouse.remindme.compose.state.ReminderState
-import dev.shorthouse.remindme.domain.CompleteOnetimeReminderUseCase
-import dev.shorthouse.remindme.domain.CompleteRepeatReminderOccurrenceUseCase
-import dev.shorthouse.remindme.domain.CompleteRepeatReminderSeriesUseCase
-import dev.shorthouse.remindme.domain.DeleteReminderUseCase
+import dev.shorthouse.remindme.domain.reminder.CompleteOnetimeReminderUseCase
+import dev.shorthouse.remindme.domain.reminder.CompleteRepeatReminderOccurrenceUseCase
+import dev.shorthouse.remindme.domain.reminder.CompleteRepeatReminderSeriesUseCase
+import dev.shorthouse.remindme.domain.reminder.DeleteReminderUseCase
 import dev.shorthouse.remindme.enums.ReminderAction
 import javax.inject.Inject
 
