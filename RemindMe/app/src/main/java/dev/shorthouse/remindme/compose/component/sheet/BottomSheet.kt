@@ -21,12 +21,13 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import dev.shorthouse.remindme.R
-import dev.shorthouse.remindme.compose.previewdata.PreviewData
+import dev.shorthouse.remindme.compose.previewdata.DefaultReminderProvider
 import dev.shorthouse.remindme.compose.state.BottomSheetActionItem
 import dev.shorthouse.remindme.compose.state.ReminderState
 import dev.shorthouse.remindme.theme.RemindMeTheme
-import dev.shorthouse.remindme.util.enums.ReminderAction
+import dev.shorthouse.remindme.enums.ReminderAction
 
 @Composable
 fun BottomSheetReminderActions(
@@ -146,14 +147,15 @@ fun BottomSheetButton(
     }
 }
 
+@Composable
 @Preview(name = "Light Mode", showBackground = true)
 @Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
-@Composable
-fun BottomSheetReminderActionsPreview() {
+fun BottomSheetReminderActionsPreview(
+    @PreviewParameter(DefaultReminderProvider::class) reminderState: ReminderState
+) {
     RemindMeTheme {
-
         BottomSheetReminderActions(
-            reminderState = PreviewData.previewReminderState,
+            reminderState = reminderState,
             onReminderActionItemSelected = {}
         )
     }
