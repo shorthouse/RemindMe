@@ -4,7 +4,6 @@ import dev.shorthouse.remindme.data.ReminderDataSource
 import dev.shorthouse.remindme.model.Reminder
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
-import java.time.ZonedDateTime
 
 class FakeDataSource(private var reminders: MutableList<Reminder> = mutableListOf()) : ReminderDataSource {
     override fun getReminders(): Flow<List<Reminder>> {
@@ -35,6 +34,10 @@ class FakeDataSource(private var reminders: MutableList<Reminder> = mutableListO
                 reminder.isCompleted
             }
         )
+    }
+
+    override fun deleteCompletedReminders() {
+        reminders.removeIf { it.isCompleted }
     }
 
     override fun insertReminder(reminder: Reminder): Long {
