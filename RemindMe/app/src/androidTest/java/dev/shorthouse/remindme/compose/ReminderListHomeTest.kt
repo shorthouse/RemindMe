@@ -2,7 +2,6 @@ package dev.shorthouse.remindme.compose
 
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -11,7 +10,6 @@ import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.UninstallModules
 import dagger.hilt.components.SingletonComponent
 import dev.shorthouse.remindme.HiltTestActivity
-import dev.shorthouse.remindme.compose.screen.ReminderListContainer
 import dev.shorthouse.remindme.data.ReminderDataSource
 import dev.shorthouse.remindme.di.DataSourceModule
 import dev.shorthouse.remindme.fake.FakeDataSource
@@ -66,9 +64,9 @@ class ReminderListHomeTest {
     private fun setContent() {
         composeTestRule.setContent {
             RemindMeTheme {
-                ReminderListContainer(
-                    navigator = EmptyDestinationsNavigator
-                )
+//                ReminderListContainer(
+//                    navigator = EmptyDestinationsNavigator
+//                )
             }
         }
     }

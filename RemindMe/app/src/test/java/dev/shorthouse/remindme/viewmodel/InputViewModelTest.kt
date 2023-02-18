@@ -61,7 +61,7 @@ class InputViewModelTest {
         ioDispatcher = StandardTestDispatcher()
 
         inputViewModel = InputViewModel(
-            repository = reminderRepository,
+            reminderRepository = reminderRepository,
             notificationScheduler = notificationScheduler,
             ioDispatcher = ioDispatcher
         )
