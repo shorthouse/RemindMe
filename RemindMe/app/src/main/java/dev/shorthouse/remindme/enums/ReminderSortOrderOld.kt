@@ -1,4 +1,4 @@
-package dev.shorthouse.remindme.util.enums
+package dev.shorthouse.remindme.enums
 
 import androidx.annotation.StringRes
 import dev.shorthouse.remindme.R

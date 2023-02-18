@@ -1,4 +1,4 @@
-package dev.shorthouse.remindme.receivers
+package dev.shorthouse.remindme.receiver
 
 import android.app.Notification
 import android.app.NotificationChannel
@@ -16,12 +16,13 @@ import dev.shorthouse.remindme.R
 class DisplayReminderNotificationReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         if (context == null || intent == null) return
+
         createNotificationChannel(context)
         displayReminderNotification(context, intent)
     }
 
     private fun createNotificationChannel(context: Context) {
-        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
+        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         val notificationChannel = NotificationChannel(
             context.getString(R.string.notification_channel_id_reminder),
@@ -29,12 +30,16 @@ class DisplayReminderNotificationReceiver : BroadcastReceiver() {
             NotificationManager.IMPORTANCE_HIGH
         )
 
-        notificationManager?.createNotificationChannel(notificationChannel)
+        notificationManager.createNotificationChannel(notificationChannel)
     }
 
     private fun displayReminderNotification(context: Context, intent: Intent) {
-        val intentKeyReminderId = context.getString(R.string.intent_key_reminderId)
-        val reminderNotificationId = intent.getLongExtra(intentKeyReminderId, -1L).toInt()
+        val reminderNotificationId = intent.getLongExtra(
+            context.getString(R.string.intent_key_reminderId),
+            -1L
+        )
+            .toInt()
+
         val reminderNotification = getReminderNotification(context, intent)
 
         reminderNotification?.let {
@@ -71,7 +76,7 @@ class DisplayReminderNotificationReceiver : BroadcastReceiver() {
             .setContentIntent(contentPendingIntent)
             .addAction(
                 R.drawable.ic_user_notification_action,
-                context.getString(R.string.reminder_notification_action_done_text),
+                context.getString(R.string.reminder_notification_action_complete_text),
                 getDonePendingIntent(context, reminderId)
             )
             .setAutoCancel(true)

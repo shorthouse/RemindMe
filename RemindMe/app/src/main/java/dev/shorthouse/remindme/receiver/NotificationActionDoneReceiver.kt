@@ -1,10 +1,10 @@
-package dev.shorthouse.remindme.receivers
+package dev.shorthouse.remindme.receiver
 
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import dev.shorthouse.remindme.R
-import dev.shorthouse.remindme.services.UpdateDoneReminderService
+import dev.shorthouse.remindme.service.NotificationCompleteReminderService
 
 class NotificationActionDoneReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
@@ -15,7 +15,7 @@ class NotificationActionDoneReceiver : BroadcastReceiver() {
             )
 
             if (reminderId != -1L) {
-                val serviceIntent = Intent(context, UpdateDoneReminderService::class.java)
+                val serviceIntent = Intent(context, NotificationCompleteReminderService::class.java)
                     .putExtra(context.getString(R.string.intent_key_reminderId), reminderId)
                 context.startService(serviceIntent)
             }
