@@ -136,6 +136,7 @@ fun ReminderListSearchScaffold(
                 reminderStates = searchReminderStates,
                 emptyStateContent = { EmptyStateSearchReminders() },
                 onReminderCard = onReminderCard,
+                contentPadding = PaddingValues(dimensionResource(R.dimen.margin_tiny)),
                 modifier = modifier
             )
         }

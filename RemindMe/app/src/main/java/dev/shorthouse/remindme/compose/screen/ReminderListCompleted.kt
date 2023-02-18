@@ -2,6 +2,7 @@ package dev.shorthouse.remindme.compose.screen
 
 import android.content.res.Configuration
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -9,6 +10,7 @@ import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.DeleteOutline
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -112,6 +114,7 @@ fun ReminderListCompletedScaffold(
                 reminderStates = completedReminderStates,
                 emptyStateContent = { EmptyStateCompletedReminders() },
                 onReminderCard = onReminderCard,
+                contentPadding = PaddingValues(dimensionResource(R.dimen.margin_tiny)),
                 modifier = modifier
             )
         }

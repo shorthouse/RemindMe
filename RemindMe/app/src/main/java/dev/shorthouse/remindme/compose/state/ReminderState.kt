@@ -1,6 +1,9 @@
 package dev.shorthouse.remindme.compose.state
 
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Stable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.model.RepeatInterval
 import java.time.LocalDateTime
@@ -175,70 +178,70 @@ private class ReminderStateImpl(
         )
     }
 
-    private var _id by mutableStateOf(id, structuralEqualityPolicy())
+    private var _id by mutableStateOf(id)
     override var id: Long
         get() = _id
         set(value) {
             _id = value
         }
 
-    private var _name by mutableStateOf(name, structuralEqualityPolicy())
+    private var _name by mutableStateOf(name)
     override var name: String
         get() = _name
         set(value) {
             _name = value
         }
 
-    private var _date by mutableStateOf(date, structuralEqualityPolicy())
+    private var _date by mutableStateOf(date)
     override var date: String
         get() = _date
         set(value) {
             _date = value
         }
 
-    private var _time by mutableStateOf(time, structuralEqualityPolicy())
+    private var _time by mutableStateOf(time)
     override var time: LocalTime
         get() = _time
         set(value) {
             _time = value
         }
 
-    private var _isNotificationSent by mutableStateOf(isNotificationSent, structuralEqualityPolicy())
+    private var _isNotificationSent by mutableStateOf(isNotificationSent)
     override var isNotificationSent: Boolean
         get() = _isNotificationSent
         set(value) {
             _isNotificationSent = value
         }
 
-    private var _isRepeatReminder by mutableStateOf(isRepeatReminder, structuralEqualityPolicy())
+    private var _isRepeatReminder by mutableStateOf(isRepeatReminder)
     override var isRepeatReminder: Boolean
         get() = _isRepeatReminder
         set(value) {
             _isRepeatReminder = value
         }
 
-    private var _repeatAmount by mutableStateOf(repeatAmount, structuralEqualityPolicy())
+    private var _repeatAmount by mutableStateOf(repeatAmount)
     override var repeatAmount: String
         get() = _repeatAmount
         set(value) {
             _repeatAmount = value
         }
 
-    private var _repeatUnit by mutableStateOf(repeatUnit, structuralEqualityPolicy())
+    private var _repeatUnit by mutableStateOf(repeatUnit)
     override var repeatUnit: String
         get() = _repeatUnit
         set(value) {
             _repeatUnit = value
         }
 
-    private var _notes by mutableStateOf(notes, structuralEqualityPolicy())
+    private var _notes by mutableStateOf(notes)
     override var notes: String?
         get() = _notes
         set(value) {
             _notes = value
         }
 
-    private var _isCompleted by mutableStateOf(isCompleted, structuralEqualityPolicy())
+    private var _isCompleted by mutableStateOf(isCompleted)
     override var isCompleted: Boolean
         get() = _isCompleted
         set(value) {
