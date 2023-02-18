@@ -86,21 +86,29 @@ fun EmptyState(
         )
     }
 }
-
+@Composable
 @Preview(name = "Light Mode", showBackground = true)
 @Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
-@Composable
-fun EmptyStateScheduledRemindersPreview() {
+fun EmptyStateActiveRemindersPreview() {
     RemindMeTheme {
         EmptyStateActiveReminders()
     }
 }
 
+@Composable
 @Preview(name = "Light Mode", showBackground = true)
 @Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
-@Composable
 fun EmptyStateCompletedRemindersPreview() {
     RemindMeTheme {
         EmptyStateCompletedReminders()
+    }
+}
+
+@Composable
+@Preview(name = "Light Mode", showBackground = true)
+@Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
+fun EmptyStateSearchRemindersPreview() {
+    RemindMeTheme {
+        EmptyStateSearchReminders()
     }
 }
