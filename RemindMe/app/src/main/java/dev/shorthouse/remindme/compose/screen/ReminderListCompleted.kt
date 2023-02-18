@@ -1,6 +1,8 @@
 package dev.shorthouse.remindme.compose.screen
 
+import android.content.res.Configuration
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -8,7 +10,10 @@ import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.DeleteOutline
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -17,14 +22,17 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.compose.component.dialog.RemindMeAlertDialog
 import dev.shorthouse.remindme.compose.component.emptystate.EmptyStateCompletedReminders
-import dev.shorthouse.remindme.compose.component.list.ReminderList
+import dev.shorthouse.remindme.compose.component.list.ReminderListContent
 import dev.shorthouse.remindme.compose.component.sheet.BottomSheetReminderActions
+import dev.shorthouse.remindme.compose.previewdata.ReminderListProvider
 import dev.shorthouse.remindme.compose.screen.destinations.ReminderEditScreenDestination
 import dev.shorthouse.remindme.compose.state.ReminderState
+import dev.shorthouse.remindme.theme.RemindMeTheme
 import dev.shorthouse.remindme.theme.Scrim
 import dev.shorthouse.remindme.viewmodel.ListCompletedViewModel
 import dev.shorthouse.remindme.viewmodel.ListViewModel
 import kotlinx.coroutines.launch
+import java.util.Collections.emptyList
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalLifecycleComposeApi::class)
 @Destination
@@ -102,15 +110,13 @@ fun ReminderListCompletedScaffold(
         content = { scaffoldPadding ->
             val modifier = Modifier.padding(scaffoldPadding)
 
-            if (completedReminderStates.isEmpty()) {
-                EmptyStateCompletedReminders()
-            } else {
-                ReminderList(
-                    reminderStates = completedReminderStates,
-                    onReminderCard = onReminderCard,
-                    modifier = modifier
-                )
-            }
+            ReminderListContent(
+                reminderStates = completedReminderStates,
+                emptyStateContent = { EmptyStateCompletedReminders() },
+                onReminderCard = onReminderCard,
+                contentPadding = PaddingValues(dimensionResource(R.dimen.margin_tiny)),
+                modifier = modifier
+            )
         }
     )
 }
@@ -158,4 +164,20 @@ fun ReminderListCompletedTopBar(
             }
         }
     )
+}
+
+@Composable
+@Preview(name = "Light Mode")
+@Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
+private fun ReminderListCompletedPreview(
+    @PreviewParameter(ReminderListProvider::class) reminderStates: List<ReminderState>
+) {
+    RemindMeTheme {
+        ReminderListCompletedScaffold(
+            completedReminderStates = reminderStates,
+            onNavigateUp = {},
+            onDeleteCompletedReminders = {},
+            onReminderCard = {},
+        )
+    }
 }

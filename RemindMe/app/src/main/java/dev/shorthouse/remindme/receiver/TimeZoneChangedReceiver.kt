@@ -1,10 +1,10 @@
-package dev.shorthouse.remindme.receivers
+package dev.shorthouse.remindme.receiver
 
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import dev.shorthouse.remindme.R
-import dev.shorthouse.remindme.services.UpdateReminderTimeZoneService
+import dev.shorthouse.remindme.service.UpdateReminderTimeZoneService
 
 class TimeZoneChangedReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {

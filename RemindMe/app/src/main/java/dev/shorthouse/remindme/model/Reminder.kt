@@ -8,7 +8,7 @@ import java.time.temporal.ChronoUnit
 @Entity
 data class Reminder(
     @PrimaryKey(autoGenerate = true)
-    var id: Long = 0L,
+    val id: Long = 0L,
     val name: String,
     val startDateTime: ZonedDateTime,
     val isNotificationSent: Boolean,

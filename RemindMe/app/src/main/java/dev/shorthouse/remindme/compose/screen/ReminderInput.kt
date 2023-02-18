@@ -26,6 +26,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
@@ -34,7 +35,7 @@ import dev.shorthouse.remindme.compose.component.*
 import dev.shorthouse.remindme.compose.component.dialog.DatePickerDialog
 import dev.shorthouse.remindme.compose.component.dialog.TimePickerDialog
 import dev.shorthouse.remindme.compose.component.text.RemindMeTextField
-import dev.shorthouse.remindme.compose.previewdata.PreviewData
+import dev.shorthouse.remindme.compose.previewdata.DefaultReminderProvider
 import dev.shorthouse.remindme.compose.state.ReminderState
 import dev.shorthouse.remindme.theme.RemindMeTheme
 import dev.shorthouse.remindme.theme.SubtitleGrey
@@ -316,7 +317,7 @@ fun ReminderNotesInput(reminderState: ReminderState, modifier: Modifier = Modifi
         RemindMeTextField(
             text = reminderState.notes.orEmpty(),
             onTextChange = { if (it.length <= notesMaxLength) reminderState.notes = it },
-            textStyle = MaterialTheme.typography.body1,
+            textStyle = MaterialTheme.typography.body1.copy(color = MaterialTheme.colors.onSurface),
             hintText = stringResource(R.string.hint_reminder_notes),
             imeAction = ImeAction.None,
             modifier = Modifier.fillMaxWidth()
@@ -481,18 +482,20 @@ fun TextWithLeftIcon(
     }
 }
 
+@Composable
 @Preview(name = "Light Mode", showBackground = true)
 @Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
-@Composable
-private fun ReminderInputPreview() {
+private fun ReminderInputPreview(
+    @PreviewParameter(DefaultReminderProvider::class) reminderState: ReminderState
+) {
     RemindMeTheme {
-        val reminderState by remember { mutableStateOf(PreviewData.previewReminderState) }
         val scaffoldState = rememberScaffoldState()
+        val topBarTitle = stringResource(R.string.top_bar_title_input_reminder)
 
         ReminderInputScaffold(
             reminderState = reminderState,
             scaffoldState = scaffoldState,
-            topBarTitle = "Reminder Input",
+            topBarTitle = topBarTitle,
             onNavigateUp = {},
             onSave = {},
         )

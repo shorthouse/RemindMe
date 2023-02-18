@@ -25,20 +25,20 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".services.RescheduleNotificationsOnRebootService"
+        <service android:name=".service.RescheduleNotificationsOnRebootService"
             android:exported="false" />
 
-        <service android:name=".services.UpdateReminderTimeZoneService"
+        <service android:name=".service.UpdateReminderTimeZoneService"
             android:exported="false" />
 
-        <service android:name=".services.UpdateDoneReminderService"
+        <service android:name=".service.NotificationCompleteReminderService"
             android:exported="false" />
 
         <receiver
-            android:name=".receivers.DisplayReminderNotificationReceiver" />
+            android:name=".receiver.DisplayReminderNotificationReceiver" />
 
         <receiver
-            android:name=".receivers.BootCompleteReceiver"
+            android:name=".receiver.BootCompletedReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
@@ -46,7 +46,7 @@
         </receiver>
 
         <receiver
-            android:name=".receivers.TimeZoneChangedReceiver"
+            android:name=".receiver.TimeZoneChangedReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.TIMEZONE_CHANGED" />
@@ -54,6 +54,6 @@
         </receiver>
 
         <receiver
-            android:name=".receivers.NotificationActionDoneReceiver" />
+            android:name=".receiver.NotificationActionDoneReceiver" />
     </application>
 </manifest>

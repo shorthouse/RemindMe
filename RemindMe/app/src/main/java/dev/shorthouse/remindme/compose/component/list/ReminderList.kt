@@ -10,8 +10,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import dev.shorthouse.remindme.R
-import dev.shorthouse.remindme.compose.previewdata.PreviewData
+import dev.shorthouse.remindme.compose.component.emptystate.EmptyStateActiveReminders
+import dev.shorthouse.remindme.compose.previewdata.ReminderListProvider
 import dev.shorthouse.remindme.compose.state.ReminderState
 import dev.shorthouse.remindme.theme.RemindMeTheme
 
@@ -58,16 +60,16 @@ fun ReminderList(
     }
 }
 
+@Composable
 @Preview(name = "Light Mode", showBackground = true)
 @Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
-@Composable
-fun ReminderListContentPreview() {
+fun ReminderListContentPreview(
+    @PreviewParameter(ReminderListProvider::class) reminderStates: List<ReminderState>
+) {
     RemindMeTheme {
-        val reminderStates = PreviewData.previewReminderStates
-
         ReminderListContent(
             reminderStates = reminderStates,
-            emptyStateContent = {},
+            emptyStateContent = { EmptyStateActiveReminders() },
             onReminderCard = {},
         )
     }

@@ -1,0 +1,13 @@
+syntax = "proto3";
+option java_package = "dev.shorthouse.remindme.protodatastore";
+option java_multiple_files = true;
+
+message UserPreferences  {
+
+  ReminderSortOrder reminder_sort_order = 1;
+
+  enum ReminderSortOrder {
+      BY_EARLIEST_DATE_FIRST = 0;
+      BY_LATEST_DATE_FIRST = 1;
+  }
+}

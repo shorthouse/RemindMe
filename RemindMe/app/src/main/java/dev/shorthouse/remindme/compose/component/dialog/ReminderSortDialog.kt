@@ -17,18 +17,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import dev.shorthouse.remindme.R
+import dev.shorthouse.remindme.data.protodatastore.ReminderSortOrder
 import dev.shorthouse.remindme.theme.RemindMeTheme
-import dev.shorthouse.remindme.util.enums.ReminderListOrder
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ReminderSortDialog(
-    initialSort: ReminderListOrder,
-    onApplySort: (ReminderListOrder) -> Unit,
+    initialSort: ReminderSortOrder,
+    onApplySort: (ReminderSortOrder) -> Unit,
     onDismiss: () -> Unit,
 ) {
     var selectedSortOption by remember { mutableStateOf(initialSort) }
-    val sortOptions = ReminderListOrder.values()
+    val sortOptions = ReminderSortOrder.values()
 
     Dialog(
         properties = DialogProperties(usePlatformDefaultWidth = false),
@@ -68,8 +68,17 @@ fun ReminderSortDialog(
                             onClick = { selectedSortOption = sortOption }
                         )
 
+                        val sortOptionName = when (sortOption) {
+                            ReminderSortOrder.BY_EARLIEST_DATE_FIRST -> {
+                                stringResource(R.string.sort_dialog_option_date_earliest)
+                            }
+                            else -> {
+                                stringResource(R.string.sort_dialog_option_date_latest)
+                            }
+                        }
+
                         Text(
-                            text = stringResource(sortOption.displayNameStringId),
+                            text = sortOptionName,
                             style = MaterialTheme.typography.body1,
                             color = MaterialTheme.colors.onSurface
                         )
@@ -98,13 +107,13 @@ fun ReminderSortDialog(
     }
 }
 
+@Composable
 @Preview(name = "Light Mode")
 @Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
 fun ReminderSortDialogPreview() {
     RemindMeTheme {
         ReminderSortDialog(
-            initialSort = ReminderListOrder.EARLIEST_DATE_FIRST,
+            initialSort = ReminderSortOrder.BY_EARLIEST_DATE_FIRST,
             onApplySort = {},
             onDismiss = {}
         )

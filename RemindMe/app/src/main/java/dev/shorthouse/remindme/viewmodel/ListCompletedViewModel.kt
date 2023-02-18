@@ -7,7 +7,7 @@ import dev.shorthouse.remindme.compose.state.ReminderState
 import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.di.IoDispatcher
 import dev.shorthouse.remindme.model.Reminder
-import dev.shorthouse.remindme.util.enums.ReminderListOrder
+import dev.shorthouse.remindme.util.enums.ReminderSortOrderOld
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -18,7 +18,7 @@ class ListCompletedViewModel @Inject constructor(
     private val repository: ReminderRepository,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
-    private val reminderListOrder = ReminderListOrder.EARLIEST_DATE_FIRST
+    private val reminderListOrder = ReminderSortOrderOld.BY_EARLIEST_DATE_FIRST
 
     val completedReminderStates = repository.getCompletedReminders()
         .map { sortReminders(it, reminderListOrder) }
@@ -30,9 +30,9 @@ class ListCompletedViewModel @Inject constructor(
         }
     }
 
-    private fun sortReminders(reminders: List<Reminder>, reminderSortOrder: ReminderListOrder): List<Reminder> {
+    private fun sortReminders(reminders: List<Reminder>, reminderSortOrder: ReminderSortOrderOld): List<Reminder> {
         return when (reminderSortOrder) {
-            ReminderListOrder.EARLIEST_DATE_FIRST -> reminders.sortedBy { it.startDateTime }
+            ReminderSortOrderOld.BY_EARLIEST_DATE_FIRST -> reminders.sortedBy { it.startDateTime }
             else -> reminders.sortedByDescending { it.startDateTime }
         }
     }

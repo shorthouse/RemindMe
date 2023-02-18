@@ -1,6 +1,8 @@
 package dev.shorthouse.remindme.compose.screen
 
+import android.content.res.Configuration
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -10,7 +12,10 @@ import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.SwapVert
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -21,15 +26,18 @@ import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.compose.component.dialog.NotificationPermissionRequester
 import dev.shorthouse.remindme.compose.component.dialog.ReminderSortDialog
 import dev.shorthouse.remindme.compose.component.emptystate.EmptyStateActiveReminders
-import dev.shorthouse.remindme.compose.component.list.ReminderList
+import dev.shorthouse.remindme.compose.component.list.ReminderListContent
 import dev.shorthouse.remindme.compose.component.sheet.BottomSheetReminderActions
+import dev.shorthouse.remindme.compose.previewdata.ReminderListProvider
 import dev.shorthouse.remindme.compose.screen.destinations.ReminderAddScreenDestination
 import dev.shorthouse.remindme.compose.screen.destinations.ReminderEditScreenDestination
 import dev.shorthouse.remindme.compose.screen.destinations.ReminderListCompletedScreenDestination
 import dev.shorthouse.remindme.compose.screen.destinations.ReminderListSearchScreenDestination
 import dev.shorthouse.remindme.compose.state.ReminderState
+import dev.shorthouse.remindme.data.protodatastore.ReminderSortOrder
+import dev.shorthouse.remindme.data.protodatastore.UserPreferences
+import dev.shorthouse.remindme.theme.RemindMeTheme
 import dev.shorthouse.remindme.theme.Scrim
-import dev.shorthouse.remindme.util.enums.ReminderListOrder
 import dev.shorthouse.remindme.viewmodel.ListActiveViewModel
 import dev.shorthouse.remindme.viewmodel.ListViewModel
 import kotlinx.coroutines.launch
@@ -55,14 +63,20 @@ fun ReminderListActiveScreen(navigator: DestinationsNavigator) {
         .activeReminderStates
         .collectAsStateWithLifecycle(initialValue = emptyList())
 
+    val reminderSortOrder = listActiveViewModel
+        .userPreferences
+        .collectAsStateWithLifecycle(initialValue = UserPreferences())
+        .value
+        .reminderSortOrder
+
     NotificationPermissionRequester()
 
     ModalBottomSheetLayout(
         content = {
             ReminderListActiveScaffold(
                 activeReminderStates = activeReminderStates,
-                reminderListOrder = listViewModel.reminderListOrder.value,
-                onApplySort = { listViewModel.reminderListOrder.value = it },
+                reminderSortOrder = reminderSortOrder,
+                onApplySort = { listActiveViewModel.updateReminderSortOrder(it) },
                 onReminderCard = { reminderState ->
                     selectedReminderState = reminderState
                     coroutineScope.launch { bottomSheetState.show() }
@@ -102,17 +116,17 @@ fun ReminderListActiveScreen(navigator: DestinationsNavigator) {
 @Composable
 fun ReminderListActiveScaffold(
     activeReminderStates: List<ReminderState>,
-    reminderListOrder: ReminderListOrder,
+    reminderSortOrder: ReminderSortOrder,
     onNavigateCompletedReminders: () -> Unit,
     onNavigateAdd: () -> Unit,
     onReminderCard: (ReminderState) -> Unit,
-    onApplySort: (ReminderListOrder) -> Unit,
+    onApplySort: (ReminderSortOrder) -> Unit,
     onNavigateSearch: () -> Unit
 ) {
     Scaffold(
         topBar = {
             ReminderListActiveTopBar(
-                reminderListOrder = reminderListOrder,
+                reminderSortOrder = reminderSortOrder,
                 onApplySort = onApplySort,
                 onNavigateCompletedReminders = onNavigateCompletedReminders,
                 onNavigateSearch = onNavigateSearch
@@ -121,15 +135,18 @@ fun ReminderListActiveScaffold(
         content = { scaffoldPadding ->
             val modifier = Modifier.padding(scaffoldPadding)
 
-            if (activeReminderStates.isEmpty()) {
-                EmptyStateActiveReminders()
-            } else {
-                ReminderList(
-                    reminderStates = activeReminderStates,
-                    onReminderCard = onReminderCard,
-                    modifier = modifier
-                )
-            }
+            ReminderListContent(
+                reminderStates = activeReminderStates,
+                emptyStateContent = { EmptyStateActiveReminders() },
+                onReminderCard = onReminderCard,
+                contentPadding = PaddingValues(
+                    start = dimensionResource(R.dimen.margin_tiny),
+                    top = dimensionResource(R.dimen.margin_tiny),
+                    end = dimensionResource(R.dimen.margin_tiny),
+                    bottom = dimensionResource(R.dimen.margin_bottom_bar)
+                ),
+                modifier = modifier
+            )
         },
         floatingActionButton = {
             FloatingActionButton(onClick = onNavigateAdd) {
@@ -145,8 +162,8 @@ fun ReminderListActiveScaffold(
 
 @Composable
 fun ReminderListActiveTopBar(
-    reminderListOrder: ReminderListOrder,
-    onApplySort: (ReminderListOrder) -> Unit,
+    reminderSortOrder: ReminderSortOrder,
+    onApplySort: (ReminderSortOrder) -> Unit,
     onNavigateCompletedReminders: () -> Unit,
     onNavigateSearch: () -> Unit
 ) {
@@ -154,7 +171,7 @@ fun ReminderListActiveTopBar(
 
     if (isSortDialogOpen) {
         ReminderSortDialog(
-            initialSort = reminderListOrder,
+            initialSort = reminderSortOrder,
             onApplySort = onApplySort,
             onDismiss = { isSortDialogOpen = false }
         )
@@ -191,4 +208,23 @@ fun ReminderListActiveTopBar(
             }
         }
     )
+}
+
+@Composable
+@Preview(name = "Light Mode")
+@Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
+fun ReminderListActivePreview(
+    @PreviewParameter(ReminderListProvider::class) reminderStates: List<ReminderState>
+) {
+    RemindMeTheme {
+        ReminderListActiveScaffold(
+            activeReminderStates = reminderStates,
+            reminderSortOrder = ReminderSortOrder.BY_EARLIEST_DATE_FIRST,
+            onNavigateCompletedReminders = {},
+            onNavigateSearch = {},
+            onReminderCard = {},
+            onApplySort = {},
+            onNavigateAdd = {}
+        )
+    }
 }

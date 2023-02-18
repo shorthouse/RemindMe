@@ -5,11 +5,12 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.MaterialDialogState
 import com.vanpra.composematerialdialogs.datetime.date.datepicker
 import dev.shorthouse.remindme.R
-import dev.shorthouse.remindme.compose.previewdata.PreviewData
+import dev.shorthouse.remindme.compose.previewdata.DefaultReminderProvider
 import dev.shorthouse.remindme.compose.state.ReminderState
 import dev.shorthouse.remindme.theme.RemindMeTheme
 import java.time.LocalDate
@@ -42,14 +43,18 @@ fun DatePickerDialog(
     }
 }
 
+@Composable
 @Preview(name = "Light Mode")
 @Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-fun DatePickerDialogPreview() {
+fun DatePickerDialogPreview(
+    @PreviewParameter(DefaultReminderProvider::class) reminderState: ReminderState
+) {
     RemindMeTheme {
+        val dialogState = MaterialDialogState(initialValue = true)
+
         DatePickerDialog(
-            reminderState = PreviewData.previewReminderState,
-            dialogState = MaterialDialogState(initialValue = true)
+            reminderState = reminderState,
+            dialogState = dialogState
         )
     }
 }

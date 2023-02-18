@@ -23,6 +23,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -30,8 +31,9 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.compose.component.emptystate.EmptyStateSearchReminders
-import dev.shorthouse.remindme.compose.component.list.ReminderList
+import dev.shorthouse.remindme.compose.component.list.ReminderListContent
 import dev.shorthouse.remindme.compose.component.sheet.BottomSheetReminderActions
+import dev.shorthouse.remindme.compose.previewdata.ReminderListProvider
 import dev.shorthouse.remindme.compose.screen.destinations.ReminderEditScreenDestination
 import dev.shorthouse.remindme.compose.state.ReminderState
 import dev.shorthouse.remindme.theme.RemindMeTheme
@@ -41,7 +43,7 @@ import dev.shorthouse.remindme.viewmodel.ListSearchViewModel
 import dev.shorthouse.remindme.viewmodel.ListViewModel
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalLifecycleComposeApi::class, ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalComposeUiApi::class, ExperimentalLifecycleComposeApi::class)
 @Destination
 @Composable
 fun ReminderListSearchScreen(navigator: DestinationsNavigator) {
@@ -130,15 +132,13 @@ fun ReminderListSearchScaffold(
         content = { scaffoldPadding ->
             val modifier = Modifier.padding(scaffoldPadding)
 
-            if (searchReminderStates.isEmpty()) {
-                EmptyStateSearchReminders()
-            } else {
-                ReminderList(
-                    reminderStates = searchReminderStates,
-                    onReminderCard = onReminderCard,
-                    modifier = modifier
-                )
-            }
+            ReminderListContent(
+                reminderStates = searchReminderStates,
+                emptyStateContent = { EmptyStateSearchReminders() },
+                onReminderCard = onReminderCard,
+                contentPadding = PaddingValues(dimensionResource(R.dimen.margin_tiny)),
+                modifier = modifier
+            )
         }
     )
 }
@@ -222,13 +222,15 @@ fun ReminderListSearchTopBar(
     )
 }
 
+@Composable
 @Preview(name = "Light Mode")
 @Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-private fun ReminderListSearchPreview() {
+private fun ReminderListSearchPreview(
+    @PreviewParameter(ReminderListProvider::class) reminderStates: List<ReminderState>
+) {
     RemindMeTheme {
         ReminderListSearchScaffold(
-            searchReminderStates = emptyList(),
+            searchReminderStates = reminderStates,
             onNavigateUp = {},
             searchQuery = "",
             onSearchQueryChange = {},
