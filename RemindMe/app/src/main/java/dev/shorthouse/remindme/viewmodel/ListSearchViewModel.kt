@@ -4,9 +4,10 @@ import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.shorthouse.remindme.compose.state.ReminderState
 import dev.shorthouse.remindme.data.ReminderRepository
+import dev.shorthouse.remindme.data.protodatastore.ReminderSortOrder
+import dev.shorthouse.remindme.data.protodatastore.UserPreferences
 import dev.shorthouse.remindme.data.protodatastore.UserPreferencesRepository
 import dev.shorthouse.remindme.model.Reminder
-import dev.shorthouse.remindme.protodatastore.UserPreferences
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
@@ -17,11 +18,17 @@ class ListSearchViewModel @Inject constructor(
     repository: ReminderRepository,
     userPreferencesRepository: UserPreferencesRepository
 ) : ViewModel() {
+    private val reminders = repository.getReminders()
+    private val userPreferences = userPreferencesRepository.userPreferencesFlow
+
     private val sortedReminderStates = combine(
-        repository.getReminders(),
-        userPreferencesRepository.userPreferencesFlow,
+        reminders,
+        userPreferences
     ) { reminders: List<Reminder>, userPreferences: UserPreferences ->
-        return@combine sortReminders(reminders, userPreferences.reminderSortOrder)
+        return@combine when (userPreferences.reminderSortOrder) {
+            ReminderSortOrder.BY_EARLIEST_DATE_FIRST -> reminders.sortedBy { it.startDateTime }
+            else -> reminders.sortedByDescending { it.startDateTime }
+        }
             .map { ReminderState(it) }
     }
 
@@ -36,15 +43,5 @@ class ListSearchViewModel @Inject constructor(
                     reminders
                 }
             }
-    }
-
-    private fun sortReminders(
-        reminders: List<Reminder>,
-        reminderSortOrder: UserPreferences.ReminderSortOrder
-    ): List<Reminder> {
-        return when (reminderSortOrder) {
-            UserPreferences.ReminderSortOrder.BY_EARLIEST_DATE_FIRST -> reminders.sortedBy { it.startDateTime }
-            else -> reminders.sortedByDescending { it.startDateTime }
-        }
     }
 }
