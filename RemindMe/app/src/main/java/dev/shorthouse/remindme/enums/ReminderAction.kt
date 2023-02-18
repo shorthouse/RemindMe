@@ -1,4 +1,4 @@
-package dev.shorthouse.remindme.util.enums
+package dev.shorthouse.remindme.enums
 
 enum class ReminderAction {
     EDIT,
