@@ -11,8 +11,16 @@ class ReminderLocalDataSource @Inject constructor(private val reminderDao: Remin
         return reminderDao.getReminder(id)
     }
 
+    override suspend fun getReminderOneShot(id: Long): Reminder {
+        return reminderDao.getReminderOneShot(id)
+    }
+
     override fun getReminders(): Flow<List<Reminder>> {
         return reminderDao.getReminders()
+    }
+
+    override suspend fun getRemindersOneShot(): List<Reminder> {
+        return reminderDao.getRemindersOneShot()
     }
 
     override fun getActiveReminders(): Flow<List<Reminder>> {

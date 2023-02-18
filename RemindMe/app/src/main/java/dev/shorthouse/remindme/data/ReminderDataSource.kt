@@ -6,7 +6,11 @@ import kotlinx.coroutines.flow.Flow
 interface ReminderDataSource {
     fun getReminder(id: Long): Flow<Reminder>
 
+    suspend fun getReminderOneShot(id: Long): Reminder
+
     fun getReminders(): Flow<List<Reminder>>
+
+    suspend fun getRemindersOneShot(): List<Reminder>
 
     fun getActiveReminders(): Flow<List<Reminder>>
 

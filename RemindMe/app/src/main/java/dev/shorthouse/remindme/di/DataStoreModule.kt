@@ -9,8 +9,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import dev.shorthouse.remindme.data.protodatastore.UserPreferences
 import dev.shorthouse.remindme.data.protodatastore.UserPreferencesSerializer
-import dev.shorthouse.remindme.protodatastore.UserPreferences
 import javax.inject.Singleton
 
 private const val DATA_STORE_FILE_NAME = "user_prefs.pb"
