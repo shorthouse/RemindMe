@@ -1,47 +1,72 @@
 package dev.shorthouse.remindme.viewmodel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.shorthouse.remindme.compose.state.ReminderState
 import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.data.protodatastore.ReminderSortOrder
-import dev.shorthouse.remindme.data.protodatastore.UserPreferences
 import dev.shorthouse.remindme.data.protodatastore.UserPreferencesRepository
-import dev.shorthouse.remindme.model.Reminder
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class ListSearchViewModel @Inject constructor(
-    repository: ReminderRepository,
-    userPreferencesRepository: UserPreferencesRepository
+    private val reminderRepository: ReminderRepository,
+    private val userPreferencesRepository: UserPreferencesRepository
 ) : ViewModel() {
-    private val reminders = repository.getReminders()
-    private val userPreferences = userPreferencesRepository.userPreferencesFlow
+    private val _uiState = MutableStateFlow(ListSearchUiState())
 
-    private val sortedReminderStates = combine(
-        reminders,
-        userPreferences
-    ) { reminders: List<Reminder>, userPreferences: UserPreferences ->
-        return@combine when (userPreferences.reminderSortOrder) {
-            ReminderSortOrder.BY_EARLIEST_DATE_FIRST -> reminders.sortedBy { it.startDateTime }
-            else -> reminders.sortedByDescending { it.startDateTime }
+    val uiState: StateFlow<ListSearchUiState>
+        get() = _uiState
+
+    private val _searchQuery = MutableStateFlow("")
+
+    init {
+        _uiState.update { it.copy(isLoading = true) }
+
+        viewModelScope.launch {
+            val remindersFlow = reminderRepository.getReminders()
+
+            val userPreferencesFlow = userPreferencesRepository.userPreferencesFlow
+
+            val searchQueryFlow = _searchQuery
+
+            combine(remindersFlow, userPreferencesFlow, searchQueryFlow) { reminders, userPreferences, searchQuery ->
+                val reminderSortOrder = userPreferences.reminderSortOrder
+
+                val reminderStates = when (reminderSortOrder) {
+                    ReminderSortOrder.BY_EARLIEST_DATE_FIRST -> reminders.sortedBy { it.startDateTime }
+                    ReminderSortOrder.BY_LATEST_DATE_FIRST -> reminders.sortedByDescending { it.startDateTime }
+                }
+                    .map { ReminderState(it) }
+
+                val searchReminderStates = if (searchQuery.isNotEmpty()) {
+                    reminderStates.filter { it.name.contains(searchQuery, ignoreCase = true) }
+                } else {
+                    reminderStates
+                }
+
+                ListSearchUiState(
+                    searchReminderStates = searchReminderStates,
+                    searchQuery = searchQuery,
+                    isLoading = false
+                )
+            }.collect { _uiState.value = it }
         }
-            .map { ReminderState(it) }
     }
 
-    fun getSearchReminderStates(searchQuery: String): Flow<List<ReminderState>> {
-        return sortedReminderStates
-            .map { reminders ->
-                if (searchQuery.isNotEmpty()) {
-                    reminders.filter { reminder ->
-                        reminder.name.contains(searchQuery, ignoreCase = true)
-                    }
-                } else {
-                    reminders
-                }
-            }
+    fun setSearchQuery(searchQuery: String) {
+        _searchQuery.value = searchQuery
     }
 }
+
+data class ListSearchUiState(
+    val searchReminderStates: List<ReminderState> = emptyList(),
+    val searchQuery: String = "",
+    val isLoading: Boolean = false
+)
