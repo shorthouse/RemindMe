@@ -2,7 +2,7 @@ package dev.shorthouse.remindme.domain.reminder
 
 import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.di.IoDispatcher
-import dev.shorthouse.remindme.domain.notification.ScheduleRepeatNotificationUseCase
+import dev.shorthouse.remindme.domain.notification.ScheduleNotificationUseCase
 import dev.shorthouse.remindme.model.Reminder
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -12,7 +12,7 @@ import javax.inject.Inject
 class AddReminderUseCase @Inject constructor(
     private val reminderRepository: ReminderRepository,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
-    private val scheduleReminderNotificationUseCase: ScheduleRepeatNotificationUseCase
+    private val scheduleReminderNotificationUseCase: ScheduleNotificationUseCase
 ) {
     private val coroutineScope = CoroutineScope(ioDispatcher)
 

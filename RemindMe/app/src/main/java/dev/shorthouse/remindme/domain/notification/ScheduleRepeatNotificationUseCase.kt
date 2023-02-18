@@ -20,17 +20,8 @@ class ScheduleRepeatNotificationUseCase @Inject constructor(
 
     private fun scheduleRepeatReminderNotification(reminder: Reminder) {
         reminder.repeatInterval?.let {
-            val alarmIntent = Intent(context, DisplayReminderNotificationReceiver::class.java).apply {
-                putExtra(context.getString(R.string.intent_key_reminderId), reminder.id)
-                putExtra(
-                    context.getString(R.string.intent_key_notificationTitle),
-                    reminder.name
-                )
-                putExtra(
-                    context.getString(R.string.intent_key_notificationText),
-                    reminder.getFormattedStartTime()
-                )
-            }
+            val alarmIntent = Intent(context, DisplayReminderNotificationReceiver::class.java)
+                .putExtra(context.getString(R.string.intent_key_reminderId), reminder.id)
 
             val receiverIntent = PendingIntent.getBroadcast(
                 context,
