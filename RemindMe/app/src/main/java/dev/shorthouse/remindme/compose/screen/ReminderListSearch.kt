@@ -46,11 +46,12 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterialApi::class, ExperimentalComposeUiApi::class, ExperimentalLifecycleComposeApi::class)
 @Destination
 @Composable
-fun ReminderListSearchScreen(navigator: DestinationsNavigator) {
-    val listViewModel: ListViewModel = hiltViewModel()
-    val listSearchViewModel: ListSearchViewModel = hiltViewModel()
-
-    var selectedReminderState by remember { mutableStateOf(ReminderState()) }
+fun ReminderListSearchScreen(
+    listSearchViewModel: ListSearchViewModel = hiltViewModel(),
+    listViewModel: ListViewModel = hiltViewModel(),
+    navigator: DestinationsNavigator
+) {
+    val uiState by listSearchViewModel.uiState.collectAsStateWithLifecycle()
 
     val coroutineScope = rememberCoroutineScope()
 
@@ -59,22 +60,18 @@ fun ReminderListSearchScreen(navigator: DestinationsNavigator) {
         skipHalfExpanded = true
     )
 
-    var searchQuery by remember { mutableStateOf("") }
-
-    val searchReminderStates: List<ReminderState> by listSearchViewModel
-        .getSearchReminderStates(searchQuery)
-        .collectAsStateWithLifecycle(initialValue = emptyList())
+    var selectedReminderState by remember { mutableStateOf(ReminderState()) }
 
     val keyboardController = LocalSoftwareKeyboardController.current
 
     ModalBottomSheetLayout(
         content = {
             ReminderListSearchScaffold(
-                searchReminderStates = searchReminderStates,
-                searchQuery = searchQuery,
+                searchReminderStates = uiState.searchReminderStates,
+                searchQuery = uiState.searchQuery,
                 onNavigateUp = { navigator.navigateUp() },
-                onSearchQueryChange = { searchQuery = it },
-                onClearSearchQuery = { searchQuery = "" },
+                onSearchQueryChange = { listSearchViewModel.setSearchQuery(it) },
+                onClearSearchQuery = { listSearchViewModel.setSearchQuery("") },
                 onReminderCard = { reminderState ->
                     coroutineScope.launch {
                         keyboardController?.hide()

@@ -32,16 +32,16 @@ import dev.shorthouse.remindme.theme.Scrim
 import dev.shorthouse.remindme.viewmodel.ListCompletedViewModel
 import dev.shorthouse.remindme.viewmodel.ListViewModel
 import kotlinx.coroutines.launch
-import java.util.Collections.emptyList
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalLifecycleComposeApi::class)
 @Destination
 @Composable
-fun ReminderListCompletedScreen(navigator: DestinationsNavigator) {
-    val listViewModel: ListViewModel = hiltViewModel()
-    val listCompletedViewModel: ListCompletedViewModel = hiltViewModel()
-
-    var selectedReminderState by remember { mutableStateOf(ReminderState()) }
+fun ReminderListCompletedScreen(
+    listCompletedViewModel: ListCompletedViewModel = hiltViewModel(),
+    listViewModel: ListViewModel = hiltViewModel(),
+    navigator: DestinationsNavigator
+) {
+    val uiState by listCompletedViewModel.uiState.collectAsStateWithLifecycle()
 
     val coroutineScope = rememberCoroutineScope()
 
@@ -50,20 +50,19 @@ fun ReminderListCompletedScreen(navigator: DestinationsNavigator) {
         skipHalfExpanded = true
     )
 
-    val completedReminderStates: List<ReminderState> by listCompletedViewModel
-        .completedReminderStates
-        .collectAsStateWithLifecycle(initialValue = emptyList())
+    var selectedReminderState by remember { mutableStateOf(ReminderState()) }
 
     ModalBottomSheetLayout(
         content = {
             ReminderListCompletedScaffold(
-                completedReminderStates = completedReminderStates,
+                completedReminderStates = uiState.completedReminderStates,
                 onNavigateUp = { navigator.navigateUp() },
                 onDeleteCompletedReminders = { listCompletedViewModel.deleteCompletedReminders() },
                 onReminderCard = { reminderState ->
                     selectedReminderState = reminderState
                     coroutineScope.launch { bottomSheetState.show() }
                 },
+                isLoading = uiState.isLoading
             )
         },
         sheetContent = {
@@ -98,7 +97,8 @@ fun ReminderListCompletedScaffold(
     completedReminderStates: List<ReminderState>,
     onNavigateUp: () -> Unit,
     onDeleteCompletedReminders: () -> Unit,
-    onReminderCard: (ReminderState) -> Unit
+    onReminderCard: (ReminderState) -> Unit,
+    isLoading: Boolean
 ) {
     Scaffold(
         topBar = {
@@ -108,15 +108,17 @@ fun ReminderListCompletedScaffold(
             )
         },
         content = { scaffoldPadding ->
-            val modifier = Modifier.padding(scaffoldPadding)
+            if (!isLoading) {
+                val modifier = Modifier.padding(scaffoldPadding)
 
-            ReminderListContent(
-                reminderStates = completedReminderStates,
-                emptyStateContent = { EmptyStateCompletedReminders() },
-                onReminderCard = onReminderCard,
-                contentPadding = PaddingValues(dimensionResource(R.dimen.margin_tiny)),
-                modifier = modifier
-            )
+                ReminderListContent(
+                    reminderStates = completedReminderStates,
+                    emptyStateContent = { EmptyStateCompletedReminders() },
+                    onReminderCard = onReminderCard,
+                    contentPadding = PaddingValues(dimensionResource(R.dimen.margin_tiny)),
+                    modifier = modifier
+                )
+            }
         }
     )
 }
@@ -178,6 +180,7 @@ private fun ReminderListCompletedPreview(
             onNavigateUp = {},
             onDeleteCompletedReminders = {},
             onReminderCard = {},
+            isLoading = false,
         )
     }
 }

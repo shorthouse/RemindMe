@@ -35,7 +35,6 @@ import dev.shorthouse.remindme.compose.screen.destinations.ReminderListCompleted
 import dev.shorthouse.remindme.compose.screen.destinations.ReminderListSearchScreenDestination
 import dev.shorthouse.remindme.compose.state.ReminderState
 import dev.shorthouse.remindme.data.protodatastore.ReminderSortOrder
-import dev.shorthouse.remindme.data.protodatastore.UserPreferences
 import dev.shorthouse.remindme.theme.RemindMeTheme
 import dev.shorthouse.remindme.theme.Scrim
 import dev.shorthouse.remindme.viewmodel.ListActiveViewModel
@@ -46,11 +45,12 @@ import kotlinx.coroutines.launch
 @RootNavGraph(start = true)
 @Destination
 @Composable
-fun ReminderListActiveScreen(navigator: DestinationsNavigator) {
-    val listViewModel: ListViewModel = hiltViewModel()
-    val listActiveViewModel: ListActiveViewModel = hiltViewModel()
-
-    var selectedReminderState by remember { mutableStateOf(ReminderState()) }
+fun ReminderListActiveScreen(
+    listActiveViewModel: ListActiveViewModel = hiltViewModel(),
+    listViewModel: ListViewModel = hiltViewModel(),
+    navigator: DestinationsNavigator
+) {
+    val uiState by listActiveViewModel.uiState.collectAsStateWithLifecycle()
 
     val coroutineScope = rememberCoroutineScope()
 
@@ -59,23 +59,15 @@ fun ReminderListActiveScreen(navigator: DestinationsNavigator) {
         skipHalfExpanded = true
     )
 
-    val activeReminderStates: List<ReminderState> by listActiveViewModel
-        .activeReminderStates
-        .collectAsStateWithLifecycle(initialValue = emptyList())
-
-    val reminderSortOrder = listActiveViewModel
-        .userPreferences
-        .collectAsStateWithLifecycle(initialValue = UserPreferences())
-        .value
-        .reminderSortOrder
+    var selectedReminderState by remember { mutableStateOf(ReminderState()) }
 
     NotificationPermissionRequester()
 
     ModalBottomSheetLayout(
         content = {
             ReminderListActiveScaffold(
-                activeReminderStates = activeReminderStates,
-                reminderSortOrder = reminderSortOrder,
+                activeReminderStates = uiState.activeReminderStates,
+                reminderSortOrder = uiState.reminderSortOrder,
                 onApplySort = { listActiveViewModel.updateReminderSortOrder(it) },
                 onReminderCard = { reminderState ->
                     selectedReminderState = reminderState
@@ -83,7 +75,8 @@ fun ReminderListActiveScreen(navigator: DestinationsNavigator) {
                 },
                 onNavigateAdd = { navigator.navigate(ReminderAddScreenDestination()) },
                 onNavigateCompletedReminders = { navigator.navigate(ReminderListCompletedScreenDestination()) },
-                onNavigateSearch = { navigator.navigate(ReminderListSearchScreenDestination()) }
+                onNavigateSearch = { navigator.navigate(ReminderListSearchScreenDestination()) },
+                isLoading = uiState.isLoading
             )
         },
         sheetContent = {
@@ -121,7 +114,8 @@ fun ReminderListActiveScaffold(
     onNavigateAdd: () -> Unit,
     onReminderCard: (ReminderState) -> Unit,
     onApplySort: (ReminderSortOrder) -> Unit,
-    onNavigateSearch: () -> Unit
+    onNavigateSearch: () -> Unit,
+    isLoading: Boolean,
 ) {
     Scaffold(
         topBar = {
@@ -133,20 +127,22 @@ fun ReminderListActiveScaffold(
             )
         },
         content = { scaffoldPadding ->
-            val modifier = Modifier.padding(scaffoldPadding)
+            if (!isLoading) {
+                val modifier = Modifier.padding(scaffoldPadding)
 
-            ReminderListContent(
-                reminderStates = activeReminderStates,
-                emptyStateContent = { EmptyStateActiveReminders() },
-                onReminderCard = onReminderCard,
-                contentPadding = PaddingValues(
-                    start = dimensionResource(R.dimen.margin_tiny),
-                    top = dimensionResource(R.dimen.margin_tiny),
-                    end = dimensionResource(R.dimen.margin_tiny),
-                    bottom = dimensionResource(R.dimen.margin_bottom_bar)
-                ),
-                modifier = modifier
-            )
+                ReminderListContent(
+                    reminderStates = activeReminderStates,
+                    emptyStateContent = { EmptyStateActiveReminders() },
+                    onReminderCard = onReminderCard,
+                    contentPadding = PaddingValues(
+                        start = dimensionResource(R.dimen.margin_tiny),
+                        top = dimensionResource(R.dimen.margin_tiny),
+                        end = dimensionResource(R.dimen.margin_tiny),
+                        bottom = dimensionResource(R.dimen.margin_bottom_bar)
+                    ),
+                    modifier = modifier
+                )
+            }
         },
         floatingActionButton = {
             FloatingActionButton(onClick = onNavigateAdd) {
@@ -224,7 +220,8 @@ fun ReminderListActivePreview(
             onNavigateSearch = {},
             onReminderCard = {},
             onApplySort = {},
-            onNavigateAdd = {}
+            onNavigateAdd = {},
+            isLoading = false
         )
     }
 }

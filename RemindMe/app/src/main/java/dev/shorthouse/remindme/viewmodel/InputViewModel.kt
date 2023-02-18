@@ -1,15 +1,19 @@
 package dev.shorthouse.remindme.viewmodel
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.shorthouse.remindme.R
+import dev.shorthouse.remindme.compose.state.ReminderState
 import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.domain.AddReminderUseCase
 import dev.shorthouse.remindme.domain.EditReminderUseCase
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.util.UiText
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import java.time.ZonedDateTime
 import javax.inject.Inject
 
@@ -19,8 +23,23 @@ class InputViewModel @Inject constructor(
     private val addReminderUseCase: AddReminderUseCase,
     private val editReminderUseCase: EditReminderUseCase
 ) : ViewModel() {
-    fun getReminder(reminderId: Long): LiveData<Reminder> {
-        return reminderRepository.getReminder(reminderId).asLiveData()
+    private val _uiState = MutableStateFlow(InputUiState())
+
+    val uiState: StateFlow<InputUiState>
+        get() = _uiState
+
+    fun setReminderState(reminderId: Long) {
+        viewModelScope.launch {
+            val reminder = reminderRepository.getReminder(reminderId)
+
+            reminder.map {
+                val reminderState = ReminderState(it)
+
+                InputUiState(
+                    reminderState = reminderState
+                )
+            }.collect { _uiState.value = it }
+        }
     }
 
     fun isReminderValid(reminder: Reminder): Boolean {
@@ -41,3 +60,7 @@ class InputViewModel @Inject constructor(
         }
     }
 }
+
+data class InputUiState(
+    val reminderState: ReminderState = ReminderState()
+)
