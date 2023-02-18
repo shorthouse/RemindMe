@@ -10,10 +10,16 @@ import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import dagger.hilt.android.AndroidEntryPoint
 import dev.shorthouse.remindme.MainActivity
 import dev.shorthouse.remindme.R
+import javax.inject.Inject
 
-class DisplayReminderNotificationReceiver : BroadcastReceiver() {
+@AndroidEntryPoint
+class ReminderNotificationReceiver : BroadcastReceiver() {
+    @Inject
+    lateinit var notificationManager: NotificationManagerCompat
+
     override fun onReceive(context: Context?, intent: Intent?) {
         if (context == null || intent == null) return
 
@@ -43,7 +49,7 @@ class DisplayReminderNotificationReceiver : BroadcastReceiver() {
         val reminderNotification = getReminderNotification(context, intent)
 
         reminderNotification?.let {
-            NotificationManagerCompat.from(context).notify(reminderNotificationId, reminderNotification)
+            notificationManager.notify(reminderNotificationId, reminderNotification)
         }
     }
 
