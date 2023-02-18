@@ -1,4 +1,4 @@
-package dev.shorthouse.remindme.domain
+package dev.shorthouse.remindme.domain.reminder
 
 import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.di.IoDispatcher

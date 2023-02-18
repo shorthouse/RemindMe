@@ -1,4 +1,4 @@
-package dev.shorthouse.remindme.domain
+package dev.shorthouse.remindme.domain.reminder
 
 import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.di.IoDispatcher
@@ -9,7 +9,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class AddReminderUseCase @Inject constructor(
+class DeleteReminderUseCase@Inject constructor(
     private val reminderRepository: ReminderRepository,
     private val notificationScheduler: NotificationScheduler,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
@@ -17,17 +17,15 @@ class AddReminderUseCase @Inject constructor(
     private val coroutineScope = CoroutineScope(ioDispatcher)
 
     operator fun invoke(reminder: Reminder) {
-        addReminder(reminder)
+        deleteReminder(reminder)
     }
 
-    private fun addReminder(reminder: Reminder) {
-        coroutineScope.launch {
-            val reminderId = reminderRepository.insertReminder(reminder)
+    private fun deleteReminder(reminder: Reminder) {
+        notificationScheduler.cancelScheduledReminderNotification(reminder)
+        notificationScheduler.removeDisplayingReminderNotification(reminder)
 
-            if (reminder.isNotificationSent) {
-                val addedReminder = reminder.copy(id = reminderId)
-                notificationScheduler.scheduleReminderNotification(addedReminder)
-            }
+        coroutineScope.launch {
+            reminderRepository.deleteReminder(reminder)
         }
     }
 }

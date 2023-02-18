@@ -7,8 +7,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.di.IoDispatcher
-import dev.shorthouse.remindme.domain.CompleteOnetimeReminderUseCase
-import dev.shorthouse.remindme.domain.CompleteRepeatReminderOccurrenceUseCase
+import dev.shorthouse.remindme.domain.reminder.CompleteOnetimeReminderUseCase
+import dev.shorthouse.remindme.domain.reminder.CompleteRepeatReminderOccurrenceUseCase
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob

@@ -7,7 +7,7 @@ import dev.shorthouse.remindme.compose.state.ReminderState
 import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.data.protodatastore.ReminderSortOrder
 import dev.shorthouse.remindme.data.protodatastore.UserPreferencesRepository
-import dev.shorthouse.remindme.domain.DeleteCompletedRemindersUseCase
+import dev.shorthouse.remindme.domain.reminder.DeleteCompletedRemindersUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
