@@ -13,7 +13,7 @@ import dev.shorthouse.remindme.HiltTestActivity
 import dev.shorthouse.remindme.data.ReminderDataSource
 import dev.shorthouse.remindme.di.DataSourceModule
 import dev.shorthouse.remindme.fake.FakeDataSource
-import dev.shorthouse.remindme.theme.RemindMeTheme
+import dev.shorthouse.remindme.ui.theme.RemindMeTheme
 import dev.shorthouse.remindme.util.ReminderTestUtil
 import org.junit.Before
 import org.junit.Rule
