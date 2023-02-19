@@ -1,0 +1,76 @@
+package dev.shorthouse.remindme.ui.component.dialog
+
+import android.content.res.Configuration
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.material.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import com.vanpra.composematerialdialogs.MaterialDialog
+import com.vanpra.composematerialdialogs.MaterialDialogState
+import com.vanpra.composematerialdialogs.datetime.time.TimePickerDefaults
+import com.vanpra.composematerialdialogs.datetime.time.timepicker
+import dev.shorthouse.remindme.R
+import dev.shorthouse.remindme.ui.preview.DefaultReminderProvider
+import dev.shorthouse.remindme.ui.state.ReminderState
+import dev.shorthouse.remindme.ui.theme.Black
+import dev.shorthouse.remindme.ui.theme.LightGrey
+import dev.shorthouse.remindme.ui.theme.RemindMeTheme
+import dev.shorthouse.remindme.ui.theme.White
+
+@Composable
+fun TimePickerDialog(
+    reminderState: ReminderState,
+    dialogState: MaterialDialogState
+) {
+    MaterialDialog(
+        dialogState = dialogState,
+        buttons = {
+            positiveButton(
+                text = stringResource(R.string.dialog_action_ok),
+                textStyle = MaterialTheme.typography.button
+            )
+            negativeButton(
+                text = stringResource(R.string.dialog_action_cancel),
+                textStyle = MaterialTheme.typography.button
+            )
+        },
+    ) {
+        Spacer(modifier = Modifier.height(dimensionResource(R.dimen.margin_normal)))
+
+        timepicker(
+            initialTime = reminderState.time,
+            title = "",
+            is24HourClock = true,
+            onTimeChange = { reminderState.time = it },
+            colors = TimePickerDefaults.colors(
+                activeBackgroundColor = MaterialTheme.colors.primary,
+                activeTextColor = White,
+                inactiveBackgroundColor = LightGrey,
+                inactiveTextColor = Black,
+                selectorColor = MaterialTheme.colors.primary,
+                selectorTextColor = White,
+            )
+        )
+    }
+}
+
+@Composable
+@Preview(name = "Light Mode")
+@Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
+fun TimePickerDialogPreview(
+    @PreviewParameter(DefaultReminderProvider::class) reminderState: ReminderState
+) {
+    RemindMeTheme {
+        val dialogState = MaterialDialogState(initialValue = true)
+
+        TimePickerDialog(
+            reminderState = reminderState,
+            dialogState = dialogState
+        )
+    }
+}

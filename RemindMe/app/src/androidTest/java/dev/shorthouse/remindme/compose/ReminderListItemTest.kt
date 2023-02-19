@@ -6,8 +6,8 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dev.shorthouse.remindme.HiltTestActivity
-import dev.shorthouse.remindme.compose.state.ReminderState
-import dev.shorthouse.remindme.theme.RemindMeTheme
+import dev.shorthouse.remindme.ui.state.ReminderState
+import dev.shorthouse.remindme.ui.theme.RemindMeTheme
 import dev.shorthouse.remindme.util.ReminderTestUtil
 import org.junit.Before
 import org.junit.Rule

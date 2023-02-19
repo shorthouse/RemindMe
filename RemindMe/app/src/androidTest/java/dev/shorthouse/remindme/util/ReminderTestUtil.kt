@@ -1,6 +1,6 @@
 package dev.shorthouse.remindme.util
 
-import dev.shorthouse.remindme.compose.state.ReminderState
+import dev.shorthouse.remindme.ui.state.ReminderState
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.model.RepeatInterval
 import java.time.LocalTime

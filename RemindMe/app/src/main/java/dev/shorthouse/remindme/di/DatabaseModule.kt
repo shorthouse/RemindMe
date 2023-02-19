@@ -33,4 +33,3 @@ class DatabaseModule {
         return ReminderRepository(reminderDataSource)
     }
 }
-

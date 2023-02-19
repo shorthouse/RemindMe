@@ -6,11 +6,10 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
 import dev.shorthouse.remindme.data.FakeDataSource
 import dev.shorthouse.remindme.data.ReminderRepository
+import dev.shorthouse.remindme.ui.screen.input.InputViewModel
 import dev.shorthouse.remindme.util.ReminderTestUtil
 import dev.shorthouse.remindme.util.getOrAwaitValue
-import dev.shorthouse.remindme.util.NotificationScheduler
 import io.mockk.MockKAnnotations
-import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
