@@ -1,9 +1,9 @@
 ![RemindMe Main](https://user-images.githubusercontent.com/73708076/207454305-b870d65b-6065-4af2-ae4c-0ae64c1e6adc.png)
 
 # RemindMe 🔔
-**RemindMe** is an Android app that allows you to set customised reminders, giving you more time to relax 🏖️.
+**RemindMe** is an Android app for setting customised reminders, giving you more time to relax 🏖️.
 
-The core features of the app are fully completed, and the app is under heavy development to further build upon its feature set.
+The core features of the app are fully implemented, and the app is under heavy development to further build upon its feature set.
 
 # Architecture 🛠
 RemindMe is built using Kotlin and follows [best practices](https://developer.android.com/topic/architecture/recommendations) for Android architecture, including:
@@ -19,8 +19,8 @@ RemindMe is built using Kotlin and follows [best practices](https://developer.an
 - Dark theme
 
 # Features 📱
- - Set one-off or repeat reminders at a specific time and date
- - Receive a notification when the reminder fires
+ - Set one-off or repeat reminders at a specified time and date
+ - Receive a notification when a reminder fires
  - Search, filter, and sort reminders
  - Edit, complete, and delete reminders
  - Automatic updates to reminders when a timezone shift occurs
