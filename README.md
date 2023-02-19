@@ -11,8 +11,8 @@ RemindMe is built using Kotlin and follows [best practices](https://developer.an
 - Coroutines
 - Flow
 - Hilt
-- Room
 - ViewModel
+- Room
 - Detekt
 - Proto DataStore
 - Material Design
