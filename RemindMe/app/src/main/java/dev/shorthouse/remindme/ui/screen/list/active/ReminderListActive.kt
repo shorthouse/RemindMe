@@ -23,10 +23,6 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import dev.shorthouse.remindme.R
-import dev.shorthouse.remindme.compose.screen.destinations.ReminderAddScreenDestination
-import dev.shorthouse.remindme.compose.screen.destinations.ReminderEditScreenDestination
-import dev.shorthouse.remindme.compose.screen.destinations.ReminderListCompletedScreenDestination
-import dev.shorthouse.remindme.compose.screen.destinations.ReminderListSearchScreenDestination
 import dev.shorthouse.remindme.data.protodatastore.ReminderSortOrder
 import dev.shorthouse.remindme.ui.component.dialog.NotificationPermissionRequester
 import dev.shorthouse.remindme.ui.component.dialog.ReminderSortDialog
@@ -34,6 +30,10 @@ import dev.shorthouse.remindme.ui.component.emptystate.EmptyStateActiveReminders
 import dev.shorthouse.remindme.ui.component.list.ReminderListContent
 import dev.shorthouse.remindme.ui.component.sheet.BottomSheetReminderActions
 import dev.shorthouse.remindme.ui.preview.ReminderListProvider
+import dev.shorthouse.remindme.ui.screen.destinations.ReminderAddScreenDestination
+import dev.shorthouse.remindme.ui.screen.destinations.ReminderEditScreenDestination
+import dev.shorthouse.remindme.ui.screen.destinations.ReminderListCompletedScreenDestination
+import dev.shorthouse.remindme.ui.screen.destinations.ReminderListSearchScreenDestination
 import dev.shorthouse.remindme.ui.screen.list.ListViewModel
 import dev.shorthouse.remindme.ui.state.ReminderState
 import dev.shorthouse.remindme.ui.theme.RemindMeTheme
@@ -49,6 +49,7 @@ fun ReminderListActiveScreen(
     listViewModel: ListViewModel = hiltViewModel(),
     navigator: DestinationsNavigator
 ) {
+    listActiveViewModel.initialiseUiState()
     val uiState by listActiveViewModel.uiState.collectAsStateWithLifecycle()
 
     val coroutineScope = rememberCoroutineScope()
