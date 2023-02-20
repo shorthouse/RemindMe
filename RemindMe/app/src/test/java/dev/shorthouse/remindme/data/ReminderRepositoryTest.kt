@@ -40,7 +40,7 @@ class ReminderRepositoryTest {
         val repositoryReminders = listOf(reminderOne, reminderTwo)
         setRepositoryReminders(repositoryReminders)
 
-        val reminders = reminderRepository.getAllReminders().asLiveData().getOrAwaitValue()
+        val reminders = reminderRepository.getReminders().asLiveData().getOrAwaitValue()
 
         assertThat(reminders).isEqualTo(repositoryReminders)
     }
@@ -58,30 +58,6 @@ class ReminderRepositoryTest {
         val reminder = reminderRepository.getReminder(reminderToGet.id).asLiveData().getOrAwaitValue()
 
         assertThat(reminder).isEqualTo(reminderToGet)
-    }
-
-    @Test
-    fun `Get overdue reminders, returns only overdue reminders`() {
-        val overdueReminder = ReminderTestUtil().createReminder(
-            id = 1,
-            name = "overdueReminder",
-            startDateTime = ZonedDateTime.parse("2000-01-01T00:00:00Z"),
-        )
-
-        val notOverdueReminder = ReminderTestUtil().createReminder(
-            id = 2,
-            name = "notOverdueReminder",
-            startDateTime = ZonedDateTime.parse("3000-01-01T00:00:00Z"),
-        )
-
-        val expectedOverdueReminders = listOf(overdueReminder)
-
-        val repositoryReminders = listOf(overdueReminder, notOverdueReminder)
-        setRepositoryReminders(repositoryReminders)
-
-        val overdueReminders = reminderRepository.getOverdueReminders().asLiveData().getOrAwaitValue()
-
-        assertThat(overdueReminders).isEqualTo(expectedOverdueReminders)
     }
 
     @Test
@@ -189,7 +165,7 @@ class ReminderRepositoryTest {
 
         reminderRepository.deleteReminder(reminderToDelete)
 
-        val reminders = reminderRepository.getAllReminders().asLiveData().getOrAwaitValue()
+        val reminders = reminderRepository.getReminders().asLiveData().getOrAwaitValue()
 
         assertThat(reminders).doesNotContain(reminderToDelete)
     }
