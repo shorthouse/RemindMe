@@ -6,8 +6,10 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.data.protodatastore.ReminderSortOrder
 import dev.shorthouse.remindme.data.protodatastore.UserPreferencesRepository
+import dev.shorthouse.remindme.di.IoDispatcher
 import dev.shorthouse.remindme.domain.reminder.DeleteCompletedRemindersUseCase
 import dev.shorthouse.remindme.ui.state.ReminderState
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
@@ -19,6 +21,7 @@ import javax.inject.Inject
 class ListCompletedViewModel @Inject constructor(
     private val reminderRepository: ReminderRepository,
     private val userPreferencesRepository: UserPreferencesRepository,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
     private val deleteCompletedRemindersUseCase: DeleteCompletedRemindersUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(ListCompletedUiState())
@@ -26,11 +29,12 @@ class ListCompletedViewModel @Inject constructor(
     val uiState: StateFlow<ListCompletedUiState>
         get() = _uiState
 
-    init {
+    fun initialiseUiState() {
         _uiState.update { it.copy(isLoading = true) }
 
-        viewModelScope.launch {
+        viewModelScope.launch(ioDispatcher) {
             val completedRemindersFlow = reminderRepository.getCompletedReminders()
+
             val userPreferencesFlow = userPreferencesRepository.userPreferencesFlow
 
             combine(completedRemindersFlow, userPreferencesFlow) { completedReminders, userPreferences ->
