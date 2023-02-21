@@ -1,4 +1,4 @@
-package dev.shorthouse.remindme.compose
+package dev.shorthouse.remindme.ui
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
