@@ -1,4 +1,4 @@
-package dev.shorthouse.remindme.compose
+package dev.shorthouse.remindme.ui.list.active
 
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
@@ -10,9 +10,9 @@ import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.UninstallModules
 import dagger.hilt.components.SingletonComponent
 import dev.shorthouse.remindme.HiltTestActivity
+import dev.shorthouse.remindme.data.FakeDataSource
 import dev.shorthouse.remindme.data.ReminderDataSource
 import dev.shorthouse.remindme.di.DataSourceModule
-import dev.shorthouse.remindme.fake.FakeDataSource
 import dev.shorthouse.remindme.ui.theme.RemindMeTheme
 import dev.shorthouse.remindme.util.ReminderTestUtil
 import org.junit.Before
