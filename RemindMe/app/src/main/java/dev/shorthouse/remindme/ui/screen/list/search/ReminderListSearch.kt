@@ -79,6 +79,7 @@ fun ReminderListSearchScreen(
                         bottomSheetState.show()
                     }
                 },
+                isLoading = uiState.isLoading
             )
         },
         sheetContent = {
@@ -116,6 +117,7 @@ fun ReminderListSearchScaffold(
     onSearchQueryChange: (String) -> Unit,
     onClearSearchQuery: () -> Unit,
     onReminderCard: (ReminderState) -> Unit,
+    isLoading: Boolean
 ) {
     Scaffold(
         topBar = {
@@ -127,15 +129,17 @@ fun ReminderListSearchScaffold(
             )
         },
         content = { scaffoldPadding ->
-            val modifier = Modifier.padding(scaffoldPadding)
+            if (!isLoading) {
+                val modifier = Modifier.padding(scaffoldPadding)
 
-            ReminderListContent(
-                reminderStates = searchReminderStates,
-                emptyStateContent = { EmptyStateSearchReminders() },
-                onReminderCard = onReminderCard,
-                contentPadding = PaddingValues(dimensionResource(R.dimen.margin_tiny)),
-                modifier = modifier
-            )
+                ReminderListContent(
+                    reminderStates = searchReminderStates,
+                    emptyStateContent = { EmptyStateSearchReminders() },
+                    onReminderCard = onReminderCard,
+                    contentPadding = PaddingValues(dimensionResource(R.dimen.margin_tiny)),
+                    modifier = modifier
+                )
+            }
         }
     )
 }
@@ -233,6 +237,7 @@ private fun ReminderListSearchPreview(
             onSearchQueryChange = {},
             onClearSearchQuery = {},
             onReminderCard = {},
+            isLoading = false
         )
     }
 }
