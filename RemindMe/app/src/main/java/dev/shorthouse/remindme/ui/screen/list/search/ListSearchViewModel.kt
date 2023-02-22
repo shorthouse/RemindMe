@@ -6,7 +6,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.data.protodatastore.ReminderSortOrder
 import dev.shorthouse.remindme.data.protodatastore.UserPreferencesRepository
+import dev.shorthouse.remindme.di.IoDispatcher
 import dev.shorthouse.remindme.ui.state.ReminderState
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
@@ -17,7 +19,8 @@ import javax.inject.Inject
 @HiltViewModel
 class ListSearchViewModel @Inject constructor(
     private val reminderRepository: ReminderRepository,
-    private val userPreferencesRepository: UserPreferencesRepository
+    private val userPreferencesRepository: UserPreferencesRepository,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(ListSearchUiState())
 
@@ -26,10 +29,10 @@ class ListSearchViewModel @Inject constructor(
 
     private val _searchQuery = MutableStateFlow("")
 
-    init {
+    fun initialiseUiState() {
         _uiState.update { it.copy(isLoading = true) }
 
-        viewModelScope.launch {
+        viewModelScope.launch(ioDispatcher) {
             val remindersFlow = reminderRepository.getReminders()
 
             val userPreferencesFlow = userPreferencesRepository.userPreferencesFlow

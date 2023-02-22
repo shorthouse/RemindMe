@@ -27,10 +27,10 @@ class ListActiveViewModel @Inject constructor(
     val uiState: StateFlow<ListActiveUiState>
         get() = _uiState
 
-    init {
+    fun initialiseUiState() {
         _uiState.update { it.copy(isLoading = true) }
 
-        viewModelScope.launch {
+        viewModelScope.launch(ioDispatcher) {
             val activeRemindersFlow = reminderRepository.getActiveReminders()
 
             val userPreferencesFlow = userPreferencesRepository.userPreferencesFlow
@@ -47,6 +47,7 @@ class ListActiveViewModel @Inject constructor(
                 ListActiveUiState(
                     activeReminderStates = activeReminderStates,
                     reminderSortOrder = reminderSortOrder,
+                    selectedReminderState = _uiState.value.selectedReminderState,
                     isLoading = false
                 )
             }.collect { _uiState.value = it }

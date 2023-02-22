@@ -1,4 +1,4 @@
-package dev.shorthouse.remindme.compose
+package dev.shorthouse.remindme.ui.input
 
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.ui.test.*

@@ -1,6 +1,5 @@
-package dev.shorthouse.remindme.fake
+package dev.shorthouse.remindme.data
 
-import dev.shorthouse.remindme.data.ReminderDataSource
 import dev.shorthouse.remindme.model.Reminder
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
@@ -12,12 +11,22 @@ class FakeDataSource(private var reminders: MutableList<Reminder> = mutableListO
         )
     }
 
+    override suspend fun getRemindersOneShot(): List<Reminder> {
+        return reminders
+    }
+
     override fun getReminder(id: Long): Flow<Reminder> {
         return flowOf(
             reminders.first { reminder ->
                 reminder.id == id
             }
         )
+    }
+
+    override suspend fun getReminderOneShot(id: Long): Reminder {
+        return reminders.first { reminder ->
+            reminder.id == id
+        }
     }
 
     override fun getActiveReminders(): Flow<List<Reminder>> {
@@ -34,10 +43,6 @@ class FakeDataSource(private var reminders: MutableList<Reminder> = mutableListO
                 reminder.isCompleted
             }
         )
-    }
-
-    override fun deleteCompletedReminders() {
-        reminders.removeIf { it.isCompleted }
     }
 
     override fun insertReminder(reminder: Reminder): Long {
@@ -70,5 +75,9 @@ class FakeDataSource(private var reminders: MutableList<Reminder> = mutableListO
         val completedReminder = reminders[reminderToCompleteIndex].copy(isCompleted = true)
 
         reminders[reminderToCompleteIndex] = completedReminder
+    }
+
+    override fun deleteCompletedReminders() {
+        reminders.removeIf { it.isCompleted }
     }
 }
