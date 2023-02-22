@@ -2,31 +2,20 @@ package dev.shorthouse.remindme.ui.list.active
 
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.datastore.core.DataStoreFactory
-import androidx.datastore.dataStoreFile
-import androidx.test.core.app.ApplicationProvider
-import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import dagger.hilt.android.testing.HiltTestApplication
 import dev.shorthouse.remindme.HiltTestActivity
-import dev.shorthouse.remindme.data.FakeDataSource
-import dev.shorthouse.remindme.data.ReminderRepository
-import dev.shorthouse.remindme.data.protodatastore.UserPreferencesRepository
-import dev.shorthouse.remindme.data.protodatastore.UserPreferencesSerializer
-import dev.shorthouse.remindme.ui.screen.list.active.ListActiveViewModel
-import dev.shorthouse.remindme.ui.screen.list.active.ReminderListActiveScreen
+import dev.shorthouse.remindme.data.protodatastore.ReminderSortOrder
+import dev.shorthouse.remindme.ui.screen.list.active.ReminderListActiveScaffold
+import dev.shorthouse.remindme.ui.state.ReminderState
 import dev.shorthouse.remindme.ui.theme.RemindMeTheme
 import dev.shorthouse.remindme.util.ReminderTestUtil
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import java.time.ZonedDateTime
+import java.time.LocalTime
 
 @HiltAndroidTest
-@OptIn(ExperimentalCoroutinesApi::class)
 class ReminderListActiveTest {
     @get:Rule(order = 1)
     var hiltTestRule = HiltAndroidRule(this)
@@ -34,58 +23,38 @@ class ReminderListActiveTest {
     @get:Rule(order = 2)
     var composeTestRule = createAndroidComposeRule<HiltTestActivity>()
 
-    private val testCoroutineDispatcher = StandardTestDispatcher()
-
-    private val testDataStore =
-        DataStoreFactory.create(
-            //scope = TestScope(testCoroutineDispatcher + Job()),
-            serializer = UserPreferencesSerializer,
-            produceFile = {
-                ApplicationProvider.getApplicationContext<HiltTestApplication>().dataStoreFile("test_datastore")
-            },
-            corruptionHandler = null
-        )
-
-    private val userPreferencesRepository = UserPreferencesRepository(testDataStore)
-
     @Before
     fun setup() {
         hiltTestRule.inject()
     }
 
-    private fun setContent() {
+    private fun setContent(
+        activeReminderStates: List<ReminderState> = listOf(
+            ReminderTestUtil().createReminderState(
+                name = "Test Overdue Reminder",
+                date = "Sat, 01 Jan 2000",
+                time = LocalTime.parse("08:00")
+            ),
+            ReminderTestUtil().createReminderState(
+                name = "Test Scheduled Reminder",
+                date = "Wed, 01 Jan 3000",
+                time = LocalTime.parse("09:00")
+            ),
+        ),
+        reminderSortOrder: ReminderSortOrder = ReminderSortOrder.BY_EARLIEST_DATE_FIRST,
+        isLoading: Boolean = false
+    ) {
         composeTestRule.setContent {
             RemindMeTheme {
-
-                val fakeReminderDataSource = FakeDataSource(
-                    mutableListOf(
-                        ReminderTestUtil().createReminder(
-                            name = "Test Overdue Reminder",
-                            startDateTime = ZonedDateTime.parse("2000-01-01T08:00:00Z")
-                        ),
-                        ReminderTestUtil().createReminder(
-                            name = "Test Scheduled Reminder",
-                            startDateTime = ZonedDateTime.parse("3000-01-01T09:00:00Z")
-                        ),
-                        ReminderTestUtil().createReminder(
-                            name = "Test Completed Reminder",
-                            startDateTime = ZonedDateTime.parse("1000-01-01T10:00:00Z"),
-                            isCompleted = true
-                        )
-                    )
-                )
-
-                val reminderRepository = ReminderRepository(fakeReminderDataSource)
-
-                val listActiveViewModel = ListActiveViewModel(
-                    reminderRepository = reminderRepository,
-                    userPreferencesRepository = userPreferencesRepository,
-                    ioDispatcher = testCoroutineDispatcher
-                )
-
-                ReminderListActiveScreen(
-                    listActiveViewModel = listActiveViewModel,
-                    navigator = EmptyDestinationsNavigator
+                ReminderListActiveScaffold(
+                    activeReminderStates = activeReminderStates,
+                    reminderSortOrder = reminderSortOrder,
+                    isLoading = isLoading,
+                    onApplySort = {},
+                    onNavigateAdd = {},
+                    onNavigateSearch = {},
+                    onReminderCard = {},
+                    onNavigateCompletedReminders = {},
                 )
             }
         }
@@ -93,7 +62,9 @@ class ReminderListActiveTest {
 
     @Test
     fun when_reminder_list_active_created_should_display_expected_scaffold_content() {
-        setContent()
+        setContent(
+            activeReminderStates = emptyList()
+        )
 
         composeTestRule.apply {
             onNodeWithText("RemindMe").assertIsDisplayed()
@@ -110,13 +81,11 @@ class ReminderListActiveTest {
 
         composeTestRule.apply {
             onNodeWithText("Test Overdue Reminder").assertIsDisplayed()
-            onNodeWithText("Sat, 01 Jan 2000").assertIsDisplayed()
-            onNodeWithText("08:00").assertIsDisplayed()
+            onNodeWithText("Sat, 01 Jan 2000 • 08:00").assertIsDisplayed()
             onNodeWithText("Overdue").assertIsDisplayed()
 
             onNodeWithText("Test Scheduled Reminder").assertIsDisplayed()
-            onNodeWithText("Wed, 01 Jan 3000").assertIsDisplayed()
-            onNodeWithText("09:00").assertIsDisplayed()
+            onNodeWithText("Wed, 01 Jan 3000 • 09:00").assertIsDisplayed()
             onNodeWithText("Scheduled").assertIsDisplayed()
         }
     }
@@ -136,38 +105,52 @@ class ReminderListActiveTest {
     }
 
     @Test
-    fun when_reminders_sorted_by_date_earliest_first_should_display_in_expected_order() {
-        setContent()
+    fun when_reminder_list_active_sorted_by_date_earliest_first_should_display_in_expected_order() {
+        setContent(
+            reminderSortOrder = ReminderSortOrder.BY_EARLIEST_DATE_FIRST
+        )
 
         composeTestRule.apply {
-            onNodeWithContentDescription("Sort reminders").performClick()
-
-            onNodeWithText("Date (Earliest first)").performClick()
-            onNodeWithText("Apply").performClick()
-
             val reminders = onNodeWithTag("test_tag_reminder_list_lazy_column")
                 .onChildren()
 
-            reminders[0].assertTextContains("Overdue")
-            reminders[0].assertTextContains("Scheduled")
+            reminders[0].assertTextContains("Test Overdue Reminder")
+            reminders[1].assertTextContains("Test Scheduled Reminder")
         }
     }
 
     @Test
-    fun when_reminders_sorted_by_date_latest_first_should_display_in_expected_order() {
-        setContent()
+    fun when_loading_reminder_list_active_should_display_scaffold_with_blank_list() {
+        setContent(
+            isLoading = true
+        )
 
         composeTestRule.apply {
-            onNodeWithContentDescription("Sort reminders").performClick()
+            onNodeWithText("RemindMe").assertIsDisplayed()
+            onNodeWithContentDescription("Sort reminders").assertIsDisplayed()
+            onNodeWithContentDescription("Completed reminders").assertIsDisplayed()
+            onNodeWithContentDescription("Search reminders").assertIsDisplayed()
+            onNodeWithContentDescription("Add reminder").assertIsDisplayed()
 
-            onNodeWithText("Date (Latest first)").performClick()
-            onNodeWithText("Apply").performClick()
+            onNodeWithText("Test Overdue Reminder").assertDoesNotExist()
+            onNodeWithText("Sat, 01 Jan 2000 • 08:00").assertDoesNotExist()
+            onNodeWithText("Overdue").assertDoesNotExist()
 
-            val reminders = onNodeWithTag("test_tag_reminder_list_lazy_column")
-                .onChildren()
+            onNodeWithText("Test Scheduled Reminder").assertDoesNotExist()
+            onNodeWithText("Wed, 01 Jan 3000 • 09:00").assertDoesNotExist()
+            onNodeWithText("Scheduled").assertDoesNotExist()
+        }
+    }
 
-            reminders[0].assertTextContains("Scheduled")
-            reminders[0].assertTextContains("Overdue")
+    @Test
+    fun when_reminder_list_active_is_empty_should_display_empty_state() {
+        setContent(
+            activeReminderStates = emptyList()
+        )
+
+        composeTestRule.apply {
+            onNodeWithText("No reminders").assertIsDisplayed()
+            onNodeWithText("Add a reminder to get started").assertIsDisplayed()
         }
     }
 }
