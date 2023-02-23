@@ -1,66 +1,67 @@
 package dev.shorthouse.remindme.ui.screen.list.completed
 
+import androidx.datastore.core.DataStoreFactory
+import androidx.datastore.dataStoreFile
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
 import dev.shorthouse.remindme.data.FakeDataSource
 import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.data.protodatastore.UserPreferencesRepository
+import dev.shorthouse.remindme.data.protodatastore.UserPreferencesSerializer
 import dev.shorthouse.remindme.domain.reminder.DeleteCompletedRemindersUseCase
 import dev.shorthouse.remindme.ui.state.ReminderState
 import dev.shorthouse.remindme.util.ReminderTestUtil
-import io.mockk.MockKAnnotations
-import io.mockk.impl.annotations.RelaxedMockK
+import io.mockk.mockk
 import io.mockk.verify
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
-import org.junit.Before
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.test.*
+import org.junit.After
 import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 @OptIn(ExperimentalCoroutinesApi::class)
 class ListCompletedViewModelTest {
-    private lateinit var listCompletedViewModel: ListCompletedViewModel
+    private val testCoroutineDispatcher = StandardTestDispatcher()
 
-    private lateinit var ioDispatcher: CoroutineDispatcher
+    private val testCoroutineScope = TestScope(testCoroutineDispatcher + Job())
 
-    @RelaxedMockK
-    lateinit var userPreferencesRepository: UserPreferencesRepository
+    private val userPreferencesRepository = UserPreferencesRepository(
+        DataStoreFactory.create(
+            serializer = UserPreferencesSerializer,
+            scope = testCoroutineScope,
+            produceFile = {
+                InstrumentationRegistry.getInstrumentation().targetContext.dataStoreFile("test_datastore")
+            }
+        )
+    )
 
-    @RelaxedMockK
-    private lateinit var deleteCompletedRemindersUseCase: DeleteCompletedRemindersUseCase
-
-    @Before
-    fun setup() {
-        MockKAnnotations.init(this)
-
-        ioDispatcher = StandardTestDispatcher()
-
-        val fakeReminderDataSource = FakeDataSource(
+    private val reminderRepository = ReminderRepository(
+        FakeDataSource(
             mutableListOf(
                 ReminderTestUtil().createReminder(
                     id = 1,
-                    name = "Completed reminder",
                     isCompleted = true
                 ),
                 ReminderTestUtil().createReminder(
                     id = 2,
-                    name = "Not completed reminder",
                     isCompleted = false
                 )
             )
         )
+    )
 
-        val reminderRepository = ReminderRepository(fakeReminderDataSource)
+    private val deleteCompletedRemindersUseCase: DeleteCompletedRemindersUseCase = mockk(relaxed = true)
 
-        listCompletedViewModel = ListCompletedViewModel(
-            reminderRepository = reminderRepository,
-            userPreferencesRepository = userPreferencesRepository,
-            ioDispatcher = ioDispatcher,
-            deleteCompletedRemindersUseCase = deleteCompletedRemindersUseCase
-        )
-    }
+    private val listCompletedViewModel = ListCompletedViewModel(
+        reminderRepository = reminderRepository,
+        userPreferencesRepository = userPreferencesRepository,
+        ioDispatcher = testCoroutineDispatcher,
+        deleteCompletedRemindersUseCase = deleteCompletedRemindersUseCase
+    )
 
     @Test
     fun `Default UI state, contains expected values`() {
@@ -75,12 +76,18 @@ class ListCompletedViewModelTest {
 
     @Test
     fun `Initialise UI state, contains expected values`() {
-        val expectedIsLoading = false
+        testCoroutineScope.runTest {
+            val expectedIsLoading = false
 
-        val uiState = listCompletedViewModel.uiState.value
+            listCompletedViewModel.initialiseUiState()
+            advanceUntilIdle()
 
-        assertThat(uiState.completedReminderStates.filter { !it.isCompleted }).isEmpty()
-        assertThat(uiState.isLoading).isEqualTo(expectedIsLoading)
+            val uiState = listCompletedViewModel.uiState.value
+
+            assertThat(uiState.completedReminderStates).isNotEmpty()
+            assertThat(uiState.completedReminderStates.filter { !it.isCompleted }).isEmpty()
+            assertThat(uiState.isLoading).isEqualTo(expectedIsLoading)
+        }
     }
 
     @Test
@@ -88,5 +95,10 @@ class ListCompletedViewModelTest {
         listCompletedViewModel.deleteCompletedReminders()
 
         verify { deleteCompletedRemindersUseCase() }
+    }
+
+    @After
+    fun cleanUp() {
+        testCoroutineScope.cancel()
     }
 }
