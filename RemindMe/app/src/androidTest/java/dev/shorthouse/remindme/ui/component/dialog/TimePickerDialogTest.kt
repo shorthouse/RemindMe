@@ -31,9 +31,8 @@ class TimePickerDialogTest {
         composeTestRule.setContent {
             RemindMeTheme {
                 TimePickerDialog(
-                    reminderState = ReminderTestUtil().createReminderState(
-                        time = LocalTime.parse("08:00")
-                    ),
+                    time = LocalTime.parse("08:00"),
+                    onTimeChange = {},
                     dialogState = MaterialDialogState(
                         initialValue = true
                     )
