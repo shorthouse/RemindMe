@@ -26,11 +26,11 @@ class CancelScheduledNotificationUseCase @Inject constructor(
             context,
             reminder.id.toInt(),
             alarmIntent,
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_NO_CREATE
+            PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
-        alarmManager.cancel(
-            receiverIntent
-        )
+        receiverIntent?.let {
+            alarmManager.cancel(it)
+        }
     }
 }
