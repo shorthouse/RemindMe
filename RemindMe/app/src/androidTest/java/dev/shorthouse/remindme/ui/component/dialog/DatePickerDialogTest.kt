@@ -8,11 +8,10 @@ import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dev.shorthouse.remindme.HiltTestActivity
 import dev.shorthouse.remindme.ui.theme.RemindMeTheme
-import dev.shorthouse.remindme.util.ReminderTestUtil
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import java.time.LocalTime
+import java.time.LocalDate
 
 @HiltAndroidTest
 class DatePickerDialogTest {
@@ -31,13 +30,9 @@ class DatePickerDialogTest {
         composeTestRule.setContent {
             RemindMeTheme {
                 DatePickerDialog(
-                    reminderState = ReminderTestUtil().createReminderState(
-                        date = "Wed, 01 Jan 2020",
-                        time = LocalTime.parse("08:00")
-                    ),
-                    dialogState = MaterialDialogState(
-                        initialValue = true
-                    )
+                    date = LocalDate.of(2020, 1, 1),
+                    onDateChange = {},
+                    dialogState = MaterialDialogState(initialValue = true)
                 )
             }
         }
