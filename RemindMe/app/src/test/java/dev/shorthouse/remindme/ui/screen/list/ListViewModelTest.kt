@@ -7,40 +7,27 @@ import dev.shorthouse.remindme.domain.reminder.CompleteRepeatReminderSeriesUseCa
 import dev.shorthouse.remindme.domain.reminder.DeleteReminderUseCase
 import dev.shorthouse.remindme.ui.state.ReminderState
 import dev.shorthouse.remindme.ui.util.enums.ReminderAction
-import io.mockk.MockKAnnotations
-import io.mockk.impl.annotations.RelaxedMockK
+import io.mockk.mockk
 import io.mockk.verify
-import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class ListViewModelTest {
-    private lateinit var listViewModel: ListViewModel
+    private val completeOnetimeReminderUseCase: CompleteOnetimeReminderUseCase = mockk(relaxed = true)
 
-    @RelaxedMockK
-    private lateinit var completeOnetimeReminderUseCase: CompleteOnetimeReminderUseCase
+    private val completeRepeatReminderOccurrenceUseCase: CompleteRepeatReminderOccurrenceUseCase = mockk(relaxed = true)
 
-    @RelaxedMockK
-    private lateinit var completeRepeatReminderOccurrenceUseCase: CompleteRepeatReminderOccurrenceUseCase
+    private val completeRepeatReminderSeriesUseCase: CompleteRepeatReminderSeriesUseCase = mockk(relaxed = true)
 
-    @RelaxedMockK
-    private lateinit var completeRepeatReminderSeriesUseCase: CompleteRepeatReminderSeriesUseCase
+    private val deleteReminderUseCase: DeleteReminderUseCase = mockk(relaxed = true)
 
-    @RelaxedMockK
-    private lateinit var deleteReminderUseCase: DeleteReminderUseCase
-
-    @Before
-    fun setup() {
-        MockKAnnotations.init(this)
-
-        listViewModel = ListViewModel(
-            completeOnetimeReminderUseCase,
-            completeRepeatReminderOccurrenceUseCase,
-            completeRepeatReminderSeriesUseCase,
-            deleteReminderUseCase
-        )
-    }
+    private val listViewModel: ListViewModel = ListViewModel(
+        completeOnetimeReminderUseCase,
+        completeRepeatReminderOccurrenceUseCase,
+        completeRepeatReminderSeriesUseCase,
+        deleteReminderUseCase
+    )
 
     @Test
     fun `Process complete onetime reminder action, expected use case is called`() {

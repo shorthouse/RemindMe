@@ -19,14 +19,15 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.ui.preview.DefaultReminderProvider
 import dev.shorthouse.remindme.ui.state.ReminderState
-import dev.shorthouse.remindme.ui.util.enums.ReminderAction
 import dev.shorthouse.remindme.ui.theme.RemindMeTheme
+import dev.shorthouse.remindme.ui.util.enums.ReminderAction
 
 @Composable
 fun BottomSheetReminderActions(
@@ -85,7 +86,7 @@ fun BottomSheetReminderActions(
         ) {
             Text(
                 text = reminderState.name,
-                style = MaterialTheme.typography.h5,
+                style = MaterialTheme.typography.h5.copy(fontWeight = FontWeight.Medium),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier

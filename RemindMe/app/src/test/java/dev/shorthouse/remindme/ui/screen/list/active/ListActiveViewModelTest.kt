@@ -1,40 +1,45 @@
 package dev.shorthouse.remindme.ui.screen.list.active
 
+import androidx.datastore.core.DataStoreFactory
+import androidx.datastore.dataStoreFile
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
 import dev.shorthouse.remindme.data.FakeDataSource
 import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.data.protodatastore.ReminderSortOrder
 import dev.shorthouse.remindme.data.protodatastore.UserPreferencesRepository
+import dev.shorthouse.remindme.data.protodatastore.UserPreferencesSerializer
 import dev.shorthouse.remindme.ui.state.ReminderState
 import dev.shorthouse.remindme.util.ReminderTestUtil
-import io.mockk.MockKAnnotations
-import io.mockk.coVerify
-import io.mockk.impl.annotations.RelaxedMockK
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.*
-import org.junit.Before
+import org.junit.After
 import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 @OptIn(ExperimentalCoroutinesApi::class)
 class ListActiveViewModelTest {
-    private lateinit var listActiveViewModel: ListActiveViewModel
+    private val testCoroutineDispatcher = StandardTestDispatcher()
 
-    private lateinit var ioDispatcher: CoroutineDispatcher
+    private val testCoroutineScope = TestScope(testCoroutineDispatcher + Job())
 
-    @RelaxedMockK
-    lateinit var userPreferencesRepository: UserPreferencesRepository
+    private val userPreferencesRepository = UserPreferencesRepository(
+        DataStoreFactory.create(
+            serializer = UserPreferencesSerializer,
+            scope = testCoroutineScope,
+            produceFile = {
+                InstrumentationRegistry.getInstrumentation().targetContext.dataStoreFile("test_datastore")
+            }
+        )
+    )
 
-    @Before
-    fun setup() {
-        MockKAnnotations.init(this)
-
-        ioDispatcher = StandardTestDispatcher()
-
-        val fakeReminderDataSource = FakeDataSource(
+    private val reminderRepository = ReminderRepository(
+        FakeDataSource(
             mutableListOf(
                 ReminderTestUtil().createReminder(
                     id = 1,
@@ -47,15 +52,13 @@ class ListActiveViewModelTest {
                 )
             )
         )
+    )
 
-        val reminderRepository = ReminderRepository(fakeReminderDataSource)
-
-        listActiveViewModel = ListActiveViewModel(
-            reminderRepository = reminderRepository,
-            userPreferencesRepository = userPreferencesRepository,
-            ioDispatcher = ioDispatcher
-        )
-    }
+    private val listActiveViewModel = ListActiveViewModel(
+        reminderRepository = reminderRepository,
+        userPreferencesRepository = userPreferencesRepository,
+        ioDispatcher = testCoroutineDispatcher,
+    )
 
     @Test
     fun `Default UI state, contains expected values`() {
@@ -72,23 +75,37 @@ class ListActiveViewModelTest {
 
     @Test
     fun `Initialise UI state, contains expected values`() {
-        val expectedReminderSortOrder = ReminderSortOrder.BY_EARLIEST_DATE_FIRST
-        val expectedIsLoading = false
+        testCoroutineScope.runTest {
+            listActiveViewModel.initialiseUiState()
+            advanceUntilIdle()
 
-        val uiState = listActiveViewModel.uiState.value
+            val expectedReminderSortOrder = ReminderSortOrder.BY_EARLIEST_DATE_FIRST
+            val expectedIsLoading = false
 
-        assertThat(uiState.activeReminderStates.filter { it.isCompleted }).isEmpty()
-        assertThat(uiState.reminderSortOrder).isEqualTo(expectedReminderSortOrder)
-        assertThat(uiState.isLoading).isEqualTo(expectedIsLoading)
+            val uiState = listActiveViewModel.uiState.value
+
+            assertThat(uiState.activeReminderStates).isNotEmpty()
+            assertThat(uiState.activeReminderStates.filter { it.isCompleted }).isEmpty()
+            assertThat(uiState.reminderSortOrder).isEqualTo(expectedReminderSortOrder)
+            assertThat(uiState.isLoading).isEqualTo(expectedIsLoading)
+        }
     }
 
     @Test
-    fun `Update reminder sort order, calls user preferences repository`() = runTest(ioDispatcher) {
-        val reminderSortOrder = ReminderSortOrder.BY_LATEST_DATE_FIRST
+    fun `Update reminder sort order, sets preferences to expected value`() {
+        testCoroutineScope.runTest {
+            val reminderSortOrder = ReminderSortOrder.BY_LATEST_DATE_FIRST
 
-        listActiveViewModel.updateReminderSortOrder(reminderSortOrder)
-        advanceUntilIdle()
+            listActiveViewModel.updateReminderSortOrder(reminderSortOrder)
+            advanceUntilIdle()
 
-        coVerify { userPreferencesRepository.updateReminderSortOrder(reminderSortOrder) }
+            assertThat(userPreferencesRepository.userPreferencesFlow.first().reminderSortOrder)
+                .isEqualTo(ReminderSortOrder.BY_LATEST_DATE_FIRST)
+        }
+    }
+
+    @After
+    fun cleanUp() {
+        testCoroutineScope.cancel()
     }
 }

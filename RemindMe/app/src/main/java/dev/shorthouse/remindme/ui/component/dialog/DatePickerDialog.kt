@@ -35,7 +35,10 @@ fun DatePickerDialog(
         },
     ) {
         datepicker(
-            initialDate = LocalDate.now(),
+            initialDate = LocalDate.parse(
+                reminderState.date,
+                DateTimeFormatter.ofPattern("EEE, dd MMM yyyy")
+            ),
             title = "",
             onDateChange = { reminderState.date = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy").format(it) },
             allowedDateValidator = { it.isAfter(LocalDate.now().minusDays(1)) }

@@ -26,12 +26,14 @@ fun ReminderAddScreen(
 ) {
     val uiState by inputViewModel.uiState.collectAsStateWithLifecycle()
 
-    ReminderInputScreen(
-        reminderState = uiState.reminderState,
-        inputViewModel = inputViewModel,
-        topBarTitle = stringResource(R.string.top_bar_title_add_reminder),
-        navigator = navigator
-    )
+    if (!uiState.isLoading) {
+        ReminderInputScreen(
+            reminderState = ReminderState(uiState.reminder),
+            inputViewModel = inputViewModel,
+            topBarTitle = stringResource(R.string.top_bar_title_add_reminder),
+            navigator = navigator
+        )
+    }
 }
 
 @Composable

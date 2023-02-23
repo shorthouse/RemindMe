@@ -7,15 +7,16 @@ import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.domain.reminder.AddReminderUseCase
 import dev.shorthouse.remindme.domain.reminder.EditReminderUseCase
 import dev.shorthouse.remindme.util.ReminderTestUtil
-import io.mockk.MockKAnnotations
-import io.mockk.impl.annotations.RelaxedMockK
+import io.mockk.mockk
 import io.mockk.verify
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
-import org.junit.Before
+import org.junit.After
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.time.ZonedDateTime
@@ -23,49 +24,41 @@ import java.time.ZonedDateTime
 @RunWith(AndroidJUnit4::class)
 @OptIn(ExperimentalCoroutinesApi::class)
 class InputViewModelTest {
-    private lateinit var inputViewModel: InputViewModel
+    private val testCoroutineDispatcher = StandardTestDispatcher()
 
-    private lateinit var ioDispatcher: CoroutineDispatcher
+    private val testCoroutineScope = TestScope(testCoroutineDispatcher + Job())
 
-    @RelaxedMockK
-    private lateinit var addReminderUseCase: AddReminderUseCase
-
-    @RelaxedMockK
-    private lateinit var editReminderUseCase: EditReminderUseCase
-
-    private val reminderToEdit = ReminderTestUtil().createReminder(
-        id = 1,
-        name = "reminderToEdit"
-    )
-
-    @Before
-    fun setup() {
-        MockKAnnotations.init(this)
-
-        ioDispatcher = StandardTestDispatcher()
-
-        val fakeReminderDataSource = FakeDataSource(
+    private val reminderRepository = ReminderRepository(
+        FakeDataSource(
             mutableListOf(
-                reminderToEdit
+                ReminderTestUtil().createReminder(
+                    id = 1,
+                )
             )
         )
+    )
 
-        val reminderRepository = ReminderRepository(fakeReminderDataSource)
+    private val addReminderUseCase: AddReminderUseCase = mockk(relaxed = true)
 
-        inputViewModel = InputViewModel(
-            reminderRepository = reminderRepository,
-            ioDispatcher = ioDispatcher,
-            addReminderUseCase = addReminderUseCase,
-            editReminderUseCase = editReminderUseCase
-        )
-    }
+    private val editReminderUseCase: EditReminderUseCase = mockk(relaxed = true)
+
+    private val inputViewModel = InputViewModel(
+        reminderRepository = reminderRepository,
+        ioDispatcher = testCoroutineDispatcher,
+        addReminderUseCase = addReminderUseCase,
+        editReminderUseCase = editReminderUseCase
+    )
 
     @Test
-    fun `Set reminder state, ui state updates and returns expected value`() = runTest(ioDispatcher) {
-        inputViewModel.setReminderState(reminderToEdit.id)
-        advanceUntilIdle()
+    fun `Set reminder state, ui state updates and returns expected value`() {
+        testCoroutineScope.runTest {
+            val reminderToEditId = 1L
 
-        assertThat(inputViewModel.uiState.value.reminderState.id).isEqualTo(reminderToEdit.id)
+            inputViewModel.setReminderState(reminderToEditId)
+            advanceUntilIdle()
+
+            assertThat(inputViewModel.uiState.value.reminderState.id).isEqualTo(reminderToEditId)
+        }
     }
 
     @Test
@@ -116,22 +109,28 @@ class InputViewModelTest {
 
     @Test
     fun `Save reminder called with new reminder, calls add reminder use case`() {
-        val reminderToAdd = ReminderTestUtil().createReminder(
+        val reminder = ReminderTestUtil().createReminder(
             id = 0,
-            name = "reminderToAdd"
         )
 
-        inputViewModel.saveReminder(reminderToAdd)
+        inputViewModel.saveReminder(reminder)
 
-        verify { addReminderUseCase(reminderToAdd) }
+        verify { addReminderUseCase(reminder) }
     }
 
     @Test
     fun `Save reminder called with existing reminder, calls edit reminder use case`() {
-        val editedReminder = reminderToEdit.copy(name = "Edited Reminder Name")
+        val reminder = ReminderTestUtil().createReminder(
+            id = 1
+        )
 
-        inputViewModel.saveReminder(editedReminder)
+        inputViewModel.saveReminder(reminder)
 
-        verify { editReminderUseCase(editedReminder) }
+        verify { editReminderUseCase(reminder) }
+    }
+
+    @After
+    fun cleanUp() {
+        testCoroutineScope.cancel()
     }
 }

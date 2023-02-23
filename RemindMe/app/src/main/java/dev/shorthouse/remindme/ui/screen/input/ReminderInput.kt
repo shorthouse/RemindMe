@@ -39,6 +39,8 @@ import dev.shorthouse.remindme.ui.state.ReminderState
 import dev.shorthouse.remindme.ui.theme.RemindMeTheme
 import dev.shorthouse.remindme.ui.theme.SubtitleGrey
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun ReminderInputScreen(
@@ -229,7 +231,13 @@ fun ReminderDateInput(reminderState: ReminderState, modifier: Modifier = Modifie
     val dateDialogState = rememberMaterialDialogState()
 
     DatePickerDialog(
-        reminderState = reminderState,
+        date = LocalDate.parse(
+            reminderState.date,
+            DateTimeFormatter.ofPattern("EEE, dd MMM yyyy")
+        ),
+        onDateChange = {
+            reminderState.date = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy").format(it)
+        },
         dialogState = dateDialogState
     )
 
@@ -246,7 +254,8 @@ fun ReminderTimeInput(reminderState: ReminderState, modifier: Modifier = Modifie
     val timeDialogState = rememberMaterialDialogState()
 
     TimePickerDialog(
-        reminderState = reminderState,
+        time = reminderState.time,
+        onTimeChange = { reminderState.time = it },
         dialogState = timeDialogState,
     )
 

@@ -15,6 +15,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.ZonedDateTime
 import javax.inject.Inject
@@ -31,17 +32,21 @@ class InputViewModel @Inject constructor(
     val uiState: StateFlow<InputUiState>
         get() = _uiState
 
-    fun setReminderState(reminderId: Long) {
+    val reminder = MutableStateFlow(
+        ReminderState().toReminder()
+    )
+
+    fun setReminder(reminderId: Long) {
+        _uiState.update { it.copy(isLoading = true) }
+
         viewModelScope.launch(ioDispatcher) {
             reminderRepository.getReminder(reminderId)
-                .map { reminder ->
-                    val reminderState = ReminderState(reminder)
-
+                .map {
                     InputUiState(
-                        reminderState = reminderState
+                        reminder = it,
+                        isLoading = false
                     )
-                }
-                .collect {
+                }.collect {
                     _uiState.value = it
                 }
         }
@@ -67,5 +72,6 @@ class InputViewModel @Inject constructor(
 }
 
 data class InputUiState(
-    val reminderState: ReminderState = ReminderState()
+    val reminder: Reminder = ReminderState().toReminder(),
+    val isLoading: Boolean = false
 )
