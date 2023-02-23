@@ -5,20 +5,17 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.MaterialDialogState
 import com.vanpra.composematerialdialogs.datetime.date.datepicker
 import dev.shorthouse.remindme.R
-import dev.shorthouse.remindme.ui.preview.DefaultReminderProvider
-import dev.shorthouse.remindme.ui.state.ReminderState
 import dev.shorthouse.remindme.ui.theme.RemindMeTheme
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 @Composable
 fun DatePickerDialog(
-    reminderState: ReminderState,
+    date: LocalDate,
+    onDateChange: (LocalDate) -> Unit,
     dialogState: MaterialDialogState
 ) {
     MaterialDialog(
@@ -35,12 +32,9 @@ fun DatePickerDialog(
         },
     ) {
         datepicker(
-            initialDate = LocalDate.parse(
-                reminderState.date,
-                DateTimeFormatter.ofPattern("EEE, dd MMM yyyy")
-            ),
+            initialDate = date,
             title = "",
-            onDateChange = { reminderState.date = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy").format(it) },
+            onDateChange = onDateChange,
             allowedDateValidator = { it.isAfter(LocalDate.now().minusDays(1)) }
         )
     }
@@ -49,14 +43,13 @@ fun DatePickerDialog(
 @Composable
 @Preview(name = "Light Mode")
 @Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
-fun DatePickerDialogPreview(
-    @PreviewParameter(DefaultReminderProvider::class) reminderState: ReminderState
-) {
+fun DatePickerDialogPreview() {
     RemindMeTheme {
         val dialogState = MaterialDialogState(initialValue = true)
 
         DatePickerDialog(
-            reminderState = reminderState,
+            date = LocalDate.now(),
+            onDateChange = {},
             dialogState = dialogState
         )
     }

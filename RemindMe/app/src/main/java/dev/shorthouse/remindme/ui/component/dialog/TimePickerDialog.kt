@@ -21,10 +21,12 @@ import dev.shorthouse.remindme.ui.theme.Black
 import dev.shorthouse.remindme.ui.theme.LightGrey
 import dev.shorthouse.remindme.ui.theme.RemindMeTheme
 import dev.shorthouse.remindme.ui.theme.White
+import java.time.LocalTime
 
 @Composable
 fun TimePickerDialog(
-    reminderState: ReminderState,
+    time: LocalTime,
+    onTimeChange: (LocalTime) -> Unit,
     dialogState: MaterialDialogState
 ) {
     MaterialDialog(
@@ -43,10 +45,10 @@ fun TimePickerDialog(
         Spacer(modifier = Modifier.height(dimensionResource(R.dimen.margin_normal)))
 
         timepicker(
-            initialTime = reminderState.time,
+            initialTime = time,
             title = "",
             is24HourClock = true,
-            onTimeChange = { reminderState.time = it },
+            onTimeChange = onTimeChange,
             colors = TimePickerDefaults.colors(
                 activeBackgroundColor = MaterialTheme.colors.primary,
                 activeTextColor = White,
@@ -69,7 +71,8 @@ fun TimePickerDialogPreview(
         val dialogState = MaterialDialogState(initialValue = true)
 
         TimePickerDialog(
-            reminderState = reminderState,
+            time = LocalTime.now(),
+            onTimeChange = {},
             dialogState = dialogState
         )
     }
