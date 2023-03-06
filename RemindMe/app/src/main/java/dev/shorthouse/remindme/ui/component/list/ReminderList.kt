@@ -25,7 +25,7 @@ fun ReminderListContent(
     emptyStateContent: @Composable () -> Unit,
     onReminderCard: (ReminderState) -> Unit,
     contentPadding: PaddingValues,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     if (reminderStates.isEmpty()) {
         emptyStateContent()
@@ -73,7 +73,7 @@ fun ReminderListContentPreview(
             reminderStates = reminderStates,
             emptyStateContent = { EmptyStateActiveReminders() },
             contentPadding = PaddingValues(dimensionResource(R.dimen.margin_tiny)),
-            onReminderCard = {},
+            onReminderCard = {}
         )
     }
 }
