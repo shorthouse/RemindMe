@@ -17,6 +17,7 @@ RemindMe is built using Kotlin and follows [best practices](https://developer.an
 - Proto DataStore
 - Material Design
 - Dark theme
+- Code analysis using Ktlint and Detekt
 
 # Features 📱
  - Set one-off or repeat reminders at a specified time and date
