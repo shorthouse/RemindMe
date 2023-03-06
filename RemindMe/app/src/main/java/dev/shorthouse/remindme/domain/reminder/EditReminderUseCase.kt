@@ -6,10 +6,10 @@ import dev.shorthouse.remindme.domain.notification.CancelScheduledNotificationUs
 import dev.shorthouse.remindme.domain.notification.RemoveDisplayingNotificationUseCase
 import dev.shorthouse.remindme.domain.notification.ScheduleNotificationUseCase
 import dev.shorthouse.remindme.model.Reminder
+import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 class EditReminderUseCase @Inject constructor(
     private val reminderRepository: ReminderRepository,
