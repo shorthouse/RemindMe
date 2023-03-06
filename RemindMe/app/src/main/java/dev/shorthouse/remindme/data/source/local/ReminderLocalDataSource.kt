@@ -2,8 +2,8 @@ package dev.shorthouse.remindme.data.source.local
 
 import dev.shorthouse.remindme.data.ReminderDataSource
 import dev.shorthouse.remindme.model.Reminder
-import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
+import kotlinx.coroutines.flow.Flow
 
 class ReminderLocalDataSource @Inject constructor(private val reminderDao: ReminderDao) :
     ReminderDataSource {
