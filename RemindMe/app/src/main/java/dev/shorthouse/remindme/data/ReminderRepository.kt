@@ -1,12 +1,14 @@
 package dev.shorthouse.remindme.data
 
 import dev.shorthouse.remindme.model.Reminder
-import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlinx.coroutines.flow.Flow
 
 @Singleton
-class ReminderRepository @Inject constructor(private val reminderLocalDataSource: ReminderDataSource) {
+class ReminderRepository @Inject constructor(
+    private val reminderLocalDataSource: ReminderDataSource
+) {
     fun getReminder(id: Long): Flow<Reminder> {
         return reminderLocalDataSource.getReminder(id)
     }
