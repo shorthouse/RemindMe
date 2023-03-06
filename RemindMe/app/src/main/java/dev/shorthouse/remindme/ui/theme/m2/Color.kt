@@ -1,4 +1,4 @@
-package dev.shorthouse.remindme.ui.theme
+package dev.shorthouse.remindme.ui.theme.m2
 
 import androidx.compose.ui.graphics.Color
 
