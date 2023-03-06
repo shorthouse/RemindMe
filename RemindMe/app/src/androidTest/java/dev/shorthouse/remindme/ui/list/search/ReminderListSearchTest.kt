@@ -11,13 +11,13 @@ import dev.shorthouse.remindme.ui.screen.list.search.ReminderListSearchScaffold
 import dev.shorthouse.remindme.ui.state.ReminderState
 import dev.shorthouse.remindme.ui.theme.RemindMeTheme
 import dev.shorthouse.remindme.util.ReminderTestUtil
+import java.time.LocalTime
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import java.time.LocalTime
 
 @HiltAndroidTest
-class ReminderListCompletedTest {
+class ReminderListSearchTest {
     @get:Rule(order = 1)
     var hiltTestRule = HiltAndroidRule(this)
 
@@ -36,7 +36,7 @@ class ReminderListCompletedTest {
                 date = "Wed, 01 Jan 2020",
                 time = LocalTime.parse("08:00"),
                 isCompleted = true
-            ),
+            )
         ),
         searchQuery: String = "",
         isLoading: Boolean = false
@@ -50,7 +50,7 @@ class ReminderListCompletedTest {
                     onNavigateUp = {},
                     onSearchQueryChange = {},
                     onClearSearchQuery = {},
-                    onReminderCard = {},
+                    onReminderCard = {}
                 )
             }
         }

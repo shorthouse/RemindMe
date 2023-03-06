@@ -16,10 +16,10 @@ import dev.shorthouse.remindme.HiltTestActivity
 import dev.shorthouse.remindme.ui.state.ReminderState
 import dev.shorthouse.remindme.ui.theme.RemindMeTheme
 import dev.shorthouse.remindme.util.ReminderTestUtil
+import java.time.LocalTime
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import java.time.LocalTime
 
 @HiltAndroidTest
 class ReminderListTest {
@@ -37,7 +37,7 @@ class ReminderListTest {
     private fun setContent(
         reminderStates: List<ReminderState>,
         emptyStateContent: @Composable () -> Unit,
-        onReminderCard: (ReminderState) -> Unit,
+        onReminderCard: (ReminderState) -> Unit
     ) {
         composeTestRule.setContent {
             RemindMeTheme {
@@ -74,8 +74,8 @@ class ReminderListTest {
                     date = "Wed, 01 Jan 3000",
                     time = LocalTime.parse("10:00"),
                     notes = "notes",
-                    isCompleted = true,
-                ),
+                    isCompleted = true
+                )
             ),
             emptyStateContent = {},
             onReminderCard = {}
@@ -122,8 +122,8 @@ class ReminderListTest {
         setContent(
             reminderStates = listOf(
                 ReminderTestUtil().createReminderState(
-                    name = "Test Click Reminder",
-                ),
+                    name = "Test Click Reminder"
+                )
             ),
             emptyStateContent = { },
             onReminderCard = { isOnReminderCardCalled = true }

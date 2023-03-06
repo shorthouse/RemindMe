@@ -12,10 +12,10 @@ import dev.shorthouse.remindme.ui.screen.list.completed.ReminderListCompletedSca
 import dev.shorthouse.remindme.ui.state.ReminderState
 import dev.shorthouse.remindme.ui.theme.RemindMeTheme
 import dev.shorthouse.remindme.util.ReminderTestUtil
+import java.time.LocalTime
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import java.time.LocalTime
 
 @HiltAndroidTest
 class ReminderListCompletedTest {
@@ -37,7 +37,7 @@ class ReminderListCompletedTest {
                 date = "Wed, 01 Jan 2020",
                 time = LocalTime.parse("08:00"),
                 isCompleted = true
-            ),
+            )
         ),
         isLoading: Boolean = false
     ) {
@@ -48,7 +48,7 @@ class ReminderListCompletedTest {
                     isLoading = isLoading,
                     onNavigateUp = {},
                     onDeleteCompletedReminders = {},
-                    onReminderCard = {},
+                    onReminderCard = {}
                 )
             }
         }
