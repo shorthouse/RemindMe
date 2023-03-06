@@ -29,7 +29,7 @@ fun DatePickerDialog(
                 text = stringResource(R.string.dialog_action_cancel),
                 textStyle = MaterialTheme.typography.button
             )
-        },
+        }
     ) {
         datepicker(
             initialDate = date,
