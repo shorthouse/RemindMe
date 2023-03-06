@@ -12,7 +12,9 @@ import com.google.accompanist.permissions.rememberPermissionState
 @Composable
 fun NotificationPermissionRequester() {
     if (Build.VERSION.SDK_INT >= 33) {
-        val notificationPermissionState = rememberPermissionState(Manifest.permission.POST_NOTIFICATIONS)
+        val notificationPermissionState = rememberPermissionState(
+            Manifest.permission.POST_NOTIFICATIONS
+        )
 
         if (!notificationPermissionState.status.isGranted) {
             LaunchedEffect(Unit) {

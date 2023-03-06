@@ -9,13 +9,13 @@ import dev.shorthouse.remindme.data.protodatastore.UserPreferencesRepository
 import dev.shorthouse.remindme.di.IoDispatcher
 import dev.shorthouse.remindme.domain.reminder.DeleteCompletedRemindersUseCase
 import dev.shorthouse.remindme.ui.state.ReminderState
+import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltViewModel
 class ListCompletedViewModel @Inject constructor(
@@ -37,12 +37,19 @@ class ListCompletedViewModel @Inject constructor(
 
             val userPreferencesFlow = userPreferencesRepository.userPreferencesFlow
 
-            combine(completedRemindersFlow, userPreferencesFlow) { completedReminders, userPreferences ->
+            combine(
+                completedRemindersFlow,
+                userPreferencesFlow
+            ) { completedReminders, userPreferences ->
                 val reminderSortOrder = userPreferences.reminderSortOrder
 
                 val completedReminderStates = when (reminderSortOrder) {
-                    ReminderSortOrder.BY_EARLIEST_DATE_FIRST -> completedReminders.sortedBy { it.startDateTime }
-                    ReminderSortOrder.BY_LATEST_DATE_FIRST -> completedReminders.sortedByDescending { it.startDateTime }
+                    ReminderSortOrder.BY_EARLIEST_DATE_FIRST -> {
+                        completedReminders.sortedBy { it.startDateTime }
+                    }
+                    ReminderSortOrder.BY_LATEST_DATE_FIRST -> {
+                        completedReminders.sortedByDescending { it.startDateTime }
+                    }
                 }
                     .map { ReminderState(it) }
 
@@ -51,7 +58,6 @@ class ListCompletedViewModel @Inject constructor(
                     isLoading = false
                 )
             }.collect { _uiState.value = it }
-
         }
     }
 

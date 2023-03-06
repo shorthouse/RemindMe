@@ -4,11 +4,25 @@ import android.content.res.Configuration
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.*
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.ModalBottomSheetLayout
+import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.DeleteOutline
-import androidx.compose.runtime.*
+import androidx.compose.material.rememberModalBottomSheetState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
@@ -80,7 +94,11 @@ fun ReminderListCompletedScreen(
                             selectedReminderState = selectedReminderState.copy(),
                             reminderAction = reminderAction,
                             onEdit = {
-                                navigator.navigate(ReminderEditScreenDestination(reminderId = selectedReminderState.id))
+                                navigator.navigate(
+                                    ReminderEditScreenDestination(
+                                        reminderId = selectedReminderState.id
+                                    )
+                                )
                             }
                         )
                     }
@@ -88,7 +106,7 @@ fun ReminderListCompletedScreen(
             )
         },
         sheetState = bottomSheetState,
-        scrimColor = Scrim,
+        scrimColor = Scrim
     )
 }
 
@@ -145,14 +163,14 @@ fun ReminderListCompletedTopBar(
         title = {
             Text(
                 text = stringResource(R.string.top_bar_title_completed_reminders),
-                style = MaterialTheme.typography.h6,
+                style = MaterialTheme.typography.h6
             )
         },
         navigationIcon = {
             IconButton(onClick = onNavigateUp) {
                 Icon(
                     imageVector = Icons.Rounded.ArrowBack,
-                    contentDescription = stringResource(R.string.cd_top_app_bar_back),
+                    contentDescription = stringResource(R.string.cd_top_app_bar_back)
                 )
             }
         },
@@ -160,7 +178,9 @@ fun ReminderListCompletedTopBar(
             IconButton(onClick = { isDeleteAllDialogOpen = true }) {
                 Icon(
                     imageVector = Icons.Rounded.DeleteOutline,
-                    contentDescription = stringResource(R.string.cd_top_bar_delete_completed_reminders),
+                    contentDescription = stringResource(
+                        R.string.cd_top_bar_delete_completed_reminders
+                    ),
                     tint = MaterialTheme.colors.onPrimary
                 )
             }
@@ -180,7 +200,7 @@ private fun ReminderListCompletedPreview(
             onNavigateUp = {},
             onDeleteCompletedReminders = {},
             onReminderCard = {},
-            isLoading = false,
+            isLoading = false
         )
     }
 }
