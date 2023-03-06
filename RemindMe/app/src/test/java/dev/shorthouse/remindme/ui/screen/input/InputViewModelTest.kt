@@ -9,6 +9,7 @@ import dev.shorthouse.remindme.domain.reminder.EditReminderUseCase
 import dev.shorthouse.remindme.util.ReminderTestUtil
 import io.mockk.mockk
 import io.mockk.verify
+import java.time.ZonedDateTime
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
@@ -19,7 +20,6 @@ import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.time.ZonedDateTime
 
 @RunWith(AndroidJUnit4::class)
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -32,7 +32,7 @@ class InputViewModelTest {
         FakeDataSource(
             mutableListOf(
                 ReminderTestUtil().createReminder(
-                    id = 1,
+                    id = 1
                 )
             )
         )
@@ -110,7 +110,7 @@ class InputViewModelTest {
     @Test
     fun `Save reminder called with new reminder, calls add reminder use case`() {
         val reminder = ReminderTestUtil().createReminder(
-            id = 0,
+            id = 0
         )
 
         inputViewModel.saveReminder(reminder)
