@@ -4,7 +4,9 @@ import dev.shorthouse.remindme.model.Reminder
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
-class FakeDataSource(private var reminders: MutableList<Reminder> = mutableListOf()) : ReminderDataSource {
+class FakeDataSource(
+    private var reminders: MutableList<Reminder> = mutableListOf()
+) : ReminderDataSource {
     override fun getReminders(): Flow<List<Reminder>> {
         return flowOf(
             reminders

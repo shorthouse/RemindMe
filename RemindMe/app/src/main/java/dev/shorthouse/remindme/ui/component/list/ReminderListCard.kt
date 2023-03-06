@@ -1,9 +1,22 @@
 package dev.shorthouse.remindme.ui.component.list
 
 import android.content.res.Configuration
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.Card
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Notes
 import androidx.compose.material.icons.rounded.NotificationsNone
@@ -20,7 +33,11 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.ui.preview.ReminderListCardProvider
 import dev.shorthouse.remindme.ui.state.ReminderState
-import dev.shorthouse.remindme.ui.theme.*
+import dev.shorthouse.remindme.ui.theme.Blue500
+import dev.shorthouse.remindme.ui.theme.Green
+import dev.shorthouse.remindme.ui.theme.Red
+import dev.shorthouse.remindme.ui.theme.RemindMeTheme
+import dev.shorthouse.remindme.ui.theme.SubtitleGrey
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -42,7 +59,7 @@ fun ReminderListCard(
         ) {
             Text(
                 text = reminderState.name,
-                style = MaterialTheme.typography.body1.copy(fontWeight = FontWeight.Medium),
+                style = MaterialTheme.typography.body1.copy(fontWeight = FontWeight.Medium)
             )
 
             Text(
@@ -56,7 +73,9 @@ fun ReminderListCard(
             Spacer(Modifier.height(dimensionResource(R.dimen.margin_small)))
 
             Row(
-                horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.margin_small)),
+                horizontalArrangement = Arrangement.spacedBy(
+                    dimensionResource(R.dimen.margin_small)
+                ),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 ReminderCardStatus(reminderState = reminderState)
@@ -66,7 +85,9 @@ fun ReminderListCard(
                         imageVector = Icons.Rounded.NotificationsNone,
                         tint = SubtitleGrey,
                         contentDescription = stringResource(R.string.cd_details_notification),
-                        modifier = Modifier.size(dimensionResource(R.dimen.reminder_list_card_icon_size))
+                        modifier = Modifier.size(
+                            dimensionResource(R.dimen.reminder_list_card_icon_size)
+                        )
                     )
                 }
 
@@ -78,7 +99,7 @@ fun ReminderListCard(
                             reminderState.repeatAmount,
                             reminderState.repeatUnit.lowercase()
                         ),
-                        contentDescription = stringResource(R.string.cd_details_repeat_interval),
+                        contentDescription = stringResource(R.string.cd_details_repeat_interval)
                     )
                 }
             }
@@ -112,13 +133,15 @@ private fun ReminderCardStatus(reminderState: ReminderState) {
 
     Surface(
         shape = RoundedCornerShape(dimensionResource(R.dimen.margin_tiny)),
-        color = statusBackgroundColor,
+        color = statusBackgroundColor
     ) {
         Text(
             text = statusText,
             style = MaterialTheme.typography.subtitle2,
             color = MaterialTheme.colors.onPrimary,
-            modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.reminder_list_card_status_padding))
+            modifier = Modifier.padding(
+                horizontal = dimensionResource(R.dimen.reminder_list_card_status_padding)
+            )
         )
     }
 }
@@ -146,7 +169,7 @@ private fun ReminderListCardDetail(
         Text(
             text = text,
             style = MaterialTheme.typography.subtitle2,
-            color = MaterialTheme.colors.onBackground,
+            color = MaterialTheme.colors.onBackground
         )
     }
 }

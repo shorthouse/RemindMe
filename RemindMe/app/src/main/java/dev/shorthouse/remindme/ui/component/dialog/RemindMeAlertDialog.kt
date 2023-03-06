@@ -43,7 +43,7 @@ fun RemindMeAlertDialog(
                 )
             }
         },
-        onDismissRequest = onDismiss,
+        onDismissRequest = onDismiss
     )
 }
 

@@ -11,13 +11,13 @@ import dagger.hilt.android.AndroidEntryPoint
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.di.IoDispatcher
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
-import java.time.ZoneId
-import java.time.ZonedDateTime
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class UpdateReminderTimeZoneService : Service() {
@@ -55,7 +55,10 @@ class UpdateReminderTimeZoneService : Service() {
             val newTimeZoneId = ZoneId.of(newTimeZone)
 
             reminders.forEach { reminder ->
-                val newStartDateTime = ZonedDateTime.of(reminder.startDateTime.toLocalDateTime(), newTimeZoneId)
+                val newStartDateTime = ZonedDateTime.of(
+                    reminder.startDateTime.toLocalDateTime(),
+                    newTimeZoneId
+                )
 
                 val updatedReminder = reminder.copy(
                     startDateTime = newStartDateTime
@@ -66,7 +69,6 @@ class UpdateReminderTimeZoneService : Service() {
                 stopForeground(STOP_FOREGROUND_REMOVE)
                 stopSelf()
             }
-
         }
     }
 

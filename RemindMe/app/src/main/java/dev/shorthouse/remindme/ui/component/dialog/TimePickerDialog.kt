@@ -9,14 +9,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.MaterialDialogState
 import com.vanpra.composematerialdialogs.datetime.time.TimePickerDefaults
 import com.vanpra.composematerialdialogs.datetime.time.timepicker
 import dev.shorthouse.remindme.R
-import dev.shorthouse.remindme.ui.preview.DefaultReminderProvider
-import dev.shorthouse.remindme.ui.state.ReminderState
 import dev.shorthouse.remindme.ui.theme.Black
 import dev.shorthouse.remindme.ui.theme.LightGrey
 import dev.shorthouse.remindme.ui.theme.RemindMeTheme
@@ -40,7 +37,7 @@ fun TimePickerDialog(
                 text = stringResource(R.string.dialog_action_cancel),
                 textStyle = MaterialTheme.typography.button
             )
-        },
+        }
     ) {
         Spacer(modifier = Modifier.height(dimensionResource(R.dimen.margin_normal)))
 
@@ -55,7 +52,7 @@ fun TimePickerDialog(
                 inactiveBackgroundColor = LightGrey,
                 inactiveTextColor = Black,
                 selectorColor = MaterialTheme.colors.primary,
-                selectorTextColor = White,
+                selectorTextColor = White
             )
         )
     }
@@ -64,9 +61,7 @@ fun TimePickerDialog(
 @Composable
 @Preview(name = "Light Mode")
 @Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
-fun TimePickerDialogPreview(
-    @PreviewParameter(DefaultReminderProvider::class) reminderState: ReminderState
-) {
+fun TimePickerDialogPreview() {
     RemindMeTheme {
         val dialogState = MaterialDialogState(initialValue = true)
 

@@ -8,13 +8,13 @@ import dev.shorthouse.remindme.data.protodatastore.ReminderSortOrder
 import dev.shorthouse.remindme.data.protodatastore.UserPreferencesRepository
 import dev.shorthouse.remindme.di.IoDispatcher
 import dev.shorthouse.remindme.ui.state.ReminderState
+import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltViewModel
 class ListActiveViewModel @Inject constructor(
@@ -35,12 +35,19 @@ class ListActiveViewModel @Inject constructor(
 
             val userPreferencesFlow = userPreferencesRepository.userPreferencesFlow
 
-            combine(activeRemindersFlow, userPreferencesFlow) { activeReminders, userPreferences ->
+            combine(
+                activeRemindersFlow,
+                userPreferencesFlow
+            ) { activeReminders, userPreferences ->
                 val reminderSortOrder = userPreferences.reminderSortOrder
 
                 val activeReminderStates = when (reminderSortOrder) {
-                    ReminderSortOrder.BY_EARLIEST_DATE_FIRST -> activeReminders.sortedBy { it.startDateTime }
-                    ReminderSortOrder.BY_LATEST_DATE_FIRST -> activeReminders.sortedByDescending { it.startDateTime }
+                    ReminderSortOrder.BY_EARLIEST_DATE_FIRST -> {
+                        activeReminders.sortedBy { it.startDateTime }
+                    }
+                    ReminderSortOrder.BY_LATEST_DATE_FIRST -> {
+                        activeReminders.sortedByDescending { it.startDateTime }
+                    }
                 }
                     .map { ReminderState(it) }
 

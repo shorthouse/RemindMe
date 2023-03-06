@@ -11,7 +11,11 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.test.*
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -46,7 +50,9 @@ class UserPreferencesRepositoryTest {
                 reminderSortOrder = ReminderSortOrder.BY_EARLIEST_DATE_FIRST
             )
 
-            userPreferencesRepository.updateReminderSortOrder(ReminderSortOrder.BY_EARLIEST_DATE_FIRST)
+            userPreferencesRepository.updateReminderSortOrder(
+                ReminderSortOrder.BY_EARLIEST_DATE_FIRST
+            )
 
             val userPreferences = userPreferencesRepository.userPreferencesFlow.first()
 
@@ -61,7 +67,9 @@ class UserPreferencesRepositoryTest {
                 reminderSortOrder = ReminderSortOrder.BY_LATEST_DATE_FIRST
             )
 
-            userPreferencesRepository.updateReminderSortOrder(ReminderSortOrder.BY_LATEST_DATE_FIRST)
+            userPreferencesRepository.updateReminderSortOrder(
+                ReminderSortOrder.BY_LATEST_DATE_FIRST
+            )
 
             val userPreferences = userPreferencesRepository.userPreferencesFlow.first()
 

@@ -17,7 +17,10 @@ import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.test.*
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -34,7 +37,9 @@ class ListCompletedViewModelTest {
             serializer = UserPreferencesSerializer,
             scope = testCoroutineScope,
             produceFile = {
-                InstrumentationRegistry.getInstrumentation().targetContext.dataStoreFile("test_datastore")
+                InstrumentationRegistry.getInstrumentation().targetContext.dataStoreFile(
+                    "test_datastore"
+                )
             }
         )
     )
@@ -54,7 +59,9 @@ class ListCompletedViewModelTest {
         )
     )
 
-    private val deleteCompletedRemindersUseCase: DeleteCompletedRemindersUseCase = mockk(relaxed = true)
+    private val deleteCompletedRemindersUseCase: DeleteCompletedRemindersUseCase = mockk(
+        relaxed = true
+    )
 
     private val listCompletedViewModel = ListCompletedViewModel(
         reminderRepository = reminderRepository,

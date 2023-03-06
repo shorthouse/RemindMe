@@ -2,15 +2,34 @@ package dev.shorthouse.remindme.ui.screen.list.search
 
 import android.content.res.Configuration
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.ModalBottomSheetLayout
+import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Close
-import androidx.compose.runtime.*
+import androidx.compose.material.rememberModalBottomSheetState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -42,7 +61,11 @@ import dev.shorthouse.remindme.ui.theme.Scrim
 import dev.shorthouse.remindme.ui.theme.SubtitleGrey
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalComposeUiApi::class, ExperimentalLifecycleComposeApi::class)
+@OptIn(
+    ExperimentalMaterialApi::class,
+    ExperimentalComposeUiApi::class,
+    ExperimentalLifecycleComposeApi::class
+)
 @Destination
 @Composable
 fun ReminderListSearchScreen(
@@ -97,7 +120,11 @@ fun ReminderListSearchScreen(
                             selectedReminderState = selectedReminderState.copy(),
                             reminderAction = reminderAction,
                             onEdit = {
-                                navigator.navigate(ReminderEditScreenDestination(reminderId = selectedReminderState.id))
+                                navigator.navigate(
+                                    ReminderEditScreenDestination(
+                                        reminderId = selectedReminderState.id
+                                    )
+                                )
                             }
                         )
                     }
@@ -105,7 +132,7 @@ fun ReminderListSearchScreen(
             )
         },
         sheetState = bottomSheetState,
-        scrimColor = Scrim,
+        scrimColor = Scrim
     )
 }
 
@@ -161,15 +188,15 @@ fun ReminderListSearchTopBar(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(
-                        horizontal = dimensionResource(R.dimen.search_text_field_padding_horizontal),
-                        vertical = dimensionResource(R.dimen.search_text_field_padding_vertical),
+                        horizontal = dimensionResource(R.dimen.search_text_field_padding),
+                        vertical = dimensionResource(R.dimen.search_text_field_padding)
                     )
             ) {
                 val keyboardController = LocalSoftwareKeyboardController.current
                 val focusRequester = remember { FocusRequester() }
 
                 Row(
-                    verticalAlignment = Alignment.CenterVertically,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
                     IconButton(onClick = onNavigateUp) {
                         Icon(
@@ -187,7 +214,9 @@ fun ReminderListSearchTopBar(
                             imeAction = ImeAction.Search,
                             autoCorrect = true
                         ),
-                        keyboardActions = KeyboardActions(onSearch = { keyboardController?.hide() }),
+                        keyboardActions = KeyboardActions(
+                            onSearch = { keyboardController?.hide() }
+                        ),
                         singleLine = true,
                         decorationBox = { innerTextField ->
                             if (searchQuery.isEmpty()) {

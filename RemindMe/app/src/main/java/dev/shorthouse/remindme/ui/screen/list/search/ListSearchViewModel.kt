@@ -11,6 +11,7 @@ import dev.shorthouse.remindme.ui.state.ReminderState
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -20,7 +21,7 @@ import javax.inject.Inject
 class ListSearchViewModel @Inject constructor(
     private val reminderRepository: ReminderRepository,
     private val userPreferencesRepository: UserPreferencesRepository,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(ListSearchUiState())
 
@@ -39,32 +40,41 @@ class ListSearchViewModel @Inject constructor(
 
             val searchQueryFlow = _searchQuery
 
-            combine(remindersFlow, userPreferencesFlow, searchQueryFlow) { reminders, userPreferences, searchQuery ->
+            combine(
+                remindersFlow,
+                userPreferencesFlow,
+                searchQueryFlow
+            ) { reminders, userPreferences, searchQuery ->
+                val searchReminders = if (searchQuery.isNotEmpty()) {
+                    reminders.filter { it.name.contains(searchQuery, ignoreCase = true) }
+                } else {
+                    reminders
+                }
+
                 val reminderSortOrder = userPreferences.reminderSortOrder
 
                 val reminderStates = when (reminderSortOrder) {
-                    ReminderSortOrder.BY_EARLIEST_DATE_FIRST -> reminders.sortedBy { it.startDateTime }
-                    ReminderSortOrder.BY_LATEST_DATE_FIRST -> reminders.sortedByDescending { it.startDateTime }
+                    ReminderSortOrder.BY_EARLIEST_DATE_FIRST -> {
+                        searchReminders.sortedBy { it.startDateTime }
+                    }
+                    ReminderSortOrder.BY_LATEST_DATE_FIRST -> {
+                        searchReminders.sortedByDescending { it.startDateTime }
+                    }
                 }
                     .map { ReminderState(it) }
 
-                val searchReminderStates = if (searchQuery.isNotEmpty()) {
-                    reminderStates.filter { it.name.contains(searchQuery, ignoreCase = true) }
-                } else {
-                    reminderStates
-                }
-
                 ListSearchUiState(
-                    searchReminderStates = searchReminderStates,
+                    searchReminderStates = reminderStates,
                     searchQuery = searchQuery,
                     isLoading = false
                 )
-            }.collect { _uiState.value = it }
+            }.collectLatest { _uiState.value = it }
         }
     }
 
     fun setSearchQuery(searchQuery: String) {
         _searchQuery.value = searchQuery
+        _uiState.update { it.copy(searchQuery = searchQuery) }
     }
 }
 

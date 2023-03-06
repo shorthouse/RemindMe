@@ -4,6 +4,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.util.ReminderTestUtil
+import java.time.ZonedDateTime
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.first
@@ -12,7 +13,6 @@ import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.time.ZonedDateTime
 
 @ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)
@@ -30,7 +30,7 @@ class ReminderRepositoryTest {
         testCoroutineScope.runTest {
             val reminderToGet = ReminderTestUtil().createReminder(
                 id = 1,
-                name = "reminderToGet",
+                name = "reminderToGet"
             )
 
             val repositoryReminders = listOf(reminderToGet)
@@ -47,7 +47,7 @@ class ReminderRepositoryTest {
         testCoroutineScope.runTest {
             val reminderToGet = ReminderTestUtil().createReminder(
                 id = 1,
-                name = "reminderToGet",
+                name = "reminderToGet"
             )
 
             val repositoryReminders = listOf(reminderToGet)
@@ -64,12 +64,12 @@ class ReminderRepositoryTest {
         testCoroutineScope.runTest {
             val reminderOne = ReminderTestUtil().createReminder(
                 id = 1,
-                name = "reminderOne",
+                name = "reminderOne"
             )
 
             val reminderTwo = ReminderTestUtil().createReminder(
                 id = 2,
-                name = "reminderTwo",
+                name = "reminderTwo"
             )
 
             val repositoryReminders = listOf(reminderOne, reminderTwo)
@@ -86,12 +86,12 @@ class ReminderRepositoryTest {
         testCoroutineScope.runTest {
             val reminderOne = ReminderTestUtil().createReminder(
                 id = 1,
-                name = "reminderOne",
+                name = "reminderOne"
             )
 
             val reminderTwo = ReminderTestUtil().createReminder(
                 id = 2,
-                name = "reminderTwo",
+                name = "reminderTwo"
             )
 
             val repositoryReminders = listOf(reminderOne, reminderTwo)
@@ -109,13 +109,13 @@ class ReminderRepositoryTest {
             val overdueReminder = ReminderTestUtil().createReminder(
                 id = 1,
                 name = "overdueReminder",
-                startDateTime = ZonedDateTime.parse("3000-01-01T00:00:00Z"),
+                startDateTime = ZonedDateTime.parse("3000-01-01T00:00:00Z")
             )
 
             val scheduledReminder = ReminderTestUtil().createReminder(
                 id = 2,
                 name = "scheduledReminder",
-                startDateTime = ZonedDateTime.parse("2000-01-01T00:00:00Z"),
+                startDateTime = ZonedDateTime.parse("2000-01-01T00:00:00Z")
             )
 
             val completedReminder = ReminderTestUtil().createReminder(
@@ -191,7 +191,7 @@ class ReminderRepositoryTest {
         testCoroutineScope.runTest {
             val reminderToInsert = ReminderTestUtil().createReminder(
                 id = 1,
-                name = "reminderToInsert",
+                name = "reminderToInsert"
             )
 
             setRepositoryReminders(emptyList())

@@ -5,15 +5,15 @@ import dev.shorthouse.remindme.di.IoDispatcher
 import dev.shorthouse.remindme.domain.notification.RemoveDisplayingNotificationUseCase
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.util.floor
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 import java.time.ZonedDateTime
 import javax.inject.Inject
 import kotlin.time.DurationUnit
 import kotlin.time.times
 import kotlin.time.toDuration
 import kotlin.time.toKotlinDuration
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 class CompleteRepeatReminderOccurrenceUseCase @Inject constructor(
     private val reminderRepository: ReminderRepository,
@@ -41,7 +41,9 @@ class CompleteRepeatReminderOccurrenceUseCase @Inject constructor(
     private fun getUpdatedReminderStartDateTime(reminder: Reminder): ZonedDateTime {
         val repeatInterval = reminder.repeatInterval ?: return reminder.startDateTime
 
-        val repeatDuration = repeatInterval.unit.duration.multipliedBy(repeatInterval.amount).toKotlinDuration()
+        val repeatDuration = repeatInterval.unit.duration
+            .multipliedBy(repeatInterval.amount)
+            .toKotlinDuration()
 
         if (reminder.startDateTime.isAfter(ZonedDateTime.now())) {
             return reminder.startDateTime.plusSeconds(repeatDuration.inWholeSeconds)

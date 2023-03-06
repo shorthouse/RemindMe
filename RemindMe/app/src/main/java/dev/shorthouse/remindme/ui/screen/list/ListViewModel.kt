@@ -27,7 +27,9 @@ class ListViewModel @Inject constructor(
         when (reminderAction) {
             ReminderAction.EDIT -> onEdit()
             ReminderAction.COMPLETE_ONETIME -> completeOnetimeReminderUseCase(reminder)
-            ReminderAction.COMPLETE_REPEAT_OCCURRENCE -> completeRepeatReminderOccurrenceUseCase(reminder)
+            ReminderAction.COMPLETE_REPEAT_OCCURRENCE -> completeRepeatReminderOccurrenceUseCase(
+                reminder
+            )
             ReminderAction.COMPLETE_REPEAT_SERIES -> completeRepeatReminderSeriesUseCase(reminder)
             ReminderAction.DELETE -> deleteReminderUseCase(reminder)
         }

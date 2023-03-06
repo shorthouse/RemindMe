@@ -1,7 +1,13 @@
 package dev.shorthouse.remindme.ui.list.active
 
-import androidx.compose.ui.test.*
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onChildren
+import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dev.shorthouse.remindme.HiltTestActivity
@@ -10,10 +16,10 @@ import dev.shorthouse.remindme.ui.screen.list.active.ReminderListActiveScaffold
 import dev.shorthouse.remindme.ui.state.ReminderState
 import dev.shorthouse.remindme.ui.theme.RemindMeTheme
 import dev.shorthouse.remindme.util.ReminderTestUtil
+import java.time.LocalTime
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import java.time.LocalTime
 
 @HiltAndroidTest
 class ReminderListActiveTest {
@@ -39,7 +45,7 @@ class ReminderListActiveTest {
                 name = "Test Scheduled Reminder",
                 date = "Wed, 01 Jan 3000",
                 time = LocalTime.parse("09:00")
-            ),
+            )
         ),
         reminderSortOrder: ReminderSortOrder = ReminderSortOrder.BY_EARLIEST_DATE_FIRST,
         isLoading: Boolean = false
@@ -54,7 +60,7 @@ class ReminderListActiveTest {
                     onNavigateAdd = {},
                     onNavigateSearch = {},
                     onReminderCard = {},
-                    onNavigateCompletedReminders = {},
+                    onNavigateCompletedReminders = {}
                 )
             }
         }

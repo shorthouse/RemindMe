@@ -53,7 +53,7 @@ private fun ReminderEditPreview(
             scaffoldState = scaffoldState,
             topBarTitle = topBarTitle,
             onNavigateUp = {},
-            onSave = {},
+            onSave = {}
         )
     }
 }

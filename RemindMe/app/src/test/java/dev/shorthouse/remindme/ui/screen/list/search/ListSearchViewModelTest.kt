@@ -15,7 +15,10 @@ import io.mockk.MockKAnnotations
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.test.*
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -33,7 +36,9 @@ class ListSearchViewModelTest {
             serializer = UserPreferencesSerializer,
             scope = testCoroutineScope,
             produceFile = {
-                InstrumentationRegistry.getInstrumentation().targetContext.dataStoreFile("test_datastore")
+                InstrumentationRegistry.getInstrumentation().targetContext.dataStoreFile(
+                    "test_datastore"
+                )
             }
         )
     )
@@ -56,7 +61,7 @@ class ListSearchViewModelTest {
     private val listSearchViewModel = ListSearchViewModel(
         reminderRepository = reminderRepository,
         userPreferencesRepository = userPreferencesRepository,
-        ioDispatcher = testCoroutineDispatcher,
+        ioDispatcher = testCoroutineDispatcher
     )
 
     @Before
@@ -89,7 +94,11 @@ class ListSearchViewModelTest {
             val uiState = listSearchViewModel.uiState.value
 
             assertThat(uiState.searchReminderStates).isNotEmpty()
-            assertThat(uiState.searchReminderStates.all { it.name.contains(expectedSearchQuery) }).isTrue()
+            assertThat(
+                uiState.searchReminderStates.all {
+                    it.name.contains(expectedSearchQuery)
+                }
+            ).isTrue()
             assertThat(uiState.searchQuery).isEqualTo(expectedSearchQuery)
             assertThat(uiState.isLoading).isEqualTo(expectedIsLoading)
         }

@@ -1,10 +1,11 @@
 package dev.shorthouse.remindme.data.protodatastore
 
+import android.util.Log
 import androidx.datastore.core.Serializer
-import kotlinx.serialization.SerializationException
-import kotlinx.serialization.json.Json
 import java.io.InputStream
 import java.io.OutputStream
+import kotlinx.serialization.SerializationException
+import kotlinx.serialization.json.Json
 
 @Suppress("BlockingMethodInNonBlockingContext")
 object UserPreferencesSerializer : Serializer<UserPreferences> {
@@ -18,7 +19,7 @@ object UserPreferencesSerializer : Serializer<UserPreferences> {
                 string = input.readBytes().decodeToString()
             )
         } catch (e: SerializationException) {
-            e.printStackTrace()
+            Log.e("UserPreferencesSerializer", "Error serializing user preferences.", e)
             defaultValue
         }
     }

@@ -8,10 +8,10 @@ import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dev.shorthouse.remindme.HiltTestActivity
 import dev.shorthouse.remindme.ui.theme.RemindMeTheme
+import java.time.LocalDate
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import java.time.LocalDate
 
 @HiltAndroidTest
 class DatePickerDialogTest {

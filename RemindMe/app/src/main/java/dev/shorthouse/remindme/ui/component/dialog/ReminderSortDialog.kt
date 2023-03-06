@@ -2,10 +2,22 @@ package dev.shorthouse.remindme.ui.component.dialog
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.selectable
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.RadioButton
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
+import androidx.compose.material.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -25,7 +37,7 @@ import dev.shorthouse.remindme.ui.theme.RemindMeTheme
 fun ReminderSortDialog(
     initialSort: ReminderSortOrder,
     onApplySort: (ReminderSortOrder) -> Unit,
-    onDismiss: () -> Unit,
+    onDismiss: () -> Unit
 ) {
     var selectedSortOption by remember { mutableStateOf(initialSort) }
     val sortOptions = ReminderSortOrder.values()
@@ -98,7 +110,7 @@ fun ReminderSortDialog(
                         Text(
                             text = stringResource(R.string.dialog_action_apply),
                             style = MaterialTheme.typography.button,
-                            color = MaterialTheme.colors.primary,
+                            color = MaterialTheme.colors.primary
                         )
                     }
                 }

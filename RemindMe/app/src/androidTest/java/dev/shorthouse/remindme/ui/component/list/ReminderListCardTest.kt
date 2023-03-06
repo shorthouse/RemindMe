@@ -10,10 +10,10 @@ import dev.shorthouse.remindme.HiltTestActivity
 import dev.shorthouse.remindme.ui.state.ReminderState
 import dev.shorthouse.remindme.ui.theme.RemindMeTheme
 import dev.shorthouse.remindme.util.ReminderTestUtil
+import java.time.LocalTime
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import java.time.LocalTime
 
 @HiltAndroidTest
 class ReminderListCardTest {
@@ -33,7 +33,7 @@ class ReminderListCardTest {
             RemindMeTheme {
                 ReminderListCard(
                     reminderState = reminderState,
-                    onReminderCard = {},
+                    onReminderCard = {}
                 )
             }
         }
