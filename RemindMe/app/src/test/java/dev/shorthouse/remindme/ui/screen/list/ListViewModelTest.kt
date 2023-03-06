@@ -14,11 +14,18 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class ListViewModelTest {
-    private val completeOnetimeReminderUseCase: CompleteOnetimeReminderUseCase = mockk(relaxed = true)
+    private val completeOnetimeReminderUseCase: CompleteOnetimeReminderUseCase = mockk(
+        relaxed = true
+    )
 
-    private val completeRepeatReminderOccurrenceUseCase: CompleteRepeatReminderOccurrenceUseCase = mockk(relaxed = true)
+    private val completeRepeatReminderOccurrenceUseCase: CompleteRepeatReminderOccurrenceUseCase =
+        mockk(
+            relaxed = true
+        )
 
-    private val completeRepeatReminderSeriesUseCase: CompleteRepeatReminderSeriesUseCase = mockk(relaxed = true)
+    private val completeRepeatReminderSeriesUseCase: CompleteRepeatReminderSeriesUseCase = mockk(
+        relaxed = true
+    )
 
     private val deleteReminderUseCase: DeleteReminderUseCase = mockk(relaxed = true)
 

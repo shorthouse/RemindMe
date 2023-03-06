@@ -87,7 +87,9 @@ private class ReminderStateImpl(
 
     companion object {
         val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy")
-        val dateTimeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm")
+        val dateTimeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern(
+            "EEE, dd MMM yyyy HH:mm"
+        )
 
         private fun getDateToday(): String {
             return ZonedDateTime.now()
@@ -132,7 +134,10 @@ private class ReminderStateImpl(
                 .atZone(ZoneId.systemDefault())
         }
 
-        private fun getReminderRepeatInterval(repeatAmount: String, repeatUnit: String): RepeatInterval {
+        private fun getReminderRepeatInterval(
+            repeatAmount: String,
+            repeatUnit: String
+        ): RepeatInterval {
             return RepeatInterval(
                 amount = repeatAmount.toLongOrNull() ?: 1,
                 unit = when {
@@ -149,7 +154,14 @@ private class ReminderStateImpl(
             name = _name,
             startDateTime = getReminderStartDateTime(_date, _time),
             isNotificationSent = _isNotificationSent,
-            repeatInterval = if (isRepeatReminder) getReminderRepeatInterval(_repeatAmount, _repeatUnit) else null,
+            repeatInterval = if (isRepeatReminder) {
+                getReminderRepeatInterval(
+                    _repeatAmount,
+                    _repeatUnit
+                )
+            } else {
+                null
+            },
             notes = _notes?.trim()?.ifBlank { null },
             isCompleted = _isCompleted
         )
