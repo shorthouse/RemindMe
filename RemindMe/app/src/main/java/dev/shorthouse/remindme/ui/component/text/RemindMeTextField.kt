@@ -5,7 +5,11 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.TextStyle
@@ -48,7 +52,12 @@ fun RemindMeTextField(
 
 @Composable
 @Preview(name = "Light Mode", showBackground = true, widthDp = 200)
-@Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true, widthDp = 200)
+@Preview(
+    name = "Dark Mode",
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    showBackground = true,
+    widthDp = 200
+)
 fun RemindMeTextFieldPreview() {
     RemindMeTheme {
         var text by remember { mutableStateOf("") }
@@ -62,7 +71,7 @@ fun RemindMeTextFieldPreview() {
             onTextChange = onTextChange,
             textStyle = textStyle,
             hintText = hintText,
-            imeAction = imeAction,
+            imeAction = imeAction
         )
     }
 }
