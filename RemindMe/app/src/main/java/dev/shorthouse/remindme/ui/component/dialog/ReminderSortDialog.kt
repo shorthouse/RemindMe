@@ -30,7 +30,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.data.protodatastore.ReminderSortOrder
-import dev.shorthouse.remindme.ui.theme.RemindMeTheme
+import dev.shorthouse.remindme.ui.theme.m2.RemindMeTheme
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable

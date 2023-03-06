@@ -9,7 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import dev.shorthouse.remindme.R
-import dev.shorthouse.remindme.ui.theme.RemindMeTheme
+import dev.shorthouse.remindme.ui.theme.m2.RemindMeTheme
 
 @Composable
 fun RemindMeAlertDialog(

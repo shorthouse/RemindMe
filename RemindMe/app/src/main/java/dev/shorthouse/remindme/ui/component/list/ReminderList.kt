@@ -17,7 +17,7 @@ import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.ui.component.emptystate.EmptyStateActiveReminders
 import dev.shorthouse.remindme.ui.preview.ReminderListProvider
 import dev.shorthouse.remindme.ui.state.ReminderState
-import dev.shorthouse.remindme.ui.theme.RemindMeTheme
+import dev.shorthouse.remindme.ui.theme.m2.RemindMeTheme
 
 @Composable
 fun ReminderListContent(

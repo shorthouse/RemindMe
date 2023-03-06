@@ -52,8 +52,8 @@ import dev.shorthouse.remindme.ui.screen.destinations.ReminderListCompletedScree
 import dev.shorthouse.remindme.ui.screen.destinations.ReminderListSearchScreenDestination
 import dev.shorthouse.remindme.ui.screen.list.ListViewModel
 import dev.shorthouse.remindme.ui.state.ReminderState
-import dev.shorthouse.remindme.ui.theme.RemindMeTheme
-import dev.shorthouse.remindme.ui.theme.Scrim
+import dev.shorthouse.remindme.ui.theme.m2.RemindMeTheme
+import dev.shorthouse.remindme.ui.theme.m2.Scrim
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalLifecycleComposeApi::class)

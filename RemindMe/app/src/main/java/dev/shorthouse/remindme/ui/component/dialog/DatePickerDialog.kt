@@ -9,7 +9,7 @@ import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.MaterialDialogState
 import com.vanpra.composematerialdialogs.datetime.date.datepicker
 import dev.shorthouse.remindme.R
-import dev.shorthouse.remindme.ui.theme.RemindMeTheme
+import dev.shorthouse.remindme.ui.theme.m2.RemindMeTheme
 import java.time.LocalDate
 
 @Composable

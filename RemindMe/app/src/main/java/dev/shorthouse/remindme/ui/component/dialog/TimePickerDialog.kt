@@ -14,10 +14,10 @@ import com.vanpra.composematerialdialogs.MaterialDialogState
 import com.vanpra.composematerialdialogs.datetime.time.TimePickerDefaults
 import com.vanpra.composematerialdialogs.datetime.time.timepicker
 import dev.shorthouse.remindme.R
-import dev.shorthouse.remindme.ui.theme.Black
-import dev.shorthouse.remindme.ui.theme.LightGrey
-import dev.shorthouse.remindme.ui.theme.RemindMeTheme
-import dev.shorthouse.remindme.ui.theme.White
+import dev.shorthouse.remindme.ui.theme.m2.Black
+import dev.shorthouse.remindme.ui.theme.m2.LightGrey
+import dev.shorthouse.remindme.ui.theme.m2.RemindMeTheme
+import dev.shorthouse.remindme.ui.theme.m2.White
 import java.time.LocalTime
 
 @Composable

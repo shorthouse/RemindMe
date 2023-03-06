@@ -33,11 +33,11 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.ui.preview.ReminderListCardProvider
 import dev.shorthouse.remindme.ui.state.ReminderState
-import dev.shorthouse.remindme.ui.theme.Blue500
-import dev.shorthouse.remindme.ui.theme.Green
-import dev.shorthouse.remindme.ui.theme.Red
-import dev.shorthouse.remindme.ui.theme.RemindMeTheme
-import dev.shorthouse.remindme.ui.theme.SubtitleGrey
+import dev.shorthouse.remindme.ui.theme.m2.Blue500
+import dev.shorthouse.remindme.ui.theme.m2.Green
+import dev.shorthouse.remindme.ui.theme.m2.Red
+import dev.shorthouse.remindme.ui.theme.m2.RemindMeTheme
+import dev.shorthouse.remindme.ui.theme.m2.SubtitleGrey
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable

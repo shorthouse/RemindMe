@@ -31,7 +31,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.ui.preview.DefaultReminderProvider
 import dev.shorthouse.remindme.ui.state.ReminderState
-import dev.shorthouse.remindme.ui.theme.RemindMeTheme
+import dev.shorthouse.remindme.ui.theme.m2.RemindMeTheme
 import dev.shorthouse.remindme.ui.util.enums.ReminderAction
 
 @Composable

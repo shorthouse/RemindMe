@@ -20,8 +20,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import dev.shorthouse.remindme.R
-import dev.shorthouse.remindme.ui.theme.RemindMeTheme
-import dev.shorthouse.remindme.ui.theme.SubtitleGrey
+import dev.shorthouse.remindme.ui.theme.m2.RemindMeTheme
+import dev.shorthouse.remindme.ui.theme.m2.SubtitleGrey
 
 @Composable
 fun EmptyStateActiveReminders(modifier: Modifier = Modifier) {
