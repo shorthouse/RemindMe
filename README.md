@@ -13,7 +13,6 @@ RemindMe is built using Kotlin and follows [best practices](https://developer.an
 - Hilt
 - ViewModel
 - Room
-- Detekt
 - Proto DataStore
 - Material Design
 - Dark theme
