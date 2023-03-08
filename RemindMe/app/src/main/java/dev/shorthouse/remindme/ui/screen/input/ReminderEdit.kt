@@ -1,9 +1,10 @@
 package dev.shorthouse.remindme.ui.screen.input
 
 import android.content.res.Configuration
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -15,7 +16,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.ui.preview.DefaultReminderProvider
 import dev.shorthouse.remindme.ui.state.ReminderState
-import dev.shorthouse.remindme.ui.theme.m2.RemindMeTheme
+import dev.shorthouse.remindme.ui.theme.m3.AppTheme
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Destination
@@ -44,13 +45,13 @@ fun ReminderEditScreen(
 private fun ReminderEditPreview(
     @PreviewParameter(DefaultReminderProvider::class) reminderState: ReminderState
 ) {
-    RemindMeTheme {
-        val scaffoldState = rememberScaffoldState()
+    AppTheme {
+        val snackbarHostState = remember { SnackbarHostState() }
         val topBarTitle = stringResource(R.string.top_bar_title_edit_reminder)
 
         ReminderInputScaffold(
             reminderState = reminderState,
-            scaffoldState = scaffoldState,
+            snackbarHostState = snackbarHostState,
             topBarTitle = topBarTitle,
             onNavigateUp = {},
             onSave = {}
