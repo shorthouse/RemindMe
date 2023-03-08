@@ -69,9 +69,9 @@ import dev.shorthouse.remindme.ui.preview.DefaultReminderProvider
 import dev.shorthouse.remindme.ui.state.ReminderState
 import dev.shorthouse.remindme.ui.theme.m2.RemindMeTheme
 import dev.shorthouse.remindme.ui.theme.m2.SubtitleGrey
-import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import kotlinx.coroutines.launch
 
 @Composable
 fun ReminderInputScreen(

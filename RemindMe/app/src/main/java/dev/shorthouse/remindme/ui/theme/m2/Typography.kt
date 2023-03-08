@@ -35,7 +35,7 @@ val RemindMeTypography = Typography(
     ),
     subtitle1 = TextStyle(
         fontSize = 18.sp,
-        fontWeight = FontWeight.Normal,
+        fontWeight = FontWeight.Normal
     ),
     subtitle2 = TextStyle(
         fontSize = 16.sp,
