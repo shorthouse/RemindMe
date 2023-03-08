@@ -8,15 +8,15 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.rounded.ChecklistRtl
 import androidx.compose.material.icons.rounded.DeleteOutline
 import androidx.compose.material.icons.rounded.TaskAlt
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,7 +31,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.ui.preview.DefaultReminderProvider
 import dev.shorthouse.remindme.ui.state.ReminderState
-import dev.shorthouse.remindme.ui.theme.m2.RemindMeTheme
+import dev.shorthouse.remindme.ui.theme.m3.AppTheme
 import dev.shorthouse.remindme.ui.util.enums.ReminderAction
 
 @Composable
@@ -91,7 +91,7 @@ fun BottomSheetReminderActions(
         ) {
             Text(
                 text = reminderState.name,
-                style = MaterialTheme.typography.h5.copy(fontWeight = FontWeight.Medium),
+                style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Medium),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier
@@ -137,7 +137,7 @@ fun BottomSheetButton(
         ) {
             Icon(
                 imageVector = buttonIcon,
-                tint = MaterialTheme.colors.onSurface,
+                tint = MaterialTheme.colorScheme.onSurface,
                 contentDescription = null
             )
 
@@ -145,8 +145,8 @@ fun BottomSheetButton(
 
             Text(
                 text = buttonLabel,
-                color = MaterialTheme.colors.onSurface,
-                style = MaterialTheme.typography.caption
+                color = MaterialTheme.colorScheme.onSurface,
+                style = MaterialTheme.typography.bodySmall
             )
         }
     }
@@ -164,7 +164,7 @@ data class BottomSheetActionItem(
 fun BottomSheetReminderActionsPreview(
     @PreviewParameter(DefaultReminderProvider::class) reminderState: ReminderState
 ) {
-    RemindMeTheme {
+    AppTheme {
         BottomSheetReminderActions(
             reminderState = reminderState,
             onReminderActionItemSelected = {}
