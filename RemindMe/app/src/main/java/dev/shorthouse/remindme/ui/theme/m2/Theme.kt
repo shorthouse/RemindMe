@@ -7,6 +7,7 @@ import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import dev.shorthouse.remindme.ui.theme.m3.Red
 
 private val LightColors = lightColors(
     primary = Blue500,
