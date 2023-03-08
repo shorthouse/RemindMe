@@ -17,7 +17,7 @@ import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.ui.component.emptystate.EmptyStateActiveReminders
 import dev.shorthouse.remindme.ui.preview.ReminderListProvider
 import dev.shorthouse.remindme.ui.state.ReminderState
-import dev.shorthouse.remindme.ui.theme.m2.RemindMeTheme
+import dev.shorthouse.remindme.ui.theme.m3.AppTheme
 
 @Composable
 fun ReminderListContent(
@@ -68,7 +68,7 @@ fun ReminderList(
 fun ReminderListContentPreview(
     @PreviewParameter(ReminderListProvider::class) reminderStates: List<ReminderState>
 ) {
-    RemindMeTheme {
+    AppTheme {
         ReminderListContent(
             reminderStates = reminderStates,
             emptyStateContent = { EmptyStateActiveReminders() },

@@ -1,15 +1,16 @@
 package dev.shorthouse.remindme.ui.component.dialog
 
 import android.content.res.Configuration
-import androidx.compose.material.AlertDialog
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import dev.shorthouse.remindme.R
-import dev.shorthouse.remindme.ui.theme.m2.RemindMeTheme
+import dev.shorthouse.remindme.ui.theme.m3.AppTheme
 
 @Composable
 fun RemindMeAlertDialog(
@@ -22,24 +23,20 @@ fun RemindMeAlertDialog(
         title = {
             Text(
                 text = title,
-                style = MaterialTheme.typography.body1
+                style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Medium)
             )
         },
         confirmButton = {
             TextButton(onClick = onConfirm) {
                 Text(
-                    text = confirmText,
-                    style = MaterialTheme.typography.button,
-                    color = MaterialTheme.colors.primary
+                    text = confirmText
                 )
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
                 Text(
-                    text = stringResource(R.string.dialog_action_cancel),
-                    style = MaterialTheme.typography.button,
-                    color = MaterialTheme.colors.primary
+                    text = stringResource(R.string.dialog_action_cancel)
                 )
             }
         },
@@ -51,7 +48,7 @@ fun RemindMeAlertDialog(
 @Preview(name = "Light Mode")
 @Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
 fun RemindMeAlertDialogPreview() {
-    RemindMeTheme {
+    AppTheme {
         val title = "Do this action?"
         val confirmText = "Confirm"
 
