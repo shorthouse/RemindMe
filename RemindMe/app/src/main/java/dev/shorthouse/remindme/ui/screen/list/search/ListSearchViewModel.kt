@@ -1,5 +1,6 @@
 package dev.shorthouse.remindme.ui.screen.list.search
 
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -8,7 +9,6 @@ import dev.shorthouse.remindme.data.protodatastore.ReminderSortOrder
 import dev.shorthouse.remindme.data.protodatastore.UserPreferencesRepository
 import dev.shorthouse.remindme.di.IoDispatcher
 import dev.shorthouse.remindme.ui.state.ReminderState
-import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 class ListSearchViewModel @Inject constructor(
@@ -30,6 +31,11 @@ class ListSearchViewModel @Inject constructor(
 
     private val _searchQuery = MutableStateFlow("")
 
+    init {
+        initialiseUiState()
+    }
+
+    @VisibleForTesting
     fun initialiseUiState() {
         _uiState.update { it.copy(isLoading = true) }
 

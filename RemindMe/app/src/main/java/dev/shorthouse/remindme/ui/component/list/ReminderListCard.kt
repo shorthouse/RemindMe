@@ -15,7 +15,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Notes
 import androidx.compose.material.icons.rounded.NotificationsNone
 import androidx.compose.material.icons.rounded.Repeat
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -33,13 +32,11 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.ui.preview.ReminderListCardProvider
 import dev.shorthouse.remindme.ui.state.ReminderState
-import dev.shorthouse.remindme.ui.theme.m2.SubtitleGrey
 import dev.shorthouse.remindme.ui.theme.m3.AppTheme
 import dev.shorthouse.remindme.ui.theme.m3.Blue
 import dev.shorthouse.remindme.ui.theme.m3.Green
 import dev.shorthouse.remindme.ui.theme.m3.Red
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReminderListCard(
     reminderState: ReminderState,
@@ -163,7 +160,7 @@ private fun ReminderListCardDetail(
         Icon(
             imageVector = icon,
             contentDescription = contentDescription,
-            tint = SubtitleGrey,
+            tint = MaterialTheme.colorScheme.outline,
             modifier = Modifier.size(dimensionResource(R.dimen.reminder_list_card_icon_size))
         )
 

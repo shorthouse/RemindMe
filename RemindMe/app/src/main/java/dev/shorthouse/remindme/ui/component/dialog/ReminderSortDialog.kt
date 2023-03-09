@@ -19,7 +19,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
@@ -32,7 +31,6 @@ import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.data.protodatastore.ReminderSortOrder
 import dev.shorthouse.remindme.ui.theme.m3.AppTheme
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ReminderSortDialog(
     initialSort: ReminderSortOrder,
