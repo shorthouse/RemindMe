@@ -69,7 +69,6 @@ import dev.shorthouse.remindme.ui.component.dialog.TimePickerDialog
 import dev.shorthouse.remindme.ui.component.text.RemindMeTextField
 import dev.shorthouse.remindme.ui.preview.DefaultReminderProvider
 import dev.shorthouse.remindme.ui.state.ReminderState
-import dev.shorthouse.remindme.ui.theme.m2.SubtitleGrey
 import dev.shorthouse.remindme.ui.theme.m3.AppTheme
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -116,7 +115,6 @@ fun ReminderInputScreen(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReminderInputScaffold(
     reminderState: ReminderState,
@@ -153,6 +151,7 @@ fun ReminderInputTopBar(
     onSave: () -> Unit
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
+
     val topBarColor = if (isSystemInDarkTheme()) {
         MaterialTheme.colorScheme.surface
     } else {
@@ -373,7 +372,7 @@ fun ReminderNotesInput(reminderState: ReminderState, modifier: Modifier = Modifi
         Icon(
             imageVector = Icons.Rounded.Notes,
             contentDescription = stringResource(R.string.cd_details_notes),
-            tint = SubtitleGrey
+            tint = MaterialTheme.colorScheme.outline
         )
 
         Spacer(Modifier.width(dimensionResource(R.dimen.margin_normal)))
@@ -390,7 +389,6 @@ fun ReminderNotesInput(reminderState: ReminderState, modifier: Modifier = Modifi
     }
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ReminderRepeatIntervalInput(reminderState: ReminderState) {
     ReminderSwitchRow(
@@ -452,12 +450,12 @@ private fun RepeatIntervalHeader(modifier: Modifier = Modifier) {
     ) {
         Text(
             text = stringResource(R.string.repeats_every_header),
-            style = MaterialTheme.typography.titleSmall.copy(color = SubtitleGrey)
+            style = MaterialTheme.typography.titleSmall
+                .copy(color = MaterialTheme.colorScheme.outline)
         )
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun RepeatAmountInput(reminderState: ReminderState) {
     val repeatAmountMaxLength = integerResource(R.integer.reminder_repeat_amount_max_length)
@@ -489,7 +487,6 @@ private fun sanitiseRepeatAmount(repeatAmount: String): String {
         .filter { it.isDigit() }
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun RepeatUnitInput(reminderState: ReminderState) {
     val repeatUnitPluralIds = listOf(R.plurals.radio_button_days, R.plurals.radio_button_weeks)
@@ -544,7 +541,7 @@ fun TextWithLeftIcon(
         Icon(
             imageVector = icon,
             contentDescription = contentDescription,
-            tint = SubtitleGrey
+            tint = MaterialTheme.colorScheme.outline
         )
 
         Spacer(Modifier.width(dimensionResource(R.dimen.margin_normal)))
