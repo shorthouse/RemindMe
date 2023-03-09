@@ -7,7 +7,6 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import dev.shorthouse.remindme.R
-import dev.shorthouse.remindme.ui.theme.m2.SubtitleGrey
 
 private val Roboto = FontFamily(
     Font(R.font.roboto_regular, FontWeight.Normal),
@@ -29,7 +28,6 @@ val AppTypography = Typography(
     titleMedium = TextStyle(
         fontSize = 18.sp,
         fontWeight = FontWeight.Normal,
-        color = SubtitleGrey,
         fontFamily = Roboto
     ),
     titleSmall = TextStyle(
