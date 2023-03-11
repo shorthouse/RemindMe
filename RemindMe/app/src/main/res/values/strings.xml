@@ -73,7 +73,7 @@
     <string name="alert_dialog_title_complete">Complete this reminder?</string>
     <string name="dialog_action_complete">Complete</string>
     <string name="dialog_action_delete">Delete</string>
-    <string name="dialog_action_ok">Ok</string>
+    <string name="dialog_action_ok">OK</string>
     <string name="dialog_action_cancel">Cancel</string>
     <string name="dialog_action_apply">Apply</string>
     <string name="cd_details_date">Date</string>
