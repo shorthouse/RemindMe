@@ -40,8 +40,11 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -62,7 +65,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.ui.component.dialog.DatePickerDialog
 import dev.shorthouse.remindme.ui.component.dialog.TimePickerDialog
@@ -71,8 +73,6 @@ import dev.shorthouse.remindme.ui.preview.DefaultReminderProvider
 import dev.shorthouse.remindme.ui.state.ReminderState
 import dev.shorthouse.remindme.ui.theme.m3.AppTheme
 import kotlinx.coroutines.launch
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 @Composable
 fun ReminderInputScreen(
@@ -284,41 +284,40 @@ fun ReminderNameInput(
 
 @Composable
 fun ReminderDateInput(reminderState: ReminderState, modifier: Modifier = Modifier) {
-    val dateDialogState = rememberMaterialDialogState()
+    var isDatePickerShown by remember { mutableStateOf(false) }
 
-    DatePickerDialog(
-        date = LocalDate.parse(
-            reminderState.date,
-            DateTimeFormatter.ofPattern("EEE, dd MMM yyyy")
-        ),
-        onDateChange = {
-            reminderState.date = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy").format(it)
-        },
-        dialogState = dateDialogState
-    )
+    if (isDatePickerShown) {
+        DatePickerDialog(
+            initialDate = reminderState.date,
+            onConfirm = { reminderState.date = it },
+            onDismiss = { isDatePickerShown = false }
+        )
+    }
 
     TextWithLeftIcon(
         icon = Icons.Rounded.CalendarToday,
         text = reminderState.date,
-        modifier = modifier.clickable { dateDialogState.show() },
+        modifier = modifier.clickable { isDatePickerShown = true },
         contentDescription = stringResource(R.string.cd_details_date)
     )
 }
 
 @Composable
 fun ReminderTimeInput(reminderState: ReminderState, modifier: Modifier = Modifier) {
-    val timeDialogState = rememberMaterialDialogState()
+    var isTimePickerShown by remember { mutableStateOf(false) }
 
-    TimePickerDialog(
-        time = reminderState.time,
-        onTimeChange = { reminderState.time = it },
-        dialogState = timeDialogState
-    )
+    if (isTimePickerShown) {
+        TimePickerDialog(
+            initialTime = reminderState.time,
+            onConfirm = { reminderState.time = it },
+            onDismiss = { isTimePickerShown = false }
+        )
+    }
 
     TextWithLeftIcon(
         icon = Icons.Rounded.Schedule,
         text = reminderState.time.toString(),
-        modifier = modifier.clickable { timeDialogState.show() },
+        modifier = modifier.clickable { isTimePickerShown = true },
         contentDescription = stringResource(R.string.cd_details_time)
     )
 }
