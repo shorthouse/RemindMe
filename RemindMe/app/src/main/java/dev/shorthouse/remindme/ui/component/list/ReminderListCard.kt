@@ -26,16 +26,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.ui.preview.ReminderListCardProvider
 import dev.shorthouse.remindme.ui.state.ReminderState
-import dev.shorthouse.remindme.ui.theme.m3.AppTheme
-import dev.shorthouse.remindme.ui.theme.m3.Blue
-import dev.shorthouse.remindme.ui.theme.m3.Green
-import dev.shorthouse.remindme.ui.theme.m3.Red
+import dev.shorthouse.remindme.ui.theme.AppTheme
+import dev.shorthouse.remindme.ui.theme.Blue
+import dev.shorthouse.remindme.ui.theme.Green
+import dev.shorthouse.remindme.ui.theme.Red
 
 @Composable
 fun ReminderListCard(
@@ -59,7 +58,7 @@ fun ReminderListCard(
         ) {
             Text(
                 text = reminderState.name,
-                style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Medium)
+                style = MaterialTheme.typography.titleMedium
             )
 
             Text(
@@ -67,7 +66,7 @@ fun ReminderListCard(
                     R.string.reminder_list_card_date_time,
                     reminderState.date,
                     reminderState.time
-                )
+                ),
             )
 
             Spacer(Modifier.height(dimensionResource(R.dimen.margin_small)))

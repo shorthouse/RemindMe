@@ -17,10 +17,9 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import dev.shorthouse.remindme.R
-import dev.shorthouse.remindme.ui.theme.m3.AppTheme
+import dev.shorthouse.remindme.ui.theme.AppTheme
 
 @Composable
 fun EmptyStateActiveReminders(modifier: Modifier = Modifier) {
@@ -79,7 +78,7 @@ fun EmptyState(
 
         Text(
             text = title,
-            style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Medium),
+            style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onBackground
         )
 
