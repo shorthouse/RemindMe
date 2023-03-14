@@ -21,12 +21,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.window.Dialog
 import dev.shorthouse.remindme.R
-import dev.shorthouse.remindme.ui.theme.m3.AppTheme
+import dev.shorthouse.remindme.ui.theme.AppTheme
 import java.time.LocalTime
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TimePickerDialog(
+fun ReminderTimePicker(
     initialTime: LocalTime,
     onConfirm: (LocalTime) -> Unit,
     onDismiss: () -> Unit
@@ -55,8 +55,7 @@ fun TimePickerDialog(
                     }
 
                     TextButton(onClick = {
-                        val time = LocalTime.of(timePickerState.hour, timePickerState.minute)
-                        onConfirm(time)
+                        onConfirm(LocalTime.of(timePickerState.hour, timePickerState.minute))
                         onDismiss()
                     }) {
                         Text(text = stringResource(R.string.dialog_action_ok))
@@ -72,7 +71,7 @@ fun TimePickerDialog(
 @Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
 fun TimePickerDialogPreview() {
     AppTheme {
-        TimePickerDialog(
+        ReminderTimePicker(
             initialTime = LocalTime.now(),
             onConfirm = {},
             onDismiss = {}
