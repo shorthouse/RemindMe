@@ -29,7 +29,7 @@ class DatePickerDialogTest {
     private fun setContent() {
         composeTestRule.setContent {
             RemindMeTheme {
-                DatePickerDialog(
+                ReminderDatePicker(
                     date = LocalDate.of(2020, 1, 1),
                     onDateChange = {},
                     dialogState = MaterialDialogState(initialValue = true)
