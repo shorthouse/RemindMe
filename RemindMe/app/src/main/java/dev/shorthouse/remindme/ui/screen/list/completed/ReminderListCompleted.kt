@@ -37,7 +37,7 @@ import dev.shorthouse.remindme.ui.preview.ReminderListProvider
 import dev.shorthouse.remindme.ui.screen.destinations.ReminderEditScreenDestination
 import dev.shorthouse.remindme.ui.screen.list.ListViewModel
 import dev.shorthouse.remindme.ui.state.ReminderState
-import dev.shorthouse.remindme.ui.theme.m3.AppTheme
+import dev.shorthouse.remindme.ui.theme.AppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Destination

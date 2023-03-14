@@ -49,7 +49,7 @@ import dev.shorthouse.remindme.ui.screen.destinations.ReminderListCompletedScree
 import dev.shorthouse.remindme.ui.screen.destinations.ReminderListSearchScreenDestination
 import dev.shorthouse.remindme.ui.screen.list.ListViewModel
 import dev.shorthouse.remindme.ui.state.ReminderState
-import dev.shorthouse.remindme.ui.theme.m3.AppTheme
+import dev.shorthouse.remindme.ui.theme.AppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @RootNavGraph(start = true)
@@ -85,7 +85,8 @@ fun ReminderListActiveScreen(
     if (isModalBottomSheetShown) {
         ModalBottomSheet(
             onDismissRequest = { isModalBottomSheetShown = false },
-            dragHandle = null
+            dragHandle = null,
+            tonalElevation = dimensionResource(R.dimen.margin_none)
         ) {
             BottomSheetReminderActions(
                 reminderState = selectedReminderState,
@@ -150,11 +151,13 @@ fun ReminderListActiveScaffold(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = onNavigateAdd,
-                shape = RoundedCornerShape(dimensionResource(R.dimen.margin_normal))
+                shape = RoundedCornerShape(dimensionResource(R.dimen.margin_normal)),
+                containerColor = MaterialTheme.colorScheme.primary
             ) {
                 Icon(
                     imageVector = Icons.Filled.Add,
-                    contentDescription = stringResource(R.string.cd_fab_add_reminder)
+                    contentDescription = stringResource(R.string.cd_fab_add_reminder),
+                    tint = MaterialTheme.colorScheme.onPrimary
                 )
             }
         }
@@ -221,7 +224,7 @@ fun ReminderListActiveTopBar(
                 )
             }
         },
-        colors = TopAppBarDefaults.smallTopAppBarColors(
+        colors = TopAppBarDefaults.topAppBarColors(
             containerColor = topBarColor
         )
     )

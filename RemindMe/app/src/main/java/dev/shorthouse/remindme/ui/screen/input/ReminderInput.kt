@@ -66,12 +66,12 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import dev.shorthouse.remindme.R
-import dev.shorthouse.remindme.ui.component.dialog.DatePickerDialog
-import dev.shorthouse.remindme.ui.component.dialog.TimePickerDialog
+import dev.shorthouse.remindme.ui.component.dialog.ReminderDatePicker
+import dev.shorthouse.remindme.ui.component.dialog.ReminderTimePicker
 import dev.shorthouse.remindme.ui.component.text.RemindMeTextField
 import dev.shorthouse.remindme.ui.preview.DefaultReminderProvider
 import dev.shorthouse.remindme.ui.state.ReminderState
-import dev.shorthouse.remindme.ui.theme.m3.AppTheme
+import dev.shorthouse.remindme.ui.theme.AppTheme
 import kotlinx.coroutines.launch
 
 @Composable
@@ -287,7 +287,7 @@ fun ReminderDateInput(reminderState: ReminderState, modifier: Modifier = Modifie
     var isDatePickerShown by remember { mutableStateOf(false) }
 
     if (isDatePickerShown) {
-        DatePickerDialog(
+        ReminderDatePicker(
             initialDate = reminderState.date,
             onConfirm = { reminderState.date = it },
             onDismiss = { isDatePickerShown = false }
@@ -307,7 +307,7 @@ fun ReminderTimeInput(reminderState: ReminderState, modifier: Modifier = Modifie
     var isTimePickerShown by remember { mutableStateOf(false) }
 
     if (isTimePickerShown) {
-        TimePickerDialog(
+        ReminderTimePicker(
             initialTime = reminderState.time,
             onConfirm = { reminderState.time = it },
             onDismiss = { isTimePickerShown = false }
@@ -379,7 +379,7 @@ fun ReminderNotesInput(reminderState: ReminderState, modifier: Modifier = Modifi
         RemindMeTextField(
             text = reminderState.notes.orEmpty(),
             onTextChange = { if (it.length <= notesMaxLength) reminderState.notes = it },
-            textStyle = MaterialTheme.typography.bodyLarge
+            textStyle = MaterialTheme.typography.bodyMedium
                 .copy(color = MaterialTheme.colorScheme.onSurface),
             hintText = stringResource(R.string.hint_reminder_notes),
             imeAction = ImeAction.None,
@@ -468,7 +468,7 @@ private fun RepeatAmountInput(reminderState: ReminderState) {
                 )
             }
         },
-        textStyle = MaterialTheme.typography.bodyLarge.copy(textAlign = TextAlign.Center),
+        textStyle = MaterialTheme.typography.bodyMedium.copy(textAlign = TextAlign.Center),
         keyboardOptions = KeyboardOptions(
             imeAction = ImeAction.Done,
             keyboardType = KeyboardType.Number
@@ -519,7 +519,7 @@ private fun RepeatUnitInput(reminderState: ReminderState) {
 
                 Text(
                     text = text,
-                    style = MaterialTheme.typography.bodyLarge
+                    style = MaterialTheme.typography.bodyMedium
                 )
             }
         }
@@ -547,7 +547,7 @@ fun TextWithLeftIcon(
 
         Text(
             text = text,
-            style = MaterialTheme.typography.bodyLarge,
+            style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onBackground
         )
     }
