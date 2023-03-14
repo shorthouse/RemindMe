@@ -29,7 +29,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.data.protodatastore.ReminderSortOrder
-import dev.shorthouse.remindme.ui.theme.m3.AppTheme
+import dev.shorthouse.remindme.ui.theme.AppTheme
 
 @Composable
 fun ReminderSortDialog(
@@ -89,7 +89,7 @@ fun ReminderSortDialog(
 
                         Text(
                             text = sortOptionName,
-                            style = MaterialTheme.typography.bodyLarge,
+                            style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurface
                         )
                     }
