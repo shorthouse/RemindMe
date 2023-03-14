@@ -49,7 +49,7 @@ import dev.shorthouse.remindme.ui.preview.ReminderListProvider
 import dev.shorthouse.remindme.ui.screen.destinations.ReminderEditScreenDestination
 import dev.shorthouse.remindme.ui.screen.list.ListViewModel
 import dev.shorthouse.remindme.ui.state.ReminderState
-import dev.shorthouse.remindme.ui.theme.m3.AppTheme
+import dev.shorthouse.remindme.ui.theme.AppTheme
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
 @Destination
@@ -167,7 +167,7 @@ fun ReminderListSearchTopBar(
                 BasicTextField(
                     value = searchQuery,
                     onValueChange = onSearchQueryChange,
-                    textStyle = MaterialTheme.typography.bodyLarge.copy(color = Color.Black),
+                    textStyle = MaterialTheme.typography.bodyMedium.copy(color = Color.Black),
                     cursorBrush = SolidColor(Color.Black),
                     keyboardOptions = KeyboardOptions(
                         imeAction = ImeAction.Search,
@@ -181,7 +181,7 @@ fun ReminderListSearchTopBar(
                         if (searchQuery.isEmpty()) {
                             Text(
                                 text = stringResource(R.string.top_app_bar_search_hint),
-                                style = MaterialTheme.typography.bodyLarge,
+                                style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.outline
                             )
                         }
