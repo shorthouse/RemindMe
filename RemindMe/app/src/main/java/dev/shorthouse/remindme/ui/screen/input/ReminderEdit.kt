@@ -15,7 +15,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.ui.preview.DefaultReminderProvider
 import dev.shorthouse.remindme.ui.state.ReminderState
-import dev.shorthouse.remindme.ui.theme.m3.AppTheme
+import dev.shorthouse.remindme.ui.theme.AppTheme
 
 @Destination
 @Composable

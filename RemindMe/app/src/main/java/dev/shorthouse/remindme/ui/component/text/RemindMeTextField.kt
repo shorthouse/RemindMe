@@ -15,7 +15,7 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
-import dev.shorthouse.remindme.ui.theme.m3.AppTheme
+import dev.shorthouse.remindme.ui.theme.AppTheme
 
 @Composable
 fun RemindMeTextField(
