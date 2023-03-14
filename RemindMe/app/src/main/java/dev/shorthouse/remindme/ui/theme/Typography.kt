@@ -1,4 +1,4 @@
-package dev.shorthouse.remindme.ui.theme.m3
+package dev.shorthouse.remindme.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
@@ -27,7 +27,7 @@ val AppTypography = Typography(
     ),
     titleMedium = TextStyle(
         fontSize = 18.sp,
-        fontWeight = FontWeight.Normal,
+        fontWeight = FontWeight.Medium,
         fontFamily = Roboto
     ),
     titleSmall = TextStyle(
@@ -41,9 +41,8 @@ val AppTypography = Typography(
         fontFamily = Roboto
     ),
     bodyMedium = TextStyle(
-        fontSize = 14.sp,
+        fontSize = 18.sp,
         fontWeight = FontWeight.Normal,
-        letterSpacing = 0.25.sp,
         fontFamily = Roboto
     ),
     bodySmall = TextStyle(

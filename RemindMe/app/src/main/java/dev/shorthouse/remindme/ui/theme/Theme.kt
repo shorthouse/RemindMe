@@ -1,10 +1,13 @@
-package dev.shorthouse.remindme.ui.theme.m3
+package dev.shorthouse.remindme.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
+import com.google.accompanist.systemuicontroller.SystemUiController
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 private val LightColors = lightColorScheme(
     primary = md_theme_light_primary,
@@ -73,8 +76,15 @@ private val DarkColors = darkColorScheme(
 @Composable
 fun AppTheme(
     useDarkTheme: Boolean = isSystemInDarkTheme(),
+    systemUiController: SystemUiController = rememberSystemUiController(),
     content: @Composable () -> Unit
 ) {
+    SideEffect {
+        systemUiController.setSystemBarsColor(
+            color = if (useDarkTheme) DarkColors.surface else LightColors.primary,
+        )
+    }
+
     MaterialTheme(
         colorScheme = if (useDarkTheme) DarkColors else LightColors,
         shapes = AppShapes,
