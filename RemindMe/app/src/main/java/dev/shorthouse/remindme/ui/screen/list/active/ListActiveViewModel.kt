@@ -5,17 +5,18 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.shorthouse.remindme.data.ReminderRepository
+import dev.shorthouse.remindme.data.protodatastore.ReminderFilter
 import dev.shorthouse.remindme.data.protodatastore.ReminderSortOrder
 import dev.shorthouse.remindme.data.protodatastore.UserPreferencesRepository
 import dev.shorthouse.remindme.di.IoDispatcher
 import dev.shorthouse.remindme.ui.state.ReminderState
-import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 class ListActiveViewModel @Inject constructor(
@@ -77,6 +78,12 @@ class ListActiveViewModel @Inject constructor(
 data class ListActiveUiState(
     val activeReminderStates: List<ReminderState> = emptyList(),
     val reminderSortOrder: ReminderSortOrder = ReminderSortOrder.BY_EARLIEST_DATE_FIRST,
+    val reminderFilters: List<ReminderFilter> = emptyList(),
+    // Either this or a map of the filter enum to boolean cos i think that will be easier to iterate
+    // Not sure of the best approach here, maybe a sealed class or something but need to think how
+    // to iterate over it an extract a true/false value from it
+    // Maybe a custom data type or a map?
+    //val selectedReminderFilters: List<>
     val selectedReminderState: ReminderState = ReminderState(),
     val isLoading: Boolean = false
 )
