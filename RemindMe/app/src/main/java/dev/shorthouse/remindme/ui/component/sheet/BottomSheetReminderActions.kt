@@ -29,7 +29,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import dev.shorthouse.remindme.R
-import dev.shorthouse.remindme.ui.preview.DefaultReminderProvider
+import dev.shorthouse.remindme.ui.previewdata.DefaultReminderProvider
 import dev.shorthouse.remindme.ui.state.ReminderState
 import dev.shorthouse.remindme.ui.theme.AppTheme
 import dev.shorthouse.remindme.ui.util.enums.ReminderAction

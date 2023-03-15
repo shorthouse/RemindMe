@@ -13,7 +13,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import dev.shorthouse.remindme.R
-import dev.shorthouse.remindme.ui.preview.EmptyReminderProvider
+import dev.shorthouse.remindme.ui.previewdata.EmptyReminderProvider
 import dev.shorthouse.remindme.ui.state.ReminderState
 import dev.shorthouse.remindme.ui.theme.AppTheme
 

@@ -69,7 +69,7 @@ import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.ui.component.dialog.ReminderDatePicker
 import dev.shorthouse.remindme.ui.component.dialog.ReminderTimePicker
 import dev.shorthouse.remindme.ui.component.text.RemindMeTextField
-import dev.shorthouse.remindme.ui.preview.DefaultReminderProvider
+import dev.shorthouse.remindme.ui.previewdata.DefaultReminderProvider
 import dev.shorthouse.remindme.ui.state.ReminderState
 import dev.shorthouse.remindme.ui.theme.AppTheme
 import kotlinx.coroutines.launch

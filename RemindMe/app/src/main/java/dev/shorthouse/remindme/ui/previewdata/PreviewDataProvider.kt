@@ -1,14 +1,14 @@
-package dev.shorthouse.remindme.ui.preview
+package dev.shorthouse.remindme.ui.previewdata
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import dev.shorthouse.remindme.ui.preview.ReminderPreviewData.addNotes
-import dev.shorthouse.remindme.ui.preview.ReminderPreviewData.addNotification
-import dev.shorthouse.remindme.ui.preview.ReminderPreviewData.addRepeatInterval
-import dev.shorthouse.remindme.ui.preview.ReminderPreviewData.completed
-import dev.shorthouse.remindme.ui.preview.ReminderPreviewData.default
-import dev.shorthouse.remindme.ui.preview.ReminderPreviewData.empty
-import dev.shorthouse.remindme.ui.preview.ReminderPreviewData.overdue
-import dev.shorthouse.remindme.ui.preview.ReminderPreviewData.scheduled
+import dev.shorthouse.remindme.ui.previewdata.ReminderPreviewData.addNotes
+import dev.shorthouse.remindme.ui.previewdata.ReminderPreviewData.addNotification
+import dev.shorthouse.remindme.ui.previewdata.ReminderPreviewData.addRepeatInterval
+import dev.shorthouse.remindme.ui.previewdata.ReminderPreviewData.completed
+import dev.shorthouse.remindme.ui.previewdata.ReminderPreviewData.default
+import dev.shorthouse.remindme.ui.previewdata.ReminderPreviewData.empty
+import dev.shorthouse.remindme.ui.previewdata.ReminderPreviewData.overdue
+import dev.shorthouse.remindme.ui.previewdata.ReminderPreviewData.scheduled
 import dev.shorthouse.remindme.ui.state.ReminderState
 import java.time.LocalTime
 

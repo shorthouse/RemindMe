@@ -33,7 +33,7 @@ import dev.shorthouse.remindme.ui.component.dialog.RemindMeAlertDialog
 import dev.shorthouse.remindme.ui.component.emptystate.EmptyStateCompletedReminders
 import dev.shorthouse.remindme.ui.component.list.ReminderListContent
 import dev.shorthouse.remindme.ui.component.sheet.BottomSheetReminderActions
-import dev.shorthouse.remindme.ui.preview.ReminderListProvider
+import dev.shorthouse.remindme.ui.previewdata.ReminderListProvider
 import dev.shorthouse.remindme.ui.screen.destinations.ReminderEditScreenDestination
 import dev.shorthouse.remindme.ui.screen.list.ListViewModel
 import dev.shorthouse.remindme.ui.state.ReminderState
