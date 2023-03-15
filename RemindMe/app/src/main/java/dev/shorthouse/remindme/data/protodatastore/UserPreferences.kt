@@ -11,3 +11,9 @@ enum class ReminderSortOrder {
     BY_EARLIEST_DATE_FIRST,
     BY_LATEST_DATE_FIRST
 }
+
+enum class ReminderFilter {
+    OVERDUE,
+    SCHEDULED,
+    COMPLETED
+}
