@@ -11,46 +11,45 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Notes
 import androidx.compose.material.icons.rounded.NotificationsNone
 import androidx.compose.material.icons.rounded.Repeat
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import dev.shorthouse.remindme.R
-import dev.shorthouse.remindme.ui.preview.ReminderListCardProvider
+import dev.shorthouse.remindme.ui.previewdata.ReminderListCardProvider
 import dev.shorthouse.remindme.ui.state.ReminderState
-import dev.shorthouse.remindme.ui.theme.Blue500
+import dev.shorthouse.remindme.ui.theme.AppTheme
+import dev.shorthouse.remindme.ui.theme.Blue
 import dev.shorthouse.remindme.ui.theme.Green
 import dev.shorthouse.remindme.ui.theme.Red
-import dev.shorthouse.remindme.ui.theme.RemindMeTheme
-import dev.shorthouse.remindme.ui.theme.SubtitleGrey
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ReminderListCard(
     reminderState: ReminderState,
     onReminderCard: (ReminderState) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Card(
+    Surface(
+        shadowElevation = dimensionResource(R.dimen.margin_minuscule),
+        tonalElevation = dimensionResource(R.dimen.margin_none),
+        color = MaterialTheme.colorScheme.surface,
         shape = RoundedCornerShape(dimensionResource(R.dimen.margin_small)),
-        elevation = dimensionResource(R.dimen.reminder_list_card_elevation),
         onClick = { onReminderCard(reminderState) },
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier
+            .fillMaxWidth()
     ) {
         Column(
             modifier = Modifier
@@ -59,7 +58,7 @@ fun ReminderListCard(
         ) {
             Text(
                 text = reminderState.name,
-                style = MaterialTheme.typography.body1.copy(fontWeight = FontWeight.Medium)
+                style = MaterialTheme.typography.titleMedium
             )
 
             Text(
@@ -67,7 +66,7 @@ fun ReminderListCard(
                     R.string.reminder_list_card_date_time,
                     reminderState.date,
                     reminderState.time
-                )
+                ),
             )
 
             Spacer(Modifier.height(dimensionResource(R.dimen.margin_small)))
@@ -83,7 +82,7 @@ fun ReminderListCard(
                 if (reminderState.isNotificationSent) {
                     Icon(
                         imageVector = Icons.Rounded.NotificationsNone,
-                        tint = SubtitleGrey,
+                        tint = MaterialTheme.colorScheme.outline,
                         contentDescription = stringResource(R.string.cd_details_notification),
                         modifier = Modifier.size(
                             dimensionResource(R.dimen.reminder_list_card_icon_size)
@@ -128,7 +127,7 @@ private fun ReminderCardStatus(reminderState: ReminderState) {
     val statusBackgroundColor = when {
         reminderState.isCompleted -> Green
         reminderState.isOverdue() -> Red
-        else -> Blue500
+        else -> Blue
     }
 
     Surface(
@@ -137,8 +136,8 @@ private fun ReminderCardStatus(reminderState: ReminderState) {
     ) {
         Text(
             text = statusText,
-            style = MaterialTheme.typography.subtitle2,
-            color = MaterialTheme.colors.onPrimary,
+            style = MaterialTheme.typography.titleSmall,
+            color = Color.White,
             modifier = Modifier.padding(
                 horizontal = dimensionResource(R.dimen.reminder_list_card_status_padding)
             )
@@ -160,7 +159,7 @@ private fun ReminderListCardDetail(
         Icon(
             imageVector = icon,
             contentDescription = contentDescription,
-            tint = SubtitleGrey,
+            tint = MaterialTheme.colorScheme.outline,
             modifier = Modifier.size(dimensionResource(R.dimen.reminder_list_card_icon_size))
         )
 
@@ -168,8 +167,8 @@ private fun ReminderListCardDetail(
 
         Text(
             text = text,
-            style = MaterialTheme.typography.subtitle2,
-            color = MaterialTheme.colors.onBackground
+            style = MaterialTheme.typography.titleSmall,
+            color = MaterialTheme.colorScheme.onBackground
         )
     }
 }
@@ -180,7 +179,7 @@ private fun ReminderListCardDetail(
 fun ReminderListCardPreview(
     @PreviewParameter(ReminderListCardProvider::class) reminderState: ReminderState
 ) {
-    RemindMeTheme {
+    AppTheme {
         ReminderListCard(
             reminderState = reminderState,
             onReminderCard = {}

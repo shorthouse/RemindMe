@@ -1,6 +1,6 @@
 package dev.shorthouse.remindme.ui.theme
 
-import androidx.compose.material.Typography
+import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -14,41 +14,46 @@ private val Roboto = FontFamily(
     Font(R.font.roboto_bold, FontWeight.Bold)
 )
 
-val RemindMeTypography = Typography(
-    defaultFontFamily = Roboto,
-    h5 = TextStyle(
+val AppTypography = Typography(
+    headlineSmall = TextStyle(
         fontSize = 20.sp,
-        fontWeight = FontWeight.Bold
+        fontWeight = FontWeight.Bold,
+        fontFamily = Roboto
     ),
-    h6 = TextStyle(
+    titleLarge = TextStyle(
         fontSize = 20.sp,
-        fontWeight = FontWeight.Medium
+        fontWeight = FontWeight.Medium,
+        fontFamily = Roboto
     ),
-    body1 = TextStyle(
+    titleMedium = TextStyle(
         fontSize = 18.sp,
-        fontWeight = FontWeight.Normal
+        fontWeight = FontWeight.Medium,
+        fontFamily = Roboto
     ),
-    body2 = TextStyle(
-        fontSize = 14.sp,
-        fontWeight = FontWeight.Normal,
-        letterSpacing = 0.25.sp
-    ),
-    subtitle1 = TextStyle(
-        fontSize = 18.sp,
-        fontWeight = FontWeight.Normal,
-        color = SubtitleGrey
-    ),
-    subtitle2 = TextStyle(
+    titleSmall = TextStyle(
         fontSize = 16.sp,
-        fontWeight = FontWeight.Normal
+        fontWeight = FontWeight.Normal,
+        fontFamily = Roboto
     ),
-    button = TextStyle(
+    bodyLarge = TextStyle(
         fontSize = 18.sp,
-        fontWeight = FontWeight.Bold
+        fontWeight = FontWeight.Normal,
+        fontFamily = Roboto
     ),
-    caption = TextStyle(
+    bodyMedium = TextStyle(
+        fontSize = 18.sp,
+        fontWeight = FontWeight.Normal,
+        fontFamily = Roboto
+    ),
+    bodySmall = TextStyle(
         fontSize = 15.sp,
         letterSpacing = 0.2.sp,
-        fontWeight = FontWeight.Medium
+        fontWeight = FontWeight.Medium,
+        fontFamily = Roboto
+    ),
+    labelLarge = TextStyle(
+        fontSize = 18.sp,
+        fontWeight = FontWeight.Bold,
+        fontFamily = Roboto
     )
 )

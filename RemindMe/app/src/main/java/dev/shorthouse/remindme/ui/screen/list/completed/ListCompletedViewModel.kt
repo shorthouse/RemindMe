@@ -1,5 +1,7 @@
 package dev.shorthouse.remindme.ui.screen.list.completed
 
+import android.util.Log
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -9,13 +11,13 @@ import dev.shorthouse.remindme.data.protodatastore.UserPreferencesRepository
 import dev.shorthouse.remindme.di.IoDispatcher
 import dev.shorthouse.remindme.domain.reminder.DeleteCompletedRemindersUseCase
 import dev.shorthouse.remindme.ui.state.ReminderState
-import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 class ListCompletedViewModel @Inject constructor(
@@ -29,6 +31,11 @@ class ListCompletedViewModel @Inject constructor(
     val uiState: StateFlow<ListCompletedUiState>
         get() = _uiState
 
+    init {
+        initialiseUiState()
+    }
+
+    @VisibleForTesting
     fun initialiseUiState() {
         _uiState.update { it.copy(isLoading = true) }
 
@@ -52,6 +59,8 @@ class ListCompletedViewModel @Inject constructor(
                     }
                 }
                     .map { ReminderState(it) }
+
+                Log.d("HDS", "new completed state")
 
                 ListCompletedUiState(
                     completedReminderStates = completedReminderStates,

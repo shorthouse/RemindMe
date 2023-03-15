@@ -8,8 +8,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,11 +17,9 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import dev.shorthouse.remindme.R
-import dev.shorthouse.remindme.ui.theme.RemindMeTheme
-import dev.shorthouse.remindme.ui.theme.SubtitleGrey
+import dev.shorthouse.remindme.ui.theme.AppTheme
 
 @Composable
 fun EmptyStateActiveReminders(modifier: Modifier = Modifier) {
@@ -31,7 +29,7 @@ fun EmptyStateActiveReminders(modifier: Modifier = Modifier) {
         subtitle = stringResource(R.string.empty_state_active_subtitle),
         modifier = modifier
             .fillMaxSize()
-            .background(MaterialTheme.colors.background)
+            .background(MaterialTheme.colorScheme.background)
     )
 }
 
@@ -43,7 +41,7 @@ fun EmptyStateCompletedReminders(modifier: Modifier = Modifier) {
         subtitle = stringResource(R.string.empty_state_completed_subtitle),
         modifier = modifier
             .fillMaxSize()
-            .background(MaterialTheme.colors.background)
+            .background(MaterialTheme.colorScheme.background)
     )
 }
 
@@ -55,7 +53,7 @@ fun EmptyStateSearchReminders(modifier: Modifier = Modifier) {
         subtitle = stringResource(R.string.empty_state_search_subtitle),
         modifier = modifier
             .fillMaxSize()
-            .background(MaterialTheme.colors.background)
+            .background(MaterialTheme.colorScheme.background)
     )
 }
 
@@ -80,13 +78,14 @@ fun EmptyState(
 
         Text(
             text = title,
-            style = MaterialTheme.typography.body1.copy(fontWeight = FontWeight.Medium)
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onBackground
         )
 
         Text(
             text = subtitle,
-            style = MaterialTheme.typography.caption,
-            color = SubtitleGrey
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.outline
         )
     }
 }
@@ -95,7 +94,7 @@ fun EmptyState(
 @Preview(name = "Light Mode", showBackground = true)
 @Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 fun EmptyStateActiveRemindersPreview() {
-    RemindMeTheme {
+    AppTheme {
         EmptyStateActiveReminders()
     }
 }
@@ -104,7 +103,7 @@ fun EmptyStateActiveRemindersPreview() {
 @Preview(name = "Light Mode", showBackground = true)
 @Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 fun EmptyStateCompletedRemindersPreview() {
-    RemindMeTheme {
+    AppTheme {
         EmptyStateCompletedReminders()
     }
 }
@@ -113,7 +112,7 @@ fun EmptyStateCompletedRemindersPreview() {
 @Preview(name = "Light Mode", showBackground = true)
 @Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 fun EmptyStateSearchRemindersPreview() {
-    RemindMeTheme {
+    AppTheme {
         EmptyStateSearchReminders()
     }
 }

@@ -1,27 +1,23 @@
 package dev.shorthouse.remindme.ui.screen.list.completed
 
 import android.content.res.Configuration
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.ModalBottomSheetLayout
-import androidx.compose.material.ModalBottomSheetValue
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.DeleteOutline
-import androidx.compose.material.rememberModalBottomSheetState
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
@@ -29,7 +25,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -38,15 +33,13 @@ import dev.shorthouse.remindme.ui.component.dialog.RemindMeAlertDialog
 import dev.shorthouse.remindme.ui.component.emptystate.EmptyStateCompletedReminders
 import dev.shorthouse.remindme.ui.component.list.ReminderListContent
 import dev.shorthouse.remindme.ui.component.sheet.BottomSheetReminderActions
-import dev.shorthouse.remindme.ui.preview.ReminderListProvider
+import dev.shorthouse.remindme.ui.previewdata.ReminderListProvider
 import dev.shorthouse.remindme.ui.screen.destinations.ReminderEditScreenDestination
 import dev.shorthouse.remindme.ui.screen.list.ListViewModel
 import dev.shorthouse.remindme.ui.state.ReminderState
-import dev.shorthouse.remindme.ui.theme.RemindMeTheme
-import dev.shorthouse.remindme.ui.theme.Scrim
-import kotlinx.coroutines.launch
+import dev.shorthouse.remindme.ui.theme.AppTheme
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalLifecycleComposeApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Destination
 @Composable
 fun ReminderListCompletedScreen(
@@ -54,60 +47,46 @@ fun ReminderListCompletedScreen(
     listViewModel: ListViewModel = hiltViewModel(),
     navigator: DestinationsNavigator
 ) {
-    listCompletedViewModel.initialiseUiState()
     val uiState by listCompletedViewModel.uiState.collectAsStateWithLifecycle()
-
-    val coroutineScope = rememberCoroutineScope()
-
-    val bottomSheetState = rememberModalBottomSheetState(
-        initialValue = ModalBottomSheetValue.Hidden,
-        skipHalfExpanded = true
-    )
-
+    var isModalBottomSheetShown by remember { mutableStateOf(false) }
     var selectedReminderState by remember { mutableStateOf(ReminderState()) }
 
-    ModalBottomSheetLayout(
-        content = {
-            ReminderListCompletedScaffold(
-                completedReminderStates = uiState.completedReminderStates,
-                onNavigateUp = { navigator.navigateUp() },
-                onDeleteCompletedReminders = { listCompletedViewModel.deleteCompletedReminders() },
-                onReminderCard = { reminderState ->
-                    selectedReminderState = reminderState
-                    coroutineScope.launch { bottomSheetState.show() }
-                },
-                isLoading = uiState.isLoading
-            )
+    ReminderListCompletedScaffold(
+        completedReminderStates = uiState.completedReminderStates,
+        onNavigateUp = { navigator.navigateUp() },
+        onDeleteCompletedReminders = { listCompletedViewModel.deleteCompletedReminders() },
+        onReminderCard = { reminderState ->
+            selectedReminderState = reminderState
+            isModalBottomSheetShown = true
         },
-        sheetContent = {
-            BackHandler(enabled = bottomSheetState.isVisible) {
-                coroutineScope.launch { bottomSheetState.hide() }
-            }
+        isLoading = uiState.isLoading
+    )
 
+    if (isModalBottomSheetShown) {
+        ModalBottomSheet(
+            onDismissRequest = { isModalBottomSheetShown = false },
+            dragHandle = null
+        ) {
             BottomSheetReminderActions(
                 reminderState = selectedReminderState,
                 onReminderActionItemSelected = { reminderAction ->
-                    coroutineScope.launch {
-                        bottomSheetState.hide()
+                    isModalBottomSheetShown = false
 
-                        listViewModel.processReminderAction(
-                            selectedReminderState = selectedReminderState.copy(),
-                            reminderAction = reminderAction,
-                            onEdit = {
-                                navigator.navigate(
-                                    ReminderEditScreenDestination(
-                                        reminderId = selectedReminderState.id
-                                    )
+                    listViewModel.processReminderAction(
+                        selectedReminderState = selectedReminderState.copy(),
+                        reminderAction = reminderAction,
+                        onEdit = {
+                            navigator.navigate(
+                                ReminderEditScreenDestination(
+                                    reminderId = selectedReminderState.id
                                 )
-                            }
-                        )
-                    }
+                            )
+                        }
+                    )
                 }
             )
-        },
-        sheetState = bottomSheetState,
-        scrimColor = Scrim
-    )
+        }
+    }
 }
 
 @Composable
@@ -141,6 +120,7 @@ fun ReminderListCompletedScaffold(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReminderListCompletedTopBar(
     onNavigateUp: () -> Unit,
@@ -163,7 +143,7 @@ fun ReminderListCompletedTopBar(
         title = {
             Text(
                 text = stringResource(R.string.top_bar_title_completed_reminders),
-                style = MaterialTheme.typography.h6
+                style = MaterialTheme.typography.titleLarge
             )
         },
         navigationIcon = {
@@ -181,7 +161,7 @@ fun ReminderListCompletedTopBar(
                     contentDescription = stringResource(
                         R.string.cd_top_bar_delete_completed_reminders
                     ),
-                    tint = MaterialTheme.colors.onPrimary
+                    tint = MaterialTheme.colorScheme.onPrimary
                 )
             }
         }
@@ -194,7 +174,7 @@ fun ReminderListCompletedTopBar(
 private fun ReminderListCompletedPreview(
     @PreviewParameter(ReminderListProvider::class) reminderStates: List<ReminderState>
 ) {
-    RemindMeTheme {
+    AppTheme {
         ReminderListCompletedScaffold(
             completedReminderStates = reminderStates,
             onNavigateUp = {},

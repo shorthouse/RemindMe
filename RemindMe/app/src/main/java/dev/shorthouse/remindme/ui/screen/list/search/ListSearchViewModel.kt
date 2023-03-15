@@ -1,5 +1,6 @@
 package dev.shorthouse.remindme.ui.screen.list.search
 
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -30,6 +31,11 @@ class ListSearchViewModel @Inject constructor(
 
     private val _searchQuery = MutableStateFlow("")
 
+    init {
+        initialiseUiState()
+    }
+
+    @VisibleForTesting
     fun initialiseUiState() {
         _uiState.update { it.copy(isLoading = true) }
 

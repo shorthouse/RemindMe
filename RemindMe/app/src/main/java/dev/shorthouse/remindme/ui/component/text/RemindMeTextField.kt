@@ -3,8 +3,8 @@ package dev.shorthouse.remindme.ui.component.text
 import android.content.res.Configuration
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -15,8 +15,7 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
-import dev.shorthouse.remindme.ui.theme.RemindMeTheme
-import dev.shorthouse.remindme.ui.theme.SubtitleGrey
+import dev.shorthouse.remindme.ui.theme.AppTheme
 
 @Composable
 fun RemindMeTextField(
@@ -31,7 +30,7 @@ fun RemindMeTextField(
         value = text,
         onValueChange = onTextChange,
         textStyle = textStyle,
-        cursorBrush = SolidColor(MaterialTheme.colors.onBackground),
+        cursorBrush = SolidColor(MaterialTheme.colorScheme.onBackground),
         keyboardOptions = KeyboardOptions(
             imeAction = imeAction,
             autoCorrect = true
@@ -41,7 +40,7 @@ fun RemindMeTextField(
                 Text(
                     text = hintText,
                     style = textStyle,
-                    color = SubtitleGrey
+                    color = MaterialTheme.colorScheme.outline
                 )
             }
             innerTextField()
@@ -59,10 +58,10 @@ fun RemindMeTextField(
     widthDp = 200
 )
 fun RemindMeTextFieldPreview() {
-    RemindMeTheme {
+    AppTheme {
         var text by remember { mutableStateOf("") }
         val onTextChange: (String) -> Unit = { text = it }
-        val textStyle = MaterialTheme.typography.h6
+        val textStyle = MaterialTheme.typography.titleLarge
         val hintText = "Hint text"
         val imeAction = ImeAction.Default
 

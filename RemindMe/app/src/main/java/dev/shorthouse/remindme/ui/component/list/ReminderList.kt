@@ -15,9 +15,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.ui.component.emptystate.EmptyStateActiveReminders
-import dev.shorthouse.remindme.ui.preview.ReminderListProvider
+import dev.shorthouse.remindme.ui.previewdata.ReminderListProvider
 import dev.shorthouse.remindme.ui.state.ReminderState
-import dev.shorthouse.remindme.ui.theme.RemindMeTheme
+import dev.shorthouse.remindme.ui.theme.AppTheme
 
 @Composable
 fun ReminderListContent(
@@ -68,7 +68,7 @@ fun ReminderList(
 fun ReminderListContentPreview(
     @PreviewParameter(ReminderListProvider::class) reminderStates: List<ReminderState>
 ) {
-    RemindMeTheme {
+    AppTheme {
         ReminderListContent(
             reminderStates = reminderStates,
             emptyStateContent = { EmptyStateActiveReminders() },

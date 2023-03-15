@@ -1,5 +1,6 @@
 package dev.shorthouse.remindme.ui.screen.list.active
 
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,6 +28,11 @@ class ListActiveViewModel @Inject constructor(
     val uiState: StateFlow<ListActiveUiState>
         get() = _uiState
 
+    init {
+        initialiseUiState()
+    }
+
+    @VisibleForTesting
     fun initialiseUiState() {
         _uiState.update { it.copy(isLoading = true) }
 

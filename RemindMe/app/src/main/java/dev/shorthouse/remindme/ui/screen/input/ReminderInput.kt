@@ -16,17 +16,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.RadioButton
-import androidx.compose.material.Scaffold
-import androidx.compose.material.ScaffoldState
-import androidx.compose.material.Surface
-import androidx.compose.material.Switch
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.CalendarToday
 import androidx.compose.material.icons.rounded.Close
@@ -35,11 +24,27 @@ import androidx.compose.material.icons.rounded.Notes
 import androidx.compose.material.icons.rounded.NotificationsNone
 import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material.icons.rounded.Schedule
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.RadioButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Switch
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -60,17 +65,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 import dev.shorthouse.remindme.R
-import dev.shorthouse.remindme.ui.component.dialog.DatePickerDialog
-import dev.shorthouse.remindme.ui.component.dialog.TimePickerDialog
+import dev.shorthouse.remindme.ui.component.dialog.ReminderDatePicker
+import dev.shorthouse.remindme.ui.component.dialog.ReminderTimePicker
 import dev.shorthouse.remindme.ui.component.text.RemindMeTextField
-import dev.shorthouse.remindme.ui.preview.DefaultReminderProvider
+import dev.shorthouse.remindme.ui.previewdata.DefaultReminderProvider
 import dev.shorthouse.remindme.ui.state.ReminderState
-import dev.shorthouse.remindme.ui.theme.RemindMeTheme
-import dev.shorthouse.remindme.ui.theme.SubtitleGrey
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
+import dev.shorthouse.remindme.ui.theme.AppTheme
 import kotlinx.coroutines.launch
 
 @Composable
@@ -80,7 +81,7 @@ fun ReminderInputScreen(
     topBarTitle: String,
     navigator: DestinationsNavigator
 ) {
-    val scaffoldState = rememberScaffoldState()
+    val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
 
@@ -99,7 +100,7 @@ fun ReminderInputScreen(
             else -> {
                 val errorMessage = inputViewModel.getErrorMessage(reminder).asString(context)
                 coroutineScope.launch {
-                    scaffoldState.snackbarHostState.showSnackbar(message = errorMessage)
+                    snackbarHostState.showSnackbar(message = errorMessage)
                 }
             }
         }
@@ -107,7 +108,7 @@ fun ReminderInputScreen(
 
     ReminderInputScaffold(
         reminderState = reminderState,
-        scaffoldState = scaffoldState,
+        snackbarHostState = snackbarHostState,
         topBarTitle = topBarTitle,
         onNavigateUp = onNavigateUp,
         onSave = onSave
@@ -117,13 +118,13 @@ fun ReminderInputScreen(
 @Composable
 fun ReminderInputScaffold(
     reminderState: ReminderState,
-    scaffoldState: ScaffoldState,
+    snackbarHostState: SnackbarHostState,
     topBarTitle: String,
     onNavigateUp: () -> Unit,
     onSave: () -> Unit
 ) {
     Scaffold(
-        scaffoldState = scaffoldState,
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             ReminderInputTopBar(
                 topBarTitle = topBarTitle,
@@ -142,7 +143,7 @@ fun ReminderInputScaffold(
     )
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun ReminderInputTopBar(
     topBarTitle: String,
@@ -151,11 +152,23 @@ fun ReminderInputTopBar(
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
 
+    val topBarColor = if (isSystemInDarkTheme()) {
+        MaterialTheme.colorScheme.surface
+    } else {
+        MaterialTheme.colorScheme.primary
+    }
+
+    val onTopBarColor = if (isSystemInDarkTheme()) {
+        MaterialTheme.colorScheme.onSurface
+    } else {
+        MaterialTheme.colorScheme.onPrimary
+    }
+
     TopAppBar(
         title = {
             Text(
                 text = topBarTitle,
-                style = MaterialTheme.typography.h6
+                style = MaterialTheme.typography.titleLarge.copy(color = onTopBarColor)
             )
         },
         navigationIcon = {
@@ -165,7 +178,8 @@ fun ReminderInputTopBar(
             }) {
                 Icon(
                     imageVector = Icons.Rounded.Close,
-                    contentDescription = stringResource(R.string.cd_top_bar_close_reminder)
+                    contentDescription = stringResource(R.string.cd_top_bar_close_reminder),
+                    tint = onTopBarColor
                 )
             }
         },
@@ -177,10 +191,13 @@ fun ReminderInputTopBar(
                 Icon(
                     imageVector = Icons.Rounded.Done,
                     contentDescription = stringResource(R.string.cd_top_bar_save_reminder),
-                    tint = MaterialTheme.colors.onPrimary
+                    tint = onTopBarColor
                 )
             }
-        }
+        },
+        colors = TopAppBarDefaults.smallTopAppBarColors(
+            containerColor = topBarColor
+        )
     )
 }
 
@@ -191,9 +208,9 @@ fun ReminderInputContent(
 ) {
     val focusRequester = remember { FocusRequester() }
     val surfaceColor = if (isSystemInDarkTheme()) {
-        MaterialTheme.colors.background
+        MaterialTheme.colorScheme.background
     } else {
-        MaterialTheme.colors.surface
+        MaterialTheme.colorScheme.surface
     }
 
     Surface(color = surfaceColor) {
@@ -255,7 +272,8 @@ fun ReminderNameInput(
     RemindMeTextField(
         text = reminderState.name,
         onTextChange = { if (it.length <= nameMaxLength) reminderState.name = it },
-        textStyle = MaterialTheme.typography.h6.copy(color = MaterialTheme.colors.onSurface),
+        textStyle = MaterialTheme.typography.titleLarge
+            .copy(color = MaterialTheme.colorScheme.onSurface),
         hintText = stringResource(R.string.hint_reminder_name),
         imeAction = ImeAction.Done,
         modifier = modifier
@@ -266,41 +284,40 @@ fun ReminderNameInput(
 
 @Composable
 fun ReminderDateInput(reminderState: ReminderState, modifier: Modifier = Modifier) {
-    val dateDialogState = rememberMaterialDialogState()
+    var isDatePickerShown by remember { mutableStateOf(false) }
 
-    DatePickerDialog(
-        date = LocalDate.parse(
-            reminderState.date,
-            DateTimeFormatter.ofPattern("EEE, dd MMM yyyy")
-        ),
-        onDateChange = {
-            reminderState.date = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy").format(it)
-        },
-        dialogState = dateDialogState
-    )
+    if (isDatePickerShown) {
+        ReminderDatePicker(
+            initialDate = reminderState.date,
+            onConfirm = { reminderState.date = it },
+            onDismiss = { isDatePickerShown = false }
+        )
+    }
 
     TextWithLeftIcon(
         icon = Icons.Rounded.CalendarToday,
         text = reminderState.date,
-        modifier = modifier.clickable { dateDialogState.show() },
+        modifier = modifier.clickable { isDatePickerShown = true },
         contentDescription = stringResource(R.string.cd_details_date)
     )
 }
 
 @Composable
 fun ReminderTimeInput(reminderState: ReminderState, modifier: Modifier = Modifier) {
-    val timeDialogState = rememberMaterialDialogState()
+    var isTimePickerShown by remember { mutableStateOf(false) }
 
-    TimePickerDialog(
-        time = reminderState.time,
-        onTimeChange = { reminderState.time = it },
-        dialogState = timeDialogState
-    )
+    if (isTimePickerShown) {
+        ReminderTimePicker(
+            initialTime = reminderState.time,
+            onConfirm = { reminderState.time = it },
+            onDismiss = { isTimePickerShown = false }
+        )
+    }
 
     TextWithLeftIcon(
         icon = Icons.Rounded.Schedule,
         text = reminderState.time.toString(),
-        modifier = modifier.clickable { timeDialogState.show() },
+        modifier = modifier.clickable { isTimePickerShown = true },
         contentDescription = stringResource(R.string.cd_details_time)
     )
 }
@@ -354,7 +371,7 @@ fun ReminderNotesInput(reminderState: ReminderState, modifier: Modifier = Modifi
         Icon(
             imageVector = Icons.Rounded.Notes,
             contentDescription = stringResource(R.string.cd_details_notes),
-            tint = SubtitleGrey
+            tint = MaterialTheme.colorScheme.outline
         )
 
         Spacer(Modifier.width(dimensionResource(R.dimen.margin_normal)))
@@ -362,7 +379,8 @@ fun ReminderNotesInput(reminderState: ReminderState, modifier: Modifier = Modifi
         RemindMeTextField(
             text = reminderState.notes.orEmpty(),
             onTextChange = { if (it.length <= notesMaxLength) reminderState.notes = it },
-            textStyle = MaterialTheme.typography.body1.copy(color = MaterialTheme.colors.onSurface),
+            textStyle = MaterialTheme.typography.bodyMedium
+                .copy(color = MaterialTheme.colorScheme.onSurface),
             hintText = stringResource(R.string.hint_reminder_notes),
             imeAction = ImeAction.None,
             modifier = Modifier.fillMaxWidth()
@@ -370,7 +388,6 @@ fun ReminderNotesInput(reminderState: ReminderState, modifier: Modifier = Modifi
     }
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ReminderRepeatIntervalInput(reminderState: ReminderState) {
     ReminderSwitchRow(
@@ -432,7 +449,8 @@ private fun RepeatIntervalHeader(modifier: Modifier = Modifier) {
     ) {
         Text(
             text = stringResource(R.string.repeats_every_header),
-            style = MaterialTheme.typography.subtitle1
+            style = MaterialTheme.typography.titleSmall
+                .copy(color = MaterialTheme.colorScheme.outline)
         )
     }
 }
@@ -450,7 +468,7 @@ private fun RepeatAmountInput(reminderState: ReminderState) {
                 )
             }
         },
-        textStyle = MaterialTheme.typography.body1.copy(textAlign = TextAlign.Center),
+        textStyle = MaterialTheme.typography.bodyMedium.copy(textAlign = TextAlign.Center),
         keyboardOptions = KeyboardOptions(
             imeAction = ImeAction.Done,
             keyboardType = KeyboardType.Number
@@ -468,7 +486,6 @@ private fun sanitiseRepeatAmount(repeatAmount: String): String {
         .filter { it.isDigit() }
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun RepeatUnitInput(reminderState: ReminderState) {
     val repeatUnitPluralIds = listOf(R.plurals.radio_button_days, R.plurals.radio_button_weeks)
@@ -502,7 +519,7 @@ private fun RepeatUnitInput(reminderState: ReminderState) {
 
                 Text(
                     text = text,
-                    style = MaterialTheme.typography.body1
+                    style = MaterialTheme.typography.bodyMedium
                 )
             }
         }
@@ -523,15 +540,15 @@ fun TextWithLeftIcon(
         Icon(
             imageVector = icon,
             contentDescription = contentDescription,
-            tint = SubtitleGrey
+            tint = MaterialTheme.colorScheme.outline
         )
 
         Spacer(Modifier.width(dimensionResource(R.dimen.margin_normal)))
 
         Text(
             text = text,
-            style = MaterialTheme.typography.body1,
-            color = MaterialTheme.colors.onBackground
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onBackground
         )
     }
 }
@@ -542,13 +559,13 @@ fun TextWithLeftIcon(
 private fun ReminderInputPreview(
     @PreviewParameter(DefaultReminderProvider::class) reminderState: ReminderState
 ) {
-    RemindMeTheme {
-        val scaffoldState = rememberScaffoldState()
+    AppTheme {
+        val snackbarHostState = remember { SnackbarHostState() }
         val topBarTitle = stringResource(R.string.top_bar_title_input_reminder)
 
         ReminderInputScaffold(
             reminderState = reminderState,
-            scaffoldState = scaffoldState,
+            snackbarHostState = snackbarHostState,
             topBarTitle = topBarTitle,
             onNavigateUp = {},
             onSave = {}
