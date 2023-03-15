@@ -1,16 +1,26 @@
 package dev.shorthouse.remindme.ui.screen.list.active
 
 import android.content.res.Configuration
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.rounded.History
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.SwapVert
+import androidx.compose.material3.ElevatedFilterChip
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -30,6 +40,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ramcosta.composedestinations.annotation.Destination
@@ -42,7 +53,7 @@ import dev.shorthouse.remindme.ui.component.dialog.ReminderSortDialog
 import dev.shorthouse.remindme.ui.component.emptystate.EmptyStateActiveReminders
 import dev.shorthouse.remindme.ui.component.list.ReminderListContent
 import dev.shorthouse.remindme.ui.component.sheet.BottomSheetReminderActions
-import dev.shorthouse.remindme.ui.preview.ReminderListProvider
+import dev.shorthouse.remindme.ui.previewdata.ReminderListProvider
 import dev.shorthouse.remindme.ui.screen.destinations.ReminderAddScreenDestination
 import dev.shorthouse.remindme.ui.screen.destinations.ReminderEditScreenDestination
 import dev.shorthouse.remindme.ui.screen.destinations.ReminderListCompletedScreenDestination
@@ -134,18 +145,21 @@ fun ReminderListActiveScaffold(
             if (!isLoading) {
                 val modifier = Modifier.padding(scaffoldPadding)
 
-                ReminderListContent(
-                    reminderStates = activeReminderStates,
-                    emptyStateContent = { EmptyStateActiveReminders() },
-                    onReminderCard = onReminderCard,
-                    contentPadding = PaddingValues(
-                        start = dimensionResource(R.dimen.margin_tiny),
-                        top = dimensionResource(R.dimen.margin_tiny),
-                        end = dimensionResource(R.dimen.margin_tiny),
-                        bottom = dimensionResource(R.dimen.margin_bottom_bar)
-                    ),
-                    modifier = modifier
-                )
+                Column(modifier = modifier) {
+                    ReminderListFilterChips()
+
+                    ReminderListContent(
+                        reminderStates = activeReminderStates,
+                        emptyStateContent = { EmptyStateActiveReminders() },
+                        onReminderCard = onReminderCard,
+                        contentPadding = PaddingValues(
+                            start = dimensionResource(R.dimen.margin_tiny),
+                            top = dimensionResource(R.dimen.margin_tiny),
+                            end = dimensionResource(R.dimen.margin_tiny),
+                            bottom = dimensionResource(R.dimen.margin_bottom_bar)
+                        )
+                    )
+                }
             }
         },
         floatingActionButton = {
@@ -228,6 +242,32 @@ fun ReminderListActiveTopBar(
             containerColor = topBarColor
         )
     )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ReminderListFilterChips() {
+    val filterChipOptions = listOf("Overdue", "Scheduled", "Completed")
+    var filterSelected by remember { mutableStateOf(false) }
+
+    val scrollState = rememberScrollState()
+
+    Row(
+        horizontalArrangement = Arrangement.SpaceEvenly,
+        modifier = Modifier
+            .padding(horizontal = 8.dp)
+            .fillMaxWidth()
+            .horizontalScroll(scrollState)
+    ) {
+        filterChipOptions.forEachIndexed { index, filterChipOption ->
+            ElevatedFilterChip(
+                selected = filterSelected,
+                onClick = { filterSelected = !filterSelected },
+                label = { Text(text = filterChipOption) },
+                modifier = Modifier.padding(horizontal = 2.dp)
+            )
+        }
+    }
 }
 
 @Composable
