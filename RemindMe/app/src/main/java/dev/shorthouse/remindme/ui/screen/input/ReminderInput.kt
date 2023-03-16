@@ -195,7 +195,7 @@ fun ReminderInputTopBar(
                 )
             }
         },
-        colors = TopAppBarDefaults.smallTopAppBarColors(
+        colors = TopAppBarDefaults.topAppBarColors(
             containerColor = topBarColor
         )
     )
