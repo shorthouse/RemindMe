@@ -7,9 +7,10 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
 import dev.shorthouse.remindme.data.FakeDataSource
 import dev.shorthouse.remindme.data.ReminderRepository
-import dev.shorthouse.remindme.data.protodatastore.ReminderSortOrder
+import dev.shorthouse.remindme.data.protodatastore.ReminderSort
 import dev.shorthouse.remindme.data.protodatastore.UserPreferencesRepository
 import dev.shorthouse.remindme.data.protodatastore.UserPreferencesSerializer
+import dev.shorthouse.remindme.ui.screen.list.ListActiveViewModel
 import dev.shorthouse.remindme.ui.state.ReminderState
 import dev.shorthouse.remindme.util.ReminderTestUtil
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -68,12 +69,12 @@ class ListActiveViewModelTest {
     @Test
     fun `Default UI state, contains expected values`() {
         val expectedActiveReminderStates = emptyList<ReminderState>()
-        val expectedReminderSortOrder = ReminderSortOrder.BY_EARLIEST_DATE_FIRST
+        val expectedReminderSortOrder = ReminderSort.BY_EARLIEST_DATE_FIRST
         val expectedIsLoading = false
 
         val uiState = listActiveViewModel.uiState.value
 
-        assertThat(uiState.activeReminderStates).isEqualTo(expectedActiveReminderStates)
+        assertThat(uiState.reminderStates).isEqualTo(expectedActiveReminderStates)
         assertThat(uiState.reminderSortOrder).isEqualTo(expectedReminderSortOrder)
         assertThat(uiState.isLoading).isEqualTo(expectedIsLoading)
     }
@@ -84,13 +85,13 @@ class ListActiveViewModelTest {
             listActiveViewModel.initialiseUiState()
             advanceUntilIdle()
 
-            val expectedReminderSortOrder = ReminderSortOrder.BY_EARLIEST_DATE_FIRST
+            val expectedReminderSortOrder = ReminderSort.BY_EARLIEST_DATE_FIRST
             val expectedIsLoading = false
 
             val uiState = listActiveViewModel.uiState.value
 
-            assertThat(uiState.activeReminderStates).isNotEmpty()
-            assertThat(uiState.activeReminderStates.filter { it.isCompleted }).isEmpty()
+            assertThat(uiState.reminderStates).isNotEmpty()
+            assertThat(uiState.reminderStates.filter { it.isCompleted }).isEmpty()
             assertThat(uiState.reminderSortOrder).isEqualTo(expectedReminderSortOrder)
             assertThat(uiState.isLoading).isEqualTo(expectedIsLoading)
         }
@@ -99,13 +100,13 @@ class ListActiveViewModelTest {
     @Test
     fun `Update reminder sort order, sets preferences to expected value`() {
         testCoroutineScope.runTest {
-            val reminderSortOrder = ReminderSortOrder.BY_LATEST_DATE_FIRST
+            val reminderSortOrder = ReminderSort.BY_LATEST_DATE_FIRST
 
             listActiveViewModel.updateReminderSortOrder(reminderSortOrder)
             advanceUntilIdle()
 
             assertThat(userPreferencesRepository.userPreferencesFlow.first().reminderSortOrder)
-                .isEqualTo(ReminderSortOrder.BY_LATEST_DATE_FIRST)
+                .isEqualTo(ReminderSort.BY_LATEST_DATE_FIRST)
         }
     }
 
