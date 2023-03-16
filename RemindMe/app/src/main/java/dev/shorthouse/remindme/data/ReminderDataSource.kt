@@ -12,10 +12,6 @@ interface ReminderDataSource {
 
     suspend fun getRemindersOneShot(): List<Reminder>
 
-    fun getActiveReminders(): Flow<List<Reminder>>
-
-    fun getCompletedReminders(): Flow<List<Reminder>>
-
     fun completeReminder(id: Long)
 
     fun deleteCompletedReminders()

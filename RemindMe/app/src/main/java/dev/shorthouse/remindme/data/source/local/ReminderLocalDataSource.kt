@@ -2,8 +2,8 @@ package dev.shorthouse.remindme.data.source.local
 
 import dev.shorthouse.remindme.data.ReminderDataSource
 import dev.shorthouse.remindme.model.Reminder
-import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
 class ReminderLocalDataSource @Inject constructor(private val reminderDao: ReminderDao) :
     ReminderDataSource {
@@ -21,14 +21,6 @@ class ReminderLocalDataSource @Inject constructor(private val reminderDao: Remin
 
     override suspend fun getRemindersOneShot(): List<Reminder> {
         return reminderDao.getRemindersOneShot()
-    }
-
-    override fun getActiveReminders(): Flow<List<Reminder>> {
-        return reminderDao.getActiveReminders()
-    }
-
-    override fun getCompletedReminders(): Flow<List<Reminder>> {
-        return reminderDao.getCompletedReminders()
     }
 
     override fun completeReminder(id: Long) {

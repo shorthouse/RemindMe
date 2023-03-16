@@ -31,14 +31,6 @@ class FakeDataSource(
         }
     }
 
-    override fun getActiveReminders(): Flow<List<Reminder>> {
-        return flowOf(
-            reminders.filter { reminder ->
-                !reminder.isCompleted
-            }
-        )
-    }
-
     override fun getCompletedReminders(): Flow<List<Reminder>> {
         return flowOf(
             reminders.filter { reminder ->

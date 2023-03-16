@@ -23,12 +23,6 @@ interface ReminderDao {
     @Query("SELECT * FROM reminder")
     suspend fun getRemindersOneShot(): List<Reminder>
 
-    @Query("SELECT * FROM reminder WHERE isCompleted = 0")
-    fun getActiveReminders(): Flow<List<Reminder>>
-
-    @Query("SELECT * FROM reminder WHERE isCompleted = 1")
-    fun getCompletedReminders(): Flow<List<Reminder>>
-
     @Query("UPDATE reminder SET isCompleted = 1 WHERE id = :id")
     fun completeReminder(id: Long)
 

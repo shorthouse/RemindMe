@@ -4,7 +4,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.util.ReminderTestUtil
-import java.time.ZonedDateTime
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.first
@@ -100,89 +99,6 @@ class ReminderRepositoryTest {
             val reminders = reminderRepository.getRemindersOneShot()
 
             assertThat(reminders).isEqualTo(repositoryReminders)
-        }
-    }
-
-    @Test
-    fun `Get active reminders, returns only active reminders`() {
-        testCoroutineScope.runTest {
-            val overdueReminder = ReminderTestUtil().createReminder(
-                id = 1,
-                name = "overdueReminder",
-                startDateTime = ZonedDateTime.parse("3000-01-01T00:00:00Z")
-            )
-
-            val scheduledReminder = ReminderTestUtil().createReminder(
-                id = 2,
-                name = "scheduledReminder",
-                startDateTime = ZonedDateTime.parse("2000-01-01T00:00:00Z")
-            )
-
-            val completedReminder = ReminderTestUtil().createReminder(
-                id = 3,
-                name = "completedReminder",
-                isCompleted = true
-            )
-
-            val expectedActiveReminders = listOf(overdueReminder, scheduledReminder)
-
-            val repositoryReminders = listOf(overdueReminder, scheduledReminder, completedReminder)
-            setRepositoryReminders(repositoryReminders)
-
-            val scheduledReminders = reminderRepository.getActiveReminders().first()
-
-            assertThat(scheduledReminders).isEqualTo(expectedActiveReminders)
-        }
-    }
-
-    @Test
-    fun `Get completed reminders, returns only completed reminders`() {
-        testCoroutineScope.runTest {
-            val completedReminder = ReminderTestUtil().createReminder(
-                id = 1,
-                name = "completedReminder",
-                isCompleted = true
-            )
-
-            val uncompletedReminder = ReminderTestUtil().createReminder(
-                id = 2,
-                name = "uncompletedReminder",
-                isCompleted = false
-            )
-
-            val expectedCompletedReminders = listOf(completedReminder)
-
-            val repositoryReminders = listOf(completedReminder, uncompletedReminder)
-            setRepositoryReminders(repositoryReminders)
-
-            val completedReminders = reminderRepository.getCompletedReminders().first()
-
-            assertThat(completedReminders).isEqualTo(expectedCompletedReminders)
-        }
-    }
-
-    @Test
-    fun `Delete completed reminders, deletes all completed reminders`() {
-        testCoroutineScope.runTest {
-            val completedReminderOne = ReminderTestUtil().createReminder(
-                id = 1,
-                name = "completedReminderOne",
-                isCompleted = true
-            )
-
-            val completedReminderTwo = ReminderTestUtil().createReminder(
-                id = 2,
-                name = "completedReminderTwo",
-                isCompleted = true
-            )
-
-            val repositoryReminders = listOf(completedReminderOne, completedReminderTwo)
-            setRepositoryReminders(repositoryReminders)
-
-            reminderRepository.deleteCompletedReminders()
-
-            val completedReminders = reminderRepository.getCompletedReminders().first()
-            assertThat(completedReminders).isEmpty()
         }
     }
 
