@@ -11,8 +11,8 @@ import androidx.compose.ui.test.performClick
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dev.shorthouse.remindme.HiltTestActivity
-import dev.shorthouse.remindme.data.protodatastore.ReminderSortOrder
-import dev.shorthouse.remindme.ui.screen.list.active.ReminderListActiveScaffold
+import dev.shorthouse.remindme.data.protodatastore.ReminderSort
+import dev.shorthouse.remindme.ui.screen.list.ReminderListActiveScaffold
 import dev.shorthouse.remindme.ui.state.ReminderState
 import dev.shorthouse.remindme.ui.theme.m2.RemindMeTheme
 import dev.shorthouse.remindme.util.ReminderTestUtil
@@ -47,7 +47,7 @@ class ReminderListActiveTest {
                 time = LocalTime.parse("09:00")
             )
         ),
-        reminderSortOrder: ReminderSortOrder = ReminderSortOrder.BY_EARLIEST_DATE_FIRST,
+        reminderSortOrder: ReminderSort = ReminderSort.BY_EARLIEST_DATE_FIRST,
         isLoading: Boolean = false
     ) {
         composeTestRule.setContent {
@@ -55,12 +55,14 @@ class ReminderListActiveTest {
                 ReminderListActiveScaffold(
                     activeReminderStates = activeReminderStates,
                     reminderSortOrder = reminderSortOrder,
-                    isLoading = isLoading,
-                    onApplySort = {},
+                    reminderFilters = uiState.reminderFilters,
+                    onNavigateCompletedReminders = {},
                     onNavigateAdd = {},
-                    onNavigateSearch = {},
                     onReminderCard = {},
-                    onNavigateCompletedReminders = {}
+                    onApplySort = {},
+                    onNavigateSearch = {},
+                    isLoading = isLoading,
+                    onApplyFilter = onApplyFilter
                 )
             }
         }
@@ -113,7 +115,7 @@ class ReminderListActiveTest {
     @Test
     fun when_reminder_list_active_sorted_by_date_earliest_first_should_display_in_expected_order() {
         setContent(
-            reminderSortOrder = ReminderSortOrder.BY_EARLIEST_DATE_FIRST
+            reminderSortOrder = ReminderSort.BY_EARLIEST_DATE_FIRST
         )
 
         composeTestRule.apply {
