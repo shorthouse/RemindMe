@@ -1,4 +1,4 @@
-package dev.shorthouse.remindme.ui.screen.list.active
+package dev.shorthouse.remindme.ui.screen.list
 
 import android.content.res.Configuration
 import androidx.compose.foundation.horizontalScroll
@@ -9,13 +9,10 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Done
-import androidx.compose.material.icons.rounded.History
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.SwapVert
 import androidx.compose.material3.ElevatedFilterChip
@@ -40,14 +37,14 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import dev.shorthouse.remindme.R
-import dev.shorthouse.remindme.data.protodatastore.ReminderSortOrder
+import dev.shorthouse.remindme.data.protodatastore.ReminderFilter
+import dev.shorthouse.remindme.data.protodatastore.ReminderSort
 import dev.shorthouse.remindme.ui.component.dialog.NotificationPermissionRequester
 import dev.shorthouse.remindme.ui.component.dialog.ReminderSortDialog
 import dev.shorthouse.remindme.ui.component.emptystate.EmptyStateActiveReminders
@@ -56,9 +53,7 @@ import dev.shorthouse.remindme.ui.component.sheet.BottomSheetReminderActions
 import dev.shorthouse.remindme.ui.previewdata.ReminderListProvider
 import dev.shorthouse.remindme.ui.screen.destinations.ReminderAddScreenDestination
 import dev.shorthouse.remindme.ui.screen.destinations.ReminderEditScreenDestination
-import dev.shorthouse.remindme.ui.screen.destinations.ReminderListCompletedScreenDestination
 import dev.shorthouse.remindme.ui.screen.destinations.ReminderListSearchScreenDestination
-import dev.shorthouse.remindme.ui.screen.list.ListViewModel
 import dev.shorthouse.remindme.ui.state.ReminderState
 import dev.shorthouse.remindme.ui.theme.AppTheme
 
@@ -68,7 +63,7 @@ import dev.shorthouse.remindme.ui.theme.AppTheme
 @Composable
 fun ReminderListActiveScreen(
     listActiveViewModel: ListActiveViewModel = hiltViewModel(),
-    listViewModel: ListViewModel = hiltViewModel(),
+    listViewModel: SharedListViewModel = hiltViewModel(),
     navigator: DestinationsNavigator
 ) {
     val uiState by listActiveViewModel.uiState.collectAsStateWithLifecycle()
@@ -78,7 +73,9 @@ fun ReminderListActiveScreen(
     NotificationPermissionRequester()
 
     ReminderListActiveScaffold(
-        activeReminderStates = uiState.activeReminderStates,
+        activeReminderStates = uiState.reminderStates,
+        reminderFilters = uiState.reminderFilters,
+        onApplyFilter = { listActiveViewModel.toggleReminderFilter(it) },
         reminderSortOrder = uiState.reminderSortOrder,
         onApplySort = { listActiveViewModel.updateReminderSortOrder(it) },
         onReminderCard = { reminderState ->
@@ -86,9 +83,6 @@ fun ReminderListActiveScreen(
             isModalBottomSheetShown = true
         },
         onNavigateAdd = { navigator.navigate(ReminderAddScreenDestination()) },
-        onNavigateCompletedReminders = {
-            navigator.navigate(ReminderListCompletedScreenDestination())
-        },
         onNavigateSearch = { navigator.navigate(ReminderListSearchScreenDestination()) },
         isLoading = uiState.isLoading
     )
@@ -124,11 +118,12 @@ fun ReminderListActiveScreen(
 @Composable
 fun ReminderListActiveScaffold(
     activeReminderStates: List<ReminderState>,
-    reminderSortOrder: ReminderSortOrder,
-    onNavigateCompletedReminders: () -> Unit,
+    reminderFilters: Set<ReminderFilter>,
+    onApplyFilter: (ReminderFilter) -> Unit,
+    reminderSortOrder: ReminderSort,
+    onApplySort: (ReminderSort) -> Unit,
     onNavigateAdd: () -> Unit,
     onReminderCard: (ReminderState) -> Unit,
-    onApplySort: (ReminderSortOrder) -> Unit,
     onNavigateSearch: () -> Unit,
     isLoading: Boolean
 ) {
@@ -137,7 +132,6 @@ fun ReminderListActiveScaffold(
             ReminderListActiveTopBar(
                 reminderSortOrder = reminderSortOrder,
                 onApplySort = onApplySort,
-                onNavigateCompletedReminders = onNavigateCompletedReminders,
                 onNavigateSearch = onNavigateSearch
             )
         },
@@ -146,7 +140,10 @@ fun ReminderListActiveScaffold(
                 val modifier = Modifier.padding(scaffoldPadding)
 
                 Column(modifier = modifier) {
-                    ReminderListFilterChips()
+                    ReminderListFilterChips(
+                        reminderFilters,
+                        onApplyFilter
+                    )
 
                     ReminderListContent(
                         reminderStates = activeReminderStates,
@@ -181,9 +178,8 @@ fun ReminderListActiveScaffold(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReminderListActiveTopBar(
-    reminderSortOrder: ReminderSortOrder,
-    onApplySort: (ReminderSortOrder) -> Unit,
-    onNavigateCompletedReminders: () -> Unit,
+    reminderSortOrder: ReminderSort,
+    onApplySort: (ReminderSort) -> Unit,
     onNavigateSearch: () -> Unit
 ) {
     var isSortDialogOpen by remember { mutableStateOf(false) }
@@ -223,13 +219,6 @@ fun ReminderListActiveTopBar(
                     tint = onTopBarColor
                 )
             }
-            IconButton(onClick = onNavigateCompletedReminders) {
-                Icon(
-                    imageVector = Icons.Rounded.History,
-                    contentDescription = stringResource(R.string.cd_completed_reminders),
-                    tint = onTopBarColor
-                )
-            }
             IconButton(onClick = onNavigateSearch) {
                 Icon(
                     imageVector = Icons.Rounded.Search,
@@ -246,28 +235,53 @@ fun ReminderListActiveTopBar(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ReminderListFilterChips() {
-    val filterChipOptions = listOf("Overdue", "Scheduled", "Completed")
-    var filterSelected by remember { mutableStateOf(false) }
-
-    val scrollState = rememberScrollState()
-
+fun ReminderListFilterChips(
+    reminderFilters: Set<ReminderFilter>,
+    onApplyFilter: (ReminderFilter) -> Unit
+) {
     Row(
         horizontalArrangement = Arrangement.SpaceEvenly,
         modifier = Modifier
-            .padding(horizontal = 8.dp)
             .fillMaxWidth()
-            .horizontalScroll(scrollState)
+            .horizontalScroll(rememberScrollState())
+            .padding(
+                top = dimensionResource(R.dimen.margin_tiny),
+                start = dimensionResource(R.dimen.margin_minuscule),
+                end = dimensionResource(R.dimen.margin_minuscule)
+            )
     ) {
-        filterChipOptions.forEachIndexed { index, filterChipOption ->
+        ReminderFilter.values().forEach { reminderFilter ->
+            val selected = reminderFilters.contains(reminderFilter)
+
             ElevatedFilterChip(
-                selected = filterSelected,
-                onClick = { filterSelected = !filterSelected },
-                label = { Text(text = filterChipOption) },
-                modifier = Modifier.padding(horizontal = 2.dp)
+                selected = selected,
+                onClick = {
+                    if (!isLastSelectedFilter(reminderFilter, reminderFilters)) {
+                        onApplyFilter(reminderFilter)
+                    }
+                },
+                label = {
+                    Text(text = stringResource(reminderFilter.nameStringId))
+                },
+                elevation = FilterChipDefaults.elevatedFilterChipElevation(
+                    elevation = dimensionResource(R.dimen.margin_minuscule)
+                ),
+                colors = FilterChipDefaults.elevatedFilterChipColors(
+                    labelColor = MaterialTheme.colorScheme.primary,
+                    selectedContainerColor = MaterialTheme.colorScheme.primary,
+                    selectedLabelColor = MaterialTheme.colorScheme.onPrimary
+                ),
+                modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.margin_tiny))
             )
         }
     }
+}
+
+private fun isLastSelectedFilter(
+    reminderFilter: ReminderFilter,
+    reminderFilters: Set<ReminderFilter>
+): Boolean {
+    return reminderFilters.size == 1 && reminderFilters.contains(reminderFilter)
 }
 
 @Composable
@@ -279,12 +293,13 @@ fun ReminderListActivePreview(
     AppTheme {
         ReminderListActiveScaffold(
             activeReminderStates = reminderStates,
-            reminderSortOrder = ReminderSortOrder.BY_EARLIEST_DATE_FIRST,
-            onNavigateCompletedReminders = {},
-            onNavigateSearch = {},
-            onReminderCard = {},
+            reminderFilters = emptySet(),
+            onApplyFilter = {},
+            reminderSortOrder = ReminderSort.BY_EARLIEST_DATE_FIRST,
             onApplySort = {},
             onNavigateAdd = {},
+            onReminderCard = {},
+            onNavigateSearch = {},
             isLoading = false
         )
     }
