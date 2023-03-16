@@ -66,7 +66,7 @@ fun ReminderListCard(
                     R.string.reminder_list_card_date_time,
                     reminderState.date,
                     reminderState.time
-                ),
+                )
             )
 
             Spacer(Modifier.height(dimensionResource(R.dimen.margin_small)))
