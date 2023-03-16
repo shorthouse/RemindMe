@@ -47,11 +47,11 @@ class UserPreferencesRepositoryTest {
     fun when_write_sort_earliest_date_first_should_write_expected_value() {
         testCoroutineScope.runTest {
             val expectedUserPreferences = UserPreferences(
-                reminderSortOrder = ReminderSortOrder.BY_EARLIEST_DATE_FIRST
+                reminderSortOrder = ReminderSort.BY_EARLIEST_DATE_FIRST
             )
 
             userPreferencesRepository.updateReminderSortOrder(
-                ReminderSortOrder.BY_EARLIEST_DATE_FIRST
+                ReminderSort.BY_EARLIEST_DATE_FIRST
             )
 
             val userPreferences = userPreferencesRepository.userPreferencesFlow.first()
@@ -64,11 +64,11 @@ class UserPreferencesRepositoryTest {
     fun when_write_sort_latest_date_first_should_write_expected_value() {
         testCoroutineScope.runTest {
             val expectedUserPreferences = UserPreferences(
-                reminderSortOrder = ReminderSortOrder.BY_LATEST_DATE_FIRST
+                reminderSortOrder = ReminderSort.BY_LATEST_DATE_FIRST
             )
 
             userPreferencesRepository.updateReminderSortOrder(
-                ReminderSortOrder.BY_LATEST_DATE_FIRST
+                ReminderSort.BY_LATEST_DATE_FIRST
             )
 
             val userPreferences = userPreferencesRepository.userPreferencesFlow.first()
