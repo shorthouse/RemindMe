@@ -47,7 +47,7 @@ import dev.shorthouse.remindme.ui.component.list.ReminderListContent
 import dev.shorthouse.remindme.ui.component.sheet.BottomSheetReminderActions
 import dev.shorthouse.remindme.ui.previewdata.ReminderListProvider
 import dev.shorthouse.remindme.ui.screen.destinations.ReminderEditScreenDestination
-import dev.shorthouse.remindme.ui.screen.list.ListViewModel
+import dev.shorthouse.remindme.ui.screen.list.SharedListViewModel
 import dev.shorthouse.remindme.ui.state.ReminderState
 import dev.shorthouse.remindme.ui.theme.AppTheme
 
@@ -56,7 +56,7 @@ import dev.shorthouse.remindme.ui.theme.AppTheme
 @Composable
 fun ReminderListSearchScreen(
     listSearchViewModel: ListSearchViewModel = hiltViewModel(),
-    listViewModel: ListViewModel = hiltViewModel(),
+    listViewModel: SharedListViewModel = hiltViewModel(),
     navigator: DestinationsNavigator
 ) {
     val uiState by listSearchViewModel.uiState.collectAsStateWithLifecycle()
