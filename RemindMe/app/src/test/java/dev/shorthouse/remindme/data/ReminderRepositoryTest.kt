@@ -4,6 +4,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.util.ReminderTestUtil
+import java.time.ZonedDateTime
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.first
@@ -99,6 +100,108 @@ class ReminderRepositoryTest {
             val reminders = reminderRepository.getRemindersOneShot()
 
             assertThat(reminders).isEqualTo(repositoryReminders)
+        }
+    }
+
+    @Test
+    fun `Get overdue reminders, returns only overdue reminders`() {
+        testCoroutineScope.runTest {
+            val overdueReminder = ReminderTestUtil().createReminder(
+                id = 1,
+                name = "overdueReminder",
+                startDateTime = ZonedDateTime.parse("3000-01-01T00:00:00Z")
+            )
+
+            val upcomingReminder = ReminderTestUtil().createReminder(
+                id = 2,
+                name = "scheduledReminder",
+                startDateTime = ZonedDateTime.parse("2000-01-01T00:00:00Z")
+            )
+
+            val completedReminder = ReminderTestUtil().createReminder(
+                id = 3,
+                name = "completedReminder",
+                isCompleted = true
+            )
+
+            val expectedOverdueReminders = listOf(overdueReminder)
+
+            val repositoryReminders = listOf(overdueReminder, upcomingReminder, completedReminder)
+            setRepositoryReminders(repositoryReminders)
+
+            val overdueReminders = reminderRepository
+                .getOverdueReminders(ZonedDateTime.now())
+                .first()
+
+            assertThat(overdueReminders).isEqualTo(expectedOverdueReminders)
+        }
+    }
+
+    @Test
+    fun `Get upcoming reminders, returns only upcoming reminders`() {
+        testCoroutineScope.runTest {
+            val overdueReminder = ReminderTestUtil().createReminder(
+                id = 1,
+                name = "overdueReminder",
+                startDateTime = ZonedDateTime.parse("3000-01-01T00:00:00Z")
+            )
+
+            val upcomingReminder = ReminderTestUtil().createReminder(
+                id = 2,
+                name = "scheduledReminder",
+                startDateTime = ZonedDateTime.parse("2000-01-01T00:00:00Z")
+            )
+
+            val completedReminder = ReminderTestUtil().createReminder(
+                id = 3,
+                name = "completedReminder",
+                isCompleted = true
+            )
+
+            val expectedUpcomingReminders = listOf(upcomingReminder)
+
+            val repositoryReminders = listOf(overdueReminder, upcomingReminder, completedReminder)
+            setRepositoryReminders(repositoryReminders)
+
+            val upcomingReminders = reminderRepository
+                .getUpcomingReminders(ZonedDateTime.now())
+                .first()
+
+            assertThat(upcomingReminders).isEqualTo(expectedUpcomingReminders)
+        }
+    }
+
+    @Test
+    fun `Get completed reminders, returns only completed reminders`() {
+        testCoroutineScope.runTest {
+            val overdueReminder = ReminderTestUtil().createReminder(
+                id = 1,
+                name = "overdueReminder",
+                startDateTime = ZonedDateTime.parse("3000-01-01T00:00:00Z")
+            )
+
+            val upcomingReminder = ReminderTestUtil().createReminder(
+                id = 2,
+                name = "scheduledReminder",
+                startDateTime = ZonedDateTime.parse("2000-01-01T00:00:00Z")
+            )
+
+            val completedReminder = ReminderTestUtil().createReminder(
+                id = 3,
+                name = "completedReminder",
+                isCompleted = true
+            )
+
+            val expectedCompletedReminders = listOf(completedReminder)
+
+            val repositoryReminders = listOf(overdueReminder, upcomingReminder, completedReminder)
+            setRepositoryReminders(repositoryReminders)
+
+            val completedReminders = reminderRepository
+                .getCompletedReminders()
+                .first()
+
+            assertThat(completedReminders).isEqualTo(expectedCompletedReminders)
         }
     }
 

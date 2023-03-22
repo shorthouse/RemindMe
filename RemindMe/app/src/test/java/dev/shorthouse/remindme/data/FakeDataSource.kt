@@ -1,6 +1,7 @@
 package dev.shorthouse.remindme.data
 
 import dev.shorthouse.remindme.model.Reminder
+import java.time.ZonedDateTime
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
@@ -29,6 +30,22 @@ class FakeDataSource(
         return reminders.first { reminder ->
             reminder.id == id
         }
+    }
+
+    override fun getOverdueReminders(now: ZonedDateTime): Flow<List<Reminder>> {
+        return flowOf(
+            reminders.filter {
+                it.startDateTime.isBefore(now) || it.startDateTime.isEqual(now)
+            }
+        )
+    }
+
+    override fun getUpcomingReminders(now: ZonedDateTime): Flow<List<Reminder>> {
+        return flowOf(
+            reminders.filter {
+                it.startDateTime.isAfter(now)
+            }
+        )
     }
 
     override fun getCompletedReminders(): Flow<List<Reminder>> {
@@ -69,9 +86,5 @@ class FakeDataSource(
         val completedReminder = reminders[reminderToCompleteIndex].copy(isCompleted = true)
 
         reminders[reminderToCompleteIndex] = completedReminder
-    }
-
-    override fun deleteCompletedReminders() {
-        reminders.removeIf { it.isCompleted }
     }
 }
