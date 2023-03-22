@@ -40,6 +40,7 @@ class ListViewModel @Inject constructor(
         get() = _uiState
 
     private val _searchQuery = MutableStateFlow("")
+    private val _isSearchBarShown = MutableStateFlow(false)
 
     init {
         initialiseUiState()
@@ -50,56 +51,64 @@ class ListViewModel @Inject constructor(
         _uiState.update { it.copy(isLoading = true) }
 
         viewModelScope.launch(ioDispatcher) {
-            val now = ZonedDateTime.now()
-
-            val overdueRemindersFlow = reminderRepository.getOverdueReminders(now)
-            val upcomingRemindersFlow = reminderRepository.getUpcomingReminders(now)
-            val completedRemindersFlow = reminderRepository.getCompletedReminders()
-
+            val remindersFlow = reminderRepository.getReminders()
             val userPreferencesFlow = userPreferencesRepository.userPreferencesFlow
-
             val searchQueryFlow = _searchQuery
+            val isSearchBarShownFlow = _isSearchBarShown
 
             combine(
-                overdueRemindersFlow,
-                upcomingRemindersFlow,
-                completedRemindersFlow,
+                remindersFlow,
                 userPreferencesFlow,
-                searchQueryFlow
-            ) { overdueReminders,
-                    upcomingReminders,
-                    completedReminders,
-                    userPreferences,
-                    searchQuery ->
+                searchQueryFlow,
+                isSearchBarShownFlow
+            ) { reminders, userPreferences, searchQuery, isSearchBarShown ->
 
-                val filteredReminders = when (userPreferences.reminderFilter) {
-                    ReminderFilter.OVERDUE -> overdueReminders
-                    ReminderFilter.UPCOMING -> upcomingReminders
-                    ReminderFilter.COMPLETED -> completedReminders
+                val searchReminders = when {
+                    !isSearchBarShown -> reminders
+                    searchQuery.isEmpty() -> emptyList()
+                    else -> reminders.filter { it.name.contains(searchQuery, ignoreCase = true) }
                 }
 
-                val searchedReminders = if (searchQuery.isNotEmpty()) {
-                    filteredReminders.filter { it.name.contains(searchQuery, ignoreCase = true) }
+                val filteredReminders = if (isSearchBarShown) {
+                    searchReminders
                 } else {
-                    filteredReminders
+                    val now = ZonedDateTime.now()
+
+                    when (userPreferences.reminderFilter) {
+                        ReminderFilter.OVERDUE -> {
+                            reminders.filter {
+                                it.startDateTime.isBefore(now) && !it.isCompleted
+                            }
+                        }
+                        ReminderFilter.UPCOMING -> {
+                            reminders.filter {
+                                !it.startDateTime.isBefore(now) && !it.isCompleted
+                            }
+                        }
+                        ReminderFilter.COMPLETED -> {
+                            reminders.filter {
+                                it.isCompleted
+                            }
+                        }
+                    }
                 }
 
-                val filteredSortedReminders = when (userPreferences.reminderSortOrder) {
+                val sortedReminders = when (userPreferences.reminderSortOrder) {
                     ReminderSort.BY_EARLIEST_DATE_FIRST -> {
-                        searchedReminders.sortedBy { it.startDateTime }
+                        filteredReminders.sortedBy { it.startDateTime }
                     }
                     ReminderSort.BY_LATEST_DATE_FIRST -> {
-                        searchedReminders.sortedByDescending { it.startDateTime }
+                        filteredReminders.sortedByDescending { it.startDateTime }
                     }
                     ReminderSort.BY_ALPHABETICAL_A_TO_Z -> {
-                        searchedReminders.sortedBy { it.name }
+                        filteredReminders.sortedBy { it.name }
                     }
                     ReminderSort.BY_ALPHABETICAL_Z_TO_A -> {
-                        searchedReminders.sortedByDescending { it.name }
+                        filteredReminders.sortedByDescending { it.name }
                     }
                 }
 
-                val reminderStates = filteredSortedReminders.map { ReminderState(it) }
+                val reminderStates = sortedReminders.map { ReminderState(it) }
 
                 _uiState.value.copy(
                     reminderStates = reminderStates,
@@ -154,6 +163,7 @@ class ListViewModel @Inject constructor(
     }
 
     fun updateIsSearchBarShown(isSearchBarShown: Boolean) {
+        _isSearchBarShown.value = isSearchBarShown
         _uiState.update { it.copy(isSearchBarShown = isSearchBarShown) }
     }
 }

@@ -48,7 +48,7 @@ import dev.shorthouse.remindme.data.protodatastore.ReminderSort
 import dev.shorthouse.remindme.ui.component.dialog.NotificationPermissionRequester
 import dev.shorthouse.remindme.ui.component.dialog.ReminderSortDialog
 import dev.shorthouse.remindme.ui.component.list.ReminderListContent
-import dev.shorthouse.remindme.ui.component.search.RemindMeSearchBar
+import dev.shorthouse.remindme.ui.component.searchbar.RemindMeSearchBar
 import dev.shorthouse.remindme.ui.component.sheet.BottomSheetReminderActions
 import dev.shorthouse.remindme.ui.screen.destinations.ReminderAddScreenDestination
 import dev.shorthouse.remindme.ui.screen.destinations.ReminderEditScreenDestination
@@ -129,10 +129,12 @@ fun ReminderListScaffold(
         content = { scaffoldPadding ->
             if (!uiState.isLoading) {
                 Column(modifier = Modifier.padding(scaffoldPadding)) {
-                    ReminderListFilterChips(
-                        uiState.reminderFilter,
-                        onApplyFilter
-                    )
+                    if (!uiState.isSearchBarShown) {
+                        ReminderListFilterChips(
+                            uiState.reminderFilter,
+                            onApplyFilter
+                        )
+                    }
 
                     ReminderListContent(
                         reminderStates = uiState.reminderStates,

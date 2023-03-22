@@ -34,14 +34,12 @@ fun ReminderListContent(
     isSearchQueryEmpty: Boolean
 ) {
     if (reminderStates.isEmpty()) {
-        if (isSearchBarShown && !isSearchQueryEmpty) {
-            EmptyStateSearchReminders()
-        } else {
-            when (reminderFilter) {
-                ReminderFilter.OVERDUE -> EmptyStateOverdueReminders()
-                ReminderFilter.UPCOMING -> EmptyStateUpcomingReminders()
-                ReminderFilter.COMPLETED -> EmptyStateCompletedReminders()
-            }
+        when {
+            isSearchBarShown && isSearchQueryEmpty -> {}
+            isSearchBarShown && !isSearchQueryEmpty -> EmptyStateSearchReminders()
+            reminderFilter == ReminderFilter.OVERDUE -> EmptyStateOverdueReminders()
+            reminderFilter == ReminderFilter.UPCOMING -> EmptyStateUpcomingReminders()
+            else -> EmptyStateCompletedReminders()
         }
     } else {
         ReminderList(
@@ -89,7 +87,7 @@ fun ReminderListContentPreview(
             isSearchBarShown = false,
             isSearchQueryEmpty = true,
             onReminderCard = {},
-            contentPadding = PaddingValues(dimensionResource(R.dimen.margin_tiny)),
+            contentPadding = PaddingValues(dimensionResource(R.dimen.margin_tiny))
         )
     }
 }

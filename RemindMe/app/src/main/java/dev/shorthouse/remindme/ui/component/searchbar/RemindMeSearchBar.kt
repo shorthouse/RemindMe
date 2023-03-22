@@ -1,6 +1,7 @@
-package dev.shorthouse.remindme.ui.component.search
+package dev.shorthouse.remindme.ui.component.searchbar
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -13,6 +14,7 @@ import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -24,6 +26,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.dimensionResource
@@ -31,6 +34,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.VisualTransformation
 import dev.shorthouse.remindme.R
+import dev.shorthouse.remindme.ui.theme.Grey
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -43,8 +47,14 @@ fun RemindMeSearchBar(
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusRequester = remember { FocusRequester() }
 
+    val topAppBarColor = if (isSystemInDarkTheme()) {
+        MaterialTheme.colorScheme.surface
+    } else {
+        MaterialTheme.colorScheme.primary
+    }
+
     Surface(
-        color = MaterialTheme.colorScheme.primary,
+        color = topAppBarColor,
         modifier = modifier
             .fillMaxWidth()
             .height(dimensionResource(R.dimen.search_bar_size))
@@ -53,9 +63,9 @@ fun RemindMeSearchBar(
             value = searchQuery,
             onValueChange = onSearchQueryChange,
             textStyle = MaterialTheme.typography.bodyMedium.copy(
-                color = MaterialTheme.colorScheme.onSurface
+                color = Color.Black
             ),
-            cursorBrush = SolidColor(MaterialTheme.colorScheme.onSurface),
+            cursorBrush = SolidColor(Color.Black),
             singleLine = true,
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Search,
@@ -100,7 +110,7 @@ private fun RemindMeSearchBarTextField(
             Text(
                 text = stringResource(R.string.top_app_bar_search_hint),
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.outline
+                color = Grey
             )
         },
         leadingIcon = {
@@ -112,7 +122,8 @@ private fun RemindMeSearchBarTextField(
             ) {
                 Icon(
                     imageVector = Icons.Rounded.ArrowBack,
-                    contentDescription = stringResource(R.string.cd_top_app_bar_back)
+                    contentDescription = stringResource(R.string.cd_top_app_bar_back),
+                    tint = Grey
                 )
             }
         },
@@ -126,7 +137,8 @@ private fun RemindMeSearchBarTextField(
                 ) {
                     Icon(
                         imageVector = Icons.Rounded.Close,
-                        contentDescription = stringResource(R.string.cd_clear_search)
+                        contentDescription = stringResource(R.string.cd_clear_search),
+                        tint = Grey
                     )
                 }
             }
@@ -134,10 +146,11 @@ private fun RemindMeSearchBarTextField(
         container = {
             Surface(
                 shape = MaterialTheme.shapes.small,
+                color = LocalContentColor.current,
+                content = {},
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(dimensionResource(R.dimen.search_bar_text_field_padding)),
-                content = {}
+                    .padding(dimensionResource(R.dimen.search_bar_text_field_padding))
             )
         }
     )
