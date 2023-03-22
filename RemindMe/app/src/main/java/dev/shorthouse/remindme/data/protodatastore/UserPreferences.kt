@@ -7,16 +7,18 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class UserPreferences(
     val reminderSortOrder: ReminderSort = ReminderSort.BY_EARLIEST_DATE_FIRST,
-    val reminderFilters: Set<ReminderFilter> = setOf(ReminderFilter.SCHEDULED)
+    val reminderFilter: ReminderFilter = ReminderFilter.UPCOMING
 )
 
 enum class ReminderSort(@StringRes val nameStringId: Int) {
     BY_EARLIEST_DATE_FIRST(R.string.sort_dialog_option_date_earliest),
-    BY_LATEST_DATE_FIRST(R.string.sort_dialog_option_date_latest)
+    BY_LATEST_DATE_FIRST(R.string.sort_dialog_option_date_latest),
+    BY_ALPHABETICAL_A_TO_Z(R.string.sort_dialog_option_alphabetical_a_to_z),
+    BY_ALPHABETICAL_Z_TO_A(R.string.sort_dialog_option_alphabetical_z_to_a)
 }
 
 enum class ReminderFilter(@StringRes val nameStringId: Int) {
-    OVERDUE(R.string.overdue),
-    SCHEDULED(R.string.scheduled),
-    COMPLETED(R.string.completed)
+    OVERDUE(R.string.reminder_overdue),
+    UPCOMING(R.string.reminder_upcoming),
+    COMPLETED(R.string.reminder_completed)
 }
