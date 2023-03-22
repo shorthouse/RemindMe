@@ -3,7 +3,6 @@ package dev.shorthouse.remindme.ui.screen.list.search
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -14,8 +13,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -37,16 +35,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import dev.shorthouse.remindme.R
-import dev.shorthouse.remindme.ui.component.emptystate.EmptyStateSearchReminders
+import dev.shorthouse.remindme.data.protodatastore.ReminderFilter
 import dev.shorthouse.remindme.ui.component.list.ReminderListContent
-import dev.shorthouse.remindme.ui.component.sheet.BottomSheetReminderActions
 import dev.shorthouse.remindme.ui.previewdata.ReminderListProvider
-import dev.shorthouse.remindme.ui.screen.destinations.ReminderEditScreenDestination
 import dev.shorthouse.remindme.ui.screen.list.SharedListViewModel
 import dev.shorthouse.remindme.ui.state.ReminderState
 import dev.shorthouse.remindme.ui.theme.AppTheme
@@ -78,33 +75,34 @@ fun ReminderListSearchScreen(
         isLoading = uiState.isLoading
     )
 
-    if (isModalBottomSheetShown) {
-        ModalBottomSheet(
-            onDismissRequest = { isModalBottomSheetShown = false },
-            dragHandle = null
-        ) {
-            BottomSheetReminderActions(
-                reminderState = selectedReminderState,
-                onReminderActionItemSelected = { reminderAction ->
-                    isModalBottomSheetShown = false
-
-                    listViewModel.processReminderAction(
-                        selectedReminderState = selectedReminderState.copy(),
-                        reminderAction = reminderAction,
-                        onEdit = {
-                            navigator.navigate(
-                                ReminderEditScreenDestination(
-                                    reminderId = selectedReminderState.id
-                                )
-                            )
-                        }
-                    )
-                }
-            )
-        }
-    }
+//    if (isModalBottomSheetShown) {
+//        ModalBottomSheet(
+//            onDismissRequest = { isModalBottomSheetShown = false },
+//            dragHandle = null
+//        ) {
+//            BottomSheetReminderActions(
+//                reminderState = selectedReminderState,
+//                onReminderActionItemSelected = { reminderAction ->
+//                    isModalBottomSheetShown = false
+//
+//                    listViewModel.processReminderAction(
+//                        selectedReminderState = selectedReminderState.copy(),
+//                        reminderAction = reminderAction,
+//                        onEdit = {
+//                            navigator.navigate(
+//                                ReminderEditScreenDestination(
+//                                    reminderId = selectedReminderState.id
+//                                )
+//                            )
+//                        }
+//                    )
+//                }
+//            )
+//        }
+//    }
 }
 
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun ReminderListSearchScaffold(
     searchReminderStates: List<ReminderState>,
@@ -113,31 +111,83 @@ fun ReminderListSearchScaffold(
     onSearchQueryChange: (String) -> Unit,
     onClearSearchQuery: () -> Unit,
     onReminderCard: (ReminderState) -> Unit,
-    isLoading: Boolean
+    isLoading: Boolean,
+    modifier: Modifier = Modifier
 ) {
-    Scaffold(
-        topBar = {
-            ReminderListSearchTopBar(
-                onNavigateUp = onNavigateUp,
-                searchQuery = searchQuery,
-                onSearchQueryChange = onSearchQueryChange,
-                onClearSearchQuery = onClearSearchQuery
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val focusRequester = remember { FocusRequester() }
+
+    SearchBar(
+        query = searchQuery,
+        onQueryChange = onSearchQueryChange,
+        onSearch = { keyboardController?.hide() },
+        active = true,
+        onActiveChange = {},
+        placeholder = {
+            Text(
+                text = stringResource(R.string.top_app_bar_search_hint),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.outline
             )
         },
-        content = { scaffoldPadding ->
-            if (!isLoading) {
-                val modifier = Modifier.padding(scaffoldPadding)
-
-                ReminderListContent(
-                    reminderStates = searchReminderStates,
-                    emptyStateContent = { EmptyStateSearchReminders() },
-                    onReminderCard = onReminderCard,
-                    contentPadding = PaddingValues(dimensionResource(R.dimen.margin_tiny)),
-                    modifier = modifier
+        leadingIcon = {
+            IconButton(onClick = onNavigateUp) {
+                Icon(
+                    imageVector = Icons.Rounded.ArrowBack,
+                    contentDescription = stringResource(R.string.cd_top_app_bar_back),
+                    tint = MaterialTheme.colorScheme.outline
                 )
             }
+        },
+        trailingIcon = {
+            if (searchQuery.isNotEmpty()) {
+                IconButton(onClick = onClearSearchQuery) {
+                    Icon(
+                        imageVector = Icons.Rounded.Close,
+                        contentDescription = stringResource(id = R.string.cd_clear_search),
+                        tint = MaterialTheme.colorScheme.outline
+                    )
+                }
+            }
+        },
+        tonalElevation = 0.dp,
+        modifier = modifier.focusRequester(focusRequester)
+    ) {
+        if (!isLoading) {
+            //val modifier = Modifier.padding(scaffoldPadding)
+
+            ReminderListContent(
+                reminderStates = searchReminderStates,
+                reminderFilter = ReminderFilter.UPCOMING,
+                onReminderCard = onReminderCard,
+                contentPadding = PaddingValues(dimensionResource(R.dimen.margin_tiny)),
+                modifier = modifier
+            )
         }
-    )
+    }
+//    Scaffold(
+//        topBar = {
+//            ReminderListSearchTopBar(
+//                onNavigateUp = onNavigateUp,
+//                searchQuery = searchQuery,
+//                onSearchQueryChange = onSearchQueryChange,
+//                onClearSearchQuery = onClearSearchQuery
+//            )
+//        },
+//        content = { scaffoldPadding ->
+//            if (!isLoading) {
+//                val modifier = Modifier.padding(scaffoldPadding)
+//
+//                ReminderListContent(
+//                    reminderStates = searchReminderStates,
+//                    reminderFilter = ReminderFilter.UPCOMING,
+//                    onReminderCard = onReminderCard,
+//                    contentPadding = PaddingValues(dimensionResource(R.dimen.margin_tiny)),
+//                    modifier = modifier
+//                )
+//            }
+//        }
+//    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
