@@ -10,7 +10,7 @@ import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.data.protodatastore.ReminderSort
 import dev.shorthouse.remindme.data.protodatastore.UserPreferencesRepository
 import dev.shorthouse.remindme.data.protodatastore.UserPreferencesSerializer
-import dev.shorthouse.remindme.ui.screen.list.ListActiveViewModel
+import dev.shorthouse.remindme.ui.screen.list.ListViewModel
 import dev.shorthouse.remindme.ui.state.ReminderState
 import dev.shorthouse.remindme.util.ReminderTestUtil
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -60,7 +60,7 @@ class ListActiveViewModelTest {
         )
     )
 
-    private val listActiveViewModel = ListActiveViewModel(
+    private val listActiveViewModel = ListViewModel(
         reminderRepository = reminderRepository,
         userPreferencesRepository = userPreferencesRepository,
         ioDispatcher = testCoroutineDispatcher

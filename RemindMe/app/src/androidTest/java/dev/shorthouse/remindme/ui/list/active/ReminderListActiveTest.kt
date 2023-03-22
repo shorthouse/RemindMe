@@ -12,7 +12,7 @@ import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dev.shorthouse.remindme.HiltTestActivity
 import dev.shorthouse.remindme.data.protodatastore.ReminderSort
-import dev.shorthouse.remindme.ui.screen.list.ReminderListActiveScaffold
+import dev.shorthouse.remindme.ui.screen.list.ReminderListScaffold
 import dev.shorthouse.remindme.ui.state.ReminderState
 import dev.shorthouse.remindme.ui.theme.m2.RemindMeTheme
 import dev.shorthouse.remindme.util.ReminderTestUtil
@@ -52,8 +52,8 @@ class ReminderListActiveTest {
     ) {
         composeTestRule.setContent {
             RemindMeTheme {
-                ReminderListActiveScaffold(
-                    activeReminderStates = activeReminderStates,
+                ReminderListScaffold(
+                    reminderStates = activeReminderStates,
                     reminderSortOrder = reminderSortOrder,
                     reminderFilters = uiState.reminderFilters,
                     onNavigateCompletedReminders = {},
