@@ -1,5 +1,9 @@
 package dev.shorthouse.remindme.ui.screen.list
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.scaleIn
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
@@ -97,6 +101,7 @@ fun ReminderListScreen(
     )
 }
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun ReminderListScaffold(
     uiState: ListUiState,
@@ -133,6 +138,8 @@ fun ReminderListScaffold(
                     ReminderListContent(
                         reminderStates = uiState.reminderStates,
                         reminderFilter = uiState.reminderFilter,
+                        isSearchBarShown = uiState.isSearchBarShown,
+                        isSearchQueryEmpty = uiState.searchQuery.isEmpty(),
                         onReminderCard = onReminderCard,
                         contentPadding = PaddingValues(
                             start = dimensionResource(R.dimen.margin_tiny),
@@ -153,7 +160,11 @@ fun ReminderListScaffold(
             }
         },
         floatingActionButton = {
-            if (!uiState.isSearchBarShown) {
+            AnimatedVisibility(
+                visible = !uiState.isSearchBarShown,
+                enter = scaleIn(),
+                exit = ExitTransition.None
+            ) {
                 FloatingActionButton(
                     onClick = onNavigateAdd,
                     shape = RoundedCornerShape(dimensionResource(R.dimen.margin_normal)),
