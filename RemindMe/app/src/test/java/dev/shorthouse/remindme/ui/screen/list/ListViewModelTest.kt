@@ -43,7 +43,7 @@ class ListViewModelTest {
         val onEdit = {}
 
         listViewModel.processReminderAction(
-            selectedReminderState = reminderState,
+            reminderState = reminderState,
             reminderAction = reminderAction,
             onEdit = onEdit
         )
@@ -58,7 +58,7 @@ class ListViewModelTest {
         val onEdit = {}
 
         listViewModel.processReminderAction(
-            selectedReminderState = reminderState,
+            reminderState = reminderState,
             reminderAction = reminderAction,
             onEdit = onEdit
         )
@@ -73,7 +73,7 @@ class ListViewModelTest {
         val onEdit = {}
 
         listViewModel.processReminderAction(
-            selectedReminderState = reminderState,
+            reminderState = reminderState,
             reminderAction = reminderAction,
             onEdit = onEdit
         )
@@ -88,7 +88,7 @@ class ListViewModelTest {
         val onEdit = {}
 
         listViewModel.processReminderAction(
-            selectedReminderState = reminderState,
+            reminderState = reminderState,
             reminderAction = reminderAction,
             onEdit = onEdit
         )
