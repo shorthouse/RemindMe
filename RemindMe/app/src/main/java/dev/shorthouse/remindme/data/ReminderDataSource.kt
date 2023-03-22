@@ -1,6 +1,7 @@
 package dev.shorthouse.remindme.data
 
 import dev.shorthouse.remindme.model.Reminder
+import java.time.ZonedDateTime
 import kotlinx.coroutines.flow.Flow
 
 interface ReminderDataSource {
@@ -12,13 +13,13 @@ interface ReminderDataSource {
 
     suspend fun getRemindersOneShot(): List<Reminder>
 
-    fun getActiveReminders(): Flow<List<Reminder>>
+    fun getOverdueReminders(now: ZonedDateTime): Flow<List<Reminder>>
+
+    fun getUpcomingReminders(now: ZonedDateTime): Flow<List<Reminder>>
 
     fun getCompletedReminders(): Flow<List<Reminder>>
 
     fun completeReminder(id: Long)
-
-    fun deleteCompletedReminders()
 
     fun insertReminder(reminder: Reminder): Long
 

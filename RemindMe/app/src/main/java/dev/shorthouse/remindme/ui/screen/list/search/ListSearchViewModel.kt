@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.shorthouse.remindme.data.ReminderRepository
-import dev.shorthouse.remindme.data.protodatastore.ReminderSortOrder
+import dev.shorthouse.remindme.data.protodatastore.ReminderSort
 import dev.shorthouse.remindme.data.protodatastore.UserPreferencesRepository
 import dev.shorthouse.remindme.di.IoDispatcher
 import dev.shorthouse.remindme.ui.state.ReminderState
@@ -60,10 +60,10 @@ class ListSearchViewModel @Inject constructor(
                 val reminderSortOrder = userPreferences.reminderSortOrder
 
                 val reminderStates = when (reminderSortOrder) {
-                    ReminderSortOrder.BY_EARLIEST_DATE_FIRST -> {
+                    ReminderSort.BY_EARLIEST_DATE_FIRST -> {
                         searchReminders.sortedBy { it.startDateTime }
                     }
-                    ReminderSortOrder.BY_LATEST_DATE_FIRST -> {
+                    ReminderSort.BY_LATEST_DATE_FIRST -> {
                         searchReminders.sortedByDescending { it.startDateTime }
                     }
                 }

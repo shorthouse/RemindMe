@@ -37,7 +37,7 @@ import dev.shorthouse.remindme.ui.theme.Green
 import dev.shorthouse.remindme.ui.theme.Red
 
 @Composable
-fun ReminderListCard(
+fun ReminderCard(
     reminderState: ReminderState,
     onReminderCard: (ReminderState) -> Unit,
     modifier: Modifier = Modifier
@@ -66,7 +66,7 @@ fun ReminderListCard(
                     R.string.reminder_list_card_date_time,
                     reminderState.date,
                     reminderState.time
-                ),
+                )
             )
 
             Spacer(Modifier.height(dimensionResource(R.dimen.margin_small)))
@@ -91,7 +91,7 @@ fun ReminderListCard(
                 }
 
                 if (reminderState.isRepeatReminder) {
-                    ReminderListCardDetail(
+                    ReminderCardDetail(
                         icon = Icons.Rounded.Repeat,
                         text = stringResource(
                             R.string.reminder_details_repeat_interval,
@@ -106,7 +106,7 @@ fun ReminderListCard(
             reminderState.notes?.let { notes ->
                 Spacer(Modifier.height(dimensionResource(R.dimen.margin_small)))
 
-                ReminderListCardDetail(
+                ReminderCardDetail(
                     icon = Icons.Rounded.Notes,
                     text = notes,
                     contentDescription = stringResource(R.string.cd_details_notes)
@@ -119,9 +119,9 @@ fun ReminderListCard(
 @Composable
 private fun ReminderCardStatus(reminderState: ReminderState) {
     val statusText = when {
-        reminderState.isCompleted -> stringResource(R.string.reminder_status_completed)
-        reminderState.isOverdue() -> stringResource(R.string.reminder_status_overdue)
-        else -> stringResource(R.string.reminder_status_scheduled)
+        reminderState.isCompleted -> stringResource(R.string.reminder_completed)
+        reminderState.isOverdue() -> stringResource(R.string.reminder_overdue)
+        else -> stringResource(R.string.reminder_upcoming)
     }
 
     val statusBackgroundColor = when {
@@ -146,7 +146,7 @@ private fun ReminderCardStatus(reminderState: ReminderState) {
 }
 
 @Composable
-private fun ReminderListCardDetail(
+private fun ReminderCardDetail(
     icon: ImageVector,
     text: String,
     contentDescription: String,
@@ -176,11 +176,11 @@ private fun ReminderListCardDetail(
 @Composable
 @Preview(name = "Light Mode", showBackground = true)
 @Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
-fun ReminderListCardPreview(
+fun ReminderCardPreview(
     @PreviewParameter(ReminderListCardProvider::class) reminderState: ReminderState
 ) {
     AppTheme {
-        ReminderListCard(
+        ReminderCard(
             reminderState = reminderState,
             onReminderCard = {}
         )

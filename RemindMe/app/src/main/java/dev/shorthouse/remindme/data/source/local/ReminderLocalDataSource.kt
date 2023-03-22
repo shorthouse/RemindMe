@@ -2,8 +2,9 @@ package dev.shorthouse.remindme.data.source.local
 
 import dev.shorthouse.remindme.data.ReminderDataSource
 import dev.shorthouse.remindme.model.Reminder
-import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
+import java.time.ZonedDateTime
+import javax.inject.Inject
 
 class ReminderLocalDataSource @Inject constructor(private val reminderDao: ReminderDao) :
     ReminderDataSource {
@@ -23,8 +24,12 @@ class ReminderLocalDataSource @Inject constructor(private val reminderDao: Remin
         return reminderDao.getRemindersOneShot()
     }
 
-    override fun getActiveReminders(): Flow<List<Reminder>> {
-        return reminderDao.getActiveReminders()
+    override fun getOverdueReminders(now: ZonedDateTime): Flow<List<Reminder>> {
+        return reminderDao.getOverdueReminders(now)
+    }
+
+    override fun getUpcomingReminders(now: ZonedDateTime): Flow<List<Reminder>> {
+        return reminderDao.getUpcomingReminders(now)
     }
 
     override fun getCompletedReminders(): Flow<List<Reminder>> {
@@ -33,10 +38,6 @@ class ReminderLocalDataSource @Inject constructor(private val reminderDao: Remin
 
     override fun completeReminder(id: Long) {
         return reminderDao.completeReminder(id)
-    }
-
-    override fun deleteCompletedReminders() {
-        return reminderDao.deleteCompletedReminders()
     }
 
     override fun insertReminder(reminder: Reminder): Long {

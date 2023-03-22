@@ -10,7 +10,7 @@ import com.google.common.truth.Truth.assertThat
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dev.shorthouse.remindme.HiltTestActivity
-import dev.shorthouse.remindme.data.protodatastore.ReminderSortOrder
+import dev.shorthouse.remindme.data.protodatastore.ReminderSort
 import dev.shorthouse.remindme.ui.theme.m2.RemindMeTheme
 import org.junit.Before
 import org.junit.Rule
@@ -30,8 +30,8 @@ class ReminderSortDialogTest {
     }
 
     private fun setContent(
-        initialSort: ReminderSortOrder = ReminderSortOrder.BY_EARLIEST_DATE_FIRST,
-        onApplySort: (ReminderSortOrder) -> Unit = {}
+        initialSort: ReminderSort = ReminderSort.BY_EARLIEST_DATE_FIRST,
+        onApplySort: (ReminderSort) -> Unit = {}
     ) {
         composeTestRule.setContent {
             RemindMeTheme {
@@ -59,7 +59,7 @@ class ReminderSortDialogTest {
     @Test
     fun when_reminder_sort_dialog_with_earliest_first_sort_should_have_only_earliest_first_selected() {
         setContent(
-            initialSort = ReminderSortOrder.BY_EARLIEST_DATE_FIRST
+            initialSort = ReminderSort.BY_EARLIEST_DATE_FIRST
         )
 
         composeTestRule.apply {
@@ -71,7 +71,7 @@ class ReminderSortDialogTest {
     @Test
     fun when_reminder_sort_dialog_with_latest_first_sort_should_have_only_latest_first_selected() {
         setContent(
-            initialSort = ReminderSortOrder.BY_LATEST_DATE_FIRST
+            initialSort = ReminderSort.BY_LATEST_DATE_FIRST
         )
 
         composeTestRule.apply {

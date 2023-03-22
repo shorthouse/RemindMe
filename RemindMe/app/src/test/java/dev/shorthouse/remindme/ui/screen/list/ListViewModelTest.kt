@@ -29,7 +29,7 @@ class ListViewModelTest {
 
     private val deleteReminderUseCase: DeleteReminderUseCase = mockk(relaxed = true)
 
-    private val listViewModel: ListViewModel = ListViewModel(
+    private val listViewModel: SharedListViewModel = SharedListViewModel(
         completeOnetimeReminderUseCase,
         completeRepeatReminderOccurrenceUseCase,
         completeRepeatReminderSeriesUseCase,

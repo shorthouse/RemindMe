@@ -14,7 +14,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import dev.shorthouse.remindme.R
-import dev.shorthouse.remindme.ui.component.emptystate.EmptyStateActiveReminders
+import dev.shorthouse.remindme.data.protodatastore.ReminderFilter
+import dev.shorthouse.remindme.ui.component.emptystate.EmptyStateCompletedReminders
+import dev.shorthouse.remindme.ui.component.emptystate.EmptyStateOverdueReminders
+import dev.shorthouse.remindme.ui.component.emptystate.EmptyStateUpcomingReminders
 import dev.shorthouse.remindme.ui.previewdata.ReminderListProvider
 import dev.shorthouse.remindme.ui.state.ReminderState
 import dev.shorthouse.remindme.ui.theme.AppTheme
@@ -22,13 +25,17 @@ import dev.shorthouse.remindme.ui.theme.AppTheme
 @Composable
 fun ReminderListContent(
     reminderStates: List<ReminderState>,
-    emptyStateContent: @Composable () -> Unit,
+    reminderFilter: ReminderFilter,
     onReminderCard: (ReminderState) -> Unit,
     contentPadding: PaddingValues,
     modifier: Modifier = Modifier
 ) {
     if (reminderStates.isEmpty()) {
-        emptyStateContent()
+        when (reminderFilter) {
+            ReminderFilter.OVERDUE -> EmptyStateOverdueReminders()
+            ReminderFilter.UPCOMING -> EmptyStateUpcomingReminders()
+            ReminderFilter.COMPLETED -> EmptyStateCompletedReminders()
+        }
     } else {
         ReminderList(
             reminderStates = reminderStates,
@@ -54,7 +61,7 @@ fun ReminderList(
             .testTag(stringResource(R.string.test_tag_reminder_list_lazy_column))
     ) {
         items(reminderStates) { reminderState ->
-            ReminderListCard(
+            ReminderCard(
                 reminderState = reminderState,
                 onReminderCard = onReminderCard
             )
@@ -71,9 +78,9 @@ fun ReminderListContentPreview(
     AppTheme {
         ReminderListContent(
             reminderStates = reminderStates,
-            emptyStateContent = { EmptyStateActiveReminders() },
+            reminderFilter = ReminderFilter.UPCOMING,
+            onReminderCard = {},
             contentPadding = PaddingValues(dimensionResource(R.dimen.margin_tiny)),
-            onReminderCard = {}
         )
     }
 }

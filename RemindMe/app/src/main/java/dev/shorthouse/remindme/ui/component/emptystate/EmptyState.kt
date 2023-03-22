@@ -22,11 +22,23 @@ import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.ui.theme.AppTheme
 
 @Composable
-fun EmptyStateActiveReminders(modifier: Modifier = Modifier) {
+fun EmptyStateOverdueReminders(modifier: Modifier = Modifier) {
     EmptyState(
-        painter = painterResource(R.drawable.empty_state_active),
-        title = stringResource(R.string.empty_state_active_title),
-        subtitle = stringResource(R.string.empty_state_active_subtitle),
+        painter = painterResource(R.drawable.empty_state_overdue),
+        title = stringResource(R.string.empty_state_overdue_title),
+        subtitle = stringResource(R.string.empty_state_overdue_subtitle),
+        modifier = modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+    )
+}
+
+@Composable
+fun EmptyStateUpcomingReminders(modifier: Modifier = Modifier) {
+    EmptyState(
+        painter = painterResource(R.drawable.empty_state_upcoming),
+        title = stringResource(R.string.empty_state_upcoming_title),
+        subtitle = stringResource(R.string.empty_state_upcoming_subtitle),
         modifier = modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
@@ -90,12 +102,21 @@ fun EmptyState(
     }
 }
 
+@Preview(name = "Light Mode", showBackground = true)
+@Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
+@Composable
+fun EmptyStateOverdueRemindersPreview() {
+    AppTheme {
+        EmptyStateOverdueReminders()
+    }
+}
+
 @Composable
 @Preview(name = "Light Mode", showBackground = true)
 @Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
-fun EmptyStateActiveRemindersPreview() {
+fun EmptyStateUpcomingRemindersPreview() {
     AppTheme {
-        EmptyStateActiveReminders()
+        EmptyStateUpcomingReminders()
     }
 }
 

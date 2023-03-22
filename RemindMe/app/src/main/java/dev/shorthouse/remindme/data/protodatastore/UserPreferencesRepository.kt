@@ -20,9 +20,15 @@ class UserPreferencesRepository @Inject constructor(
             }
         }
 
-    suspend fun updateReminderSortOrder(reminderSortOrder: ReminderSortOrder) {
+    suspend fun updateReminderSortOrder(reminderSortOrder: ReminderSort) {
         userPreferencesDataStore.updateData { userPreferences ->
             userPreferences.copy(reminderSortOrder = reminderSortOrder)
+        }
+    }
+
+    suspend fun updateReminderFilter(reminderFilter: ReminderFilter) {
+        userPreferencesDataStore.updateData { userPreferences ->
+            userPreferences.copy(reminderFilter = reminderFilter)
         }
     }
 }

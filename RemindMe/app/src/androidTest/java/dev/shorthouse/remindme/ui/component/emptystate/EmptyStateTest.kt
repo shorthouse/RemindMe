@@ -30,7 +30,7 @@ class EmptyStateTest {
         composeTestRule.setContent {
             RemindMeTheme {
                 EmptyState(
-                    painter = painterResource(R.drawable.empty_state_active),
+                    painter = painterResource(R.drawable.empty_state_upcoming),
                     title = "Test title",
                     subtitle = "Test subtitle"
                 )

@@ -28,17 +28,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import dev.shorthouse.remindme.R
-import dev.shorthouse.remindme.data.protodatastore.ReminderSortOrder
+import dev.shorthouse.remindme.data.protodatastore.ReminderSort
 import dev.shorthouse.remindme.ui.theme.AppTheme
 
 @Composable
 fun ReminderSortDialog(
-    initialSort: ReminderSortOrder,
-    onApplySort: (ReminderSortOrder) -> Unit,
+    initialSort: ReminderSort,
+    onApplySort: (ReminderSort) -> Unit,
     onDismiss: () -> Unit
 ) {
     var selectedSortOption by remember { mutableStateOf(initialSort) }
-    val sortOptions = ReminderSortOrder.values()
+    val sortOptions = ReminderSort.values()
 
     Dialog(
         properties = DialogProperties(usePlatformDefaultWidth = false),
@@ -78,17 +78,8 @@ fun ReminderSortDialog(
                             onClick = { selectedSortOption = sortOption }
                         )
 
-                        val sortOptionName = when (sortOption) {
-                            ReminderSortOrder.BY_EARLIEST_DATE_FIRST -> {
-                                stringResource(R.string.sort_dialog_option_date_earliest)
-                            }
-                            else -> {
-                                stringResource(R.string.sort_dialog_option_date_latest)
-                            }
-                        }
-
                         Text(
-                            text = sortOptionName,
+                            text = stringResource(sortOption.nameStringId),
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurface
                         )
@@ -123,7 +114,7 @@ fun ReminderSortDialog(
 fun ReminderSortDialogPreview() {
     AppTheme {
         ReminderSortDialog(
-            initialSort = ReminderSortOrder.BY_EARLIEST_DATE_FIRST,
+            initialSort = ReminderSort.BY_EARLIEST_DATE_FIRST,
             onApplySort = {},
             onDismiss = {}
         )
