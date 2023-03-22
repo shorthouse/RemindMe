@@ -57,14 +57,18 @@ class ListSearchViewModel @Inject constructor(
                     reminders
                 }
 
-                val reminderSortOrder = userPreferences.reminderSortOrder
-
-                val reminderStates = when (reminderSortOrder) {
+                val reminderStates = when (userPreferences.reminderSortOrder) {
                     ReminderSort.BY_EARLIEST_DATE_FIRST -> {
                         searchReminders.sortedBy { it.startDateTime }
                     }
                     ReminderSort.BY_LATEST_DATE_FIRST -> {
                         searchReminders.sortedByDescending { it.startDateTime }
+                    }
+                    ReminderSort.BY_ALPHABETICAL_A_TO_Z -> {
+                        searchReminders.sortedBy { it.name }
+                    }
+                    ReminderSort.BY_ALPHABETICAL_Z_TO_A -> {
+                        searchReminders.sortedByDescending { it.name }
                     }
                 }
                     .map { ReminderState(it) }
