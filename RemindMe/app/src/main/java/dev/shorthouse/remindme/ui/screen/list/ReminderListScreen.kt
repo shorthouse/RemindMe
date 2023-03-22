@@ -60,7 +60,6 @@ import dev.shorthouse.remindme.ui.util.enums.ReminderAction
 @Composable
 fun ReminderListScreen(
     listViewModel: ListViewModel = hiltViewModel(),
-    sharedListViewModel: SharedListViewModel = hiltViewModel(),
     navigator: DestinationsNavigator
 ) {
     val uiState by listViewModel.uiState.collectAsStateWithLifecycle()
@@ -92,7 +91,7 @@ fun ReminderListScreen(
                         reminderId = uiState.bottomSheetReminderState.id
                     )
                 )
-                else -> sharedListViewModel.processReminderAction(
+                else -> listViewModel.processReminderAction(
                     reminderAction = reminderAction,
                     reminderState = uiState.bottomSheetReminderState.copy()
                 )

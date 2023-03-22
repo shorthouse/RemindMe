@@ -9,7 +9,12 @@ import dev.shorthouse.remindme.data.protodatastore.ReminderFilter
 import dev.shorthouse.remindme.data.protodatastore.ReminderSort
 import dev.shorthouse.remindme.data.protodatastore.UserPreferencesRepository
 import dev.shorthouse.remindme.di.IoDispatcher
+import dev.shorthouse.remindme.domain.reminder.CompleteOnetimeReminderUseCase
+import dev.shorthouse.remindme.domain.reminder.CompleteRepeatReminderOccurrenceUseCase
+import dev.shorthouse.remindme.domain.reminder.CompleteRepeatReminderSeriesUseCase
+import dev.shorthouse.remindme.domain.reminder.DeleteReminderUseCase
 import dev.shorthouse.remindme.ui.state.ReminderState
+import dev.shorthouse.remindme.ui.util.enums.ReminderAction
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -23,7 +28,11 @@ import javax.inject.Inject
 class ListViewModel @Inject constructor(
     private val reminderRepository: ReminderRepository,
     private val userPreferencesRepository: UserPreferencesRepository,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
+    private val completeOnetimeReminderUseCase: CompleteOnetimeReminderUseCase,
+    private val completeRepeatReminderOccurrenceUseCase: CompleteRepeatReminderOccurrenceUseCase,
+    private val completeRepeatReminderSeriesUseCase: CompleteRepeatReminderSeriesUseCase,
+    private val deleteReminderUseCase: DeleteReminderUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(ListUiState())
 
@@ -100,6 +109,22 @@ class ListViewModel @Inject constructor(
                     isLoading = false
                 )
             }.collect { _uiState.value = it }
+        }
+    }
+
+    fun processReminderAction(
+        reminderAction: ReminderAction,
+        reminderState: ReminderState
+    ) {
+        val reminder = reminderState.toReminder()
+
+        when (reminderAction) {
+            ReminderAction.COMPLETE_ONETIME -> completeOnetimeReminderUseCase(reminder)
+            ReminderAction.COMPLETE_REPEAT_OCCURRENCE -> completeRepeatReminderOccurrenceUseCase(
+                reminder
+            )
+            ReminderAction.COMPLETE_REPEAT_SERIES -> completeRepeatReminderSeriesUseCase(reminder)
+            else -> deleteReminderUseCase(reminder)
         }
     }
 
