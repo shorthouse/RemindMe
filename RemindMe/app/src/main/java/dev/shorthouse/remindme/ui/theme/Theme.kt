@@ -81,7 +81,7 @@ fun AppTheme(
 ) {
     SideEffect {
         systemUiController.setSystemBarsColor(
-            color = if (useDarkTheme) DarkColors.surface else LightColors.primary,
+            color = if (useDarkTheme) DarkColors.surface else LightColors.primary
         )
     }
 

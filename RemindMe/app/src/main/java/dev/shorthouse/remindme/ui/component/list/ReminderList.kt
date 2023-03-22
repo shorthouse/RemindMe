@@ -17,6 +17,7 @@ import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.data.protodatastore.ReminderFilter
 import dev.shorthouse.remindme.ui.component.emptystate.EmptyStateCompletedReminders
 import dev.shorthouse.remindme.ui.component.emptystate.EmptyStateOverdueReminders
+import dev.shorthouse.remindme.ui.component.emptystate.EmptyStateSearchReminders
 import dev.shorthouse.remindme.ui.component.emptystate.EmptyStateUpcomingReminders
 import dev.shorthouse.remindme.ui.previewdata.ReminderListProvider
 import dev.shorthouse.remindme.ui.state.ReminderState
@@ -26,15 +27,19 @@ import dev.shorthouse.remindme.ui.theme.AppTheme
 fun ReminderListContent(
     reminderStates: List<ReminderState>,
     reminderFilter: ReminderFilter,
+    isSearchBarShown: Boolean,
     onReminderCard: (ReminderState) -> Unit,
     contentPadding: PaddingValues,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    isSearchQueryEmpty: Boolean
 ) {
     if (reminderStates.isEmpty()) {
-        when (reminderFilter) {
-            ReminderFilter.OVERDUE -> EmptyStateOverdueReminders()
-            ReminderFilter.UPCOMING -> EmptyStateUpcomingReminders()
-            ReminderFilter.COMPLETED -> EmptyStateCompletedReminders()
+        when {
+            isSearchBarShown && isSearchQueryEmpty -> {}
+            isSearchBarShown && !isSearchQueryEmpty -> EmptyStateSearchReminders()
+            reminderFilter == ReminderFilter.OVERDUE -> EmptyStateOverdueReminders()
+            reminderFilter == ReminderFilter.UPCOMING -> EmptyStateUpcomingReminders()
+            else -> EmptyStateCompletedReminders()
         }
     } else {
         ReminderList(
@@ -79,8 +84,10 @@ fun ReminderListContentPreview(
         ReminderListContent(
             reminderStates = reminderStates,
             reminderFilter = ReminderFilter.UPCOMING,
+            isSearchBarShown = false,
+            isSearchQueryEmpty = true,
             onReminderCard = {},
-            contentPadding = PaddingValues(dimensionResource(R.dimen.margin_tiny)),
+            contentPadding = PaddingValues(dimensionResource(R.dimen.margin_tiny))
         )
     }
 }
