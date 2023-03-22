@@ -8,7 +8,7 @@ import dev.shorthouse.remindme.ui.previewdata.ReminderPreviewData.completed
 import dev.shorthouse.remindme.ui.previewdata.ReminderPreviewData.default
 import dev.shorthouse.remindme.ui.previewdata.ReminderPreviewData.empty
 import dev.shorthouse.remindme.ui.previewdata.ReminderPreviewData.overdue
-import dev.shorthouse.remindme.ui.previewdata.ReminderPreviewData.scheduled
+import dev.shorthouse.remindme.ui.previewdata.ReminderPreviewData.upcoming
 import dev.shorthouse.remindme.ui.state.ReminderState
 import java.time.LocalTime
 
@@ -27,7 +27,7 @@ class EmptyReminderProvider : PreviewParameterProvider<ReminderState> {
 class ReminderListProvider : PreviewParameterProvider<List<ReminderState>> {
     override val values = sequenceOf(
         listOf(
-            scheduled,
+            upcoming,
             overdue,
             completed,
             addNotification,
@@ -40,7 +40,7 @@ class ReminderListProvider : PreviewParameterProvider<List<ReminderState>> {
 
 class ReminderListCardProvider : PreviewParameterProvider<ReminderState> {
     override val values = sequenceOf(
-        scheduled,
+        upcoming,
         overdue,
         completed,
         addNotification,
@@ -65,7 +65,7 @@ private object ReminderPreviewData {
         isCompleted = false
     )
 
-    val scheduled = ReminderState(
+    val upcoming = ReminderState(
         id = 2,
         name = "Scheduled",
         date = "Sat, 01 Jan 3020",

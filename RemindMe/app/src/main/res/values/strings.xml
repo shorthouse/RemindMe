@@ -3,15 +3,16 @@
     <string name="reminder_database_name">reminder_database</string>
 
     <!-- Bottom Sheets -->
-    <string name="scheduled_reminders">Scheduled Reminders</string>
     <string name="completed_reminders">Completed Reminders</string>
     <string name="nav_drawer_sort_title">Sort by</string>
     <string name="drawer_title_earliest_date_first">Earliest date first</string>
     <string name="drawer_title_latest_date_first">Latest date first</string>
 
     <!-- Empty States -->
-    <string name="empty_state_active_title">No reminders</string>
-    <string name="empty_state_active_subtitle">Add a reminder to get started</string>
+    <string name="empty_state_overdue_title">No overdue reminders</string>
+    <string name="empty_state_overdue_subtitle">You\'re all caught up</string>
+    <string name="empty_state_upcoming_title">No upcoming reminders</string>
+    <string name="empty_state_upcoming_subtitle">Add a reminder to get started</string>
     <string name="empty_state_completed_title">No completed reminders</string>
     <string name="empty_state_completed_subtitle">Completed reminders will show up here</string>
 
@@ -99,9 +100,9 @@
     <string name="reminder_list_card_date_time">%1$s • %2$s</string>
     <string name="dot_spacer">•</string>
     <string name="reminder_list_card_condensed_date_time">%1$s • %2$s • </string>
-    <string name="reminder_status_completed">Completed</string>
-    <string name="reminder_status_overdue">Overdue</string>
-    <string name="reminder_status_scheduled">Scheduled</string>
+    <string name="reminder_overdue">Overdue</string>
+    <string name="reminder_upcoming">Upcoming</string>
+    <string name="reminder_completed">Completed</string>
     <string name="sort_dialog_title">Sort reminders by</string>
     <string name="sort_dialog_option_date_earliest">Date - Earliest first</string>
     <string name="sort_dialog_option_date_latest">Date - Latest first</string>
@@ -121,7 +122,6 @@
     <string name="cd_clear_search">Clear Search</string>
     <string name="top_bar_title_input_reminder">Input Reminder</string>
     <string name="test_tag_reminder_list_lazy_column">test_tag_reminder_list_lazy_column</string>
-    <string name="overdue">Overdue</string>
-    <string name="scheduled">Scheduled</string>
-    <string name="completed">Completed</string>
+    <string name="sort_dialog_option_alphabetical_a_to_z">Alphabetical A-Z</string>
+    <string name="sort_dialog_option_alphabetical_z_to_a">Alphabetical Z-A</string>
 </resources>
