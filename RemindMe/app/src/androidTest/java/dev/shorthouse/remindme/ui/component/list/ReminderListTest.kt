@@ -45,7 +45,8 @@ class ReminderListTest {
                     reminderStates = reminderStates,
                     emptyStateContent = emptyStateContent,
                     onReminderCard = onReminderCard,
-                    contentPadding = PaddingValues(0.dp)
+                    contentPadding = PaddingValues(0.dp),
+                    reminderFilters = reminderFilters
                 )
             }
         }

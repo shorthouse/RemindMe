@@ -2,10 +2,10 @@ package dev.shorthouse.remindme.data.protodatastore
 
 import android.util.Log
 import androidx.datastore.core.DataStore
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
 import java.io.IOException
 import javax.inject.Inject
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 
 class UserPreferencesRepository @Inject constructor(
     private val userPreferencesDataStore: DataStore<UserPreferences>
@@ -26,17 +26,9 @@ class UserPreferencesRepository @Inject constructor(
         }
     }
 
-    suspend fun toggleReminderFilter(reminderFilter: ReminderFilter) {
+    suspend fun updateReminderFilter(reminderFilter: ReminderFilter) {
         userPreferencesDataStore.updateData { userPreferences ->
-            val reminderFilters = userPreferences.reminderFilters.toMutableSet()
-
-            if (reminderFilters.contains(reminderFilter)) {
-                reminderFilters.remove(reminderFilter)
-            } else {
-                reminderFilters.add(reminderFilter)
-            }
-
-            userPreferences.copy(reminderFilters = reminderFilters)
+            userPreferences.copy(reminderFilter = reminderFilter)
         }
     }
 }
