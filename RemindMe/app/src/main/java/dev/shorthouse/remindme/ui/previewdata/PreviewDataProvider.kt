@@ -49,6 +49,13 @@ class ReminderListCardProvider : PreviewParameterProvider<ReminderState> {
     )
 }
 
+class SearchQueryProvider : PreviewParameterProvider<String> {
+    override val values = sequenceOf(
+        "",
+        "Water the plants"
+    )
+}
+
 private object ReminderPreviewData {
     val empty = ReminderState()
 
