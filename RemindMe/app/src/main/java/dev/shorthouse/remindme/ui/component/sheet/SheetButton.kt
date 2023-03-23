@@ -1,11 +1,14 @@
 package dev.shorthouse.remindme.ui.component.sheet
 
+import android.content.res.Configuration
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -16,7 +19,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.tooling.preview.Preview
 import dev.shorthouse.remindme.R
+import dev.shorthouse.remindme.ui.theme.AppTheme
 
 @Composable
 fun BottomSheetButton(
@@ -54,5 +59,23 @@ fun BottomSheetButton(
                 style = MaterialTheme.typography.bodySmall
             )
         }
+    }
+}
+
+@Composable
+@Preview(name = "Light Mode", showBackground = true, widthDp = 300)
+@Preview(
+    name = "Dark Mode",
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    showBackground = true,
+    widthDp = 300
+)
+fun BottomSheetButtonPreview() {
+    AppTheme {
+        BottomSheetButton(
+            buttonIcon = Icons.Rounded.Edit,
+            buttonLabel = "Edit",
+            onSelected = {}
+        )
     }
 }
