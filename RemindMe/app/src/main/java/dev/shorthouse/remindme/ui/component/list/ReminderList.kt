@@ -14,62 +14,35 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import dev.shorthouse.remindme.R
-import dev.shorthouse.remindme.data.protodatastore.ReminderFilter
-import dev.shorthouse.remindme.ui.component.emptystate.EmptyStateCompletedReminders
 import dev.shorthouse.remindme.ui.component.emptystate.EmptyStateOverdueReminders
-import dev.shorthouse.remindme.ui.component.emptystate.EmptyStateSearchReminders
-import dev.shorthouse.remindme.ui.component.emptystate.EmptyStateUpcomingReminders
 import dev.shorthouse.remindme.ui.previewdata.ReminderListProvider
 import dev.shorthouse.remindme.ui.state.ReminderState
 import dev.shorthouse.remindme.ui.theme.AppTheme
 
 @Composable
-fun ReminderListContent(
-    reminderStates: List<ReminderState>,
-    reminderFilter: ReminderFilter,
-    isSearchBarShown: Boolean,
-    onReminderCard: (ReminderState) -> Unit,
-    contentPadding: PaddingValues,
-    modifier: Modifier = Modifier,
-    isSearchQueryEmpty: Boolean
-) {
-    if (reminderStates.isEmpty()) {
-        when {
-            isSearchBarShown && isSearchQueryEmpty -> {}
-            isSearchBarShown && !isSearchQueryEmpty -> EmptyStateSearchReminders()
-            reminderFilter == ReminderFilter.OVERDUE -> EmptyStateOverdueReminders()
-            reminderFilter == ReminderFilter.UPCOMING -> EmptyStateUpcomingReminders()
-            else -> EmptyStateCompletedReminders()
-        }
-    } else {
-        ReminderList(
-            reminderStates = reminderStates,
-            onReminderCard = onReminderCard,
-            contentPadding = contentPadding,
-            modifier = modifier
-        )
-    }
-}
-
-@Composable
 fun ReminderList(
     reminderStates: List<ReminderState>,
+    emptyState: @Composable () -> Unit,
     onReminderCard: (ReminderState) -> Unit,
     contentPadding: PaddingValues,
     modifier: Modifier = Modifier
 ) {
-    LazyColumn(
-        verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.margin_tiny)),
-        contentPadding = contentPadding,
-        modifier = modifier
-            .fillMaxSize()
-            .testTag(stringResource(R.string.test_tag_reminder_list_lazy_column))
-    ) {
-        items(reminderStates) { reminderState ->
-            ReminderCard(
-                reminderState = reminderState,
-                onReminderCard = onReminderCard
-            )
+    if (reminderStates.isEmpty()) {
+        emptyState()
+    } else {
+        LazyColumn(
+            verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.margin_tiny)),
+            contentPadding = contentPadding,
+            modifier = modifier
+                .fillMaxSize()
+                .testTag(stringResource(R.string.test_tag_reminder_list_lazy_column))
+        ) {
+            items(reminderStates) { reminderState ->
+                ReminderCard(
+                    reminderState = reminderState,
+                    onReminderCard = onReminderCard
+                )
+            }
         }
     }
 }
@@ -81,13 +54,11 @@ fun ReminderListContentPreview(
     @PreviewParameter(ReminderListProvider::class) reminderStates: List<ReminderState>
 ) {
     AppTheme {
-        ReminderListContent(
+        ReminderList(
             reminderStates = reminderStates,
-            reminderFilter = ReminderFilter.UPCOMING,
-            isSearchBarShown = false,
-            isSearchQueryEmpty = true,
+            emptyState = { EmptyStateOverdueReminders() },
             onReminderCard = {},
-            contentPadding = PaddingValues(dimensionResource(R.dimen.margin_tiny))
+            contentPadding = PaddingValues(dimensionResource(R.dimen.margin_tiny)),
         )
     }
 }
