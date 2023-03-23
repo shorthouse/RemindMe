@@ -36,8 +36,8 @@ fun ReminderAddScreen(
 }
 
 @Composable
-@Preview(name = "Light Mode", showBackground = true)
-@Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
+@Preview(name = "Light Mode")
+@Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
 private fun ReminderAddPreview(
     @PreviewParameter(EmptyReminderProvider::class) reminderState: ReminderState
 ) {
