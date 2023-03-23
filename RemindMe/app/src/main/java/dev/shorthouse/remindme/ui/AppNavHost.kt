@@ -5,6 +5,6 @@ import com.ramcosta.composedestinations.DestinationsNavHost
 import dev.shorthouse.remindme.ui.screen.NavGraphs
 
 @Composable
-fun RemindMeNavHost() {
+fun AppNavHost() {
     DestinationsNavHost(navGraph = NavGraphs.root)
 }

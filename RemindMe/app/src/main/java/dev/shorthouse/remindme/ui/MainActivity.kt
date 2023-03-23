@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity() {
 
         setContent {
             AppTheme {
-                RemindMeNavHost()
+                AppNavHost()
             }
         }
     }
