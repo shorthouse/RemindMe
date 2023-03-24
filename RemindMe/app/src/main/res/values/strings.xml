@@ -29,11 +29,11 @@
     <string name="error_time_past">The reminder start time cannot be in the past</string>
     <string name="day">Day</string>
     <string name="cd_top_bar_close_reminder">Close</string>
-    <plurals name="radio_button_days">
+    <plurals name="repeat_unit_days">
         <item quantity="one">Day</item>
         <item quantity="other">Days</item>
     </plurals>
-    <plurals name="radio_button_weeks">
+    <plurals name="repeat_unit_weeks">
         <item quantity="one">Week</item>
         <item quantity="other">Weeks</item>
     </plurals>
