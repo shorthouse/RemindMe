@@ -1,4 +1,4 @@
-package dev.shorthouse.remindme.ui.screen.input
+package dev.shorthouse.remindme.ui.reminderinput
 
 import android.content.res.Configuration
 import androidx.compose.material3.SnackbarHostState
@@ -13,25 +13,23 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import dev.shorthouse.remindme.R
-import dev.shorthouse.remindme.ui.previewdata.DefaultReminderProvider
+import dev.shorthouse.remindme.ui.previewprovider.EmptyReminderStateProvider
 import dev.shorthouse.remindme.ui.state.ReminderState
 import dev.shorthouse.remindme.ui.theme.AppTheme
 
 @Destination
 @Composable
-fun ReminderEditScreen(
+fun ReminderAddScreen(
     inputViewModel: InputViewModel = hiltViewModel(),
-    reminderId: Long,
     navigator: DestinationsNavigator
 ) {
-    inputViewModel.setReminder(reminderId = reminderId)
     val uiState by inputViewModel.uiState.collectAsStateWithLifecycle()
 
     if (!uiState.isLoading) {
         ReminderInputScreen(
             reminderState = ReminderState(uiState.reminder),
             inputViewModel = inputViewModel,
-            topBarTitle = stringResource(R.string.top_bar_title_edit_reminder),
+            topBarTitle = stringResource(R.string.top_bar_title_add_reminder),
             navigator = navigator
         )
     }
@@ -40,12 +38,12 @@ fun ReminderEditScreen(
 @Composable
 @Preview(name = "Light Mode")
 @Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
-private fun ReminderEditPreview(
-    @PreviewParameter(DefaultReminderProvider::class) reminderState: ReminderState
+private fun ReminderAddPreview(
+    @PreviewParameter(EmptyReminderStateProvider::class) reminderState: ReminderState
 ) {
     AppTheme {
         val snackbarHostState = remember { SnackbarHostState() }
-        val topBarTitle = stringResource(R.string.top_bar_title_edit_reminder)
+        val topBarTitle = stringResource(R.string.top_bar_title_add_reminder)
 
         ReminderInputScaffold(
             reminderState = reminderState,
