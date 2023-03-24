@@ -15,27 +15,27 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.dp
 import dev.shorthouse.remindme.R
-import dev.shorthouse.remindme.ui.previewdata.DefaultReminderProvider
-import dev.shorthouse.remindme.ui.state.ReminderState
+import dev.shorthouse.remindme.model.Reminder
+import dev.shorthouse.remindme.ui.previewprovider.DefaultReminderProvider
 import dev.shorthouse.remindme.ui.theme.AppTheme
 import dev.shorthouse.remindme.ui.util.enums.ReminderAction
 
 @Composable
 fun SheetReminderActions(
-    reminderState: ReminderState,
+    reminder: Reminder,
     onReminderActionSelected: (ReminderAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val reminderActionItems = buildList {
-        if (!reminderState.isCompleted) {
-            if (reminderState.isRepeatReminder) {
+        if (!reminder.isCompleted) {
+            if (reminder.isRepeatReminder()) {
                 add(
                     BottomSheetActionItem(
                         icon = Icons.Rounded.TaskAlt,
@@ -80,18 +80,18 @@ fun SheetReminderActions(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(dimensionResource(R.dimen.margin_tiny))
+                .padding(8.dp)
         ) {
             Text(
-                text = reminderState.name,
+                text = reminder.name,
                 style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Medium),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier
                     .padding(
-                        start = dimensionResource(R.dimen.margin_tiny),
-                        bottom = dimensionResource(R.dimen.margin_small),
-                        top = dimensionResource(R.dimen.margin_small)
+                        start = 8.dp,
+                        bottom = 12.dp,
+                        top = 12.dp
                     )
             )
 
@@ -116,11 +116,11 @@ data class BottomSheetActionItem(
 @Preview(name = "Light Mode", showBackground = true)
 @Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 fun SheetReminderActionsPreview(
-    @PreviewParameter(DefaultReminderProvider::class) reminderState: ReminderState
+    @PreviewParameter(DefaultReminderProvider::class) reminder: Reminder
 ) {
     AppTheme {
         SheetReminderActions(
-            reminderState = reminderState,
+            reminder = reminder,
             onReminderActionSelected = {}
         )
     }

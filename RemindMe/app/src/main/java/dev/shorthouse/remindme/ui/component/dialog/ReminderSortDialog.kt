@@ -20,7 +20,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
@@ -48,15 +47,15 @@ fun ReminderSortDialog(
             Column(
                 modifier = Modifier
                     .background(MaterialTheme.colorScheme.surface)
-                    .padding(dimensionResource(R.dimen.margin_small))
+                    .padding(12.dp)
                     .fillMaxWidth(0.9f)
             ) {
                 Text(
                     text = stringResource(R.string.sort_dialog_title),
                     style = MaterialTheme.typography.headlineSmall,
                     modifier = Modifier.padding(
-                        horizontal = dimensionResource(R.dimen.margin_normal),
-                        vertical = dimensionResource(R.dimen.margin_tiny)
+                        horizontal = 16.dp,
+                        vertical = 8.dp
                     ),
                     color = MaterialTheme.colorScheme.onSurface
                 )
@@ -90,7 +89,7 @@ fun ReminderSortDialog(
                     horizontalArrangement = Arrangement.End,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = dimensionResource(R.dimen.margin_minuscule))
+                        .padding(horizontal = 4.dp)
                 ) {
                     TextButton(onClick = {
                         onApplySort(selectedSortOption)

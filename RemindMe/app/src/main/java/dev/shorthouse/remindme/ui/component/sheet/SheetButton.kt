@@ -18,9 +18,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
-import dev.shorthouse.remindme.R
+import androidx.compose.ui.unit.dp
 import dev.shorthouse.remindme.ui.theme.AppTheme
 
 @Composable
@@ -41,8 +40,8 @@ fun BottomSheetButton(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .padding(
-                    horizontal = dimensionResource(R.dimen.margin_tiny),
-                    vertical = dimensionResource(R.dimen.margin_small)
+                    horizontal = 8.dp,
+                    vertical = 12.dp
                 )
         ) {
             Icon(
@@ -51,7 +50,7 @@ fun BottomSheetButton(
                 contentDescription = null
             )
 
-            Spacer(Modifier.width(dimensionResource(R.dimen.margin_normal)))
+            Spacer(Modifier.width(16.dp))
 
             Text(
                 text = buttonLabel,
