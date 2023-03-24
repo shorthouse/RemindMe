@@ -6,6 +6,7 @@ import dev.shorthouse.remindme.data.FakeDataSource
 import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.domain.reminder.AddReminderUseCase
 import dev.shorthouse.remindme.domain.reminder.EditReminderUseCase
+import dev.shorthouse.remindme.ui.reminderinput.InputViewModel
 import dev.shorthouse.remindme.util.ReminderTestUtil
 import io.mockk.mockk
 import io.mockk.verify

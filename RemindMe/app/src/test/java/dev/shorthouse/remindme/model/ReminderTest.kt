@@ -2,10 +2,10 @@ package dev.shorthouse.remindme.model
 
 import com.google.common.truth.Truth.assertThat
 import dev.shorthouse.remindme.util.ReminderTestUtil
-import java.time.ZonedDateTime
-import java.time.temporal.ChronoUnit
 import org.junit.Before
 import org.junit.Test
+import java.time.ZonedDateTime
+import java.time.temporal.ChronoUnit
 
 class ReminderTest {
     private lateinit var repeatReminder: Reminder
@@ -45,7 +45,7 @@ class ReminderTest {
     fun `Get formatted start time, returns expected formatted start time`() {
         val expectedTime = "19:01"
 
-        val time = repeatReminder.getFormattedStartTime()
+        val time = repeatReminder.getFormattedTime()
 
         assertThat(time).isEqualTo(expectedTime)
     }
