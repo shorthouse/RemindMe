@@ -1,4 +1,4 @@
-package dev.shorthouse.remindme.ui.screen.list
+package dev.shorthouse.remindme.ui.reminderlist
 
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
@@ -13,7 +13,7 @@ import dev.shorthouse.remindme.domain.reminder.CompleteOnetimeReminderUseCase
 import dev.shorthouse.remindme.domain.reminder.CompleteRepeatReminderOccurrenceUseCase
 import dev.shorthouse.remindme.domain.reminder.CompleteRepeatReminderSeriesUseCase
 import dev.shorthouse.remindme.domain.reminder.DeleteReminderUseCase
-import dev.shorthouse.remindme.ui.state.ReminderState
+import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.ui.util.enums.ReminderAction
 import java.time.ZonedDateTime
 import javax.inject.Inject
@@ -108,10 +108,8 @@ class ListViewModel @Inject constructor(
                     }
                 }
 
-                val reminderStates = sortedReminders.map { ReminderState(it) }
-
                 _uiState.value.copy(
-                    reminderStates = reminderStates,
+                    reminders = sortedReminders,
                     reminderFilter = userPreferences.reminderFilter,
                     reminderSortOrder = userPreferences.reminderSortOrder,
                     searchQuery = searchQuery,
@@ -123,10 +121,8 @@ class ListViewModel @Inject constructor(
 
     fun processReminderAction(
         reminderAction: ReminderAction,
-        reminderState: ReminderState
+        reminder: Reminder
     ) {
-        val reminder = reminderState.toReminder()
-
         when (reminderAction) {
             ReminderAction.COMPLETE_ONETIME -> completeOnetimeReminderUseCase(reminder)
             ReminderAction.COMPLETE_REPEAT_OCCURRENCE -> completeRepeatReminderOccurrenceUseCase(
@@ -149,8 +145,8 @@ class ListViewModel @Inject constructor(
         }
     }
 
-    fun updateBottomSheetReminderState(bottomSheetReminderState: ReminderState) {
-        _uiState.update { it.copy(bottomSheetReminderState = bottomSheetReminderState) }
+    fun updateBottomSheetReminder(bottomSheetReminder: Reminder) {
+        _uiState.update { it.copy(bottomSheetReminder = bottomSheetReminder) }
     }
 
     fun updateIsBottomSheetShown(isBottomSheetShown: Boolean) {
@@ -169,12 +165,12 @@ class ListViewModel @Inject constructor(
 }
 
 data class ListUiState(
-    val reminderStates: List<ReminderState> = emptyList(),
+    val reminders: List<Reminder> = emptyList(),
     val reminderFilter: ReminderFilter = ReminderFilter.UPCOMING,
     val reminderSortOrder: ReminderSort = ReminderSort.BY_EARLIEST_DATE_FIRST,
     val searchQuery: String = "",
     val isSearchBarShown: Boolean = false,
-    val bottomSheetReminderState: ReminderState = ReminderState(),
+    val bottomSheetReminder: Reminder = Reminder(),
     val isBottomSheetShown: Boolean = false,
     val isLoading: Boolean = false
 )
