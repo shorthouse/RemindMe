@@ -41,7 +41,7 @@ class ReminderListTest {
     ) {
         composeTestRule.setContent {
             RemindMeTheme {
-                ReminderListContent(
+                ReminderList(
                     reminderStates = reminderStates,
                     emptyStateContent = emptyStateContent,
                     onReminderCard = onReminderCard,

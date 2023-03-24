@@ -1,5 +1,6 @@
 package dev.shorthouse.remindme.ui.component.searchbar
 
+import android.content.res.Configuration
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,7 +15,6 @@ import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -33,7 +33,11 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import dev.shorthouse.remindme.R
+import dev.shorthouse.remindme.ui.previewdata.SearchQueryProvider
+import dev.shorthouse.remindme.ui.theme.AppTheme
 import dev.shorthouse.remindme.ui.theme.Grey
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -146,7 +150,7 @@ private fun RemindMeSearchBarTextField(
         container = {
             Surface(
                 shape = MaterialTheme.shapes.small,
-                color = LocalContentColor.current,
+                color = Color.White,
                 content = {},
                 modifier = Modifier
                     .fillMaxWidth()
@@ -154,4 +158,19 @@ private fun RemindMeSearchBarTextField(
             )
         }
     )
+}
+
+@Composable
+@Preview(name = "Light Mode", showBackground = true)
+@Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
+fun RemindMeSearchBarPreview(
+    @PreviewParameter(SearchQueryProvider::class) searchQuery: String
+) {
+    AppTheme {
+        RemindMeSearchBar(
+            searchQuery = searchQuery,
+            onSearchQueryChange = {},
+            onCloseSearch = {}
+        )
+    }
 }

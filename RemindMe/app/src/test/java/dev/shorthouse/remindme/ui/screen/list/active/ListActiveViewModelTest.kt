@@ -10,7 +10,7 @@ import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.data.protodatastore.ReminderSort
 import dev.shorthouse.remindme.data.protodatastore.UserPreferencesRepository
 import dev.shorthouse.remindme.data.protodatastore.UserPreferencesSerializer
-import dev.shorthouse.remindme.ui.screen.list.ListViewModel
+import dev.shorthouse.remindme.ui.reminderlist.ListViewModel
 import dev.shorthouse.remindme.ui.state.ReminderState
 import dev.shorthouse.remindme.util.ReminderTestUtil
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -74,7 +74,7 @@ class ListActiveViewModelTest {
 
         val uiState = listActiveViewModel.uiState.value
 
-        assertThat(uiState.reminderStates).isEqualTo(expectedActiveReminderStates)
+        assertThat(uiState.reminders).isEqualTo(expectedActiveReminderStates)
         assertThat(uiState.reminderSortOrder).isEqualTo(expectedReminderSortOrder)
         assertThat(uiState.isLoading).isEqualTo(expectedIsLoading)
     }
@@ -90,8 +90,8 @@ class ListActiveViewModelTest {
 
             val uiState = listActiveViewModel.uiState.value
 
-            assertThat(uiState.reminderStates).isNotEmpty()
-            assertThat(uiState.reminderStates.filter { it.isCompleted }).isEmpty()
+            assertThat(uiState.reminders).isNotEmpty()
+            assertThat(uiState.reminders.filter { it.isCompleted }).isEmpty()
             assertThat(uiState.reminderSortOrder).isEqualTo(expectedReminderSortOrder)
             assertThat(uiState.isLoading).isEqualTo(expectedIsLoading)
         }

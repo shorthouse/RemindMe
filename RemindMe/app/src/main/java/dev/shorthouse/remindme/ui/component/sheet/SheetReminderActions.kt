@@ -30,7 +30,7 @@ import dev.shorthouse.remindme.ui.util.enums.ReminderAction
 @Composable
 fun SheetReminderActions(
     reminderState: ReminderState,
-    onReminderActionItemSelected: (ReminderAction) -> Unit,
+    onReminderActionSelected: (ReminderAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val reminderActionItems = buildList {
@@ -99,7 +99,7 @@ fun SheetReminderActions(
                 BottomSheetButton(
                     buttonIcon = bottomSheetItem.icon,
                     buttonLabel = bottomSheetItem.label,
-                    onSelected = { onReminderActionItemSelected(bottomSheetItem.action) }
+                    onSelected = { onReminderActionSelected(bottomSheetItem.action) }
                 )
             }
         }
@@ -115,13 +115,13 @@ data class BottomSheetActionItem(
 @Composable
 @Preview(name = "Light Mode", showBackground = true)
 @Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
-fun BottomSheetReminderActionsPreview(
+fun SheetReminderActionsPreview(
     @PreviewParameter(DefaultReminderProvider::class) reminderState: ReminderState
 ) {
     AppTheme {
         SheetReminderActions(
             reminderState = reminderState,
-            onReminderActionItemSelected = {}
+            onReminderActionSelected = {}
         )
     }
 }
