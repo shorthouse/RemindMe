@@ -1,10 +1,10 @@
 package dev.shorthouse.remindme.data
 
 import dev.shorthouse.remindme.model.Reminder
-import kotlinx.coroutines.flow.Flow
 import java.time.ZonedDateTime
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlinx.coroutines.flow.Flow
 
 @Singleton
 class ReminderRepository @Inject constructor(

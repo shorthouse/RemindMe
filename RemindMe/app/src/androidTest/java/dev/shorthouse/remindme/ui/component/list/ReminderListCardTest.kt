@@ -7,6 +7,7 @@ import androidx.compose.ui.test.onNodeWithText
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dev.shorthouse.remindme.HiltTestActivity
+import dev.shorthouse.remindme.ui.reminderlist.ReminderCard
 import dev.shorthouse.remindme.ui.state.ReminderState
 import dev.shorthouse.remindme.ui.theme.m2.RemindMeTheme
 import dev.shorthouse.remindme.util.ReminderTestUtil
