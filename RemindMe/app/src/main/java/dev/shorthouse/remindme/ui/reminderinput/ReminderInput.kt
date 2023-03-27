@@ -324,7 +324,7 @@ fun ReminderTimeInput(reminderState: ReminderState, modifier: Modifier = Modifie
 @Composable
 fun ReminderSwitchRow(
     icon: ImageVector,
-    iconContentDescription: String,
+    iconContentDescription: String?,
     switchText: String,
     switchTestTag: String,
     isChecked: Boolean,
@@ -391,7 +391,7 @@ fun ReminderNotesInput(reminderState: ReminderState, modifier: Modifier = Modifi
 fun ReminderRepeatIntervalInput(reminderState: ReminderState) {
     ReminderSwitchRow(
         icon = Icons.Rounded.Refresh,
-        iconContentDescription = stringResource(R.string.cd_details_repeat_interval),
+        iconContentDescription = null,
         switchText = stringResource(R.string.title_repeat_reminder),
         switchTestTag = stringResource(R.string.test_tag_switch_repeat_interval),
         isChecked = reminderState.isRepeatReminder,
@@ -399,6 +399,7 @@ fun ReminderRepeatIntervalInput(reminderState: ReminderState) {
     )
 
     val repeatAmount = reminderState.repeatAmount.toIntOrNull() ?: 0
+
     reminderState.repeatUnit = when {
         stringResource(R.string.day) in reminderState.repeatUnit -> pluralStringResource(
             R.plurals.repeat_unit_days,
@@ -415,7 +416,13 @@ fun ReminderRepeatIntervalInput(reminderState: ReminderState) {
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.fillMaxWidth()
         ) {
-            RepeatIntervalHeader()
+            Text(
+                text = stringResource(R.string.repeats_every_header),
+                style = MaterialTheme.typography.titleSmall.copy(
+                    color = MaterialTheme.colorScheme.outline,
+                    textAlign = TextAlign.Center
+                )
+            )
 
             Spacer(Modifier.height(8.dp))
 
@@ -441,30 +448,16 @@ fun ReminderRepeatIntervalInput(reminderState: ReminderState) {
 }
 
 @Composable
-private fun RepeatIntervalHeader(modifier: Modifier = Modifier) {
-    Row(
-        horizontalArrangement = Arrangement.Center,
-        modifier = modifier
-    ) {
-        Text(
-            text = stringResource(R.string.repeats_every_header),
-            style = MaterialTheme.typography.titleSmall
-                .copy(color = MaterialTheme.colorScheme.outline)
-        )
-    }
-}
-
-@Composable
 private fun RepeatAmountInput(reminderState: ReminderState) {
     val repeatAmountMaxLength = integerResource(R.integer.reminder_repeat_amount_max_length)
 
     OutlinedTextField(
         value = reminderState.repeatAmount,
-        onValueChange = {
-            if (it.length <= repeatAmountMaxLength) {
-                reminderState.repeatAmount = sanitiseRepeatAmount(
-                    it
-                )
+        onValueChange = { repeatAmount ->
+            if (repeatAmount.length <= repeatAmountMaxLength) {
+                reminderState.repeatAmount = repeatAmount
+                    .trimStart { it == '0' }
+                    .filter { it.isDigit() }
             }
         },
         textStyle = MaterialTheme.typography.bodyMedium.copy(textAlign = TextAlign.Center),
@@ -477,12 +470,6 @@ private fun RepeatAmountInput(reminderState: ReminderState) {
             .padding(end = 16.dp)
             .testTag(stringResource(R.string.test_tag_text_field_repeat_amount))
     )
-}
-
-private fun sanitiseRepeatAmount(repeatAmount: String): String {
-    return repeatAmount
-        .trimStart { it == '0' }
-        .filter { it.isDigit() }
 }
 
 @Composable
@@ -530,7 +517,7 @@ fun TextWithLeftIcon(
     icon: ImageVector,
     text: String,
     modifier: Modifier = Modifier,
-    contentDescription: String? = null
+    contentDescription: String?
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
