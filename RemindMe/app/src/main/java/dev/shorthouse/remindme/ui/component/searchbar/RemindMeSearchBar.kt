@@ -29,14 +29,14 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.dp
 import dev.shorthouse.remindme.R
-import dev.shorthouse.remindme.ui.previewdata.SearchQueryProvider
+import dev.shorthouse.remindme.ui.previewprovider.SearchQueryProvider
 import dev.shorthouse.remindme.ui.theme.AppTheme
 import dev.shorthouse.remindme.ui.theme.Grey
 
@@ -61,7 +61,7 @@ fun RemindMeSearchBar(
         color = topAppBarColor,
         modifier = modifier
             .fillMaxWidth()
-            .height(dimensionResource(R.dimen.search_bar_size))
+            .height(64.dp)
     ) {
         BasicTextField(
             value = searchQuery,
@@ -121,7 +121,7 @@ private fun RemindMeSearchBarTextField(
             IconButton(
                 onClick = onCloseSearch,
                 modifier = Modifier.padding(
-                    start = dimensionResource(R.dimen.margin_tiny)
+                    start = 8.dp
                 )
             ) {
                 Icon(
@@ -136,7 +136,7 @@ private fun RemindMeSearchBarTextField(
                 IconButton(
                     onClick = { onSearchQueryChange("") },
                     modifier = Modifier.padding(
-                        end = dimensionResource(R.dimen.margin_tiny)
+                        end = 8.dp
                     )
                 ) {
                     Icon(
@@ -154,7 +154,7 @@ private fun RemindMeSearchBarTextField(
                 content = {},
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(dimensionResource(R.dimen.search_bar_text_field_padding))
+                    .padding(6.dp)
             )
         }
     )

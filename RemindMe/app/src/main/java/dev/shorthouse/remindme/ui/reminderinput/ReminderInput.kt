@@ -1,4 +1,4 @@
-package dev.shorthouse.remindme.ui.screen.input
+package dev.shorthouse.remindme.ui.reminderinput
 
 import android.content.res.Configuration
 import androidx.compose.foundation.clickable
@@ -54,7 +54,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
@@ -69,7 +68,7 @@ import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.ui.component.dialog.ReminderDatePicker
 import dev.shorthouse.remindme.ui.component.dialog.ReminderTimePicker
 import dev.shorthouse.remindme.ui.component.text.RemindMeTextField
-import dev.shorthouse.remindme.ui.previewdata.DefaultReminderProvider
+import dev.shorthouse.remindme.ui.previewprovider.DefaultReminderStateProvider
 import dev.shorthouse.remindme.ui.state.ReminderState
 import dev.shorthouse.remindme.ui.theme.AppTheme
 import kotlinx.coroutines.launch
@@ -217,10 +216,10 @@ fun ReminderInputContent(
         Column(
             modifier = modifier
                 .verticalScroll(rememberScrollState())
-                .padding(horizontal = dimensionResource(R.dimen.margin_normal))
+                .padding(horizontal = 16.dp)
         ) {
             val spacingModifier = Modifier
-                .padding(vertical = dimensionResource(R.dimen.margin_small))
+                .padding(vertical = 12.dp)
                 .fillMaxWidth()
 
             ReminderNameInput(
@@ -277,7 +276,7 @@ fun ReminderNameInput(
         hintText = stringResource(R.string.hint_reminder_name),
         imeAction = ImeAction.Done,
         modifier = modifier
-            .padding(top = dimensionResource(R.dimen.margin_small))
+            .padding(top = 12.dp)
             .focusRequester(focusRequester)
     )
 }
@@ -374,7 +373,7 @@ fun ReminderNotesInput(reminderState: ReminderState, modifier: Modifier = Modifi
             tint = MaterialTheme.colorScheme.outline
         )
 
-        Spacer(Modifier.width(dimensionResource(R.dimen.margin_normal)))
+        Spacer(Modifier.width(16.dp))
 
         RemindMeTextField(
             text = reminderState.notes.orEmpty(),
@@ -402,11 +401,11 @@ fun ReminderRepeatIntervalInput(reminderState: ReminderState) {
     val repeatAmount = reminderState.repeatAmount.toIntOrNull() ?: 0
     reminderState.repeatUnit = when {
         stringResource(R.string.day) in reminderState.repeatUnit -> pluralStringResource(
-            R.plurals.radio_button_days,
+            R.plurals.repeat_unit_days,
             repeatAmount
         )
         else -> pluralStringResource(
-            R.plurals.radio_button_weeks,
+            R.plurals.repeat_unit_weeks,
             repeatAmount
         )
     }
@@ -428,7 +427,7 @@ fun ReminderRepeatIntervalInput(reminderState: ReminderState) {
                     RepeatAmountInput(reminderState = reminderState)
                 }
 
-                Spacer(Modifier.width(dimensionResource(R.dimen.margin_large)))
+                Spacer(Modifier.width(24.dp))
 
                 Row(
                     modifier = Modifier.weight(1f),
@@ -475,7 +474,7 @@ private fun RepeatAmountInput(reminderState: ReminderState) {
         ),
         modifier = Modifier
             .width(72.dp)
-            .padding(end = dimensionResource(R.dimen.margin_normal))
+            .padding(end = 16.dp)
             .testTag(stringResource(R.string.test_tag_text_field_repeat_amount))
     )
 }
@@ -488,7 +487,7 @@ private fun sanitiseRepeatAmount(repeatAmount: String): String {
 
 @Composable
 private fun RepeatUnitInput(reminderState: ReminderState) {
-    val repeatUnitPluralIds = listOf(R.plurals.radio_button_days, R.plurals.radio_button_weeks)
+    val repeatUnitPluralIds = listOf(R.plurals.repeat_unit_days, R.plurals.repeat_unit_weeks)
     val repeatAmount = reminderState.repeatAmount.toIntOrNull() ?: 0
 
     val repeatUnitOptions = repeatUnitPluralIds.map { pluralId ->
@@ -515,7 +514,7 @@ private fun RepeatUnitInput(reminderState: ReminderState) {
                     modifier = Modifier.testTag(text)
                 )
 
-                Spacer(modifier = Modifier.width(dimensionResource(R.dimen.margin_tiny)))
+                Spacer(modifier = Modifier.width(8.dp))
 
                 Text(
                     text = text,
@@ -543,7 +542,7 @@ fun TextWithLeftIcon(
             tint = MaterialTheme.colorScheme.outline
         )
 
-        Spacer(Modifier.width(dimensionResource(R.dimen.margin_normal)))
+        Spacer(Modifier.width(16.dp))
 
         Text(
             text = text,
@@ -557,7 +556,7 @@ fun TextWithLeftIcon(
 @Preview(name = "Light Mode")
 @Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
 private fun ReminderInputPreview(
-    @PreviewParameter(DefaultReminderProvider::class) reminderState: ReminderState
+    @PreviewParameter(DefaultReminderStateProvider::class) reminderState: ReminderState
 ) {
     AppTheme {
         val snackbarHostState = remember { SnackbarHostState() }

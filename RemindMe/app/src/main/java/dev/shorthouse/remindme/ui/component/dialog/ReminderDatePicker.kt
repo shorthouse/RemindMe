@@ -9,9 +9,9 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.ui.theme.AppTheme
 import java.time.Instant
@@ -50,7 +50,7 @@ fun ReminderDatePicker(
                 Text(text = stringResource(R.string.dialog_action_cancel))
             }
         },
-        tonalElevation = dimensionResource(id = R.dimen.margin_none)
+        tonalElevation = 0.dp
     ) {
         DatePicker(
             state = datePickerState,
