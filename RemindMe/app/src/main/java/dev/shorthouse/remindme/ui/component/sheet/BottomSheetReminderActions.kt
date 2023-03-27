@@ -1,6 +1,7 @@
 package dev.shorthouse.remindme.ui.component.sheet
 
 import android.content.res.Configuration
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.runtime.Composable
@@ -21,6 +22,7 @@ fun BottomSheetReminderActions(
 ) {
     ModalBottomSheet(
         onDismissRequest = onDismissRequest,
+        shape = RoundedCornerShape(0.dp),
         tonalElevation = 0.dp,
         dragHandle = null
     ) {
