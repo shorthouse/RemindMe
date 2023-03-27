@@ -88,7 +88,7 @@ private object ReminderPreviewData {
     val addNotification = Reminder(
         id = 5,
         name = "Add notification",
-        startDateTime = ZonedDateTime.parse("2020-01-01T08:30:00Z"),
+        startDateTime = ZonedDateTime.parse("3020-01-01T08:30:00Z"),
         isNotificationSent = true,
         repeatInterval = null,
         notes = null,
@@ -97,8 +97,8 @@ private object ReminderPreviewData {
 
     val addRepeatInterval = Reminder(
         id = 6,
-        name = "Add notification",
-        startDateTime = ZonedDateTime.parse("2020-01-01T08:30:00Z"),
+        name = "Add repeat interval",
+        startDateTime = ZonedDateTime.parse("3020-01-01T08:30:00Z"),
         isNotificationSent = true,
         repeatInterval = RepeatInterval(2, ChronoUnit.WEEKS),
         notes = null,
@@ -108,7 +108,7 @@ private object ReminderPreviewData {
     val addNotes = Reminder(
         id = 7,
         name = "Add notes",
-        startDateTime = ZonedDateTime.parse("2020-01-01T08:30:00Z"),
+        startDateTime = ZonedDateTime.parse("3020-01-01T08:30:00Z"),
         isNotificationSent = true,
         repeatInterval = RepeatInterval(2, ChronoUnit.WEEKS),
         notes = "Don't forget to do this thing",

@@ -24,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -63,7 +64,7 @@ fun ReminderCard(
 
             Text(
                 text = stringResource(
-                    R.string.reminder_list_card_date_time,
+                    R.string.reminder_card_date_time,
                     reminder.getFormattedDate(),
                     reminder.getFormattedTime()
                 )
@@ -89,10 +90,10 @@ fun ReminderCard(
                 reminder.repeatInterval?.let { repeatInterval ->
                     ReminderCardDetail(
                         icon = Icons.Rounded.Repeat,
-                        text = stringResource(
-                            R.string.reminder_details_repeat_interval,
-                            repeatInterval.amount,
-                            repeatInterval.unit
+                        text = pluralStringResource(
+                            repeatInterval.getPluralId(),
+                            repeatInterval.amount.toInt(),
+                            repeatInterval.amount
                         ),
                         contentDescription = stringResource(R.string.cd_details_repeat_interval)
                     )

@@ -148,21 +148,21 @@ fun ReminderListScaffold(
                         )
                     }
 
-                    val listEmptyState = when {
-                        uiState.reminders.isNotEmpty() -> {}
-                        uiState.isSearchBarShown && uiState.searchQuery.isEmpty() -> {}
-                        uiState.isSearchBarShown && uiState.searchQuery.isNotEmpty() ->
-                            EmptyStateSearchReminders()
-                        uiState.reminderFilter == ReminderFilter.OVERDUE ->
-                            EmptyStateOverdueReminders()
-                        uiState.reminderFilter == ReminderFilter.UPCOMING ->
-                            EmptyStateUpcomingReminders()
-                        else -> EmptyStateCompletedReminders()
-                    }
-
                     ReminderList(
                         reminders = uiState.reminders,
-                        emptyState = { listEmptyState },
+                        emptyState = {
+                            when {
+                                uiState.reminders.isNotEmpty() -> {}
+                                uiState.isSearchBarShown && uiState.searchQuery.isEmpty() -> {}
+                                uiState.isSearchBarShown && uiState.searchQuery.isNotEmpty() ->
+                                    EmptyStateSearchReminders()
+                                uiState.reminderFilter == ReminderFilter.OVERDUE ->
+                                    EmptyStateOverdueReminders()
+                                uiState.reminderFilter == ReminderFilter.UPCOMING ->
+                                    EmptyStateUpcomingReminders()
+                                else -> EmptyStateCompletedReminders()
+                            }
+                        },
                         onReminderCard = onReminderCard,
                         contentPadding = PaddingValues(
                             start = 8.dp,

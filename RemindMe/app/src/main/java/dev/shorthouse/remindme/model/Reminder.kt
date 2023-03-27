@@ -4,7 +4,6 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
-import java.time.temporal.ChronoUnit
 
 @Entity
 data class Reminder(
@@ -29,8 +28,3 @@ data class Reminder(
 
     fun isOverdue() = this.startDateTime.isBefore(ZonedDateTime.now())
 }
-
-data class RepeatInterval(
-    val amount: Long,
-    val unit: ChronoUnit
-)

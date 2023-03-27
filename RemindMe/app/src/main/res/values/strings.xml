@@ -2,12 +2,6 @@
     <string name="app_name" translatable="false">RemindMe</string>
     <string name="reminder_database_name">reminder_database</string>
 
-    <!-- Bottom Sheets -->
-    <string name="completed_reminders">Completed Reminders</string>
-    <string name="nav_drawer_sort_title">Sort by</string>
-    <string name="drawer_title_earliest_date_first">Earliest date first</string>
-    <string name="drawer_title_latest_date_first">Latest date first</string>
-
     <!-- Empty States -->
     <string name="empty_state_overdue_title">No overdue reminders</string>
     <string name="empty_state_overdue_subtitle">You\'re all caught up</string>
@@ -38,15 +32,6 @@
         <item quantity="other">Weeks</item>
     </plurals>
 
-    <!-- Reminder details -->
-    <string name="top_bar_title_details">Details</string>
-    <string name="notifications_on">Notifications enabled</string>
-    <string name="menu_item_complete">Complete</string>
-    <string name="menu_item_delete">Delete</string>
-    <string name="menu_item_edit">Edit</string>
-    <string name="reminder_details_repeat_interval">%1s %2s</string>
-    <string name="cd_more">More</string>
-
     <!-- Notifications -->
     <string name="notification_body_text_reboot_reschedule">Scheduling reminder notifications after reboot</string>
     <string name="notification_body_text_time_zone_update">Updating reminder timezones</string>
@@ -56,24 +41,21 @@
 
     <!-- Intent Keys -->
     <string name="intent_key_reminderId">reminderId</string>
-    <string name="intent_key_notificationTitle">notificationTitle</string>
-    <string name="intent_key_notificationText">notificationText</string>
     <string name="intent_key_timeZone">"time-zone"</string>
 
     <!-- List Home -->
     <string name="cd_fab_add_reminder">Add reminder</string>
-    <string name="cd_bottom_app_bar_menu">Menu</string>
-    <string name="cd_bottom_app_bar_sort">Sort</string>
-    <string name="cd_back">Back</string>
-    <string name="cd_repeat_reminder">Repeat reminder</string>
-    <string name="cd_checkbox_complete_reminder">Complete reminder</string>
-    <string name="cd_notifications_enabled">Notifications enabled</string>
 
     <!-- Alert Dialogs -->
-    <string name="alert_dialog_title_delete">Delete this reminder?</string>
-    <string name="alert_dialog_title_complete">Complete this reminder?</string>
-    <string name="dialog_action_complete">Complete</string>
-    <string name="dialog_action_delete">Delete</string>
+    <plurals name="repeat_interval_days">
+        <item quantity="one">%1$d day</item>
+        <item quantity="other">%1$d days</item>
+    </plurals>
+    <plurals name="repeat_interval_weeks">
+        <item quantity="one">%1$d week</item>
+        <item quantity="other">%1$d weeks</item>
+    </plurals>
+
     <string name="dialog_action_ok">OK</string>
     <string name="dialog_action_cancel">Cancel</string>
     <string name="dialog_action_apply">Apply</string>
@@ -86,38 +68,23 @@
     <string name="test_tag_switch_repeat_interval">Test Tag Switch Repeat Interval</string>
     <string name="test_tag_text_field_repeat_amount">Test Tag Text Field Repeat Amount</string>
 
-    <string name="test_tag_list_home_title">%1$s title</string>
-    <string name="reminder_card_notification_on">Notification enabled</string>
-    <string name="reminder_card_notification_off">Notification disabled</string>
-    <string name="drawer_title_edit">Edit</string>
-    <string name="drawer_title_delete">Delete</string>
-    <string name="cd_reminder_actions">Reminder actions</string>
     <string name="drawer_item_complete">Complete</string>
     <string name="drawer_item_edit">Edit</string>
     <string name="drawer_item_delete">Delete</string>
     <string name="drawer_item_complete_series">Complete Series</string>
 
-    <string name="reminder_list_card_date_time">%1$s • %2$s</string>
-    <string name="dot_spacer">•</string>
-    <string name="reminder_list_card_condensed_date_time">%1$s • %2$s • </string>
+    <string name="reminder_card_date_time">%1$s • %2$s</string>
     <string name="reminder_overdue">Overdue</string>
     <string name="reminder_upcoming">Upcoming</string>
     <string name="reminder_completed">Completed</string>
     <string name="sort_dialog_title">Sort reminders by</string>
     <string name="sort_dialog_option_date_earliest">Date - Earliest first</string>
     <string name="sort_dialog_option_date_latest">Date - Latest first</string>
-    <string name="dropdown_menu_sort">Sort</string>
-    <string name="dropdown_menu_completed">Completed</string>
     <string name="cd_top_app_bar_back">Back</string>
-    <string name="cd_top_bar_delete_completed_reminders">Delete completed reminders</string>
-    <string name="alert_dialog_title_delete_all_completed">Delete completed reminders?</string>
-    <string name="alert_dialog_title_delete_completed">Delete completed reminder?</string>
     <string name="cd_search_reminders">Search reminders</string>
     <string name="cd_sort_reminders">Sort reminders</string>
-    <string name="cd_completed_reminders">Completed reminders</string>
     <string name="empty_state_search_title">No reminders found</string>
     <string name="empty_state_search_subtitle">Try adjusting your search</string>
-    <string name="top_bar_title_completed_reminders">Completed</string>
     <string name="top_app_bar_search_hint">Search…</string>
     <string name="cd_clear_search">Clear Search</string>
     <string name="top_bar_title_input_reminder">Input Reminder</string>
