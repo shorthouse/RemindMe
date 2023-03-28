@@ -11,7 +11,7 @@ import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dev.shorthouse.remindme.HiltTestActivity
 import dev.shorthouse.remindme.data.protodatastore.ReminderSort
-import dev.shorthouse.remindme.ui.theme.m2.RemindMeTheme
+import dev.shorthouse.remindme.ui.theme.AppTheme
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -34,7 +34,7 @@ class ReminderSortDialogTest {
         onApplySort: (ReminderSort) -> Unit = {}
     ) {
         composeTestRule.setContent {
-            RemindMeTheme {
+            AppTheme {
                 ReminderSortDialog(
                     initialSort = initialSort,
                     onApplySort = onApplySort,
@@ -50,33 +50,67 @@ class ReminderSortDialogTest {
 
         composeTestRule.apply {
             onNodeWithText("Sort reminders by").assertIsDisplayed()
-            onNodeWithText("Date (Earliest first)").assertIsDisplayed()
-            onNodeWithText("Date (Latest first)").assertIsDisplayed()
+            onNodeWithText("Date - Earliest first").assertIsDisplayed()
+            onNodeWithText("Date - Latest first").assertIsDisplayed()
+            onNodeWithText("Alphabetical A-Z").assertIsDisplayed()
+            onNodeWithText("Alphabetical Z-A").assertIsDisplayed()
             onNodeWithText("Apply").assertIsDisplayed()
         }
     }
 
     @Test
-    fun when_reminder_sort_dialog_with_earliest_first_sort_should_have_only_earliest_first_selected() {
+    fun when_reminder_sort_dialog_with_earliest_first_sort_sshould_have_expected_selection() {
         setContent(
             initialSort = ReminderSort.BY_EARLIEST_DATE_FIRST
         )
 
         composeTestRule.apply {
-            onNodeWithText("Date (Earliest first)").assertIsSelected()
-            onNodeWithText("Date (Latest first)").assertIsNotSelected()
+            onNodeWithText("Date - Earliest first").assertIsSelected()
+            onNodeWithText("Date - Latest first").assertIsNotSelected()
+            onNodeWithText("Alphabetical A-Z").assertIsNotSelected()
+            onNodeWithText("Alphabetical Z-A").assertIsNotSelected()
         }
     }
 
     @Test
-    fun when_reminder_sort_dialog_with_latest_first_sort_should_have_only_latest_first_selected() {
+    fun when_reminder_sort_dialog_with_latest_first_sort_should_have_expected_selection() {
         setContent(
             initialSort = ReminderSort.BY_LATEST_DATE_FIRST
         )
 
         composeTestRule.apply {
-            onNodeWithText("Date (Latest first)").assertIsSelected()
-            onNodeWithText("Date (Earliest first)").assertIsNotSelected()
+            onNodeWithText("Date - Earliest first").assertIsNotSelected()
+            onNodeWithText("Date - Latest first").assertIsSelected()
+            onNodeWithText("Alphabetical A-Z").assertIsNotSelected()
+            onNodeWithText("Alphabetical Z-A").assertIsNotSelected()
+        }
+    }
+
+    @Test
+    fun when_reminder_sort_dialog_with_alphabetical_a_to_z_sort_should_have_expected_selection() {
+        setContent(
+            initialSort = ReminderSort.BY_ALPHABETICAL_A_TO_Z
+        )
+
+        composeTestRule.apply {
+            onNodeWithText("Date - Earliest first").assertIsNotSelected()
+            onNodeWithText("Date - Latest first").assertIsNotSelected()
+            onNodeWithText("Alphabetical A-Z").assertIsSelected()
+            onNodeWithText("Alphabetical Z-A").assertIsNotSelected()
+        }
+    }
+
+    @Test
+    fun when_reminder_sort_dialog_with_alphabetical_z_to_a_sort_should_have_expected_selection() {
+        setContent(
+            initialSort = ReminderSort.BY_ALPHABETICAL_Z_TO_A
+        )
+
+        composeTestRule.apply {
+            onNodeWithText("Date - Earliest first").assertIsNotSelected()
+            onNodeWithText("Date - Latest first").assertIsNotSelected()
+            onNodeWithText("Alphabetical A-Z").assertIsNotSelected()
+            onNodeWithText("Alphabetical Z-A").assertIsSelected()
         }
     }
 
