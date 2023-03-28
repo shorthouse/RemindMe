@@ -1,4 +1,4 @@
-package dev.shorthouse.remindme.ui.reminderinput
+package dev.shorthouse.remindme.ui.input
 
 import android.content.res.Configuration
 import androidx.compose.material3.SnackbarHostState
@@ -20,7 +20,7 @@ import dev.shorthouse.remindme.ui.theme.AppTheme
 @Destination
 @Composable
 fun ReminderEditScreen(
-    inputViewModel: InputViewModel = hiltViewModel(),
+    inputViewModel: ReminderInputViewModel = hiltViewModel(),
     reminderId: Long,
     navigator: DestinationsNavigator
 ) {
