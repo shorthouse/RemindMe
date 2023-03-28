@@ -8,7 +8,7 @@ import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dev.shorthouse.remindme.HiltTestActivity
 import dev.shorthouse.remindme.R
-import dev.shorthouse.remindme.ui.theme.m2.RemindMeTheme
+import dev.shorthouse.remindme.ui.theme.AppTheme
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -28,7 +28,7 @@ class EmptyStateTest {
 
     private fun setContent() {
         composeTestRule.setContent {
-            RemindMeTheme {
+            AppTheme {
                 EmptyState(
                     painter = painterResource(R.drawable.empty_state_upcoming),
                     title = "Test title",
