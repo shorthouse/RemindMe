@@ -34,7 +34,8 @@ import dev.shorthouse.remindme.ui.theme.AppTheme
 fun ReminderSortDialog(
     initialSort: ReminderSort,
     onApplySort: (ReminderSort) -> Unit,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     var selectedSortOption by remember { mutableStateOf(initialSort) }
     val sortOptions = ReminderSort.values()
@@ -43,7 +44,10 @@ fun ReminderSortDialog(
         properties = DialogProperties(usePlatformDefaultWidth = false),
         onDismissRequest = onDismiss
     ) {
-        Surface(shape = MaterialTheme.shapes.medium) {
+        Surface(
+            shape = MaterialTheme.shapes.medium,
+            modifier = modifier
+        ) {
             Column(
                 modifier = Modifier
                     .background(MaterialTheme.colorScheme.surface)

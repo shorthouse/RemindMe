@@ -29,7 +29,8 @@ import java.time.LocalTime
 fun ReminderTimePicker(
     initialTime: LocalTime,
     onConfirm: (LocalTime) -> Unit,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val timePickerState = rememberTimePickerState(
         initialHour = initialTime.hour,
@@ -38,7 +39,10 @@ fun ReminderTimePicker(
     )
 
     Dialog(onDismissRequest = onDismiss) {
-        Surface(shape = MaterialTheme.shapes.extraLarge) {
+        Surface(
+            shape = MaterialTheme.shapes.extraLarge,
+            modifier = modifier
+        ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
