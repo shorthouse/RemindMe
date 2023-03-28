@@ -8,7 +8,7 @@ import com.google.common.truth.Truth.assertThat
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dev.shorthouse.remindme.HiltTestActivity
-import dev.shorthouse.remindme.ui.theme.m2.RemindMeTheme
+import dev.shorthouse.remindme.ui.theme.AppTheme
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -31,7 +31,7 @@ class RemindMeAlertDialogTest {
         onDismiss: () -> Unit = {}
     ) {
         composeTestRule.setContent {
-            RemindMeTheme {
+            AppTheme {
                 RemindMeAlertDialog(
                     title = "Alert dialog title",
                     confirmText = "Confirm",
@@ -43,7 +43,7 @@ class RemindMeAlertDialogTest {
     }
 
     @Test
-    fun when_remindme_alert__dialog_displays_should_show_expected_content() {
+    fun when_alert_dialog_displays_should_show_expected_content() {
         setContent()
 
         composeTestRule.apply {
@@ -54,21 +54,30 @@ class RemindMeAlertDialogTest {
     }
 
     @Test
-    fun when_remindme_alert_dialog_buttons_clicked_should_call_expected_functions() {
-        var isOnConfirmClicked = false
+    fun when_cancel_button_clicked_should_call_on_dismiss() {
         var isOnDismissClicked = false
 
         setContent(
-            onConfirm = { isOnConfirmClicked = true },
             onDismiss = { isOnDismissClicked = true }
         )
 
         composeTestRule.apply {
-            onNodeWithText("Confirm").performClick()
             onNodeWithText("Cancel").performClick()
-
-            assertThat(isOnConfirmClicked).isTrue()
             assertThat(isOnDismissClicked).isTrue()
+        }
+    }
+
+    @Test
+    fun when_ok_button_clicked_should_call_on_confirm() {
+        var isOnConfirmClicked = false
+
+        setContent(
+            onConfirm = { isOnConfirmClicked = true }
+        )
+
+        composeTestRule.apply {
+            onNodeWithText("Confirm").performClick()
+            assertThat(isOnConfirmClicked).isTrue()
         }
     }
 }
