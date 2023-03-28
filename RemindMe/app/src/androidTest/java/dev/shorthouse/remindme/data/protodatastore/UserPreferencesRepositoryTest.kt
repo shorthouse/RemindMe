@@ -23,7 +23,6 @@ import org.junit.Test
 @HiltAndroidTest
 @OptIn(ExperimentalCoroutinesApi::class)
 class UserPreferencesRepositoryTest {
-
     private val testContext: Context = InstrumentationRegistry.getInstrumentation().targetContext
 
     private val testCoroutineDispatcher = StandardTestDispatcher()
@@ -43,8 +42,14 @@ class UserPreferencesRepositoryTest {
         Dispatchers.setMain(testCoroutineDispatcher)
     }
 
+    @After
+    fun cleanup() {
+        Dispatchers.resetMain()
+        testCoroutineScope.cancel()
+    }
+
     @Test
-    fun when_write_sort_earliest_date_first_should_write_expected_value() {
+    fun when_set_sort_to_earliest_date_first_should_update_user_preferences() {
         testCoroutineScope.runTest {
             val expectedUserPreferences = UserPreferences(
                 reminderSortOrder = ReminderSort.BY_EARLIEST_DATE_FIRST
@@ -61,7 +66,7 @@ class UserPreferencesRepositoryTest {
     }
 
     @Test
-    fun when_write_sort_latest_date_first_should_write_expected_value() {
+    fun when_set_sort_to_latest_date_first_should_update_user_preferences() {
         testCoroutineScope.runTest {
             val expectedUserPreferences = UserPreferences(
                 reminderSortOrder = ReminderSort.BY_LATEST_DATE_FIRST
@@ -77,9 +82,54 @@ class UserPreferencesRepositoryTest {
         }
     }
 
-    @After
-    fun cleanUp() {
-        Dispatchers.resetMain()
-        testCoroutineScope.cancel()
+    @Test
+    fun when_set_filter_to_overdue_should_update_user_preferences() {
+        testCoroutineScope.runTest {
+            val expectedUserPreferences = UserPreferences(
+                reminderFilter = ReminderFilter.OVERDUE
+            )
+
+            userPreferencesRepository.updateReminderFilter(
+                ReminderFilter.OVERDUE
+            )
+
+            val userPreferences = userPreferencesRepository.userPreferencesFlow.first()
+
+            assertThat(userPreferences).isEqualTo(expectedUserPreferences)
+        }
+    }
+
+    @Test
+    fun when_set_filter_to_upcoming_should_update_user_preferences() {
+        testCoroutineScope.runTest {
+            val expectedUserPreferences = UserPreferences(
+                reminderFilter = ReminderFilter.UPCOMING
+            )
+
+            userPreferencesRepository.updateReminderFilter(
+                ReminderFilter.UPCOMING
+            )
+
+            val userPreferences = userPreferencesRepository.userPreferencesFlow.first()
+
+            assertThat(userPreferences).isEqualTo(expectedUserPreferences)
+        }
+    }
+
+    @Test
+    fun when_set_filter_to_completed_should_update_user_preferences() {
+        testCoroutineScope.runTest {
+            val expectedUserPreferences = UserPreferences(
+                reminderFilter = ReminderFilter.COMPLETED
+            )
+
+            userPreferencesRepository.updateReminderFilter(
+                ReminderFilter.COMPLETED
+            )
+
+            val userPreferences = userPreferencesRepository.userPreferencesFlow.first()
+
+            assertThat(userPreferences).isEqualTo(expectedUserPreferences)
+        }
     }
 }
