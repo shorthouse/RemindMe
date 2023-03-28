@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import dev.shorthouse.remindme.ui.theme.AppTheme
 
 @Composable
-fun BottomSheetButton(
+fun SheetButton(
     buttonIcon: ImageVector,
     buttonLabel: String,
     onSelected: () -> Unit,
@@ -71,7 +71,7 @@ fun BottomSheetButton(
 )
 fun BottomSheetButtonPreview() {
     AppTheme {
-        BottomSheetButton(
+        SheetButton(
             buttonIcon = Icons.Rounded.Edit,
             buttonLabel = "Edit",
             onSelected = {}
