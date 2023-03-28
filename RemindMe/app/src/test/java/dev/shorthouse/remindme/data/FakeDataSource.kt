@@ -35,7 +35,7 @@ class FakeDataSource(
     override fun getOverdueReminders(now: ZonedDateTime): Flow<List<Reminder>> {
         return flowOf(
             reminders.filter {
-                it.startDateTime.isBefore(now) || it.startDateTime.isEqual(now)
+                it.startDateTime.isBefore(now) && !it.isCompleted
             }
         )
     }
@@ -43,15 +43,15 @@ class FakeDataSource(
     override fun getUpcomingReminders(now: ZonedDateTime): Flow<List<Reminder>> {
         return flowOf(
             reminders.filter {
-                it.startDateTime.isAfter(now)
+                !it.startDateTime.isBefore(now) && !it.isCompleted
             }
         )
     }
 
     override fun getCompletedReminders(): Flow<List<Reminder>> {
         return flowOf(
-            reminders.filter { reminder ->
-                reminder.isCompleted
+            reminders.filter {
+                it.isCompleted
             }
         )
     }
