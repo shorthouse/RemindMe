@@ -1,4 +1,4 @@
-package dev.shorthouse.remindme.ui.reminderlist
+package dev.shorthouse.remindme.ui.list
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
@@ -36,6 +36,7 @@ import dev.shorthouse.remindme.ui.theme.AppTheme
 import dev.shorthouse.remindme.ui.theme.Blue
 import dev.shorthouse.remindme.ui.theme.Green
 import dev.shorthouse.remindme.ui.theme.Red
+import java.time.temporal.ChronoUnit
 
 @Composable
 fun ReminderCard(
@@ -88,10 +89,15 @@ fun ReminderCard(
                 }
 
                 reminder.repeatInterval?.let { repeatInterval ->
+                    val pluralId = when (repeatInterval.unit) {
+                        ChronoUnit.DAYS -> R.plurals.repeat_interval_days
+                        else -> R.plurals.repeat_interval_days
+                    }
+
                     ReminderCardDetail(
                         icon = Icons.Rounded.Repeat,
                         text = pluralStringResource(
-                            repeatInterval.getPluralId(),
+                            pluralId,
                             repeatInterval.amount.toInt(),
                             repeatInterval.amount
                         ),
@@ -114,7 +120,10 @@ fun ReminderCard(
 }
 
 @Composable
-private fun ReminderCardStatus(reminder: Reminder) {
+private fun ReminderCardStatus(
+    reminder: Reminder,
+    modifier: Modifier = Modifier
+) {
     val statusText = when {
         reminder.isCompleted -> stringResource(R.string.reminder_completed)
         reminder.isOverdue() -> stringResource(R.string.reminder_overdue)
@@ -129,7 +138,8 @@ private fun ReminderCardStatus(reminder: Reminder) {
 
     Surface(
         shape = RoundedCornerShape(8.dp),
-        color = statusBackgroundColor
+        color = statusBackgroundColor,
+        modifier = modifier
     ) {
         Text(
             text = statusText,
