@@ -1,10 +1,12 @@
 package dev.shorthouse.remindme.ui.component.sheet
 
 import android.content.res.Configuration
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -18,13 +20,18 @@ import dev.shorthouse.remindme.ui.util.enums.ReminderAction
 fun BottomSheetReminderActions(
     reminder: Reminder,
     onReminderActionSelected: (ReminderAction) -> Unit,
-    onDismissRequest: () -> Unit
+    onDismissRequest: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     ModalBottomSheet(
         onDismissRequest = onDismissRequest,
-        shape = RoundedCornerShape(0.dp),
+        shape = MaterialTheme.shapes.large.copy(
+            bottomStart = CornerSize(0.dp),
+            bottomEnd = CornerSize(0.dp)
+        ),
         tonalElevation = 0.dp,
-        dragHandle = null
+        dragHandle = null,
+        modifier = modifier
     ) {
         SheetReminderActions(
             reminder = reminder,

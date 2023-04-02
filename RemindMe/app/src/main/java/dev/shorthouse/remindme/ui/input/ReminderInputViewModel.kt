@@ -1,4 +1,4 @@
-package dev.shorthouse.remindme.ui.reminderinput
+package dev.shorthouse.remindme.ui.input
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,17 +11,17 @@ import dev.shorthouse.remindme.domain.reminder.EditReminderUseCase
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.ui.state.ReminderState
 import dev.shorthouse.remindme.ui.util.UiText
+import java.time.ZonedDateTime
+import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.time.ZonedDateTime
-import javax.inject.Inject
 
 @HiltViewModel
-class InputViewModel @Inject constructor(
+class ReminderInputViewModel @Inject constructor(
     private val reminderRepository: ReminderRepository,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
     private val addReminderUseCase: AddReminderUseCase,

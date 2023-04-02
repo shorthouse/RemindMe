@@ -1,6 +1,5 @@
-package dev.shorthouse.remindme.ui.reminderlist
+package dev.shorthouse.remindme.ui.list
 
-import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,17 +14,17 @@ import dev.shorthouse.remindme.domain.reminder.CompleteRepeatReminderSeriesUseCa
 import dev.shorthouse.remindme.domain.reminder.DeleteReminderUseCase
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.ui.util.enums.ReminderAction
-import java.time.ZonedDateTime
-import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.time.ZonedDateTime
+import javax.inject.Inject
 
 @HiltViewModel
-class ListViewModel @Inject constructor(
+class ReminderListViewModel @Inject constructor(
     private val reminderRepository: ReminderRepository,
     private val userPreferencesRepository: UserPreferencesRepository,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
@@ -42,11 +41,6 @@ class ListViewModel @Inject constructor(
     private val _searchQuery = MutableStateFlow("")
     private val _isSearchBarShown = MutableStateFlow(false)
 
-    init {
-        initialiseUiState()
-    }
-
-    @VisibleForTesting
     fun initialiseUiState() {
         _uiState.update { it.copy(isLoading = true) }
 
@@ -119,20 +113,6 @@ class ListViewModel @Inject constructor(
         }
     }
 
-    fun processReminderAction(
-        reminderAction: ReminderAction,
-        reminder: Reminder
-    ) {
-        when (reminderAction) {
-            ReminderAction.COMPLETE_ONETIME -> completeOnetimeReminderUseCase(reminder)
-            ReminderAction.COMPLETE_REPEAT_OCCURRENCE -> completeRepeatReminderOccurrenceUseCase(
-                reminder
-            )
-            ReminderAction.COMPLETE_REPEAT_SERIES -> completeRepeatReminderSeriesUseCase(reminder)
-            else -> deleteReminderUseCase(reminder)
-        }
-    }
-
     fun updateReminderSortOrder(reminderSortOrder: ReminderSort) {
         viewModelScope.launch(ioDispatcher) {
             userPreferencesRepository.updateReminderSortOrder(reminderSortOrder)
@@ -161,6 +141,23 @@ class ListViewModel @Inject constructor(
     fun updateIsSearchBarShown(isSearchBarShown: Boolean) {
         _isSearchBarShown.value = isSearchBarShown
         _uiState.update { it.copy(isSearchBarShown = isSearchBarShown) }
+    }
+
+    fun processReminderAction(reminderAction: ReminderAction, reminder: Reminder) {
+        when (reminderAction) {
+            ReminderAction.COMPLETE_ONETIME -> {
+                completeOnetimeReminderUseCase(reminder)
+            }
+            ReminderAction.COMPLETE_REPEAT_OCCURRENCE -> {
+                completeRepeatReminderOccurrenceUseCase(reminder)
+            }
+            ReminderAction.COMPLETE_REPEAT_SERIES -> {
+                completeRepeatReminderSeriesUseCase(reminder)
+            }
+            else -> {
+                deleteReminderUseCase(reminder)
+            }
+        }
     }
 }
 
