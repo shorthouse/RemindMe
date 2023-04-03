@@ -74,6 +74,7 @@ configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
     ignoreFailures.set(false)
     android.set(true)
 }
+
 kapt {
     correctErrorTypes = true
 }
@@ -81,65 +82,54 @@ kapt {
 dependencies {
     // Core
     implementation("androidx.core:core-ktx:1.9.0")
-    implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.8.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.core:core-splashscreen:1.0.0")
-    implementation("androidx.legacy:legacy-support-v4:1.0.0")
-    implementation("androidx.datastore:datastore-preferences-core:1.0.0")
 
     // Compose
-    val composeBom = platform("androidx.compose:compose-bom:2023.01.00")
+    val composeBom = platform("androidx.compose:compose-bom:2023.03.00")
     implementation(composeBom)
     androidTestImplementation(composeBom)
-
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.0")
-    implementation("androidx.compose.ui:ui-tooling-preview:1.3.3")
+    implementation("androidx.compose.material3:material3:1.1.0-beta01")
+    implementation("androidx.compose.material:material-icons-extended:1.4.0")
+    implementation("com.google.accompanist:accompanist-permissions:0.30.0")
+    implementation("com.google.accompanist:accompanist-systemuicontroller:0.30.0")
+    implementation("io.github.raamcosta.compose-destinations:core:1.8.38-beta")
     debugImplementation("androidx.compose.ui:ui-tooling")
-    implementation("androidx.compose.material3:material3:1.1.0-alpha08")
-    implementation("androidx.navigation:navigation-compose:2.5.3")
-    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
-    implementation("io.github.vanpra.compose-material-dialogs:datetime:0.9.0")
-    implementation("androidx.compose.material:material-icons-extended:1.3.1")
-    ksp("io.github.raamcosta.compose-destinations:ksp:1.8.36-beta")
-    implementation("io.github.raamcosta.compose-destinations:core:1.8.36-beta")
-    implementation("com.google.accompanist:accompanist-permissions:0.28.0")
-    implementation("com.google.accompanist:accompanist-systemuicontroller:0.28.0")
+    ksp("io.github.raamcosta.compose-destinations:ksp:1.8.38-beta")
 
     // Lifecycle
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.0")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.0")
-    implementation("androidx.test.ext:junit-ktx:1.1.5")
-    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-testing:2.6.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.1")
+    implementation("androidx.lifecycle:lifecycle-runtime-testing:2.6.1")
 
     // Room
-    implementation("androidx.room:room-runtime:2.5.0")
-    implementation("androidx.navigation:navigation-testing:2.5.3")
-    implementation("androidx.room:room-ktx:2.5.0")
-    debugImplementation("androidx.fragment:fragment-testing:1.5.5")
-    kapt("androidx.room:room-compiler:2.5.0")
+    implementation("androidx.room:room-runtime:2.5.1")
+    implementation("androidx.room:room-ktx:2.5.1")
+    kapt("androidx.room:room-compiler:2.5.1")
 
     // Proto Datastore
     implementation("androidx.datastore:datastore:1.0.0")
-    implementation("com.google.protobuf:protobuf-javalite:3.18.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
+    implementation("com.google.protobuf:protobuf-javalite:3.22.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
 
     // GSON
-    implementation("com.google.code.gson:gson:2.9.0")
+    implementation("com.google.code.gson:gson:2.10.1")
 
     // Hilt
-    implementation("com.google.dagger:hilt-android:2.38.1")
-    kapt("com.google.dagger:hilt-android-compiler:2.38.1")
+    implementation("com.google.dagger:hilt-android:2.45")
+    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+    kapt("com.google.dagger:hilt-android-compiler:2.45")
 
     // Local unit tests
     testImplementation("androidx.test:core:1.5.0")
     testImplementation("junit:junit:4.13.2")
+    testImplementation("androidx.test.ext:junit-ktx:1.1.5")
     testImplementation("org.robolectric:robolectric:4.9.2")
     testImplementation("com.google.truth:truth:1.1.3")
     testImplementation("io.mockk:mockk:1.13.4")
-    testImplementation("org.mockito:mockito-core:4.0.0")
-    testImplementation("org.mockito.kotlin:mockito-kotlin:4.0.0")
+    testImplementation("org.mockito:mockito-core:5.2.0")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:4.1.0")
     testImplementation("androidx.arch.core:core-testing:2.2.0")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
 
@@ -155,12 +145,12 @@ dependencies {
     androidTestImplementation("androidx.navigation:navigation-testing:2.5.3")
     androidTestImplementation("com.google.truth:truth:1.1.3")
     androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
-    androidTestImplementation("org.mockito:mockito-android:3.8.0")
+    androidTestImplementation("org.mockito:mockito-android:5.2.0")
     androidTestImplementation("androidx.test.uiautomator:uiautomator:2.2.0")
-    kaptAndroidTest("com.google.dagger:hilt-android-compiler:2.38.1")
+    androidTestImplementation("com.google.dagger:hilt-android-testing:2.45")
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.4.0")
+    kaptAndroidTest("com.google.dagger:hilt-android-compiler:2.45")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
-    androidTestImplementation("com.google.dagger:hilt-android-testing:2.38.1")
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.3.3")
 }
 
 protobuf {
