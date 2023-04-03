@@ -14,7 +14,7 @@ import org.junit.Rule
 import org.junit.Test
 
 @HiltAndroidTest
-class RemindMeAlertDialogTest {
+class ReminderDatePickerTest {
     @get:Rule(order = 1)
     var hiltTestRule = HiltAndroidRule(this)
 
@@ -27,14 +27,14 @@ class RemindMeAlertDialogTest {
     }
 
     private fun setContent(
-        onConfirm: () -> Unit = {},
+        initialDate: String = "Sat, 01 Jan 2000",
+        onConfirm: (String) -> Unit = {},
         onDismiss: () -> Unit = {}
     ) {
         composeTestRule.setContent {
             AppTheme {
-                RemindMeAlertDialog(
-                    title = "Alert dialog title",
-                    confirmText = "Confirm",
+                ReminderDatePicker(
+                    initialDate = initialDate,
                     onConfirm = onConfirm,
                     onDismiss = onDismiss
                 )
@@ -43,13 +43,14 @@ class RemindMeAlertDialogTest {
     }
 
     @Test
-    fun when_alert_dialog_displays_should_show_expected_content() {
+    fun when_reminder_date_picker_displays_should_show_expected_content() {
         setContent()
 
         composeTestRule.apply {
-            onNodeWithText("Alert dialog title").assertIsDisplayed()
+            onNodeWithText("Jan 1, 2000").assertIsDisplayed()
+            onNodeWithText("January 2000").assertIsDisplayed()
             onNodeWithText("Cancel").assertIsDisplayed()
-            onNodeWithText("Confirm").assertIsDisplayed()
+            onNodeWithText("OK").assertIsDisplayed()
         }
     }
 
@@ -76,7 +77,7 @@ class RemindMeAlertDialogTest {
         )
 
         composeTestRule.apply {
-            onNodeWithText("Confirm").performClick()
+            onNodeWithText("OK").performClick()
             assertThat(isOnConfirmClicked).isTrue()
         }
     }

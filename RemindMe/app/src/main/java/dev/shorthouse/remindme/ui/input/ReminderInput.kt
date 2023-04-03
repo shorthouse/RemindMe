@@ -1,4 +1,4 @@
-package dev.shorthouse.remindme.ui.reminderinput
+package dev.shorthouse.remindme.ui.input
 
 import android.content.res.Configuration
 import androidx.compose.foundation.clickable
@@ -76,7 +76,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun ReminderInputScreen(
     reminderState: ReminderState,
-    inputViewModel: InputViewModel,
+    inputViewModel: ReminderInputViewModel,
     topBarTitle: String,
     navigator: DestinationsNavigator
 ) {
@@ -120,7 +120,8 @@ fun ReminderInputScaffold(
     snackbarHostState: SnackbarHostState,
     topBarTitle: String,
     onNavigateUp: () -> Unit,
-    onSave: () -> Unit
+    onSave: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
@@ -138,7 +139,8 @@ fun ReminderInputScaffold(
                     .padding(scaffoldPadding)
                     .fillMaxSize()
             )
-        }
+        },
+        modifier = modifier
     )
 }
 
@@ -147,7 +149,8 @@ fun ReminderInputScaffold(
 fun ReminderInputTopBar(
     topBarTitle: String,
     onNavigateUp: () -> Unit,
-    onSave: () -> Unit
+    onSave: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
 
@@ -196,7 +199,8 @@ fun ReminderInputTopBar(
         },
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = topBarColor
-        )
+        ),
+        modifier = modifier
     )
 }
 
@@ -328,11 +332,12 @@ fun ReminderSwitchRow(
     switchText: String,
     switchTestTag: String,
     isChecked: Boolean,
-    onCheckedChange: (Boolean) -> Unit
+    onCheckedChange: (Boolean) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.fillMaxWidth()
+        modifier = modifier.fillMaxWidth()
     ) {
         TextWithLeftIcon(
             icon = icon,
@@ -351,19 +356,26 @@ fun ReminderSwitchRow(
 }
 
 @Composable
-fun ReminderNotificationInput(reminderState: ReminderState) {
+fun ReminderNotificationInput(
+    reminderState: ReminderState,
+    modifier: Modifier = Modifier
+) {
     ReminderSwitchRow(
         icon = Icons.Rounded.NotificationsNone,
         iconContentDescription = stringResource(R.string.cd_details_notification),
         switchText = stringResource(R.string.title_send_notification),
         switchTestTag = stringResource(R.string.test_tag_switch_notification),
         isChecked = reminderState.isNotificationSent,
-        onCheckedChange = { reminderState.isNotificationSent = it }
+        onCheckedChange = { reminderState.isNotificationSent = it },
+        modifier = modifier
     )
 }
 
 @Composable
-fun ReminderNotesInput(reminderState: ReminderState, modifier: Modifier = Modifier) {
+fun ReminderNotesInput(
+    reminderState: ReminderState,
+    modifier: Modifier = Modifier
+) {
     val notesMaxLength = integerResource(R.integer.reminder_notes_max_length)
 
     Row(modifier = modifier) {
@@ -388,14 +400,18 @@ fun ReminderNotesInput(reminderState: ReminderState, modifier: Modifier = Modifi
 }
 
 @Composable
-fun ReminderRepeatIntervalInput(reminderState: ReminderState) {
+fun ReminderRepeatIntervalInput(
+    reminderState: ReminderState,
+    modifier: Modifier = Modifier
+) {
     ReminderSwitchRow(
         icon = Icons.Rounded.Refresh,
         iconContentDescription = null,
         switchText = stringResource(R.string.title_repeat_reminder),
         switchTestTag = stringResource(R.string.test_tag_switch_repeat_interval),
         isChecked = reminderState.isRepeatReminder,
-        onCheckedChange = { reminderState.isRepeatReminder = it }
+        onCheckedChange = { reminderState.isRepeatReminder = it },
+        modifier = modifier
     )
 
     val repeatAmount = reminderState.repeatAmount.toIntOrNull() ?: 0
@@ -448,7 +464,10 @@ fun ReminderRepeatIntervalInput(reminderState: ReminderState) {
 }
 
 @Composable
-private fun RepeatAmountInput(reminderState: ReminderState) {
+private fun RepeatAmountInput(
+    reminderState: ReminderState,
+    modifier: Modifier = Modifier
+) {
     val repeatAmountMaxLength = integerResource(R.integer.reminder_repeat_amount_max_length)
 
     OutlinedTextField(
@@ -465,7 +484,7 @@ private fun RepeatAmountInput(reminderState: ReminderState) {
             imeAction = ImeAction.Done,
             keyboardType = KeyboardType.Number
         ),
-        modifier = Modifier
+        modifier = modifier
             .width(72.dp)
             .padding(end = 16.dp)
             .testTag(stringResource(R.string.test_tag_text_field_repeat_amount))
@@ -473,7 +492,10 @@ private fun RepeatAmountInput(reminderState: ReminderState) {
 }
 
 @Composable
-private fun RepeatUnitInput(reminderState: ReminderState) {
+private fun RepeatUnitInput(
+    reminderState: ReminderState,
+    modifier: Modifier = Modifier
+) {
     val repeatUnitPluralIds = listOf(R.plurals.repeat_unit_days, R.plurals.repeat_unit_weeks)
     val repeatAmount = reminderState.repeatAmount.toIntOrNull() ?: 0
 
@@ -484,7 +506,7 @@ private fun RepeatUnitInput(reminderState: ReminderState) {
         )
     }
 
-    Column {
+    Column(modifier = modifier) {
         repeatUnitOptions.forEach { text ->
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -516,8 +538,8 @@ private fun RepeatUnitInput(reminderState: ReminderState) {
 fun TextWithLeftIcon(
     icon: ImageVector,
     text: String,
-    modifier: Modifier = Modifier,
-    contentDescription: String?
+    contentDescription: String?,
+    modifier: Modifier = Modifier
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,

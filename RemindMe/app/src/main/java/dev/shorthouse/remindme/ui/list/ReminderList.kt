@@ -1,4 +1,4 @@
-package dev.shorthouse.remindme.ui.reminderlist
+package dev.shorthouse.remindme.ui.list
 
 import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibility
@@ -71,9 +71,10 @@ import dev.shorthouse.remindme.ui.util.enums.ReminderAction
 @Destination
 @Composable
 fun ReminderListScreen(
-    listViewModel: ListViewModel = hiltViewModel(),
+    listViewModel: ReminderListViewModel = hiltViewModel(),
     navigator: DestinationsNavigator
 ) {
+    listViewModel.initialiseUiState()
     val uiState by listViewModel.uiState.collectAsStateWithLifecycle()
 
     NotificationPermissionRequester()
@@ -124,7 +125,8 @@ fun ReminderListScaffold(
     onNavigateAdd: () -> Unit,
     onDismissBottomSheet: () -> Unit,
     onReminderCard: (Reminder) -> Unit,
-    onReminderActionSelected: (ReminderAction) -> Unit
+    onReminderActionSelected: (ReminderAction) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Scaffold(
         topBar = {
@@ -200,7 +202,8 @@ fun ReminderListScaffold(
                     )
                 }
             }
-        }
+        },
+        modifier = modifier
     )
 }
 
@@ -213,7 +216,8 @@ fun ReminderListTopBar(
     searchQuery: String,
     onSearchQueryChange: (String) -> Unit,
     onCloseSearch: () -> Unit,
-    isSearchBarShown: Boolean
+    isSearchBarShown: Boolean,
+    modifier: Modifier = Modifier
 ) {
     var isSortDialogOpen by remember { mutableStateOf(false) }
 
@@ -269,7 +273,8 @@ fun ReminderListTopBar(
             },
             colors = TopAppBarDefaults.topAppBarColors(
                 containerColor = topBarColor
-            )
+            ),
+            modifier = modifier
         )
     }
 }
@@ -278,11 +283,12 @@ fun ReminderListTopBar(
 @Composable
 fun ReminderListFilterChips(
     selectedReminderFilter: ReminderFilter,
-    onApplyFilter: (ReminderFilter) -> Unit
+    onApplyFilter: (ReminderFilter) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Row(
         horizontalArrangement = Arrangement.SpaceEvenly,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .horizontalScroll(rememberScrollState())
             .padding(

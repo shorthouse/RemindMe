@@ -4,13 +4,14 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 
 @Entity
 data class Reminder(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0L,
     val name: String = "",
-    val startDateTime: ZonedDateTime = ZonedDateTime.now(),
+    val startDateTime: ZonedDateTime = ZonedDateTime.now().truncatedTo(ChronoUnit.MINUTES),
     val isNotificationSent: Boolean = false,
     val repeatInterval: RepeatInterval? = null,
     val notes: String? = null,

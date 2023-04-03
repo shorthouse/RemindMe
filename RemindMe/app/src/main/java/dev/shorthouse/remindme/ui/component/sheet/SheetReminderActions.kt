@@ -96,7 +96,7 @@ fun SheetReminderActions(
             )
 
             reminderActionItems.forEach { bottomSheetItem ->
-                BottomSheetButton(
+                SheetButton(
                     buttonIcon = bottomSheetItem.icon,
                     buttonLabel = bottomSheetItem.label,
                     onSelected = { onReminderActionSelected(bottomSheetItem.action) }

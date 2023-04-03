@@ -5,10 +5,10 @@ import dev.shorthouse.remindme.di.IoDispatcher
 import dev.shorthouse.remindme.domain.notification.CancelScheduledNotificationUseCase
 import dev.shorthouse.remindme.domain.notification.RemoveDisplayingNotificationUseCase
 import dev.shorthouse.remindme.model.Reminder
+import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 class CompleteOnetimeReminderUseCase @Inject constructor(
     private val reminderRepository: ReminderRepository,

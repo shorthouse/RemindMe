@@ -9,6 +9,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -25,7 +26,8 @@ import java.time.format.DateTimeFormatter
 fun ReminderDatePicker(
     initialDate: String,
     onConfirm: (String) -> Unit,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val dateFormatter = remember { DateTimeFormatter.ofPattern("EEE, dd MMM yyyy") }
 
@@ -50,7 +52,8 @@ fun ReminderDatePicker(
                 Text(text = stringResource(R.string.dialog_action_cancel))
             }
         },
-        tonalElevation = 0.dp
+        tonalElevation = 0.dp,
+        modifier = modifier
     ) {
         DatePicker(
             state = datePickerState,

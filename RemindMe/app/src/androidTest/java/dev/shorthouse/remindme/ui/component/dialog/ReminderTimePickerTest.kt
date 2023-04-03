@@ -12,9 +12,10 @@ import dev.shorthouse.remindme.ui.theme.AppTheme
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import java.time.LocalTime
 
 @HiltAndroidTest
-class RemindMeAlertDialogTest {
+class ReminderTimePickerTest {
     @get:Rule(order = 1)
     var hiltTestRule = HiltAndroidRule(this)
 
@@ -27,14 +28,14 @@ class RemindMeAlertDialogTest {
     }
 
     private fun setContent(
-        onConfirm: () -> Unit = {},
+        initialTime: LocalTime = LocalTime.parse("08:00"),
+        onConfirm: (LocalTime) -> Unit = {},
         onDismiss: () -> Unit = {}
     ) {
         composeTestRule.setContent {
             AppTheme {
-                RemindMeAlertDialog(
-                    title = "Alert dialog title",
-                    confirmText = "Confirm",
+                ReminderTimePicker(
+                    initialTime = initialTime,
                     onConfirm = onConfirm,
                     onDismiss = onDismiss
                 )
@@ -43,13 +44,14 @@ class RemindMeAlertDialogTest {
     }
 
     @Test
-    fun when_alert_dialog_displays_should_show_expected_content() {
+    fun when_time_picker_dialog_displays_should_show_expected_content() {
         setContent()
 
         composeTestRule.apply {
-            onNodeWithText("Alert dialog title").assertIsDisplayed()
+            onNodeWithText("08").assertIsDisplayed()
+            onNodeWithText("00").assertIsDisplayed()
             onNodeWithText("Cancel").assertIsDisplayed()
-            onNodeWithText("Confirm").assertIsDisplayed()
+            onNodeWithText("OK").assertIsDisplayed()
         }
     }
 
@@ -76,7 +78,7 @@ class RemindMeAlertDialogTest {
         )
 
         composeTestRule.apply {
-            onNodeWithText("Confirm").performClick()
+            onNodeWithText("OK").performClick()
             assertThat(isOnConfirmClicked).isTrue()
         }
     }

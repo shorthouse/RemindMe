@@ -1,6 +1,6 @@
 package dev.shorthouse.remindme.ui.input
 
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotSelected
 import androidx.compose.ui.test.assertIsOff
@@ -16,13 +16,12 @@ import androidx.compose.ui.test.performTextInput
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dev.shorthouse.remindme.HiltTestActivity
-import dev.shorthouse.remindme.ui.reminderinput.ReminderInputScaffold
 import dev.shorthouse.remindme.ui.state.ReminderState
-import dev.shorthouse.remindme.ui.theme.m2.RemindMeTheme
-import java.time.LocalTime
+import dev.shorthouse.remindme.ui.theme.AppTheme
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import java.time.LocalTime
 
 @HiltAndroidTest
 class ReminderInputTest {
@@ -66,11 +65,11 @@ class ReminderInputTest {
 
     private fun setAddContent() {
         composeTestRule.setContent {
-            RemindMeTheme {
+            AppTheme {
                 ReminderInputScaffold(
                     reminderState = reminderAddState,
-                    scaffoldState = rememberScaffoldState(),
-                    topBarTitle = "Add reminder",
+                    snackbarHostState = SnackbarHostState(),
+                    topBarTitle = "Add Reminder",
                     onNavigateUp = {},
                     onSave = {}
                 )
@@ -78,13 +77,13 @@ class ReminderInputTest {
         }
     }
 
-    private fun setEditContent() {
+    private fun setContent() {
         composeTestRule.setContent {
-            RemindMeTheme {
+            AppTheme {
                 ReminderInputScaffold(
                     reminderState = reminderEditState,
-                    scaffoldState = rememberScaffoldState(),
-                    topBarTitle = "Edit reminder",
+                    snackbarHostState = SnackbarHostState(),
+                    topBarTitle = "Edit Reminder",
                     onNavigateUp = {},
                     onSave = {}
                 )
@@ -97,7 +96,7 @@ class ReminderInputTest {
         setAddContent()
 
         composeTestRule.apply {
-            onNodeWithText("Add reminder").assertIsDisplayed()
+            onNodeWithText("Add Reminder").assertIsDisplayed()
             onNodeWithContentDescription("Close").assertIsDisplayed()
             onNodeWithContentDescription("Save reminder").assertIsDisplayed()
 
@@ -113,7 +112,6 @@ class ReminderInputTest {
             onNodeWithText("Send notification").assertIsDisplayed()
             onNodeWithTag("Test Tag Switch Notification").assertIsOff()
 
-            onNodeWithContentDescription("Repeat Interval").assertIsDisplayed()
             onNodeWithText("Repeat reminder").assertIsDisplayed()
             onNodeWithTag("Test Tag Switch Repeat Interval").assertIsOff()
 
@@ -124,10 +122,10 @@ class ReminderInputTest {
 
     @Test
     fun when_reminder_edit_created_should_display_content() {
-        setEditContent()
+        setContent()
 
         composeTestRule.apply {
-            onNodeWithText("Edit reminder").assertIsDisplayed()
+            onNodeWithText("Edit Reminder").assertIsDisplayed()
             onNodeWithContentDescription("Close").assertIsDisplayed()
             onNodeWithContentDescription("Save reminder").assertIsDisplayed()
             onNodeWithText("Reminder name").assertIsDisplayed()
@@ -142,7 +140,6 @@ class ReminderInputTest {
             onNodeWithText("Send notification").assertIsDisplayed()
             onNodeWithTag("Test Tag Switch Repeat Interval").assertIsOn()
 
-            onNodeWithContentDescription("Repeat Interval").assertIsDisplayed()
             onNodeWithText("Repeat reminder").assertIsDisplayed()
             onNodeWithTag("Test Tag Switch Repeat Interval").assertIsOn()
 
@@ -159,8 +156,35 @@ class ReminderInputTest {
     }
 
     @Test
+    fun when_reminder_date_clicked_should_display_date_picker() {
+        setContent()
+
+        composeTestRule.apply {
+            onNodeWithContentDescription("Date").performClick()
+            waitForIdle()
+            onNodeWithText("Jan 2, 2000").assertIsDisplayed()
+            onNodeWithText("January 2000").assertIsDisplayed()
+            onNodeWithText("Cancel").assertIsDisplayed()
+            onNodeWithText("OK").assertIsDisplayed()
+        }
+    }
+
+    @Test
+    fun when_reminder_time_clicked_should_display_time_picker() {
+        setContent()
+
+        composeTestRule.apply {
+            onNodeWithContentDescription("Time").performClick()
+            waitForIdle()
+            onNodeWithContentDescription("Select hour").assertIsDisplayed()
+            onNodeWithText("Cancel").assertIsDisplayed()
+            onNodeWithText("OK").assertIsDisplayed()
+        }
+    }
+
+    @Test
     fun when_repeat_reminder_switch_toggled_should_toggle_repeat_input_fields() {
-        setEditContent()
+        setContent()
 
         composeTestRule.apply {
             onNodeWithTag("Test Tag Switch Repeat Interval").assertIsOn()
@@ -183,7 +207,7 @@ class ReminderInputTest {
 
     @Test
     fun when_repeat_amount_plural_changed_should_change_repeat_unit_plural() {
-        setEditContent()
+        setContent()
 
         composeTestRule.apply {
             onNodeWithTag("Test Tag Text Field Repeat Amount").performTextClearance()
