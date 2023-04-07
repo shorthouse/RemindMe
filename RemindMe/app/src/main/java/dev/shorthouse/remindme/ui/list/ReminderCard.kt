@@ -23,7 +23,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -50,8 +49,7 @@ fun ReminderCard(
         color = MaterialTheme.colorScheme.surface,
         shape = RoundedCornerShape(12.dp),
         onClick = { onReminderCard(reminder) },
-        modifier = modifier
-            .fillMaxWidth()
+        modifier = modifier.fillMaxWidth()
     ) {
         Column(
             modifier = Modifier
@@ -68,7 +66,8 @@ fun ReminderCard(
                     R.string.reminder_card_date_time,
                     reminder.getFormattedDate(),
                     reminder.getFormattedTime()
-                )
+                ),
+                style = MaterialTheme.typography.bodyMedium
             )
 
             Spacer(Modifier.height(12.dp))
@@ -94,26 +93,55 @@ fun ReminderCard(
                         else -> R.plurals.repeat_interval_days
                     }
 
-                    ReminderCardDetail(
-                        icon = Icons.Rounded.Repeat,
-                        text = pluralStringResource(
-                            pluralId,
-                            repeatInterval.amount.toInt(),
-                            repeatInterval.amount
-                        ),
-                        contentDescription = stringResource(R.string.cd_details_repeat_interval)
-                    )
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = modifier
+                    ) {
+                        Icon(
+                            imageVector = Icons.Rounded.Repeat,
+                            contentDescription = stringResource(
+                                R.string.cd_details_repeat_interval
+                            ),
+                            tint = MaterialTheme.colorScheme.outline,
+                            modifier = Modifier.size(20.dp)
+                        )
+
+                        Spacer(Modifier.width(8.dp))
+
+                        Text(
+                            text = pluralStringResource(
+                                pluralId,
+                                repeatInterval.amount.toInt(),
+                                repeatInterval.amount
+                            ),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onBackground
+                        )
+                    }
                 }
             }
 
             reminder.notes?.let { notes ->
                 Spacer(Modifier.height(12.dp))
 
-                ReminderCardDetail(
-                    icon = Icons.Rounded.Notes,
-                    text = notes,
-                    contentDescription = stringResource(R.string.cd_details_notes)
-                )
+                Row(modifier = modifier) {
+                    Icon(
+                        imageVector = Icons.Rounded.Notes,
+                        contentDescription = stringResource(R.string.cd_details_notes),
+                        tint = MaterialTheme.colorScheme.outline,
+                        modifier = Modifier
+                            .size(22.dp)
+                            .padding(top = 2.dp)
+                    )
+
+                    Spacer(Modifier.width(8.dp))
+
+                    Text(
+                        text = notes,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
+                }
             }
         }
     }
@@ -146,34 +174,6 @@ private fun ReminderCardStatus(
             style = MaterialTheme.typography.titleSmall,
             color = Color.White,
             modifier = Modifier.padding(horizontal = 6.dp)
-        )
-    }
-}
-
-@Composable
-private fun ReminderCardDetail(
-    icon: ImageVector,
-    text: String,
-    contentDescription: String,
-    modifier: Modifier = Modifier
-) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier
-    ) {
-        Icon(
-            imageVector = icon,
-            contentDescription = contentDescription,
-            tint = MaterialTheme.colorScheme.outline,
-            modifier = Modifier.size(20.dp)
-        )
-
-        Spacer(Modifier.width(8.dp))
-
-        Text(
-            text = text,
-            style = MaterialTheme.typography.titleSmall,
-            color = MaterialTheme.colorScheme.onBackground
         )
     }
 }
