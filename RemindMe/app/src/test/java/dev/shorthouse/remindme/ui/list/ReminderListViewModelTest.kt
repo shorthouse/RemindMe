@@ -6,11 +6,11 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
 import dev.shorthouse.remindme.data.FakeDataSource
-import dev.shorthouse.remindme.data.ReminderRepository
 import dev.shorthouse.remindme.data.protodatastore.ReminderFilter
 import dev.shorthouse.remindme.data.protodatastore.ReminderSort
 import dev.shorthouse.remindme.data.protodatastore.UserPreferencesRepository
 import dev.shorthouse.remindme.data.protodatastore.UserPreferencesSerializer
+import dev.shorthouse.remindme.data.source.local.ReminderRepository
 import dev.shorthouse.remindme.domain.reminder.CompleteOnetimeReminderUseCase
 import dev.shorthouse.remindme.domain.reminder.CompleteRepeatReminderOccurrenceUseCase
 import dev.shorthouse.remindme.domain.reminder.CompleteRepeatReminderSeriesUseCase
@@ -20,6 +20,7 @@ import dev.shorthouse.remindme.ui.util.enums.ReminderAction
 import dev.shorthouse.remindme.util.ReminderTestUtil
 import io.mockk.mockk
 import io.mockk.verify
+import java.time.ZonedDateTime
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
@@ -31,7 +32,6 @@ import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.time.ZonedDateTime
 
 @RunWith(AndroidJUnit4::class)
 @OptIn(ExperimentalCoroutinesApi::class)

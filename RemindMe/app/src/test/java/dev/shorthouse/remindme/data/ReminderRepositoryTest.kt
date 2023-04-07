@@ -2,8 +2,10 @@ package dev.shorthouse.remindme.data
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
+import dev.shorthouse.remindme.data.source.local.ReminderRepository
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.util.ReminderTestUtil
+import java.time.ZonedDateTime
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.first
@@ -12,7 +14,6 @@ import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.time.ZonedDateTime
 
 @ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)

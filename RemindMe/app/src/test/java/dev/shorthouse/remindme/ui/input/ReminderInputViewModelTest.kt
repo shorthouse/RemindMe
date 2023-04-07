@@ -3,7 +3,7 @@ package dev.shorthouse.remindme.ui.input
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
 import dev.shorthouse.remindme.data.FakeDataSource
-import dev.shorthouse.remindme.data.ReminderRepository
+import dev.shorthouse.remindme.data.source.local.ReminderRepository
 import dev.shorthouse.remindme.domain.reminder.AddReminderUseCase
 import dev.shorthouse.remindme.domain.reminder.EditReminderUseCase
 import dev.shorthouse.remindme.ui.state.ReminderState

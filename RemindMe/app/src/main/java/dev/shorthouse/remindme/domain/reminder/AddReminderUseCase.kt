@@ -1,6 +1,6 @@
 package dev.shorthouse.remindme.domain.reminder
 
-import dev.shorthouse.remindme.data.ReminderRepository
+import dev.shorthouse.remindme.data.source.local.ReminderRepository
 import dev.shorthouse.remindme.di.IoDispatcher
 import dev.shorthouse.remindme.domain.notification.ScheduleNotificationUseCase
 import dev.shorthouse.remindme.model.Reminder
