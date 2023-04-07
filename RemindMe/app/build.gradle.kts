@@ -10,7 +10,7 @@ plugins {
     id("dagger.hilt.android.plugin")
     id("com.google.devtools.ksp") version "1.8.10-1.0.9"
     id("com.google.protobuf") version "0.8.17"
-    id("org.jlleitschuh.gradle.ktlint") version "11.2.0"
+    id("org.jlleitschuh.gradle.ktlint") version "11.3.1"
     id("io.gitlab.arturbosch.detekt") version "1.22.0"
     kotlin("android")
     kotlin("kapt")
@@ -70,7 +70,7 @@ android {
 }
 
 configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
-    version.set("11.2.0")
+    version.set("11.3.1")
     ignoreFailures.set(false)
     android.set(true)
 }
@@ -94,7 +94,7 @@ dependencies {
     implementation("com.google.accompanist:accompanist-permissions:0.30.0")
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.30.0")
     implementation("io.github.raamcosta.compose-destinations:core:1.8.38-beta")
-    debugImplementation("androidx.compose.ui:ui-tooling")
+    implementation("androidx.compose.ui:ui-tooling")
     ksp("io.github.raamcosta.compose-destinations:ksp:1.8.38-beta")
 
     // Lifecycle

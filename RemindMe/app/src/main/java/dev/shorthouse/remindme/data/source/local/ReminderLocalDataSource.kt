@@ -6,8 +6,9 @@ import java.time.ZonedDateTime
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 
-class ReminderLocalDataSource @Inject constructor(private val reminderDao: ReminderDao) :
-    ReminderDataSource {
+class ReminderLocalDataSource @Inject constructor(
+    private val reminderDao: ReminderDao
+) : ReminderDataSource {
     override fun getReminder(id: Long): Flow<Reminder> {
         return reminderDao.getReminder(id)
     }

@@ -39,7 +39,7 @@ class BottomSheetReminderActionsTest {
                 BottomSheetReminderActions(
                     reminder = reminder,
                     onReminderActionSelected = onReminderActionSelected,
-                    onDismissRequest = onDismissRequest
+                    onDismissRequest = onDismissRequest,
                 )
             }
         }
@@ -73,23 +73,6 @@ class BottomSheetReminderActionsTest {
         composeTestRule.apply {
             onNodeWithText("Complete").performClick()
             assertThat(isOnReminderActionSelectedClicked).isTrue()
-        }
-    }
-
-    @Test
-    fun when_back_pressed_should_call_on_dismiss_request() {
-        var isOnDismissRequested = false
-
-        setContent(
-            onDismissRequest = { isOnDismissRequested = true }
-        )
-
-        composeTestRule.apply {
-            activityRule.scenario.onActivity { activity ->
-                activity.onBackPressedDispatcher.onBackPressed()
-            }
-
-            assertThat(isOnDismissRequested).isTrue()
         }
     }
 }

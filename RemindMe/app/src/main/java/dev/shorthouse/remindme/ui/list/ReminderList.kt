@@ -1,6 +1,7 @@
 package dev.shorthouse.remindme.ui.list
 
 import android.content.res.Configuration
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -15,7 +16,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -141,8 +141,8 @@ fun ReminderListScaffold(
             )
         },
         content = { scaffoldPadding ->
-            if (!uiState.isLoading) {
-                Column(modifier = Modifier.padding(scaffoldPadding)) {
+            Column(modifier = Modifier.padding(scaffoldPadding)) {
+                if (!uiState.isLoading) {
                     if (!uiState.isSearchBarShown) {
                         ReminderListFilterChips(
                             uiState.reminderFilter,
@@ -229,6 +229,10 @@ fun ReminderListTopBar(
         )
     }
 
+    BackHandler(enabled = isSearchBarShown) {
+        onCloseSearch()
+    }
+
     val topBarColor = if (isSystemInDarkTheme()) {
         MaterialTheme.colorScheme.surface
     } else {
@@ -291,11 +295,7 @@ fun ReminderListFilterChips(
         modifier = modifier
             .fillMaxWidth()
             .horizontalScroll(rememberScrollState())
-            .padding(
-                top = 8.dp,
-                start = 4.dp,
-                end = 4.dp
-            )
+            .padding(top = 8.dp)
     ) {
         ReminderFilter.values().forEach { reminderFilter ->
             ElevatedFilterChip(
@@ -317,7 +317,7 @@ fun ReminderListFilterChips(
                     selectedLabelColor = MaterialTheme.colorScheme.onPrimary
                 ),
                 modifier = Modifier.padding(
-                    horizontal = 8.dp
+                    horizontal = 4.dp
                 )
             )
         }
@@ -342,12 +342,16 @@ fun ReminderList(
                 .fillMaxSize()
                 .testTag(stringResource(R.string.test_tag_reminder_list_lazy_column))
         ) {
-            items(reminders) { reminder ->
-                ReminderCard(
-                    reminder = reminder,
-                    onReminderCard = onReminderCard
-                )
-            }
+            items(
+                count = reminders.size,
+                key = { reminders[it].id },
+                itemContent = { index ->
+                    ReminderCard(
+                        reminder = reminders[index],
+                        onReminderCard = onReminderCard
+                    )
+                }
+            )
         }
     }
 }
