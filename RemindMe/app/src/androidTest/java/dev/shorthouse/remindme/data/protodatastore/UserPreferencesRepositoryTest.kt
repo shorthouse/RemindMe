@@ -51,85 +51,90 @@ class UserPreferencesRepositoryTest {
     @Test
     fun when_set_sort_to_earliest_date_first_should_update_user_preferences() {
         testCoroutineScope.runTest {
-            val expectedUserPreferences = UserPreferences(
-                reminderSortOrder = ReminderSort.BY_EARLIEST_DATE_FIRST
-            )
+            val expectedReminderSortOrder = ReminderSort.BY_EARLIEST_DATE_FIRST
 
             userPreferencesRepository.updateReminderSortOrder(
                 ReminderSort.BY_EARLIEST_DATE_FIRST
             )
 
-            val userPreferences = userPreferencesRepository.userPreferencesFlow.first()
+            val reminderSortOrder = userPreferencesRepository
+                .userPreferencesFlow
+                .first()
+                .reminderSortOrder
 
-            assertThat(userPreferences).isEqualTo(expectedUserPreferences)
+            assertThat(reminderSortOrder).isEqualTo(expectedReminderSortOrder)
         }
     }
 
     @Test
     fun when_set_sort_to_latest_date_first_should_update_user_preferences() {
         testCoroutineScope.runTest {
-            val expectedUserPreferences = UserPreferences(
-                reminderSortOrder = ReminderSort.BY_LATEST_DATE_FIRST
-            )
+            val expectedReminderSortOrder = ReminderSort.BY_LATEST_DATE_FIRST
 
             userPreferencesRepository.updateReminderSortOrder(
                 ReminderSort.BY_LATEST_DATE_FIRST
             )
 
-            val userPreferences = userPreferencesRepository.userPreferencesFlow.first()
+            val reminderSortOrder = userPreferencesRepository
+                .userPreferencesFlow
+                .first()
+                .reminderSortOrder
 
-            assertThat(userPreferences).isEqualTo(expectedUserPreferences)
+            assertThat(reminderSortOrder).isEqualTo(expectedReminderSortOrder)
         }
     }
 
     @Test
     fun when_set_filter_to_overdue_should_update_user_preferences() {
         testCoroutineScope.runTest {
-            val expectedUserPreferences = UserPreferences(
-                reminderFilter = ReminderFilter.OVERDUE
-            )
+            val expectedReminderFilter = ReminderFilter.OVERDUE
 
             userPreferencesRepository.updateReminderFilter(
                 ReminderFilter.OVERDUE
             )
 
-            val userPreferences = userPreferencesRepository.userPreferencesFlow.first()
+            val reminderFilter = userPreferencesRepository
+                .userPreferencesFlow
+                .first()
+                .reminderFilter
 
-            assertThat(userPreferences).isEqualTo(expectedUserPreferences)
+            assertThat(reminderFilter).isEqualTo(expectedReminderFilter)
         }
     }
 
     @Test
     fun when_set_filter_to_upcoming_should_update_user_preferences() {
         testCoroutineScope.runTest {
-            val expectedUserPreferences = UserPreferences(
-                reminderFilter = ReminderFilter.UPCOMING
-            )
+            val expectedReminderFilter = ReminderFilter.UPCOMING
 
             userPreferencesRepository.updateReminderFilter(
                 ReminderFilter.UPCOMING
             )
 
-            val userPreferences = userPreferencesRepository.userPreferencesFlow.first()
+            val reminderFilter = userPreferencesRepository
+                .userPreferencesFlow
+                .first()
+                .reminderFilter
 
-            assertThat(userPreferences).isEqualTo(expectedUserPreferences)
+            assertThat(reminderFilter).isEqualTo(expectedReminderFilter)
         }
     }
 
     @Test
     fun when_set_filter_to_completed_should_update_user_preferences() {
         testCoroutineScope.runTest {
-            val expectedUserPreferences = UserPreferences(
-                reminderFilter = ReminderFilter.COMPLETED
-            )
+            val expectedReminderFilter = ReminderFilter.COMPLETED
 
             userPreferencesRepository.updateReminderFilter(
                 ReminderFilter.COMPLETED
             )
 
-            val userPreferences = userPreferencesRepository.userPreferencesFlow.first()
+            val reminderFilter = userPreferencesRepository
+                .userPreferencesFlow
+                .first()
+                .reminderFilter
 
-            assertThat(userPreferences).isEqualTo(expectedUserPreferences)
+            assertThat(reminderFilter).isEqualTo(expectedReminderFilter)
         }
     }
 }
