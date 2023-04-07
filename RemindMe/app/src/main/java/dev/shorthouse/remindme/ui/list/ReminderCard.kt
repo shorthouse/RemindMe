@@ -3,8 +3,10 @@ package dev.shorthouse.remindme.ui.list
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -15,6 +17,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Notes
 import androidx.compose.material.icons.rounded.NotificationsNone
 import androidx.compose.material.icons.rounded.Repeat
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -22,7 +25,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -51,130 +53,111 @@ fun ReminderCard(
         onClick = { onReminderCard(reminder) },
         modifier = modifier.fillMaxWidth()
     ) {
-        Column(
-            modifier = Modifier
-                .padding(16.dp)
-                .fillMaxWidth()
-        ) {
-            Text(
-                text = reminder.name,
-                style = MaterialTheme.typography.titleMedium
+        Row(modifier = Modifier.height(IntrinsicSize.Min)) {
+            Divider(
+                color = when {
+                    reminder.isCompleted -> Green
+                    reminder.isOverdue() -> Red
+                    else -> Blue
+                },
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .width(8.dp)
             )
 
-            Text(
-                text = stringResource(
-                    R.string.reminder_card_date_time,
-                    reminder.getFormattedDate(),
-                    reminder.getFormattedTime()
-                ),
-                style = MaterialTheme.typography.bodyMedium
-            )
-
-            Spacer(Modifier.height(12.dp))
-
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                verticalAlignment = Alignment.CenterVertically
+            Column(
+                modifier = Modifier
+                    .padding(horizontal = 12.dp, vertical = 8.dp)
+                    .fillMaxWidth()
             ) {
-                ReminderCardStatus(reminder = reminder)
+                Text(
+                    text = reminder.name,
+                    style = MaterialTheme.typography.titleMedium
+                )
 
-                if (reminder.isNotificationSent) {
-                    Icon(
-                        imageVector = Icons.Rounded.NotificationsNone,
-                        tint = MaterialTheme.colorScheme.outline,
-                        contentDescription = stringResource(R.string.cd_details_notification),
-                        modifier = Modifier.size(20.dp)
-                    )
+                Text(
+                    text = stringResource(
+                        R.string.reminder_card_date_time,
+                        reminder.getFormattedDate(),
+                        reminder.getFormattedTime()
+                    ),
+                    style = MaterialTheme.typography.bodyMedium
+                )
+
+                if (reminder.isNotificationSent || reminder.repeatInterval != null) {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(12.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.padding(top = 8.dp)
+                    ) {
+                        if (reminder.isNotificationSent) {
+                            Icon(
+                                imageVector = Icons.Rounded.NotificationsNone,
+                                tint = MaterialTheme.colorScheme.outline,
+                                contentDescription = stringResource(
+                                    R.string.cd_details_notification
+                                ),
+                                modifier = Modifier.size(20.dp)
+                            )
+                        }
+
+                        reminder.repeatInterval?.let { repeatInterval ->
+                            val pluralId = when (repeatInterval.unit) {
+                                ChronoUnit.DAYS -> R.plurals.repeat_interval_days
+                                else -> R.plurals.repeat_interval_days
+                            }
+
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = modifier
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Rounded.Repeat,
+                                    contentDescription = stringResource(
+                                        R.string.cd_details_repeat_interval
+                                    ),
+                                    tint = MaterialTheme.colorScheme.outline,
+                                    modifier = Modifier.size(20.dp)
+                                )
+
+                                Spacer(Modifier.width(8.dp))
+
+                                Text(
+                                    text = pluralStringResource(
+                                        pluralId,
+                                        repeatInterval.amount.toInt(),
+                                        repeatInterval.amount
+                                    ),
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = MaterialTheme.colorScheme.onBackground
+                                )
+                            }
+                        }
+                    }
                 }
 
-                reminder.repeatInterval?.let { repeatInterval ->
-                    val pluralId = when (repeatInterval.unit) {
-                        ChronoUnit.DAYS -> R.plurals.repeat_interval_days
-                        else -> R.plurals.repeat_interval_days
-                    }
-
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = modifier
-                    ) {
+                reminder.notes?.let { notes ->
+                    Row(modifier = Modifier.padding(top = 8.dp)) {
                         Icon(
-                            imageVector = Icons.Rounded.Repeat,
-                            contentDescription = stringResource(
-                                R.string.cd_details_repeat_interval
-                            ),
+                            imageVector = Icons.Rounded.Notes,
+                            contentDescription = stringResource(R.string.cd_details_notes),
                             tint = MaterialTheme.colorScheme.outline,
-                            modifier = Modifier.size(20.dp)
+                            modifier = Modifier
+                                .size(22.dp)
+                                .padding(top = 2.dp)
                         )
 
                         Spacer(Modifier.width(8.dp))
 
                         Text(
-                            text = pluralStringResource(
-                                pluralId,
-                                repeatInterval.amount.toInt(),
-                                repeatInterval.amount
-                            ),
+                            text = notes,
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onBackground
                         )
                     }
                 }
             }
-
-            reminder.notes?.let { notes ->
-                Spacer(Modifier.height(12.dp))
-
-                Row(modifier = modifier) {
-                    Icon(
-                        imageVector = Icons.Rounded.Notes,
-                        contentDescription = stringResource(R.string.cd_details_notes),
-                        tint = MaterialTheme.colorScheme.outline,
-                        modifier = Modifier
-                            .size(22.dp)
-                            .padding(top = 2.dp)
-                    )
-
-                    Spacer(Modifier.width(8.dp))
-
-                    Text(
-                        text = notes,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onBackground
-                    )
-                }
-            }
         }
-    }
-}
-
-@Composable
-private fun ReminderCardStatus(
-    reminder: Reminder,
-    modifier: Modifier = Modifier
-) {
-    val statusText = when {
-        reminder.isCompleted -> stringResource(R.string.reminder_completed)
-        reminder.isOverdue() -> stringResource(R.string.reminder_overdue)
-        else -> stringResource(R.string.reminder_upcoming)
-    }
-
-    val statusBackgroundColor = when {
-        reminder.isCompleted -> Green
-        reminder.isOverdue() -> Red
-        else -> Blue
-    }
-
-    Surface(
-        shape = RoundedCornerShape(8.dp),
-        color = statusBackgroundColor,
-        modifier = modifier
-    ) {
-        Text(
-            text = statusText,
-            style = MaterialTheme.typography.titleSmall,
-            color = Color.White,
-            modifier = Modifier.padding(horizontal = 6.dp)
-        )
     }
 }
 
