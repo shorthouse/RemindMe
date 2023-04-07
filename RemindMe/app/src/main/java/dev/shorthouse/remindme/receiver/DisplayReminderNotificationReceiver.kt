@@ -15,7 +15,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import dagger.hilt.android.AndroidEntryPoint
 import dev.shorthouse.remindme.R
-import dev.shorthouse.remindme.data.ReminderRepository
+import dev.shorthouse.remindme.data.source.local.ReminderRepository
 import dev.shorthouse.remindme.di.IoDispatcher
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.ui.MainActivity

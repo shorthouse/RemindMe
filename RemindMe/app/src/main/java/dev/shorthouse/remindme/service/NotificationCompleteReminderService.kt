@@ -5,7 +5,7 @@ import android.content.Intent
 import android.os.IBinder
 import dagger.hilt.android.AndroidEntryPoint
 import dev.shorthouse.remindme.R
-import dev.shorthouse.remindme.data.ReminderRepository
+import dev.shorthouse.remindme.data.source.local.ReminderRepository
 import dev.shorthouse.remindme.di.IoDispatcher
 import dev.shorthouse.remindme.domain.reminder.CompleteOnetimeReminderUseCase
 import dev.shorthouse.remindme.domain.reminder.CompleteRepeatReminderOccurrenceUseCase

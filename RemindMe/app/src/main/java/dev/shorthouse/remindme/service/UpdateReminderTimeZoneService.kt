@@ -9,7 +9,7 @@ import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import dagger.hilt.android.AndroidEntryPoint
 import dev.shorthouse.remindme.R
-import dev.shorthouse.remindme.data.ReminderRepository
+import dev.shorthouse.remindme.data.source.local.ReminderRepository
 import dev.shorthouse.remindme.di.IoDispatcher
 import java.time.ZoneId
 import java.time.ZonedDateTime
