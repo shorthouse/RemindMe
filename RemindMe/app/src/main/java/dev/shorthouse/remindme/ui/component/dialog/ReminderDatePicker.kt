@@ -66,7 +66,6 @@ fun ReminderDatePicker(
 
                 day.isAfter(yesterday)
             },
-            title = null,
             showModeToggle = false
         )
     }
@@ -75,6 +74,7 @@ fun ReminderDatePicker(
 private fun dateStringToEpochMillis(date: String, dateFormatter: DateTimeFormatter): Long {
     return LocalDate.parse(date, dateFormatter)
         .atStartOfDay()
+        .plusDays(1)
         .atZone(ZoneId.systemDefault())
         .toInstant()
         .toEpochMilli()
@@ -95,7 +95,7 @@ private fun epochMillisToDateString(utcMillis: Long, dateFormatter: DateTimeForm
 fun DatePickerDialogPreview() {
     AppTheme {
         ReminderDatePicker(
-            initialDate = LocalDate.now().toString(),
+            initialDate = "Wed, 01 Jan 2020",
             onConfirm = {},
             onDismiss = {}
         )
