@@ -15,11 +15,11 @@ import dev.shorthouse.remindme.data.protodatastore.ReminderFilter
 import dev.shorthouse.remindme.model.RepeatInterval
 import dev.shorthouse.remindme.ui.theme.AppTheme
 import dev.shorthouse.remindme.util.ReminderTestUtil
-import java.time.ZonedDateTime
-import java.time.temporal.ChronoUnit
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import java.time.ZonedDateTime
+import java.time.temporal.ChronoUnit
 
 @HiltAndroidTest
 class ReminderListTest {
@@ -253,11 +253,11 @@ class ReminderListTest {
             uiState = ListUiState(
                 reminders = listOf(
                     ReminderTestUtil().createReminder(
-                        name = "Earlier reminder",
+                        name = "Later reminder",
                         startDateTime = ZonedDateTime.now().minusDays(1)
                     ),
                     ReminderTestUtil().createReminder(
-                        name = "Later reminder",
+                        name = "Earlier reminder",
                         startDateTime = ZonedDateTime.now().plusDays(1)
                     )
                 )
