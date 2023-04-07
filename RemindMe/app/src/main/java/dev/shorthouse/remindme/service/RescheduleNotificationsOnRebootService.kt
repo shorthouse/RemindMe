@@ -49,7 +49,7 @@ class RescheduleNotificationsOnRebootService : Service() {
             val reminders = repository.getRemindersOneShot()
 
             reminders
-                .filter { reminder -> reminder.isNotificationSent }
+                .filter { reminder -> reminder.isNotificationSent && !reminder.isCompleted }
                 .forEach { reminder -> scheduleNotificationUseCase(reminder) }
 
             stopForeground(STOP_FOREGROUND_REMOVE)
