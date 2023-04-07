@@ -14,14 +14,14 @@ import dev.shorthouse.remindme.domain.reminder.CompleteRepeatReminderSeriesUseCa
 import dev.shorthouse.remindme.domain.reminder.DeleteReminderUseCase
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.ui.util.enums.ReminderAction
+import java.time.ZonedDateTime
+import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.time.ZonedDateTime
-import javax.inject.Inject
 
 @HiltViewModel
 class ReminderListViewModel @Inject constructor(
@@ -42,8 +42,6 @@ class ReminderListViewModel @Inject constructor(
     private val _isSearchBarShown = MutableStateFlow(false)
 
     fun initialiseUiState() {
-        _uiState.update { it.copy(isLoading = true) }
-
         viewModelScope.launch(ioDispatcher) {
             val remindersFlow = reminderRepository.getReminders()
             val userPreferencesFlow = userPreferencesRepository.userPreferencesFlow
@@ -139,7 +137,6 @@ class ReminderListViewModel @Inject constructor(
     }
 
     fun updateIsSearchBarShown(isSearchBarShown: Boolean) {
-        _isSearchBarShown.value = isSearchBarShown
         _uiState.update { it.copy(isSearchBarShown = isSearchBarShown) }
     }
 
@@ -169,5 +166,5 @@ data class ListUiState(
     val isSearchBarShown: Boolean = false,
     val bottomSheetReminder: Reminder = Reminder(),
     val isBottomSheetShown: Boolean = false,
-    val isLoading: Boolean = false
+    val isLoading: Boolean = true
 )
