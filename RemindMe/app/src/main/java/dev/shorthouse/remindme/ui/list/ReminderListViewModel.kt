@@ -137,6 +137,7 @@ class ReminderListViewModel @Inject constructor(
     }
 
     fun updateIsSearchBarShown(isSearchBarShown: Boolean) {
+        _isSearchBarShown.value = isSearchBarShown
         _uiState.update { it.copy(isSearchBarShown = isSearchBarShown) }
     }
 
