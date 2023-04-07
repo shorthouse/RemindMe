@@ -39,14 +39,14 @@ fun SheetReminderActions(
                 add(
                     BottomSheetActionItem(
                         icon = Icons.Rounded.TaskAlt,
-                        label = stringResource(R.string.drawer_item_complete),
+                        label = stringResource(R.string.sheet_action_complete),
                         action = ReminderAction.COMPLETE_REPEAT_OCCURRENCE
                     )
                 )
                 add(
                     BottomSheetActionItem(
                         icon = Icons.Rounded.ChecklistRtl,
-                        label = stringResource(R.string.drawer_item_complete_series),
+                        label = stringResource(R.string.sheet_action_complete_series),
                         action = ReminderAction.COMPLETE_REPEAT_SERIES
                     )
                 )
@@ -54,7 +54,7 @@ fun SheetReminderActions(
                 add(
                     BottomSheetActionItem(
                         icon = Icons.Rounded.TaskAlt,
-                        label = stringResource(R.string.drawer_item_complete),
+                        label = stringResource(R.string.sheet_action_complete),
                         action = ReminderAction.COMPLETE_ONETIME
                     )
                 )
@@ -62,7 +62,7 @@ fun SheetReminderActions(
             add(
                 BottomSheetActionItem(
                     icon = Icons.Outlined.Edit,
-                    label = stringResource(R.string.drawer_item_edit),
+                    label = stringResource(R.string.sheet_action_edit),
                     action = ReminderAction.EDIT
                 )
             )
@@ -70,7 +70,7 @@ fun SheetReminderActions(
         add(
             BottomSheetActionItem(
                 icon = Icons.Rounded.DeleteOutline,
-                label = stringResource(R.string.drawer_item_delete),
+                label = stringResource(R.string.sheet_action_delete),
                 action = ReminderAction.DELETE
             )
         )
