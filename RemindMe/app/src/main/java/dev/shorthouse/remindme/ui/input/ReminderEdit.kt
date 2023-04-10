@@ -30,7 +30,7 @@ fun ReminderEditScreen(
     if (!uiState.isLoading) {
         ReminderInputScreen(
             reminderState = ReminderState(uiState.reminder),
-            inputViewModel = inputViewModel,
+            viewModel = inputViewModel,
             topBarTitle = stringResource(R.string.top_bar_title_edit_reminder),
             navigator = navigator
         )
