@@ -20,17 +20,17 @@ import dev.shorthouse.remindme.ui.theme.AppTheme
 @Destination
 @Composable
 fun ReminderEditScreen(
-    inputViewModel: ReminderInputViewModel = hiltViewModel(),
+    viewModel: ReminderInputViewModel = hiltViewModel(),
     reminderId: Long,
     navigator: DestinationsNavigator
 ) {
-    inputViewModel.setReminder(reminderId = reminderId)
-    val uiState by inputViewModel.uiState.collectAsStateWithLifecycle()
+    viewModel.setReminder(reminderId = reminderId)
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     if (!uiState.isLoading) {
         ReminderInputScreen(
             reminderState = ReminderState(uiState.reminder),
-            viewModel = inputViewModel,
+            viewModel = viewModel,
             topBarTitle = stringResource(R.string.top_bar_title_edit_reminder),
             navigator = navigator
         )
