@@ -44,7 +44,7 @@ class NotificationCompleteReminderService : Service() {
         CoroutineScope(ioDispatcher + SupervisorJob()).launch {
             val reminder = repository.getReminderOneShot(reminderId)
 
-            if (reminder.isRepeatReminder()) {
+            if (reminder.isRepeatReminder) {
                 completeRepeatReminderOccurrenceUseCase(reminder)
             } else {
                 completeOnetimeReminderUseCase(reminder)

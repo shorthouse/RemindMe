@@ -75,7 +75,7 @@ class DisplayReminderNotificationReceiver : BroadcastReceiver() {
         ).apply {
             setSmallIcon(R.drawable.ic_user_notification)
             setContentTitle(reminder.name)
-            setContentText(reminder.getFormattedTime())
+            setContentText(reminder.formattedTime)
             setContentIntent(
                 PendingIntent.getActivity(
                     context,

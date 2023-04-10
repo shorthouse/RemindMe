@@ -45,7 +45,7 @@ class ReminderTest {
     fun `Get formatted date, returns correctly formatted date`() {
         val expectedDate = "Thu, 15 Jun 2000"
 
-        val date = repeatReminder.getFormattedDate()
+        val date = repeatReminder.formattedDate
 
         assertThat(date).isEqualTo(expectedDate)
     }
@@ -54,35 +54,35 @@ class ReminderTest {
     fun `Get formatted time, returns correctly formatted time`() {
         val expectedTime = "19:01"
 
-        val time = repeatReminder.getFormattedTime()
+        val time = repeatReminder.formattedTime
 
         assertThat(time).isEqualTo(expectedTime)
     }
 
     @Test
     fun `Is repeat reminder on one off reminder, returns false`() {
-        val isRepeatReminder = oneOffReminder.isRepeatReminder()
+        val isRepeatReminder = oneOffReminder.isRepeatReminder
 
         assertThat(isRepeatReminder).isFalse()
     }
 
     @Test
     fun `Is repeat reminder on repeat reminder, returns true`() {
-        val isRepeatReminder = repeatReminder.isRepeatReminder()
+        val isRepeatReminder = repeatReminder.isRepeatReminder
 
         assertThat(isRepeatReminder).isTrue()
     }
 
     @Test
     fun `Is overdue on non overdue reminder, returns false`() {
-        val isOverdue = nonOverdueReminder.isOverdue()
+        val isOverdue = nonOverdueReminder.isOverdue
 
         assertThat(isOverdue).isFalse()
     }
 
     @Test
     fun `Is overdue on overdue reminder, returns true`() {
-        val isOverdue = overdueReminder.isOverdue()
+        val isOverdue = overdueReminder.isOverdue
 
         assertThat(isOverdue).isTrue()
     }

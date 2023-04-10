@@ -35,7 +35,7 @@ fun SheetReminderActions(
 ) {
     val reminderActionItems = buildList {
         if (!reminder.isCompleted) {
-            if (reminder.isRepeatReminder()) {
+            if (reminder.isRepeatReminder) {
                 add(
                     BottomSheetActionItem(
                         icon = Icons.Rounded.TaskAlt,

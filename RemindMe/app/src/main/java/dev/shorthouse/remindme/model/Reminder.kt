@@ -17,15 +17,19 @@ data class Reminder(
     val notes: String? = null,
     val isCompleted: Boolean = false
 ) {
-    fun getFormattedDate(): String = this.startDateTime
-        .toLocalDate()
-        .format(DateTimeFormatter.ofPattern("EEE, dd MMM yyyy"))
+    val formattedDate: String
+        get() = this.startDateTime
+            .toLocalDate()
+            .format(DateTimeFormatter.ofPattern("EEE, dd MMM yyyy"))
 
-    fun getFormattedTime(): String = this.startDateTime
-        .toLocalTime()
-        .toString()
+    val formattedTime: String
+        get() = this.startDateTime
+            .toLocalTime()
+            .toString()
 
-    fun isRepeatReminder() = this.repeatInterval != null
+    val isRepeatReminder: Boolean
+        get() = this.repeatInterval != null
 
-    fun isOverdue() = this.startDateTime.isBefore(ZonedDateTime.now())
+    val isOverdue: Boolean
+        get() = this.startDateTime.isBefore(ZonedDateTime.now())
 }
