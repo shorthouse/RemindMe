@@ -76,7 +76,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun ReminderInputScreen(
     reminderState: ReminderState,
-    inputViewModel: ReminderInputViewModel,
+    viewModel: ReminderInputViewModel,
     topBarTitle: String,
     navigator: DestinationsNavigator
 ) {
@@ -92,12 +92,12 @@ fun ReminderInputScreen(
         val reminder = reminderState.toReminder()
 
         when {
-            inputViewModel.isReminderValid(reminder) -> {
-                inputViewModel.saveReminder(reminder)
+            viewModel.isReminderValid(reminder) -> {
+                viewModel.saveReminder(reminder)
                 onNavigateUp()
             }
             else -> {
-                val errorMessage = inputViewModel.getErrorMessage(reminder).asString(context)
+                val errorMessage = viewModel.getErrorMessage(reminder).asString(context)
                 coroutineScope.launch {
                     snackbarHostState.showSnackbar(message = errorMessage)
                 }
