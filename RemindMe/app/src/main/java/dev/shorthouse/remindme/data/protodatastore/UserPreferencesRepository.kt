@@ -13,7 +13,11 @@ class UserPreferencesRepository @Inject constructor(
     val userPreferencesFlow: Flow<UserPreferences> = userPreferencesDataStore.data
         .catch { exception ->
             if (exception is IOException) {
-                Log.e("UserPreferencesRepo", "Error reading sort order preferences.", exception)
+                Log.e(
+                    "UserPreferencesRepo",
+                    "Error reading sort order preferences.",
+                    exception
+                )
                 emit(UserPreferences())
             } else {
                 throw exception
