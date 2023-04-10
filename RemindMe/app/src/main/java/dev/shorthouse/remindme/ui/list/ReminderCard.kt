@@ -57,7 +57,7 @@ fun ReminderCard(
             Divider(
                 color = when {
                     reminder.isCompleted -> Green
-                    reminder.isOverdue() -> Red
+                    reminder.isOverdue -> Red
                     else -> Blue
                 },
                 modifier = Modifier
@@ -78,8 +78,8 @@ fun ReminderCard(
                 Text(
                     text = stringResource(
                         R.string.reminder_card_date_time,
-                        reminder.getFormattedDate(),
-                        reminder.getFormattedTime()
+                        reminder.formattedDate,
+                        reminder.formattedTime
                     ),
                     style = MaterialTheme.typography.bodyMedium
                 )

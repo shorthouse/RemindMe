@@ -13,8 +13,6 @@ import dev.shorthouse.remindme.data.protodatastore.UserPreferences
 import dev.shorthouse.remindme.data.protodatastore.UserPreferencesSerializer
 import javax.inject.Singleton
 
-private const val DATA_STORE_FILE_NAME = "user_prefs.pb"
-
 @InstallIn(SingletonComponent::class)
 @Module
 class DataStoreModule {
@@ -24,7 +22,7 @@ class DataStoreModule {
     fun provideProtoDataStore(@ApplicationContext appContext: Context): DataStore<UserPreferences> {
         return DataStoreFactory.create(
             serializer = UserPreferencesSerializer,
-            produceFile = { appContext.dataStoreFile(DATA_STORE_FILE_NAME) },
+            produceFile = { appContext.dataStoreFile("user_prefs.pb") },
             corruptionHandler = null
         )
     }

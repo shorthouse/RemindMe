@@ -12,7 +12,7 @@ class ScheduleNotificationUseCase @Inject constructor(
     }
 
     private fun scheduleNotificationUseCase(reminder: Reminder) {
-        if (reminder.isRepeatReminder()) {
+        if (reminder.isRepeatReminder) {
             scheduleRepeatNotificationUseCase(reminder)
         } else {
             scheduleOnetimeNotificationUseCase(reminder)
