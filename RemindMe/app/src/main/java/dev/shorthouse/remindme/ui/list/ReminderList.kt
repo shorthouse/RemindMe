@@ -71,32 +71,32 @@ import dev.shorthouse.remindme.ui.util.enums.ReminderAction
 @Destination
 @Composable
 fun ReminderListScreen(
-    listViewModel: ReminderListViewModel = hiltViewModel(),
+    viewModel: ReminderListViewModel = hiltViewModel(),
     navigator: DestinationsNavigator
 ) {
-    listViewModel.initialiseUiState()
-    val uiState by listViewModel.uiState.collectAsStateWithLifecycle()
+    viewModel.initialiseUiState()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     NotificationPermissionRequester()
 
     ReminderListScaffold(
         uiState = uiState,
-        onApplyFilter = { listViewModel.updateReminderFilter(it) },
-        onApplySort = { listViewModel.updateReminderSortOrder(it) },
+        onApplyFilter = { viewModel.updateReminderFilter(it) },
+        onApplySort = { viewModel.updateReminderSortOrder(it) },
         onNavigateAdd = { navigator.navigate(ReminderAddScreenDestination()) },
-        onSearch = { listViewModel.updateIsSearchBarShown(true) },
-        onSearchQueryChange = { listViewModel.updateSearchQuery(it) },
+        onSearch = { viewModel.updateIsSearchBarShown(true) },
+        onSearchQueryChange = { viewModel.updateSearchQuery(it) },
         onCloseSearch = {
-            listViewModel.updateIsSearchBarShown(false)
-            listViewModel.updateSearchQuery("")
+            viewModel.updateIsSearchBarShown(false)
+            viewModel.updateSearchQuery("")
         },
-        onDismissBottomSheet = { listViewModel.updateIsBottomSheetShown(false) },
+        onDismissBottomSheet = { viewModel.updateIsBottomSheetShown(false) },
         onReminderCard = { reminder ->
-            listViewModel.updateBottomSheetReminder(reminder)
-            listViewModel.updateIsBottomSheetShown(true)
+            viewModel.updateBottomSheetReminder(reminder)
+            viewModel.updateIsBottomSheetShown(true)
         },
         onReminderActionSelected = { reminderAction ->
-            listViewModel.updateIsBottomSheetShown(false)
+            viewModel.updateIsBottomSheetShown(false)
 
             when (reminderAction) {
                 ReminderAction.EDIT -> navigator.navigate(
@@ -104,7 +104,7 @@ fun ReminderListScreen(
                         reminderId = uiState.bottomSheetReminder.id
                     )
                 )
-                else -> listViewModel.processReminderAction(
+                else -> viewModel.processReminderAction(
                     reminderAction = reminderAction,
                     reminder = uiState.bottomSheetReminder.copy()
                 )
