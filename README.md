@@ -14,9 +14,10 @@ RemindMe is built using Kotlin and follows [best practices](https://developer.an
 - ViewModel
 - Room
 - Proto DataStore
-- Material Design
+- Material Design 3
 - Dark theme
 - Code analysis using Ktlint and Detekt
+- Performance monitoring and crash analytics using Firebase
 
 # Features 📱
  - Set one-off or repeat reminders at a specified time and date
@@ -37,7 +38,8 @@ To facilitate testing of the app, RemindMe uses the following:
 There are many upcoming features in the backlog for RemindMe, alongside architecture and refactoring changes.
 
 To give a sneak peek, here are some of the upcoming changes:
+ - Material Design 3 - Done! ✅
  - More flexible repeat reminder durations
- - Material Design 3
- - Firebase integration 
+ - Firebase integration - Done! ✅
+ - User tutorial flow on overcoming background limitations
  - CI/CD pipeline
