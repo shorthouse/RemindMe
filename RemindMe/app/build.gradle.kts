@@ -12,6 +12,9 @@ plugins {
     id("com.google.protobuf") version "0.8.17"
     id("org.jlleitschuh.gradle.ktlint") version "11.3.1"
     id("io.gitlab.arturbosch.detekt") version "1.22.0"
+    id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
+    id("com.google.firebase.firebase-perf")
     kotlin("android")
     kotlin("kapt")
     kotlin("plugin.serialization") version "1.8.10"
@@ -81,7 +84,7 @@ kapt {
 
 dependencies {
     // Core
-    implementation("androidx.core:core-ktx:1.9.0")
+    implementation("androidx.core:core-ktx:1.10.0")
     implementation("com.google.android.material:material:1.8.0")
     implementation("androidx.core:core-splashscreen:1.0.0")
 
@@ -89,13 +92,20 @@ dependencies {
     val composeBom = platform("androidx.compose:compose-bom:2023.03.00")
     implementation(composeBom)
     androidTestImplementation(composeBom)
-    implementation("androidx.compose.material3:material3:1.1.0-beta01")
-    implementation("androidx.compose.material:material-icons-extended:1.4.0")
+    implementation("androidx.compose.material3:material3:1.1.0-beta02")
+    implementation("androidx.compose.material:material-icons-extended:1.4.1")
     implementation("com.google.accompanist:accompanist-permissions:0.30.0")
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.30.0")
     implementation("io.github.raamcosta.compose-destinations:core:1.8.38-beta")
     implementation("androidx.compose.ui:ui-tooling")
     ksp("io.github.raamcosta.compose-destinations:ksp:1.8.38-beta")
+
+    // Firebase
+    val firebaseBom = platform("com.google.firebase:firebase-bom:31.3.0")
+    implementation(firebaseBom)
+    implementation("com.google.firebase:firebase-analytics-ktx")
+    implementation("com.google.firebase:firebase-crashlytics-ktx")
+    implementation("com.google.firebase:firebase-perf-ktx")
 
     // Lifecycle
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
@@ -148,7 +158,7 @@ dependencies {
     androidTestImplementation("org.mockito:mockito-android:5.2.0")
     androidTestImplementation("androidx.test.uiautomator:uiautomator:2.2.0")
     androidTestImplementation("com.google.dagger:hilt-android-testing:2.45")
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.4.0")
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.4.1")
     kaptAndroidTest("com.google.dagger:hilt-android-compiler:2.45")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 }
