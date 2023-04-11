@@ -74,7 +74,6 @@ fun ReminderListScreen(
     viewModel: ReminderListViewModel = hiltViewModel(),
     navigator: DestinationsNavigator
 ) {
-    viewModel.initialiseUiState()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     NotificationPermissionRequester()

@@ -41,6 +41,10 @@ class ReminderListViewModel @Inject constructor(
     private val _searchQuery = MutableStateFlow("")
     private val _isSearchBarShown = MutableStateFlow(false)
 
+    init {
+        initialiseUiState()
+    }
+
     fun initialiseUiState() {
         viewModelScope.launch(ioDispatcher) {
             val remindersFlow = reminderRepository.getReminders()

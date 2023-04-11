@@ -390,7 +390,7 @@ fun ReminderNotesInput(
         RemindMeTextField(
             text = reminderState.notes.orEmpty(),
             onTextChange = { if (it.length <= notesMaxLength) reminderState.notes = it },
-            textStyle = MaterialTheme.typography.bodyLarge
+            textStyle = MaterialTheme.typography.bodyMedium
                 .copy(color = MaterialTheme.colorScheme.onSurface),
             hintText = stringResource(R.string.hint_reminder_notes),
             imeAction = ImeAction.None,
@@ -479,7 +479,7 @@ private fun RepeatAmountInput(
                     .filter { it.isDigit() }
             }
         },
-        textStyle = MaterialTheme.typography.bodyLarge.copy(textAlign = TextAlign.Center),
+        textStyle = MaterialTheme.typography.bodyMedium.copy(textAlign = TextAlign.Center),
         keyboardOptions = KeyboardOptions(
             imeAction = ImeAction.Done,
             keyboardType = KeyboardType.Number
@@ -527,7 +527,7 @@ private fun RepeatUnitInput(
 
                 Text(
                     text = text,
-                    style = MaterialTheme.typography.bodyLarge
+                    style = MaterialTheme.typography.bodyMedium
                 )
             }
         }
@@ -555,7 +555,7 @@ fun TextWithLeftIcon(
 
         Text(
             text = text,
-            style = MaterialTheme.typography.bodyLarge,
+            style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onBackground
         )
     }
