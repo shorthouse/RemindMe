@@ -36,7 +36,7 @@ val AppTypography = Typography(
         fontFamily = Roboto
     ),
     bodyLarge = TextStyle(
-        fontSize = 20.sp,
+        fontSize = 18.sp,
         fontWeight = FontWeight.Normal,
         fontFamily = Roboto
     ),
