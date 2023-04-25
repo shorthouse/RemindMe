@@ -8,12 +8,7 @@ import dev.shorthouse.remindme.data.protodatastore.ReminderSort
 import dev.shorthouse.remindme.data.protodatastore.UserPreferencesRepository
 import dev.shorthouse.remindme.data.source.local.ReminderRepository
 import dev.shorthouse.remindme.di.IoDispatcher
-import dev.shorthouse.remindme.domain.reminder.CompleteOnetimeReminderUseCase
-import dev.shorthouse.remindme.domain.reminder.CompleteRepeatReminderOccurrenceUseCase
-import dev.shorthouse.remindme.domain.reminder.CompleteRepeatReminderSeriesUseCase
-import dev.shorthouse.remindme.domain.reminder.DeleteReminderUseCase
-import dev.shorthouse.remindme.model.Reminder
-import dev.shorthouse.remindme.ui.util.enums.ReminderAction
+import dev.shorthouse.remindme.domain.reminder.CompleteReminderUseCase
 import java.time.ZonedDateTime
 import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
@@ -28,14 +23,11 @@ class ReminderListViewModel @Inject constructor(
     private val reminderRepository: ReminderRepository,
     private val userPreferencesRepository: UserPreferencesRepository,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
-    private val completeOnetimeReminderUseCase: CompleteOnetimeReminderUseCase,
-    private val completeRepeatReminderOccurrenceUseCase: CompleteRepeatReminderOccurrenceUseCase,
-    private val completeRepeatReminderSeriesUseCase: CompleteRepeatReminderSeriesUseCase,
-    private val deleteReminderUseCase: DeleteReminderUseCase
+    private val completeReminderUseCase: CompleteReminderUseCase
 ) : ViewModel() {
-    private val _uiState = MutableStateFlow(ListUiState())
+    private val _uiState = MutableStateFlow(ReminderListUiState())
 
-    val uiState: StateFlow<ListUiState>
+    val uiState: StateFlow<ReminderListUiState>
         get() = _uiState
 
     private val _searchQuery = MutableStateFlow("")
@@ -115,61 +107,45 @@ class ReminderListViewModel @Inject constructor(
         }
     }
 
-    fun updateReminderSortOrder(reminderSortOrder: ReminderSort) {
-        viewModelScope.launch(ioDispatcher) {
-            userPreferencesRepository.updateReminderSortOrder(reminderSortOrder)
+    fun handleEvent(event: ReminderListEvent) {
+        when (event) {
+            is ReminderListEvent.Filter -> handleFilter(event)
+            is ReminderListEvent.Sort -> handleSort(event)
+            is ReminderListEvent.Search -> handleSearch(event)
+            is ReminderListEvent.CompleteReminder -> handleCompleteReminder(event)
+            ReminderListEvent.ShowSearch -> handleShowSearch()
+            ReminderListEvent.HideSearch -> handleHideSearch()
         }
     }
 
-    fun updateReminderFilter(reminderFilter: ReminderFilter) {
+    private fun handleFilter(event: ReminderListEvent.Filter) {
         viewModelScope.launch(ioDispatcher) {
-            userPreferencesRepository.updateReminderFilter(reminderFilter)
+            userPreferencesRepository.updateReminderFilter(event.filter)
         }
     }
 
-    fun updateBottomSheetReminder(bottomSheetReminder: Reminder) {
-        _uiState.update { it.copy(bottomSheetReminder = bottomSheetReminder) }
+    private fun handleSort(event: ReminderListEvent.Sort) {
+        viewModelScope.launch(ioDispatcher) {
+            userPreferencesRepository.updateReminderSortOrder(event.sortOrder)
+        }
     }
 
-    fun updateIsBottomSheetShown(isBottomSheetShown: Boolean) {
-        _uiState.update { it.copy(isBottomSheetShown = isBottomSheetShown) }
+    private fun handleSearch(event: ReminderListEvent.Search) {
+        _searchQuery.value = event.query
+        _uiState.update { it.copy(searchQuery = event.query) }
     }
 
-    fun updateSearchQuery(searchQuery: String) {
-        _searchQuery.value = searchQuery
-        _uiState.update { it.copy(searchQuery = searchQuery) }
+    private fun handleCompleteReminder(event: ReminderListEvent.CompleteReminder) {
+        completeReminderUseCase(event.reminder)
     }
 
-    fun updateIsSearchBarShown(isSearchBarShown: Boolean) {
-        _isSearchBarShown.value = isSearchBarShown
-        _uiState.update { it.copy(isSearchBarShown = isSearchBarShown) }
+    private fun handleShowSearch() {
+        _uiState.update { it.copy(isSearchBarShown = true) }
     }
 
-    fun processReminderAction(reminderAction: ReminderAction, reminder: Reminder) {
-        when (reminderAction) {
-            ReminderAction.COMPLETE_ONETIME -> {
-                completeOnetimeReminderUseCase(reminder)
-            }
-            ReminderAction.COMPLETE_REPEAT_OCCURRENCE -> {
-                completeRepeatReminderOccurrenceUseCase(reminder)
-            }
-            ReminderAction.COMPLETE_REPEAT_SERIES -> {
-                completeRepeatReminderSeriesUseCase(reminder)
-            }
-            else -> {
-                deleteReminderUseCase(reminder)
-            }
+    private fun handleHideSearch() {
+        _uiState.update {
+            it.copy(isSearchBarShown = false, searchQuery = "")
         }
     }
 }
-
-data class ListUiState(
-    val reminders: List<Reminder> = emptyList(),
-    val reminderFilter: ReminderFilter = ReminderFilter.UPCOMING,
-    val reminderSortOrder: ReminderSort = ReminderSort.BY_EARLIEST_DATE_FIRST,
-    val searchQuery: String = "",
-    val isSearchBarShown: Boolean = false,
-    val bottomSheetReminder: Reminder = Reminder(),
-    val isBottomSheetShown: Boolean = false,
-    val isLoading: Boolean = true
-)
