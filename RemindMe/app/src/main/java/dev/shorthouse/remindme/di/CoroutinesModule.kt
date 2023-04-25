@@ -22,8 +22,7 @@ annotation class MainDispatcher
 
 @Module
 @InstallIn(SingletonComponent::class)
-object CoroutinesModule {
-
+class CoroutinesModule {
     @DefaultDispatcher
     @Provides
     fun providesDefaultDispatcher(): CoroutineDispatcher = Dispatchers.Default
