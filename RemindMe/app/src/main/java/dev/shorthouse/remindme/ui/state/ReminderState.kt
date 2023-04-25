@@ -65,7 +65,7 @@ private class ReminderStateImpl(
     name: String = "",
     date: String = getDateToday(),
     time: LocalTime = getTimeNextHour(),
-    isNotificationSent: Boolean = false,
+    isNotificationSent: Boolean = true,
     isRepeatReminder: Boolean = false,
     repeatAmount: String = "1",
     repeatUnit: String = "Day",
