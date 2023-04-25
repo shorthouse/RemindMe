@@ -60,12 +60,10 @@ import dev.shorthouse.remindme.ui.component.emptystate.EmptyStateOverdueReminder
 import dev.shorthouse.remindme.ui.component.emptystate.EmptyStateSearchReminders
 import dev.shorthouse.remindme.ui.component.emptystate.EmptyStateUpcomingReminders
 import dev.shorthouse.remindme.ui.component.searchbar.RemindMeSearchBar
-import dev.shorthouse.remindme.ui.component.sheet.BottomSheetReminderActions
 import dev.shorthouse.remindme.ui.destinations.ReminderAddScreenDestination
-import dev.shorthouse.remindme.ui.destinations.ReminderEditScreenDestination
+import dev.shorthouse.remindme.ui.destinations.ReminderDetailsScreenDestination
 import dev.shorthouse.remindme.ui.previewprovider.ReminderListProvider
 import dev.shorthouse.remindme.ui.theme.AppTheme
-import dev.shorthouse.remindme.ui.util.enums.ReminderAction
 
 @RootNavGraph(start = true)
 @Destination
@@ -80,63 +78,31 @@ fun ReminderListScreen(
 
     ReminderListScaffold(
         uiState = uiState,
-        onApplyFilter = { viewModel.updateReminderFilter(it) },
-        onApplySort = { viewModel.updateReminderSortOrder(it) },
+        onHandleEvent = { viewModel.handleEvent(it) },
         onNavigateAdd = { navigator.navigate(ReminderAddScreenDestination()) },
-        onSearch = { viewModel.updateIsSearchBarShown(true) },
-        onSearchQueryChange = { viewModel.updateSearchQuery(it) },
-        onCloseSearch = {
-            viewModel.updateIsSearchBarShown(false)
-            viewModel.updateSearchQuery("")
-        },
-        onDismissBottomSheet = { viewModel.updateIsBottomSheetShown(false) },
-        onReminderCard = { reminder ->
-            viewModel.updateBottomSheetReminder(reminder)
-            viewModel.updateIsBottomSheetShown(true)
-        },
-        onReminderActionSelected = { reminderAction ->
-            viewModel.updateIsBottomSheetShown(false)
-
-            when (reminderAction) {
-                ReminderAction.EDIT -> navigator.navigate(
-                    ReminderEditScreenDestination(
-                        reminderId = uiState.bottomSheetReminder.id
-                    )
-                )
-                else -> viewModel.processReminderAction(
-                    reminderAction = reminderAction,
-                    reminder = uiState.bottomSheetReminder.copy()
-                )
-            }
-        }
+        onNavigateDetails = { navigator.navigate(ReminderDetailsScreenDestination(it.id)) }
     )
 }
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun ReminderListScaffold(
-    uiState: ListUiState,
-    onApplyFilter: (ReminderFilter) -> Unit,
-    onApplySort: (ReminderSort) -> Unit,
-    onSearch: () -> Unit,
-    onSearchQueryChange: (String) -> Unit,
-    onCloseSearch: () -> Unit,
+    uiState: ReminderListUiState,
+    onHandleEvent: (ReminderListEvent) -> Unit,
     onNavigateAdd: () -> Unit,
-    onDismissBottomSheet: () -> Unit,
-    onReminderCard: (Reminder) -> Unit,
-    onReminderActionSelected: (ReminderAction) -> Unit,
+    onNavigateDetails: (Reminder) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
         topBar = {
             ReminderListTopBar(
                 reminderSortOrder = uiState.reminderSortOrder,
-                onApplySort = onApplySort,
-                onSearch = onSearch,
                 searchQuery = uiState.searchQuery,
-                onSearchQueryChange = onSearchQueryChange,
-                onCloseSearch = onCloseSearch,
-                isSearchBarShown = uiState.isSearchBarShown
+                isSearchBarShown = uiState.isSearchBarShown,
+                onApplySort = { onHandleEvent(ReminderListEvent.Sort(it)) },
+                onShowSearch = { onHandleEvent(ReminderListEvent.ShowSearch) },
+                onHideSearch = { onHandleEvent(ReminderListEvent.HideSearch) },
+                onSearchQueryChange = { onHandleEvent(ReminderListEvent.Search(it)) }
             )
         },
         content = { scaffoldPadding ->
@@ -144,8 +110,8 @@ fun ReminderListScaffold(
                 if (!uiState.isLoading) {
                     if (!uiState.isSearchBarShown) {
                         ReminderListFilterChips(
-                            uiState.reminderFilter,
-                            onApplyFilter
+                            selectedReminderFilter = uiState.reminderFilter,
+                            onApplyFilter = { onHandleEvent(ReminderListEvent.Filter(it)) }
                         )
                     }
 
@@ -164,21 +130,16 @@ fun ReminderListScaffold(
                                 else -> EmptyStateCompletedReminders()
                             }
                         },
-                        onReminderCard = onReminderCard,
+                        onCompleteReminder = {
+                            onHandleEvent(ReminderListEvent.CompleteReminder(it))
+                        },
+                        onReminderCard = { onNavigateDetails(it) },
                         contentPadding = PaddingValues(
                             start = 8.dp,
                             top = 8.dp,
                             end = 8.dp,
                             bottom = 92.dp
                         )
-                    )
-                }
-
-                if (uiState.isBottomSheetShown) {
-                    BottomSheetReminderActions(
-                        reminder = uiState.bottomSheetReminder,
-                        onReminderActionSelected = onReminderActionSelected,
-                        onDismissRequest = onDismissBottomSheet
                     )
                 }
             }
@@ -211,10 +172,10 @@ fun ReminderListScaffold(
 fun ReminderListTopBar(
     reminderSortOrder: ReminderSort,
     onApplySort: (ReminderSort) -> Unit,
-    onSearch: () -> Unit,
+    onShowSearch: () -> Unit,
     searchQuery: String,
     onSearchQueryChange: (String) -> Unit,
-    onCloseSearch: () -> Unit,
+    onHideSearch: () -> Unit,
     isSearchBarShown: Boolean,
     modifier: Modifier = Modifier
 ) {
@@ -229,7 +190,7 @@ fun ReminderListTopBar(
     }
 
     BackHandler(enabled = isSearchBarShown) {
-        onCloseSearch()
+        onHideSearch()
     }
 
     val topBarColor = if (isSystemInDarkTheme()) {
@@ -248,7 +209,7 @@ fun ReminderListTopBar(
         RemindMeSearchBar(
             searchQuery = searchQuery,
             onSearchQueryChange = onSearchQueryChange,
-            onCloseSearch = onCloseSearch
+            onCloseSearch = onHideSearch
         )
     } else {
         TopAppBar(
@@ -266,7 +227,7 @@ fun ReminderListTopBar(
                         tint = onTopBarColor
                     )
                 }
-                IconButton(onClick = onSearch) {
+                IconButton(onClick = onShowSearch) {
                     Icon(
                         imageVector = Icons.Rounded.Search,
                         contentDescription = stringResource(R.string.cd_search_reminders),
@@ -327,6 +288,7 @@ fun ReminderListFilterChips(
 fun ReminderList(
     reminders: List<Reminder>,
     emptyState: @Composable () -> Unit,
+    onCompleteReminder: (Reminder) -> Unit,
     onReminderCard: (Reminder) -> Unit,
     contentPadding: PaddingValues,
     modifier: Modifier = Modifier
@@ -347,6 +309,7 @@ fun ReminderList(
                 itemContent = { index ->
                     ReminderCard(
                         reminder = reminders[index],
+                        onCompleteReminder = onCompleteReminder,
                         onReminderCard = onReminderCard
                     )
                 }
@@ -363,16 +326,10 @@ fun ReminderListPreview(
 ) {
     AppTheme {
         ReminderListScaffold(
-            uiState = ListUiState(reminders = reminders),
-            onApplyFilter = {},
-            onApplySort = {},
-            onSearch = {},
-            onSearchQueryChange = {},
-            onCloseSearch = {},
+            uiState = ReminderListUiState(reminders = reminders),
+            onHandleEvent = {},
             onNavigateAdd = {},
-            onReminderCard = {},
-            onDismissBottomSheet = {},
-            onReminderActionSelected = {}
+            onNavigateDetails = {}
         )
     }
 }
