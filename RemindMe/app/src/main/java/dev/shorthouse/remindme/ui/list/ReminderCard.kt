@@ -14,15 +14,23 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Done
 import androidx.compose.material.icons.rounded.Notes
 import androidx.compose.material.icons.rounded.NotificationsNone
+import androidx.compose.material.icons.rounded.RadioButtonUnchecked
 import androidx.compose.material.icons.rounded.Repeat
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.pluralStringResource
@@ -38,10 +46,14 @@ import dev.shorthouse.remindme.ui.theme.Blue
 import dev.shorthouse.remindme.ui.theme.Green
 import dev.shorthouse.remindme.ui.theme.Red
 import java.time.temporal.ChronoUnit
+import kotlin.time.Duration.Companion.milliseconds
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun ReminderCard(
     reminder: Reminder,
+    onCompleteReminder: (Reminder) -> Unit,
     onReminderCard: (Reminder) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -53,7 +65,10 @@ fun ReminderCard(
         onClick = { onReminderCard(reminder) },
         modifier = modifier.fillMaxWidth()
     ) {
-        Row(modifier = Modifier.height(IntrinsicSize.Min)) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.height(IntrinsicSize.Min)
+        ) {
             Divider(
                 color = when {
                     reminder.isCompleted -> Green
@@ -65,9 +80,42 @@ fun ReminderCard(
                     .width(8.dp)
             )
 
+            var isReminderCompleted by remember { mutableStateOf(false) }
+            val coroutineScope = rememberCoroutineScope()
+
+            if (!reminder.isCompleted) {
+                IconButton(onClick = {
+                    coroutineScope.launch {
+                        isReminderCompleted = true
+                        delay(350.milliseconds)
+                        onCompleteReminder(reminder)
+                        if (reminder.isRepeatReminder) isReminderCompleted = false
+                    }
+                }) {
+                    Icon(
+                        imageVector = if (isReminderCompleted) {
+                            Icons.Rounded.Done
+                        } else {
+                            Icons.Rounded.RadioButtonUnchecked
+                        },
+                        tint = if (isReminderCompleted) {
+                            MaterialTheme.colorScheme.primary
+                        } else {
+                            MaterialTheme.colorScheme.outline
+                        },
+                        contentDescription = stringResource(R.string.cd_complete_reminder)
+                    )
+                }
+            }
+
             Column(
                 modifier = Modifier
-                    .padding(horizontal = 12.dp, vertical = 8.dp)
+                    .padding(
+                        start = if (reminder.isCompleted) 12.dp else 0.dp,
+                        top = 8.dp,
+                        end = 12.dp,
+                        bottom = 8.dp
+                    )
                     .fillMaxWidth()
             ) {
                 Text(
@@ -170,6 +218,7 @@ fun ReminderCardPreview(
     AppTheme {
         ReminderCard(
             reminder = reminder,
+            onCompleteReminder = {},
             onReminderCard = {}
         )
     }
