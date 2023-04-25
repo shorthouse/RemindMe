@@ -93,4 +93,7 @@
     <string name="test_tag_text_field_repeat_amount">Test Tag Text Field Repeat Amount</string>
     <string name="test_tag_reminder_list_lazy_column">test_tag_reminder_list_lazy_column</string>
     <string name="reminder_all">All</string>
+    <string name="cd_complete_reminder">Complete reminder</string>
+    <string name="top_bar_title_reminder_details">Details</string>
+    <string name="cd_more">More</string>
 </resources>
