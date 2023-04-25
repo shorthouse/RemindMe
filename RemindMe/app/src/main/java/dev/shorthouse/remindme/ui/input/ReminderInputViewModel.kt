@@ -7,7 +7,7 @@ import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.data.source.local.ReminderRepository
 import dev.shorthouse.remindme.di.IoDispatcher
 import dev.shorthouse.remindme.domain.reminder.AddReminderUseCase
-import dev.shorthouse.remindme.domain.reminder.EditReminderUseCase
+import dev.shorthouse.remindme.domain.reminder.UpdateReminderUseCase
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.ui.state.ReminderState
 import dev.shorthouse.remindme.ui.util.UiText
@@ -25,7 +25,7 @@ class ReminderInputViewModel @Inject constructor(
     private val reminderRepository: ReminderRepository,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
     private val addReminderUseCase: AddReminderUseCase,
-    private val editReminderUseCase: EditReminderUseCase
+    private val editReminderUseCase: UpdateReminderUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(InputUiState())
 
