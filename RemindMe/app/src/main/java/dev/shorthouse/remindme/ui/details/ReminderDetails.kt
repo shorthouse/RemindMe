@@ -1,9 +1,7 @@
 package dev.shorthouse.remindme.ui.details
 
 import android.content.res.Configuration
-import android.util.Log
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,20 +23,19 @@ import androidx.compose.material.icons.rounded.Notes
 import androidx.compose.material.icons.rounded.NotificationsNone
 import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material.icons.rounded.Schedule
+import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -48,7 +45,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -56,6 +52,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -65,7 +62,10 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.ui.component.dialog.ReminderDatePicker
 import dev.shorthouse.remindme.ui.component.dialog.ReminderTimePicker
+import dev.shorthouse.remindme.ui.component.dialog.RepeatIntervalDialog
 import dev.shorthouse.remindme.ui.component.text.RemindMeTextField
+import dev.shorthouse.remindme.ui.component.topappbar.RemindMeTopAppBar
+import dev.shorthouse.remindme.ui.input.ReminderRepeatIntervalInput
 import dev.shorthouse.remindme.ui.previewprovider.DefaultReminderStateProvider
 import dev.shorthouse.remindme.ui.state.ReminderState
 import dev.shorthouse.remindme.ui.theme.AppTheme
@@ -84,10 +84,8 @@ fun ReminderDetailsScreen(
     if (!uiState.isLoading) {
         ReminderDetailsScaffold(
             reminderState = reminderState,
-            onNavigateUp = {
-                viewModel.saveReminder(reminderState)
-                navigator.navigateUp()
-            }
+            onHandleEvent = { viewModel.handleEvent(it) },
+            onNavigateUp = { navigator.navigateUp() }
         )
     }
 }
@@ -95,18 +93,23 @@ fun ReminderDetailsScreen(
 @Composable
 fun ReminderDetailsScaffold(
     reminderState: ReminderState,
+    onHandleEvent: (ReminderDetailsEvent) -> Unit,
     onNavigateUp: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
         topBar = {
             ReminderDetailsTopBar(
+                reminderState = reminderState,
+                onHandleEvent = onHandleEvent,
                 onNavigateUp = onNavigateUp
             )
         },
         content = { scaffoldPadding ->
             ReminderDetailsContent(
                 reminderState = reminderState,
+                onHandleEvent = onHandleEvent,
+                onNavigateUp = onNavigateUp,
                 modifier = Modifier
                     .padding(scaffoldPadding)
                     .fillMaxSize()
@@ -116,41 +119,22 @@ fun ReminderDetailsScaffold(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReminderDetailsTopBar(
+    reminderState: ReminderState,
+    onHandleEvent: (ReminderDetailsEvent) -> Unit,
     onNavigateUp: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val topBarColor = if (isSystemInDarkTheme()) {
-        MaterialTheme.colorScheme.surface
-    } else {
-        MaterialTheme.colorScheme.primary
-    }
-
-    val onTopBarColor = if (isSystemInDarkTheme()) {
-        MaterialTheme.colorScheme.onSurface
-    } else {
-        MaterialTheme.colorScheme.onPrimary
-    }
-
     var showMenu by remember { mutableStateOf(false) }
 
-    TopAppBar(
-        title = {
-            Text(
-                text = stringResource(R.string.top_bar_title_reminder_details),
-                style = MaterialTheme.typography.titleLarge.copy(color = onTopBarColor)
-            )
-        },
+    RemindMeTopAppBar(
+        title = stringResource(R.string.top_bar_title_reminder_details),
         navigationIcon = {
-            IconButton(onClick = {
-                onNavigateUp()
-            }) {
+            IconButton(onClick = { onNavigateUp() }) {
                 Icon(
                     imageVector = Icons.Rounded.ArrowBack,
-                    contentDescription = stringResource(R.string.cd_top_bar_close_reminder),
-                    tint = onTopBarColor
+                    contentDescription = stringResource(R.string.cd_top_bar_close_reminder)
                 )
             }
         },
@@ -158,114 +142,232 @@ fun ReminderDetailsTopBar(
             IconButton(onClick = { showMenu = !showMenu }) {
                 Icon(
                     imageVector = Icons.Rounded.MoreVert,
-                    tint = onTopBarColor,
                     contentDescription = stringResource(R.string.cd_more)
                 )
             }
             DropdownMenu(
                 expanded = showMenu,
-                onDismissRequest = { showMenu = false }
+                onDismissRequest = { showMenu = false },
+                offset = DpOffset(
+                    x = 0.dp,
+                    y = (-60).dp
+                )
             ) {
                 DropdownMenuItem(
                     text = {
                         Text(
-                            text = "Delete",
+                            text = stringResource(R.string.dropdown_delete_reminder),
                             style = MaterialTheme.typography.bodyMedium.copy(fontSize = 17.sp)
                         )
                     },
                     onClick = {
-                        Log.d("HDS", "delete clicked")
-                        showMenu = false
+                        onHandleEvent(
+                            ReminderDetailsEvent.DeleteReminder(reminderState.toReminder())
+                        )
+                        onNavigateUp()
                     }
                 )
                 DropdownMenuItem(
                     text = {
                         Text(
-                            text = "Complete",
+                            text = stringResource(R.string.dropdown_complete_reminder),
                             style = MaterialTheme.typography.bodyMedium.copy(fontSize = 17.sp)
                         )
                     },
                     onClick = {
-                        Log.d("HDS", "complete clicked")
-                        showMenu = false
+                        onHandleEvent(
+                            ReminderDetailsEvent.CompleteReminder(reminderState.toReminder())
+                        )
+                        onNavigateUp()
                     }
                 )
             }
         },
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = topBarColor
-        ),
         modifier = modifier
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReminderDetailsContent(
     reminderState: ReminderState,
+    onHandleEvent: (ReminderDetailsEvent) -> Unit,
+    onNavigateUp: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val surfaceColor = if (isSystemInDarkTheme()) {
-        MaterialTheme.colorScheme.background
-    } else {
-        MaterialTheme.colorScheme.surface
-    }
+    Column(
+        modifier = modifier
+            .verticalScroll(rememberScrollState())
+            .padding(16.dp)
+    ) {
+        RemindMeTextField(
+            text = reminderState.name,
+            onTextChange = { if (it.length <= 200) reminderState.name = it },
+            textStyle = MaterialTheme.typography.titleLarge.copy(
+                color = MaterialTheme.colorScheme.onBackground
+            ),
+            hintText = stringResource(R.string.hint_reminder_name),
+            imeAction = ImeAction.Done
+        )
 
-    Surface(color = surfaceColor) {
-        Column(
-            modifier = modifier
-                .verticalScroll(rememberScrollState())
-                .padding(horizontal = 16.dp)
-        ) {
-            val spacingModifier = Modifier
-                .padding(vertical = 12.dp)
-                .fillMaxWidth()
-
-            ReminderNameInput(
-                reminderState = reminderState,
-                modifier = spacingModifier
-            )
-
-            ReminderDateInput(
-                reminderState = reminderState,
-                modifier = spacingModifier
-            )
-
-            ReminderTimeInput(
-                reminderState = reminderState,
-                modifier = spacingModifier
-            )
-
-            ReminderNotificationInput(
-                reminderState = reminderState
-            )
-
-            ReminderRepeatIntervalInput(
-                reminderState = reminderState
-            )
-
-            ReminderNotesInput(
-                reminderState = reminderState,
-                modifier = spacingModifier
+        var isDatePickerShown by remember { mutableStateOf(false) }
+        if (isDatePickerShown) {
+            ReminderDatePicker(
+                initialDate = reminderState.date,
+                onConfirm = { reminderState.date = it },
+                onDismiss = { isDatePickerShown = false }
             )
         }
-    }
-}
 
-@Composable
-fun ReminderNameInput(
-    reminderState: ReminderState,
-    modifier: Modifier = Modifier
-) {
-    RemindMeTextField(
-        text = reminderState.name,
-        onTextChange = { if (it.length <= 200) reminderState.name = it },
-        textStyle = MaterialTheme.typography.titleLarge
-            .copy(color = MaterialTheme.colorScheme.onSurface),
-        hintText = stringResource(R.string.hint_reminder_name),
-        imeAction = ImeAction.Done,
-        modifier = modifier
-            .padding(top = 12.dp)
-    )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.clickable { isDatePickerShown = true }
+        ) {
+            Icon(
+                imageVector = Icons.Rounded.CalendarToday,
+                tint = MaterialTheme.colorScheme.outline,
+                contentDescription = stringResource(R.string.cd_details_date)
+            )
+
+            Spacer(Modifier.width(16.dp))
+
+            Text(
+                text = reminderState.date,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onBackground
+            )
+        }
+
+        var isTimePickerShown by remember { mutableStateOf(false) }
+        if (isTimePickerShown) {
+            ReminderTimePicker(
+                initialTime = reminderState.time,
+                onConfirm = { reminderState.time = it },
+                onDismiss = { isTimePickerShown = false }
+            )
+        }
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.clickable { isTimePickerShown = true }
+        ) {
+            Icon(
+                imageVector = Icons.Rounded.Schedule,
+                tint = MaterialTheme.colorScheme.outline,
+                contentDescription = stringResource(R.string.cd_details_time)
+            )
+
+            Spacer(Modifier.width(16.dp))
+
+            Text(
+                text = reminderState.time.toString(),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onBackground
+            )
+        }
+
+        Row {
+            FilterChip(
+                selected = reminderState.isNotificationSent,
+                onClick = { reminderState.isNotificationSent = !reminderState.isNotificationSent },
+                label = {
+                    Text(
+                        text = if (reminderState.isNotificationSent) {
+                            "Notification on"
+                        } else {
+                            "Add notification"
+                        },
+                        style = MaterialTheme.typography.labelMedium,
+                        modifier = Modifier.padding(vertical = 12.dp)
+                    )
+                },
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Rounded.NotificationsNone,
+                        tint = MaterialTheme.colorScheme.onBackground,
+                        contentDescription = null
+                    )
+                },
+                modifier = Modifier.weight(1f)
+            )
+
+            Spacer(Modifier.width(16.dp))
+
+            FilterChip(
+                selected = reminderState.isRepeatReminder,
+                onClick = { reminderState.isRepeatReminder = !reminderState.isRepeatReminder },
+                label = {
+                    Text(
+                        text = if (reminderState.isRepeatReminder) {
+                            "5 days"
+                        } else {
+                            "Add repeat"
+                        },
+                        style = MaterialTheme.typography.labelMedium,
+                        modifier = Modifier.padding(vertical = 12.dp)
+                    )
+                },
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Rounded.Refresh,
+                        tint = MaterialTheme.colorScheme.onBackground,
+                        contentDescription = null
+                    )
+                },
+                modifier = Modifier.weight(1f)
+            )
+         
+            if (reminderState.isRepeatReminder) {
+                RepeatIntervalDialog(
+                    reminderState = reminderState,
+                    onConfirm = {},
+                    onDismiss = {}
+                )
+            }
+        }
+
+        ReminderRepeatIntervalInput(
+            reminderState = reminderState
+        )
+
+        Row {
+            Icon(
+                imageVector = Icons.Rounded.Notes,
+                contentDescription = stringResource(R.string.cd_details_notes),
+                tint = MaterialTheme.colorScheme.outline
+            )
+
+            Spacer(Modifier.width(16.dp))
+
+            RemindMeTextField(
+                text = reminderState.notes.orEmpty(),
+                onTextChange = { if (it.length <= 2000) reminderState.notes = it },
+                textStyle = MaterialTheme.typography.bodyMedium
+                    .copy(color = MaterialTheme.colorScheme.onBackground),
+                hintText = stringResource(R.string.hint_reminder_notes),
+                imeAction = ImeAction.None,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        Button(
+            onClick = {
+                onHandleEvent(ReminderDetailsEvent.SaveReminder(reminderState.toReminder()))
+                onNavigateUp()
+            },
+            content = {
+                Text(
+                    text = stringResource(R.string.button_save_reminder),
+                    style = MaterialTheme.typography.titleMedium
+                )
+            },
+            enabled = reminderState.isValid(),
+            shape = MaterialTheme.shapes.small,
+            modifier = Modifier.fillMaxWidth()
+        )
+    }
 }
 
 @Composable
@@ -359,8 +461,6 @@ fun ReminderNotesInput(
     reminderState: ReminderState,
     modifier: Modifier = Modifier
 ) {
-    val notesMaxLength = integerResource(R.integer.reminder_notes_max_length)
-
     Row(modifier = modifier) {
         Icon(
             imageVector = Icons.Rounded.Notes,
@@ -372,7 +472,7 @@ fun ReminderNotesInput(
 
         RemindMeTextField(
             text = reminderState.notes.orEmpty(),
-            onTextChange = { if (it.length <= notesMaxLength) reminderState.notes = it },
+            onTextChange = { if (it.length <= 2000) reminderState.notes = it },
             textStyle = MaterialTheme.typography.bodyMedium
                 .copy(color = MaterialTheme.colorScheme.onSurface),
             hintText = stringResource(R.string.hint_reminder_notes),
@@ -451,12 +551,10 @@ private fun RepeatAmountInput(
     reminderState: ReminderState,
     modifier: Modifier = Modifier
 ) {
-    val repeatAmountMaxLength = integerResource(R.integer.reminder_repeat_amount_max_length)
-
     OutlinedTextField(
         value = reminderState.repeatAmount,
         onValueChange = { repeatAmount ->
-            if (repeatAmount.length <= repeatAmountMaxLength) {
+            if (repeatAmount.length <= 2) {
                 reminderState.repeatAmount = repeatAmount
                     .trimStart { it == '0' }
                     .filter { it.isDigit() }
@@ -553,83 +651,8 @@ private fun ReminderInputPreview(
     AppTheme {
         ReminderDetailsScaffold(
             reminderState = reminderState,
+            onHandleEvent = {},
             onNavigateUp = {}
         )
     }
 }
-
-//    when (it) {
-//        ReminderAction.EDIT -> navigator.navigate(
-//            ReminderEditScreenDestination(
-//                reminderId = uiState.bottomSheetReminder.id
-//            )
-//        )
-//        else -> viewModel.processReminderAction(
-//            reminderAction = it,
-//            reminder = uiState.bottomSheetReminder.copy()
-//        )
-//    }
-
-// fun processReminderAction(reminderAction: ReminderAction, reminder: Reminder) {
-//    when (reminderAction) {
-//        ReminderAction.COMPLETE_ONETIME -> {
-//            completeOnetimeReminderUseCase(reminder)
-//        }
-//        ReminderAction.COMPLETE_REPEAT_OCCURRENCE -> {
-//            completeRepeatReminderOccurrenceUseCase(reminder)
-//        }
-//        ReminderAction.COMPLETE_REPEAT_SERIES -> {
-//            completeRepeatReminderSeriesUseCase(reminder)
-//        }
-//        else -> {
-//            deleteReminderUseCase(reminder)
-//        }
-//    }
-// }
-
-// if (uiState.isBottomSheetShown) {
-//    BottomSheetReminderActions(
-//        reminder = uiState.bottomSheetReminder,
-//        onReminderActionSelected = onReminderActionSelected,
-//        onDismissRequest = { onHandleEvent(ReminderListEvent.HideBottomSheet) }
-//    )
-// }
-
-// @Composable
-// fun ReminderInputScreen(
-//    reminderState: ReminderState,
-//    viewModel: ReminderInputViewModel,
-//    topBarTitle: String,
-//    navigator: DestinationsNavigator
-// ) {
-//    val coroutineScope = rememberCoroutineScope()
-//    val context = LocalContext.current
-//
-//    val onNavigateUp: () -> Unit = {
-//        navigator.navigateUp()
-//    }
-//
-//    val onSave: () -> Unit = {
-//        val reminder = reminderState.toReminder()
-//
-//        when {
-//            viewModel.isReminderValid(reminder) -> {
-//                viewModel.saveReminder(reminder)
-//                onNavigateUp()
-//            }
-//            else -> {
-//                val errorMessage = viewModel.getErrorMessage(reminder).asString(context)
-//                coroutineScope.launch {
-//                    snackbarHostState.showSnackbar(message = errorMessage)
-//                }
-//            }
-//        }
-//    }
-//
-//    ReminderInputScaffold(
-//        reminderState = reminderState,
-//        topBarTitle = topBarTitle,
-//        onNavigateUp = onNavigateUp,
-//        onSave = onSave
-//    )
-// }
