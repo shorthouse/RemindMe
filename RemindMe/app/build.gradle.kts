@@ -84,16 +84,16 @@ kapt {
 
 dependencies {
     // Core
-    implementation("androidx.core:core-ktx:1.10.0")
+    implementation("androidx.core:core-ktx:1.9.0")
     implementation("com.google.android.material:material:1.8.0")
-    implementation("androidx.core:core-splashscreen:1.0.0")
+    implementation("androidx.core:core-splashscreen:1.0.1")
 
     // Compose
     val composeBom = platform("androidx.compose:compose-bom:2023.03.00")
     implementation(composeBom)
     androidTestImplementation(composeBom)
-    implementation("androidx.compose.material3:material3:1.1.0-beta02")
-    implementation("androidx.compose.material:material-icons-extended:1.4.1")
+    implementation("androidx.compose.material3:material3:1.1.0-rc01")
+    implementation("androidx.compose.material:material-icons-extended:1.4.2")
     implementation("com.google.accompanist:accompanist-permissions:0.30.0")
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.30.0")
     implementation("io.github.raamcosta.compose-destinations:core:1.8.38-beta")
@@ -158,7 +158,7 @@ dependencies {
     androidTestImplementation("org.mockito:mockito-android:5.2.0")
     androidTestImplementation("androidx.test.uiautomator:uiautomator:2.2.0")
     androidTestImplementation("com.google.dagger:hilt-android-testing:2.45")
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.4.1")
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.4.2")
     kaptAndroidTest("com.google.dagger:hilt-android-compiler:2.45")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 }
