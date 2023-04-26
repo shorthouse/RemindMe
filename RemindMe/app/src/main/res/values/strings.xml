@@ -96,4 +96,7 @@
     <string name="cd_complete_reminder">Complete reminder</string>
     <string name="top_bar_title_reminder_details">Details</string>
     <string name="cd_more">More</string>
+    <string name="dropdown_complete_reminder">Complete</string>
+    <string name="dropdown_delete_reminder">Delete</string>
+    <string name="button_save_reminder">Save</string>
 </resources>
