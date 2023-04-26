@@ -7,7 +7,6 @@ import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.scaleIn
 import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -31,8 +30,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -60,6 +57,7 @@ import dev.shorthouse.remindme.ui.component.emptystate.EmptyStateOverdueReminder
 import dev.shorthouse.remindme.ui.component.emptystate.EmptyStateSearchReminders
 import dev.shorthouse.remindme.ui.component.emptystate.EmptyStateUpcomingReminders
 import dev.shorthouse.remindme.ui.component.searchbar.RemindMeSearchBar
+import dev.shorthouse.remindme.ui.component.topappbar.RemindMeTopAppBar
 import dev.shorthouse.remindme.ui.destinations.ReminderAddScreenDestination
 import dev.shorthouse.remindme.ui.destinations.ReminderDetailsScreenDestination
 import dev.shorthouse.remindme.ui.previewprovider.ReminderListProvider
@@ -167,7 +165,6 @@ fun ReminderListScaffold(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReminderListTopBar(
     reminderSortOrder: ReminderSort,
@@ -193,18 +190,6 @@ fun ReminderListTopBar(
         onHideSearch()
     }
 
-    val topBarColor = if (isSystemInDarkTheme()) {
-        MaterialTheme.colorScheme.surface
-    } else {
-        MaterialTheme.colorScheme.primary
-    }
-
-    val onTopBarColor = if (isSystemInDarkTheme()) {
-        MaterialTheme.colorScheme.onSurface
-    } else {
-        MaterialTheme.colorScheme.onPrimary
-    }
-
     if (isSearchBarShown) {
         RemindMeSearchBar(
             searchQuery = searchQuery,
@@ -212,32 +197,22 @@ fun ReminderListTopBar(
             onCloseSearch = onHideSearch
         )
     } else {
-        TopAppBar(
-            title = {
-                Text(
-                    text = stringResource(R.string.app_name),
-                    style = MaterialTheme.typography.titleLarge.copy(color = onTopBarColor)
-                )
-            },
+        RemindMeTopAppBar(
+            title = stringResource(R.string.app_name),
             actions = {
                 IconButton(onClick = { isSortDialogOpen = true }) {
                     Icon(
                         imageVector = Icons.Rounded.SwapVert,
-                        contentDescription = stringResource(R.string.cd_sort_reminders),
-                        tint = onTopBarColor
+                        contentDescription = stringResource(R.string.cd_sort_reminders)
                     )
                 }
                 IconButton(onClick = onShowSearch) {
                     Icon(
                         imageVector = Icons.Rounded.Search,
-                        contentDescription = stringResource(R.string.cd_search_reminders),
-                        tint = onTopBarColor
+                        contentDescription = stringResource(R.string.cd_search_reminders)
                     )
                 }
             },
-            colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = topBarColor
-            ),
             modifier = modifier
         )
     }
