@@ -24,7 +24,6 @@ import androidx.compose.material.icons.rounded.Notes
 import androidx.compose.material.icons.rounded.NotificationsNone
 import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material.icons.rounded.Schedule
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -36,8 +35,6 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -52,7 +49,6 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -66,6 +62,7 @@ import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.ui.component.dialog.ReminderDatePicker
 import dev.shorthouse.remindme.ui.component.dialog.ReminderTimePicker
 import dev.shorthouse.remindme.ui.component.text.RemindMeTextField
+import dev.shorthouse.remindme.ui.component.topappbar.RemindMeTopAppBar
 import dev.shorthouse.remindme.ui.previewprovider.DefaultReminderStateProvider
 import dev.shorthouse.remindme.ui.state.ReminderState
 import dev.shorthouse.remindme.ui.theme.AppTheme
@@ -142,7 +139,6 @@ fun ReminderInputScaffold(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReminderInputTopBar(
     topBarTitle: String,
@@ -150,50 +146,24 @@ fun ReminderInputTopBar(
     onSave: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val topBarColor = if (isSystemInDarkTheme()) {
-        MaterialTheme.colorScheme.surface
-    } else {
-        MaterialTheme.colorScheme.primary
-    }
-
-    val onTopBarColor = if (isSystemInDarkTheme()) {
-        MaterialTheme.colorScheme.onSurface
-    } else {
-        MaterialTheme.colorScheme.onPrimary
-    }
-
-    TopAppBar(
-        title = {
-            Text(
-                text = topBarTitle,
-                style = MaterialTheme.typography.titleLarge.copy(color = onTopBarColor)
-            )
-        },
+    RemindMeTopAppBar(
+        title = topBarTitle,
         navigationIcon = {
-            IconButton(onClick = {
-                onNavigateUp()
-            }) {
+            IconButton(onClick = { onNavigateUp() }) {
                 Icon(
                     imageVector = Icons.Rounded.Close,
-                    contentDescription = stringResource(R.string.cd_top_bar_close_reminder),
-                    tint = onTopBarColor
+                    contentDescription = stringResource(R.string.cd_top_bar_close_reminder)
                 )
             }
         },
         actions = {
-            IconButton(onClick = {
-                onSave()
-            }) {
+            IconButton(onClick = { onSave() }) {
                 Icon(
                     imageVector = Icons.Rounded.Done,
-                    contentDescription = stringResource(R.string.cd_top_bar_save_reminder),
-                    tint = onTopBarColor
+                    contentDescription = stringResource(R.string.cd_top_bar_save_reminder)
                 )
             }
         },
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = topBarColor
-        ),
         modifier = modifier
     )
 }
@@ -264,11 +234,9 @@ fun ReminderNameInput(
     focusRequester: FocusRequester,
     modifier: Modifier = Modifier
 ) {
-    val nameMaxLength = integerResource(R.integer.reminder_name_max_length)
-
     RemindMeTextField(
         text = reminderState.name,
-        onTextChange = { if (it.length <= nameMaxLength) reminderState.name = it },
+        onTextChange = { if (it.length <= 200) reminderState.name = it },
         textStyle = MaterialTheme.typography.titleLarge
             .copy(color = MaterialTheme.colorScheme.onSurface),
         hintText = stringResource(R.string.hint_reminder_name),
@@ -370,8 +338,6 @@ fun ReminderNotesInput(
     reminderState: ReminderState,
     modifier: Modifier = Modifier
 ) {
-    val notesMaxLength = integerResource(R.integer.reminder_notes_max_length)
-
     Row(modifier = modifier) {
         Icon(
             imageVector = Icons.Rounded.Notes,
@@ -383,7 +349,7 @@ fun ReminderNotesInput(
 
         RemindMeTextField(
             text = reminderState.notes.orEmpty(),
-            onTextChange = { if (it.length <= notesMaxLength) reminderState.notes = it },
+            onTextChange = { if (it.length <= 2000) reminderState.notes = it },
             textStyle = MaterialTheme.typography.bodyMedium
                 .copy(color = MaterialTheme.colorScheme.onSurface),
             hintText = stringResource(R.string.hint_reminder_notes),
@@ -462,12 +428,10 @@ private fun RepeatAmountInput(
     reminderState: ReminderState,
     modifier: Modifier = Modifier
 ) {
-    val repeatAmountMaxLength = integerResource(R.integer.reminder_repeat_amount_max_length)
-
     OutlinedTextField(
         value = reminderState.repeatAmount,
         onValueChange = { repeatAmount ->
-            if (repeatAmount.length <= repeatAmountMaxLength) {
+            if (repeatAmount.length <= 2) {
                 reminderState.repeatAmount = repeatAmount
                     .trimStart { it == '0' }
                     .filter { it.isDigit() }
