@@ -24,7 +24,7 @@ private object ReminderStatePreviewData {
     val default = ReminderState(
         id = 1,
         name = "Water the plants",
-        date = "Wed, 22 Mar 2020",
+        date = "Sun, 22 Mar 2020",
         time = LocalTime.of(14, 30),
         isNotificationSent = true,
         isRepeatReminder = true,
