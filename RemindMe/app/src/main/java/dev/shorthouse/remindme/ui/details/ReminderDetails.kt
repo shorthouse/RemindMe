@@ -99,7 +99,9 @@ fun ReminderDetailsScaffold(
                 isReminderValid = isReminderValid,
                 onHandleEvent = onHandleEvent,
                 onNavigateUp = onNavigateUp,
-                modifier = Modifier.padding(scaffoldPadding)
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(scaffoldPadding)
             )
         },
         modifier = modifier
@@ -180,7 +182,6 @@ fun ReminderDetailsContent(
 ) {
     Column(
         modifier = modifier
-            .fillMaxSize()
             .padding(horizontal = 16.dp)
             .verticalScroll(rememberScrollState())
     ) {
@@ -278,7 +279,7 @@ fun ReminderDetailsContent(
                 onTextChange = { onHandleEvent(ReminderDetailsEvent.UpdateNotes(it)) },
                 textStyle = MaterialTheme.typography.bodyMedium,
                 hintText = stringResource(R.string.hint_reminder_notes),
-                imeAction = ImeAction.None
+                imeAction = ImeAction.Done
             )
         }
 
