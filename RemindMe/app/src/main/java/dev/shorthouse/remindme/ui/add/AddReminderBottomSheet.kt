@@ -18,6 +18,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 import dev.shorthouse.remindme.ui.details.ReminderDetailsContent
 import dev.shorthouse.remindme.ui.details.ReminderDetailsViewModel
 import dev.shorthouse.remindme.ui.theme.AppTheme
+import dev.shorthouse.remindme.util.disableBottomSheetSwipe
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Destination
@@ -45,7 +46,9 @@ fun AddReminderBottomSheetScreen(
             isReminderValid = viewModel.isReminderValid(uiState.reminder),
             onHandleEvent = { viewModel.handleEvent(it) },
             onNavigateUp = onDismissRequest,
-            modifier = Modifier.imePadding()
+            modifier = Modifier
+                .imePadding()
+                .disableBottomSheetSwipe()
         )
     }
 }
