@@ -136,7 +136,7 @@ fun ReminderListScaffold(
                             start = 8.dp,
                             top = 8.dp,
                             end = 8.dp,
-                            bottom = 92.dp
+                            bottom = if (uiState.isSearchBarShown) 16.dp else 92.dp
                         )
                     )
                 }
@@ -251,9 +251,7 @@ fun ReminderListFilterChips(
                     selectedContainerColor = MaterialTheme.colorScheme.primary,
                     selectedLabelColor = MaterialTheme.colorScheme.onPrimary
                 ),
-                modifier = Modifier.padding(
-                    horizontal = 4.dp
-                )
+                modifier = Modifier.padding(horizontal = 4.dp)
             )
         }
     }
