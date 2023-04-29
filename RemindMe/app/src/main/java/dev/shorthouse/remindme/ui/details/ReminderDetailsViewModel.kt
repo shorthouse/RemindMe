@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.shorthouse.remindme.data.source.local.ReminderRepository
 import dev.shorthouse.remindme.di.IoDispatcher
+import dev.shorthouse.remindme.domain.reminder.AddReminderUseCase
 import dev.shorthouse.remindme.domain.reminder.CompleteOnetimeReminderUseCase
 import dev.shorthouse.remindme.domain.reminder.CompleteRepeatReminderSeriesUseCase
 import dev.shorthouse.remindme.domain.reminder.DeleteReminderUseCase
@@ -28,6 +29,7 @@ import kotlinx.coroutines.launch
 class ReminderDetailsViewModel @Inject constructor(
     private val reminderRepository: ReminderRepository,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
+    private val addReminderUseCase: AddReminderUseCase,
     private val updateReminderUseCase: UpdateReminderUseCase,
     private val deleteReminderUseCase: DeleteReminderUseCase,
     private val completeOnetimeReminderUseCase: CompleteOnetimeReminderUseCase,
@@ -41,7 +43,12 @@ class ReminderDetailsViewModel @Inject constructor(
 
     init {
         val navArgs = savedStateHandle.navArgs<ReminderDetailsScreenNavArgs>()
-        setReminder(navArgs.reminderId)
+
+        if (navArgs.reminderId == null) {
+            setAddReminder()
+        } else {
+            setEditReminder(navArgs.reminderId)
+        }
     }
 
     fun handleEvent(event: ReminderDetailsEvent) {
@@ -66,7 +73,11 @@ class ReminderDetailsViewModel @Inject constructor(
                 reminder.validated() != _uiState.value.initialReminder.validated()
     }
 
-    private fun setReminder(reminderId: Long) {
+    private fun setAddReminder() {
+        _uiState.update { it.copy(isLoading = false) }
+    }
+
+    private fun setEditReminder(reminderId: Long) {
         _uiState.update { it.copy(isLoading = true) }
 
         viewModelScope.launch(ioDispatcher) {
@@ -95,7 +106,11 @@ class ReminderDetailsViewModel @Inject constructor(
     }
 
     private fun handleSaveReminder(reminder: Reminder) {
-        updateReminderUseCase(reminder.validated())
+        if (reminder.id == 0L) {
+            addReminderUseCase(reminder.validated())
+        } else {
+            updateReminderUseCase(reminder.validated())
+        }
     }
 
     private fun updateReminder(updatedReminder: Reminder) {
