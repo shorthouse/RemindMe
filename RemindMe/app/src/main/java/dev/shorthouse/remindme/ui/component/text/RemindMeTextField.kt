@@ -59,20 +59,38 @@ fun RemindMeTextField(
     showBackground = true,
     widthDp = 200
 )
-fun RemindMeTextFieldPreview() {
+fun RemindMeTextFieldEmptyPreview() {
     AppTheme {
-        var text by remember { mutableStateOf("Input") }
-        val onTextChange: (String) -> Unit = { text = it }
-        val textStyle = MaterialTheme.typography.titleLarge
-        val hintText = "Hint text"
-        val imeAction = ImeAction.Default
+        var text by remember { mutableStateOf("") }
 
         RemindMeTextField(
             text = text,
-            onTextChange = onTextChange,
-            textStyle = textStyle,
-            hintText = hintText,
-            imeAction = imeAction
+            onTextChange = { text = it },
+            textStyle = MaterialTheme.typography.titleLarge,
+            hintText = "Hint text",
+            imeAction = ImeAction.Default
+        )
+    }
+}
+
+@Composable
+@Preview(name = "Light Mode", showBackground = true, widthDp = 200)
+@Preview(
+    name = "Dark Mode",
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    showBackground = true,
+    widthDp = 200
+)
+fun RemindMeTextFieldPreview() {
+    AppTheme {
+        var text by remember { mutableStateOf("Input") }
+
+        RemindMeTextField(
+            text = text,
+            onTextChange = { text = it },
+            textStyle = MaterialTheme.typography.titleLarge,
+            hintText = "Hint text",
+            imeAction = ImeAction.Default
         )
     }
 }
