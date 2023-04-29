@@ -3,9 +3,9 @@ package dev.shorthouse.remindme.ui.list
 import android.content.res.Configuration
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -148,9 +148,9 @@ fun ReminderListScaffold(
         },
         floatingActionButton = {
             AnimatedVisibility(
-                visible = !uiState.isSearchBarShown,
+                visible = !uiState.isSearchBarShown && !uiState.isAddReminderSheetShown,
                 enter = scaleIn(),
-                exit = ExitTransition.None
+                exit = scaleOut()
             ) {
                 FloatingActionButton(
                     onClick = { onHandleEvent(ReminderListEvent.ShowAddReminderSheet) },
