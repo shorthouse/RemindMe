@@ -1,11 +1,9 @@
-package dev.shorthouse.remindme.ui.details
+package dev.shorthouse.remindme.ui.addedit
 
-import android.content.res.Configuration
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -13,20 +11,14 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.TextSnippet
-import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.CalendarToday
 import androidx.compose.material.icons.rounded.Close
-import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material.icons.rounded.NotificationsNone
 import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material.icons.rounded.Schedule
 import androidx.compose.material3.Button
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -38,15 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.ui.component.chip.RemindMeInputChip
@@ -54,129 +38,13 @@ import dev.shorthouse.remindme.ui.component.dialog.ReminderDatePicker
 import dev.shorthouse.remindme.ui.component.dialog.ReminderTimePicker
 import dev.shorthouse.remindme.ui.component.dialog.RepeatIntervalDialog
 import dev.shorthouse.remindme.ui.component.text.RemindMeTextField
-import dev.shorthouse.remindme.ui.component.topappbar.RemindMeTopAppBar
-import dev.shorthouse.remindme.ui.previewprovider.DefaultReminderProvider
-import dev.shorthouse.remindme.ui.theme.AppTheme
 import java.time.temporal.ChronoUnit
 
-@Destination(navArgsDelegate = ReminderDetailsScreenNavArgs::class)
 @Composable
-fun ReminderDetailsScreen(
-    viewModel: ReminderDetailsViewModel = hiltViewModel(),
-    navigator: DestinationsNavigator
-) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-
-    if (!uiState.isLoading) {
-        ReminderDetailsScaffold(
-            reminder = uiState.reminder,
-            isReminderValid = viewModel.isReminderValid(uiState.reminder),
-            onHandleEvent = { viewModel.handleEvent(it) },
-            onNavigateUp = { navigator.navigateUp() }
-        )
-    }
-}
-
-@Composable
-fun ReminderDetailsScaffold(
+fun ReminderAddEditContent(
     reminder: Reminder,
     isReminderValid: Boolean,
-    onHandleEvent: (ReminderDetailsEvent) -> Unit,
-    onNavigateUp: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Scaffold(
-        topBar = {
-            ReminderDetailsTopBar(
-                reminder = reminder,
-                onHandleEvent = onHandleEvent,
-                onNavigateUp = onNavigateUp
-            )
-        },
-        content = { scaffoldPadding ->
-            ReminderDetailsContent(
-                reminder = reminder,
-                isReminderValid = isReminderValid,
-                onHandleEvent = onHandleEvent,
-                onNavigateUp = onNavigateUp,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(scaffoldPadding)
-            )
-        },
-        modifier = modifier
-    )
-}
-
-@Composable
-fun ReminderDetailsTopBar(
-    reminder: Reminder,
-    onHandleEvent: (ReminderDetailsEvent) -> Unit,
-    onNavigateUp: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    var showOverflowMenu by remember { mutableStateOf(false) }
-
-    RemindMeTopAppBar(
-        title = stringResource(R.string.top_bar_title_reminder_details),
-        navigationIcon = {
-            IconButton(onClick = { onNavigateUp() }) {
-                Icon(
-                    imageVector = Icons.Rounded.ArrowBack,
-                    contentDescription = stringResource(R.string.cd_top_app_bar_back)
-                )
-            }
-        },
-        actions = {
-            IconButton(onClick = { showOverflowMenu = !showOverflowMenu }) {
-                Icon(
-                    imageVector = Icons.Rounded.MoreVert,
-                    contentDescription = stringResource(R.string.cd_more)
-                )
-            }
-            DropdownMenu(
-                expanded = showOverflowMenu,
-                onDismissRequest = { showOverflowMenu = false },
-                offset = DpOffset(
-                    x = 0.dp,
-                    y = (-60).dp
-                )
-            ) {
-                DropdownMenuItem(
-                    text = {
-                        Text(
-                            text = stringResource(R.string.dropdown_delete_reminder),
-                            style = MaterialTheme.typography.bodyMedium.copy(fontSize = 17.sp)
-                        )
-                    },
-                    onClick = {
-                        onHandleEvent(ReminderDetailsEvent.DeleteReminder(reminder))
-                        onNavigateUp()
-                    }
-                )
-                DropdownMenuItem(
-                    text = {
-                        Text(
-                            text = stringResource(R.string.dropdown_complete_reminder),
-                            style = MaterialTheme.typography.bodyMedium.copy(fontSize = 17.sp)
-                        )
-                    },
-                    onClick = {
-                        onHandleEvent(ReminderDetailsEvent.CompleteReminder(reminder))
-                        onNavigateUp()
-                    }
-                )
-            }
-        },
-        modifier = modifier
-    )
-}
-
-@Composable
-fun ReminderDetailsContent(
-    reminder: Reminder,
-    isReminderValid: Boolean,
-    onHandleEvent: (ReminderDetailsEvent) -> Unit,
+    onHandleEvent: (ReminderAddEditEvent) -> Unit,
     onNavigateUp: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -188,7 +56,7 @@ fun ReminderDetailsContent(
         RemindMeTextField(
             text = reminder.name,
             onTextChange = {
-                onHandleEvent(ReminderDetailsEvent.UpdateName(it))
+                onHandleEvent(ReminderAddEditEvent.UpdateName(it))
             },
             textStyle = MaterialTheme.typography.titleLarge,
             hintText = stringResource(R.string.hint_reminder_name),
@@ -203,7 +71,7 @@ fun ReminderDetailsContent(
         if (isDatePickerShown) {
             ReminderDatePicker(
                 initialDate = reminder.startDateTime.toLocalDate(),
-                onConfirm = { onHandleEvent(ReminderDetailsEvent.UpdateDate(it)) },
+                onConfirm = { onHandleEvent(ReminderAddEditEvent.UpdateDate(it)) },
                 onDismiss = { isDatePickerShown = false }
             )
         }
@@ -234,7 +102,7 @@ fun ReminderDetailsContent(
         if (isTimePickerShown) {
             ReminderTimePicker(
                 initialTime = reminder.startDateTime.toLocalTime(),
-                onConfirm = { onHandleEvent(ReminderDetailsEvent.UpdateTime(it)) },
+                onConfirm = { onHandleEvent(ReminderAddEditEvent.UpdateTime(it)) },
                 onDismiss = { isTimePickerShown = false }
             )
         }
@@ -276,7 +144,7 @@ fun ReminderDetailsContent(
 
             RemindMeTextField(
                 text = reminder.notes.orEmpty(),
-                onTextChange = { onHandleEvent(ReminderDetailsEvent.UpdateNotes(it)) },
+                onTextChange = { onHandleEvent(ReminderAddEditEvent.UpdateNotes(it)) },
                 textStyle = MaterialTheme.typography.bodyMedium,
                 hintText = stringResource(R.string.hint_reminder_notes),
                 imeAction = ImeAction.Done
@@ -288,7 +156,7 @@ fun ReminderDetailsContent(
                 selected = reminder.isNotificationSent,
                 onClick = {
                     onHandleEvent(
-                        ReminderDetailsEvent.UpdateNotification(!reminder.isNotificationSent)
+                        ReminderAddEditEvent.UpdateNotification(!reminder.isNotificationSent)
                     )
                 },
                 label = {
@@ -355,7 +223,7 @@ fun ReminderDetailsContent(
                             imageVector = Icons.Rounded.Close,
                             contentDescription = null,
                             modifier = Modifier.clickable {
-                                onHandleEvent(ReminderDetailsEvent.UpdateRepeatInterval(null))
+                                onHandleEvent(ReminderAddEditEvent.UpdateRepeatInterval(null))
                             }
                         )
                     }
@@ -367,7 +235,7 @@ fun ReminderDetailsContent(
                 RepeatIntervalDialog(
                     initialRepeatInterval = reminder.repeatInterval,
                     onConfirm = {
-                        onHandleEvent(ReminderDetailsEvent.UpdateRepeatInterval(it))
+                        onHandleEvent(ReminderAddEditEvent.UpdateRepeatInterval(it))
                     },
                     onDismiss = { isRepeatIntervalDialogShown = false }
                 )
@@ -378,7 +246,7 @@ fun ReminderDetailsContent(
 
         Button(
             onClick = {
-                onHandleEvent(ReminderDetailsEvent.SaveReminder(reminder))
+                onHandleEvent(ReminderAddEditEvent.SaveReminder(reminder))
                 onNavigateUp()
             },
             content = {
@@ -392,22 +260,6 @@ fun ReminderDetailsContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 8.dp)
-        )
-    }
-}
-
-@Composable
-@Preview(name = "Light Mode")
-@Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
-private fun ReminderInputPreview(
-    @PreviewParameter(DefaultReminderProvider::class) reminder: Reminder
-) {
-    AppTheme {
-        ReminderDetailsScaffold(
-            reminder = Reminder(),
-            isReminderValid = true,
-            onHandleEvent = {},
-            onNavigateUp = {}
         )
     }
 }

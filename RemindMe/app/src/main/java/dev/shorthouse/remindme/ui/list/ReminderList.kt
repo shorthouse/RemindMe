@@ -50,7 +50,7 @@ import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.data.protodatastore.ReminderFilter
 import dev.shorthouse.remindme.data.protodatastore.ReminderSort
 import dev.shorthouse.remindme.model.Reminder
-import dev.shorthouse.remindme.ui.add.AddReminderBottomSheetScreen
+import dev.shorthouse.remindme.ui.addedit.add.ReminderAddBottomSheet
 import dev.shorthouse.remindme.ui.component.dialog.NotificationPermissionRequester
 import dev.shorthouse.remindme.ui.component.dialog.ReminderSortDialog
 import dev.shorthouse.remindme.ui.component.emptystate.EmptyStateCompletedReminders
@@ -141,7 +141,7 @@ fun ReminderListScaffold(
             }
 
             if (uiState.isAddReminderSheetShown) {
-                AddReminderBottomSheetScreen(
+                ReminderAddBottomSheet(
                     onDismissRequest = { onHandleEvent(ReminderListEvent.HideAddReminderSheet) }
                 )
             }

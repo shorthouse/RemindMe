@@ -1,4 +1,4 @@
-package dev.shorthouse.remindme.ui.add
+package dev.shorthouse.remindme.ui.addedit.add
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.imePadding
@@ -14,17 +14,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.ramcosta.composedestinations.annotation.Destination
-import dev.shorthouse.remindme.ui.details.ReminderDetailsContent
-import dev.shorthouse.remindme.ui.details.ReminderDetailsViewModel
+import dev.shorthouse.remindme.ui.addedit.ReminderAddEditContent
+import dev.shorthouse.remindme.ui.addedit.ReminderAddEditViewModel
 import dev.shorthouse.remindme.ui.theme.AppTheme
 import dev.shorthouse.remindme.util.disableBottomSheetSwipe
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Destination
 @Composable
-fun AddReminderBottomSheetScreen(
-    viewModel: ReminderDetailsViewModel = hiltViewModel(),
+fun ReminderAddBottomSheet(
+    viewModel: ReminderAddEditViewModel = hiltViewModel(),
     onDismissRequest: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -41,7 +39,7 @@ fun AddReminderBottomSheetScreen(
         tonalElevation = 0.dp,
         dragHandle = null
     ) {
-        ReminderDetailsContent(
+        ReminderAddEditContent(
             reminder = uiState.reminder,
             isReminderValid = viewModel.isReminderValid(uiState.reminder),
             onHandleEvent = { viewModel.handleEvent(it) },
@@ -58,7 +56,7 @@ fun AddReminderBottomSheetScreen(
 @Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 fun AddReminderBottomSheetPreview() {
     AppTheme {
-        AddReminderBottomSheetScreen(
+        ReminderAddBottomSheet(
             onDismissRequest = {}
         )
     }
