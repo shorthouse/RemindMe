@@ -1,5 +1,6 @@
 package dev.shorthouse.remindme.ui.addedit
 
+import android.content.res.Configuration
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -30,6 +31,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.model.Reminder
@@ -38,14 +41,16 @@ import dev.shorthouse.remindme.ui.component.dialog.ReminderDatePicker
 import dev.shorthouse.remindme.ui.component.dialog.ReminderTimePicker
 import dev.shorthouse.remindme.ui.component.dialog.RepeatIntervalDialog
 import dev.shorthouse.remindme.ui.component.text.RemindMeTextField
+import dev.shorthouse.remindme.ui.previewprovider.DefaultReminderProvider
+import dev.shorthouse.remindme.ui.theme.AppTheme
 import java.time.temporal.ChronoUnit
 
 @Composable
 fun ReminderAddEditContent(
     reminder: Reminder,
-    isReminderValid: Boolean,
     onHandleEvent: (ReminderAddEditEvent) -> Unit,
     onNavigateUp: () -> Unit,
+    isReminderValid: Boolean,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -261,6 +266,36 @@ fun ReminderAddEditContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 8.dp)
+        )
+    }
+}
+
+@Composable
+@Preview(name = "Light Mode", showBackground = true)
+@Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
+fun ReminderAddContentPreview() {
+    AppTheme {
+        ReminderAddEditContent(
+            reminder = Reminder(),
+            onHandleEvent = {},
+            onNavigateUp = {},
+            isReminderValid = false
+        )
+    }
+}
+
+@Composable
+@Preview(name = "Light Mode", showBackground = true)
+@Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
+fun ReminderEditContentPreview(
+    @PreviewParameter(DefaultReminderProvider::class) reminder: Reminder
+) {
+    AppTheme {
+        ReminderAddEditContent(
+            reminder = reminder,
+            onHandleEvent = {},
+            onNavigateUp = {},
+            isReminderValid = true
         )
     }
 }
