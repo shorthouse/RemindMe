@@ -51,7 +51,7 @@ class CompleteRepeatReminderOccurrenceUseCase @Inject constructor(
         val repeatInterval = reminder.repeatInterval ?: return reminder.startDateTime
 
         val repeatDuration = repeatInterval.unit.duration
-            .multipliedBy(repeatInterval.amount)
+            .multipliedBy(repeatInterval.amount.toLong())
             .toKotlinDuration()
 
         if (reminder.startDateTime.isAfter(ZonedDateTime.now())) {
