@@ -8,6 +8,7 @@ import dev.shorthouse.remindme.ui.previewprovider.ReminderPreviewData.addNotific
 import dev.shorthouse.remindme.ui.previewprovider.ReminderPreviewData.addRepeatInterval
 import dev.shorthouse.remindme.ui.previewprovider.ReminderPreviewData.completed
 import dev.shorthouse.remindme.ui.previewprovider.ReminderPreviewData.default
+import dev.shorthouse.remindme.ui.previewprovider.ReminderPreviewData.empty
 import dev.shorthouse.remindme.ui.previewprovider.ReminderPreviewData.overdue
 import dev.shorthouse.remindme.ui.previewprovider.ReminderPreviewData.upcoming
 import java.time.ZonedDateTime
@@ -16,6 +17,12 @@ import java.time.temporal.ChronoUnit
 class DefaultReminderProvider : PreviewParameterProvider<Reminder> {
     override val values = sequenceOf(
         default
+    )
+}
+
+class EmptyReminderProvider : PreviewParameterProvider<Reminder> {
+    override val values = sequenceOf(
+        empty
     )
 }
 
@@ -45,6 +52,8 @@ class ReminderCardProvider : PreviewParameterProvider<Reminder> {
 }
 
 private object ReminderPreviewData {
+    val empty = Reminder()
+
     val default = Reminder(
         id = 1,
         name = "Water the plants",
