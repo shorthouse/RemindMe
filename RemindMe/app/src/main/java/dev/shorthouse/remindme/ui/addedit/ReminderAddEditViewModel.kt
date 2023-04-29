@@ -44,10 +44,8 @@ class ReminderAddEditViewModel @Inject constructor(
     init {
         val navArgs = savedStateHandle.navArgs<ReminderAddEditScreenNavArgs>()
 
-        if (navArgs.reminderId == null) {
-            setAddReminder()
-        } else {
-            setEditReminder(navArgs.reminderId)
+        navArgs.reminderId?.let { reminderId ->
+            setEditReminder(reminderId)
         }
     }
 
@@ -56,6 +54,7 @@ class ReminderAddEditViewModel @Inject constructor(
             is ReminderAddEditEvent.CompleteReminder -> handleCompleteReminder(event.reminder)
             is ReminderAddEditEvent.DeleteReminder -> handleDeleteReminder(event.reminder)
             is ReminderAddEditEvent.SaveReminder -> handleSaveReminder(event.reminder)
+            is ReminderAddEditEvent.ClearReminder -> handleClearReminder()
             is ReminderAddEditEvent.UpdateName -> handleUpdateName(event.name)
             is ReminderAddEditEvent.UpdateDate -> handleUpdateDate(event.date)
             is ReminderAddEditEvent.UpdateTime -> handleUpdateTime(event.time)
@@ -71,10 +70,6 @@ class ReminderAddEditViewModel @Inject constructor(
         return reminder.name.isNotBlank() &&
                 reminder.startDateTime.isAfter(ZonedDateTime.now()) &&
                 reminder.validated() != _uiState.value.initialReminder.validated()
-    }
-
-    private fun setAddReminder() {
-        _uiState.update { it.copy(isLoading = false) }
     }
 
     private fun setEditReminder(reminderId: Long) {
@@ -111,6 +106,10 @@ class ReminderAddEditViewModel @Inject constructor(
         } else {
             updateReminderUseCase(reminder.validated())
         }
+    }
+
+    private fun handleClearReminder() {
+        _uiState.update { it.copy(reminder = Reminder()) }
     }
 
     private fun updateReminder(updatedReminder: Reminder) {

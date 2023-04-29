@@ -9,6 +9,7 @@ sealed interface ReminderAddEditEvent {
     data class CompleteReminder(val reminder: Reminder) : ReminderAddEditEvent
     data class DeleteReminder(val reminder: Reminder) : ReminderAddEditEvent
     data class SaveReminder(val reminder: Reminder) : ReminderAddEditEvent
+    object ClearReminder : ReminderAddEditEvent
     data class UpdateName(val name: String) : ReminderAddEditEvent
     data class UpdateDate(val date: LocalDate) : ReminderAddEditEvent
     data class UpdateTime(val time: LocalTime) : ReminderAddEditEvent
