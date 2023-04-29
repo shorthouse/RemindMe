@@ -50,6 +50,7 @@ import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.data.protodatastore.ReminderFilter
 import dev.shorthouse.remindme.data.protodatastore.ReminderSort
 import dev.shorthouse.remindme.model.Reminder
+import dev.shorthouse.remindme.ui.add.AddReminderBottomSheetScreen
 import dev.shorthouse.remindme.ui.component.dialog.NotificationPermissionRequester
 import dev.shorthouse.remindme.ui.component.dialog.ReminderSortDialog
 import dev.shorthouse.remindme.ui.component.emptystate.EmptyStateCompletedReminders
@@ -58,7 +59,6 @@ import dev.shorthouse.remindme.ui.component.emptystate.EmptyStateSearchReminders
 import dev.shorthouse.remindme.ui.component.emptystate.EmptyStateUpcomingReminders
 import dev.shorthouse.remindme.ui.component.searchbar.RemindMeSearchBar
 import dev.shorthouse.remindme.ui.component.topappbar.RemindMeTopAppBar
-import dev.shorthouse.remindme.ui.destinations.ReminderAddScreenDestination
 import dev.shorthouse.remindme.ui.destinations.ReminderDetailsScreenDestination
 import dev.shorthouse.remindme.ui.previewprovider.ReminderListProvider
 import dev.shorthouse.remindme.ui.theme.AppTheme
@@ -77,7 +77,6 @@ fun ReminderListScreen(
     ReminderListScaffold(
         uiState = uiState,
         onHandleEvent = { viewModel.handleEvent(it) },
-        onNavigateAdd = { navigator.navigate(ReminderAddScreenDestination()) },
         onNavigateDetails = { navigator.navigate(ReminderDetailsScreenDestination(it.id)) }
     )
 }
@@ -87,7 +86,6 @@ fun ReminderListScreen(
 fun ReminderListScaffold(
     uiState: ReminderListUiState,
     onHandleEvent: (ReminderListEvent) -> Unit,
-    onNavigateAdd: () -> Unit,
     onNavigateDetails: (Reminder) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -141,6 +139,12 @@ fun ReminderListScaffold(
                     )
                 }
             }
+
+            if (uiState.isAddReminderSheetShown) {
+                AddReminderBottomSheetScreen(
+                    onDismissRequest = { onHandleEvent(ReminderListEvent.HideAddReminderSheet) }
+                )
+            }
         },
         floatingActionButton = {
             AnimatedVisibility(
@@ -149,7 +153,7 @@ fun ReminderListScaffold(
                 exit = ExitTransition.None
             ) {
                 FloatingActionButton(
-                    onClick = onNavigateAdd,
+                    onClick = { onHandleEvent(ReminderListEvent.ShowAddReminderSheet) },
                     shape = RoundedCornerShape(16.dp),
                     containerColor = MaterialTheme.colorScheme.primary
                 ) {
@@ -301,7 +305,6 @@ fun ReminderListPreview(
         ReminderListScaffold(
             uiState = ReminderListUiState(reminders = reminders),
             onHandleEvent = {},
-            onNavigateAdd = {},
             onNavigateDetails = {}
         )
     }
