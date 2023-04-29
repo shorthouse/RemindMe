@@ -9,6 +9,7 @@ import dev.shorthouse.remindme.data.protodatastore.UserPreferencesRepository
 import dev.shorthouse.remindme.data.source.local.ReminderRepository
 import dev.shorthouse.remindme.di.IoDispatcher
 import dev.shorthouse.remindme.domain.reminder.CompleteReminderUseCase
+import dev.shorthouse.remindme.model.Reminder
 import java.time.ZonedDateTime
 import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
@@ -109,34 +110,36 @@ class ReminderListViewModel @Inject constructor(
 
     fun handleEvent(event: ReminderListEvent) {
         when (event) {
-            is ReminderListEvent.Filter -> handleFilter(event)
-            is ReminderListEvent.Sort -> handleSort(event)
-            is ReminderListEvent.Search -> handleSearch(event)
-            is ReminderListEvent.CompleteReminder -> handleCompleteReminder(event)
+            is ReminderListEvent.Filter -> handleFilter(event.filter)
+            is ReminderListEvent.Sort -> handleSort(event.sortOrder)
+            is ReminderListEvent.Search -> handleSearch(event.query)
+            is ReminderListEvent.CompleteReminder -> handleCompleteReminder(event.reminder)
             ReminderListEvent.ShowSearch -> handleShowSearch()
             ReminderListEvent.HideSearch -> handleHideSearch()
+            ReminderListEvent.ShowAddReminderSheet -> handleShowAddReminderSheet()
+            ReminderListEvent.HideAddReminderSheet -> handleHideAddReminderSheet()
         }
     }
 
-    private fun handleFilter(event: ReminderListEvent.Filter) {
+    private fun handleFilter(filter: ReminderFilter) {
         viewModelScope.launch(ioDispatcher) {
-            userPreferencesRepository.updateReminderFilter(event.filter)
+            userPreferencesRepository.updateReminderFilter(filter)
         }
     }
 
-    private fun handleSort(event: ReminderListEvent.Sort) {
+    private fun handleSort(sortOrder: ReminderSort) {
         viewModelScope.launch(ioDispatcher) {
-            userPreferencesRepository.updateReminderSortOrder(event.sortOrder)
+            userPreferencesRepository.updateReminderSortOrder(sortOrder)
         }
     }
 
-    private fun handleSearch(event: ReminderListEvent.Search) {
-        _searchQuery.value = event.query
-        _uiState.update { it.copy(searchQuery = event.query) }
+    private fun handleSearch(query: String) {
+        _searchQuery.value = query
+        _uiState.update { it.copy(searchQuery = query) }
     }
 
-    private fun handleCompleteReminder(event: ReminderListEvent.CompleteReminder) {
-        completeReminderUseCase(event.reminder)
+    private fun handleCompleteReminder(reminder: Reminder) {
+        completeReminderUseCase(reminder)
     }
 
     private fun handleShowSearch() {
@@ -147,5 +150,13 @@ class ReminderListViewModel @Inject constructor(
         _uiState.update {
             it.copy(isSearchBarShown = false, searchQuery = "")
         }
+    }
+
+    private fun handleShowAddReminderSheet() {
+        _uiState.update { it.copy(isAddReminderSheetShown = true) }
+    }
+
+    private fun handleHideAddReminderSheet() {
+        _uiState.update { it.copy(isAddReminderSheetShown = false) }
     }
 }
