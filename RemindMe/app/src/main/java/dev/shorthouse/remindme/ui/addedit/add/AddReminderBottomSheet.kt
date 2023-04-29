@@ -1,6 +1,7 @@
 package dev.shorthouse.remindme.ui.addedit.add
 
 import android.content.res.Configuration
+import androidx.compose.foundation.layout.imeNestedScroll
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -15,17 +16,22 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.shorthouse.remindme.ui.addedit.ReminderAddEditContent
+import dev.shorthouse.remindme.ui.addedit.ReminderAddEditEvent
 import dev.shorthouse.remindme.ui.addedit.ReminderAddEditViewModel
 import dev.shorthouse.remindme.ui.theme.AppTheme
-import dev.shorthouse.remindme.util.disableBottomSheetSwipe
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReminderAddBottomSheet(
     viewModel: ReminderAddEditViewModel = hiltViewModel(),
-    onDismissRequest: () -> Unit
+    onDismissSheet: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    val onDismissRequest: () -> Unit = {
+        onDismissSheet()
+        viewModel.handleEvent(ReminderAddEditEvent.ClearReminder)
+    }
 
     ModalBottomSheet(
         onDismissRequest = onDismissRequest,
@@ -57,7 +63,7 @@ fun ReminderAddBottomSheet(
 fun AddReminderBottomSheetPreview() {
     AppTheme {
         ReminderAddBottomSheet(
-            onDismissRequest = {}
+            onDismissSheet = {}
         )
     }
 }

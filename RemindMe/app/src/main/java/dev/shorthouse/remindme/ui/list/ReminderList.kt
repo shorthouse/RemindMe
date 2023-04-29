@@ -142,7 +142,7 @@ fun ReminderListScaffold(
 
             if (uiState.isAddReminderSheetShown) {
                 ReminderAddBottomSheet(
-                    onDismissRequest = { onHandleEvent(ReminderListEvent.HideAddReminderSheet) }
+                    onDismissSheet = { onHandleEvent(ReminderListEvent.HideAddReminderSheet) }
                 )
             }
         },
