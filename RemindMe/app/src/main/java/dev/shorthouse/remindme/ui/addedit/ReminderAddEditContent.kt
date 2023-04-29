@@ -258,14 +258,15 @@ fun ReminderAddEditContent(
             content = {
                 Text(
                     text = stringResource(R.string.button_save_reminder),
-                    style = MaterialTheme.typography.titleMedium
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.padding(vertical = 1.dp)
                 )
             },
             enabled = isReminderValid,
             shape = MaterialTheme.shapes.small,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 8.dp)
+                .padding(bottom = 16.dp, top = 8.dp)
         )
     }
 }
