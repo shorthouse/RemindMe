@@ -29,7 +29,9 @@ fun RemindMeTextField(
     BasicTextField(
         value = text,
         onValueChange = onTextChange,
-        textStyle = textStyle,
+        textStyle = textStyle.copy(
+            color = MaterialTheme.colorScheme.onBackground
+        ),
         cursorBrush = SolidColor(MaterialTheme.colorScheme.onBackground),
         keyboardOptions = KeyboardOptions(
             imeAction = imeAction,
@@ -59,7 +61,7 @@ fun RemindMeTextField(
 )
 fun RemindMeTextFieldPreview() {
     AppTheme {
-        var text by remember { mutableStateOf("") }
+        var text by remember { mutableStateOf("Input") }
         val onTextChange: (String) -> Unit = { text = it }
         val textStyle = MaterialTheme.typography.titleLarge
         val hintText = "Hint text"
