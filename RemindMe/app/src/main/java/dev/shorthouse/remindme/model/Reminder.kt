@@ -12,7 +12,7 @@ data class Reminder(
     val id: Long = 0L,
     val name: String = "",
     val startDateTime: ZonedDateTime = ZonedDateTime.now().nextHour(),
-    val isNotificationSent: Boolean = true,
+    val isNotificationSent: Boolean = false,
     val repeatInterval: RepeatInterval? = null,
     val notes: String? = null,
     val isCompleted: Boolean = false
