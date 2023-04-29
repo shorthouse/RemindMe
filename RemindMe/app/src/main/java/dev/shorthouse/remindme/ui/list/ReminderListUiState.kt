@@ -10,5 +10,6 @@ data class ReminderListUiState(
     val reminderSortOrder: ReminderSort = ReminderSort.BY_EARLIEST_DATE_FIRST,
     val searchQuery: String = "",
     val isSearchBarShown: Boolean = false,
+    val isAddReminderSheetShown: Boolean = false,
     val isLoading: Boolean = true
 )
