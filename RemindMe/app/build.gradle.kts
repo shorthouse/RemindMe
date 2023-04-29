@@ -87,9 +87,10 @@ dependencies {
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("com.google.android.material:material:1.8.0")
     implementation("androidx.core:core-splashscreen:1.0.1")
+    implementation("androidx.compose.ui:ui-tooling-preview:1.4.2")
 
     // Compose
-    val composeBom = platform("androidx.compose:compose-bom:2023.03.00")
+    val composeBom = platform("androidx.compose:compose-bom:2023.04.01")
     implementation(composeBom)
     androidTestImplementation(composeBom)
     implementation("androidx.compose.material3:material3:1.1.0-rc01")
@@ -97,7 +98,7 @@ dependencies {
     implementation("com.google.accompanist:accompanist-permissions:0.30.0")
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.30.0")
     implementation("io.github.raamcosta.compose-destinations:core:1.8.38-beta")
-    implementation("androidx.compose.ui:ui-tooling")
+    debugImplementation("androidx.compose.ui:ui-tooling:1.4.2")
     ksp("io.github.raamcosta.compose-destinations:ksp:1.8.38-beta")
 
     // Firebase
