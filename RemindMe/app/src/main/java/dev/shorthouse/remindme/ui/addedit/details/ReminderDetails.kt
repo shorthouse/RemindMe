@@ -50,9 +50,9 @@ fun ReminderDetailsScreen(
     if (!uiState.isLoading) {
         ReminderDetailsScaffold(
             reminder = uiState.reminder,
-            isReminderValid = viewModel.isReminderValid(uiState.reminder),
             onHandleEvent = { viewModel.handleEvent(it) },
-            onNavigateUp = { navigator.navigateUp() }
+            onNavigateUp = { navigator.navigateUp() },
+            isReminderValid = viewModel.isReminderValid(uiState.reminder)
         )
     }
 }
@@ -60,9 +60,9 @@ fun ReminderDetailsScreen(
 @Composable
 fun ReminderDetailsScaffold(
     reminder: Reminder,
-    isReminderValid: Boolean,
     onHandleEvent: (ReminderAddEditEvent) -> Unit,
     onNavigateUp: () -> Unit,
+    isReminderValid: Boolean,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
@@ -76,9 +76,9 @@ fun ReminderDetailsScaffold(
         content = { scaffoldPadding ->
             ReminderAddEditContent(
                 reminder = reminder,
-                isReminderValid = isReminderValid,
                 onHandleEvent = onHandleEvent,
                 onNavigateUp = onNavigateUp,
+                isReminderValid = isReminderValid,
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(scaffoldPadding)
@@ -155,15 +155,15 @@ fun ReminderDetailsTopBar(
 @Composable
 @Preview(name = "Light Mode")
 @Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
-private fun ReminderInputPreview(
+private fun ReminderDetailsPreview(
     @PreviewParameter(DefaultReminderProvider::class) reminder: Reminder
 ) {
     AppTheme {
         ReminderDetailsScaffold(
             reminder = Reminder(),
-            isReminderValid = true,
             onHandleEvent = {},
-            onNavigateUp = {}
+            onNavigateUp = {},
+            isReminderValid = true
         )
     }
 }
