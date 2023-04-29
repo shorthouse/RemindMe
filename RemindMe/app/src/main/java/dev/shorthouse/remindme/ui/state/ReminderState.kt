@@ -122,9 +122,9 @@ private class ReminderStateImpl(
             if (repeatInterval == null) return "Day"
 
             return when {
-                repeatInterval.unit == ChronoUnit.DAYS && repeatInterval.amount == 1L -> "Day"
-                repeatInterval.unit == ChronoUnit.DAYS && repeatInterval.amount != 1L -> "Days"
-                repeatInterval.unit == ChronoUnit.WEEKS && repeatInterval.amount == 1L -> "Week"
+                repeatInterval.unit == ChronoUnit.DAYS && repeatInterval.amount == 1 -> "Day"
+                repeatInterval.unit == ChronoUnit.DAYS && repeatInterval.amount != 1 -> "Days"
+                repeatInterval.unit == ChronoUnit.WEEKS && repeatInterval.amount == 1 -> "Week"
                 else -> "Weeks"
             }
         }
@@ -140,7 +140,7 @@ private class ReminderStateImpl(
             repeatUnit: String
         ): RepeatInterval {
             return RepeatInterval(
-                amount = repeatAmount.toLongOrNull() ?: 1,
+                amount = repeatAmount.toIntOrNull() ?: 1,
                 unit = when {
                     repeatUnit.contains("Day") -> ChronoUnit.DAYS
                     else -> ChronoUnit.WEEKS
