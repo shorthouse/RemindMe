@@ -29,6 +29,7 @@
     <string name="error_time_past">The reminder start time cannot be in the past</string>
     <string name="cd_details_date">Date</string>
     <string name="cd_details_time">Time</string>
+    <string name="cd_card_notification_enabled">Notification enabled</string>
     <string name="cd_details_notification">Notification</string>
     <string name="cd_details_repeat_interval">Repeat Interval</string>
     <string name="cd_details_notes">Notes</string>
@@ -99,4 +100,13 @@
     <string name="dropdown_complete_reminder">Complete</string>
     <string name="dropdown_delete_reminder">Delete</string>
     <string name="button_save_reminder">Save</string>
+
+    <string name="reminder_repeat_interval">%1$s %2$s</string>
+    <string name="reminder_details_notification_on">Notification on</string>
+    <string name="reminder_details_add_notification">No notification</string>
+    <string name="reminder_details_add_repeat">No repeat</string>
+    <string name="repeat_unit_option_day">Day(s)</string>
+    <string name="repeat_unit_option_week">Week(s)</string>
+    <string name="cd_card_repeat_reminder">Repeat reminder</string>
+    <string name="cd_card_has_notes">Has notes</string>
 </resources>
