@@ -2,16 +2,16 @@ package dev.shorthouse.remindme.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import dev.shorthouse.remindme.util.nextHour
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
-import java.time.temporal.ChronoUnit
 
 @Entity
 data class Reminder(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0L,
     val name: String = "",
-    val startDateTime: ZonedDateTime = ZonedDateTime.now().truncatedTo(ChronoUnit.MINUTES),
+    val startDateTime: ZonedDateTime = ZonedDateTime.now().nextHour(),
     val isNotificationSent: Boolean = true,
     val repeatInterval: RepeatInterval? = null,
     val notes: String? = null,
