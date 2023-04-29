@@ -11,16 +11,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.ui.addedit.ReminderAddEditContent
 import dev.shorthouse.remindme.ui.addedit.ReminderAddEditEvent
+import dev.shorthouse.remindme.ui.addedit.ReminderAddEditUiState
 import dev.shorthouse.remindme.ui.addedit.ReminderAddEditViewModel
+import dev.shorthouse.remindme.ui.previewprovider.EmptyReminderProvider
 import dev.shorthouse.remindme.ui.theme.AppTheme
 import dev.shorthouse.remindme.util.disableBottomSheetSwipe
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReminderAddBottomSheet(
     viewModel: ReminderAddEditViewModel = hiltViewModel(),
@@ -28,11 +31,25 @@ fun ReminderAddBottomSheet(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    val onDismissRequest: () -> Unit = {
-        onDismissSheet()
-        viewModel.handleEvent(ReminderAddEditEvent.ClearReminder)
-    }
+    ReminderAddBottomSheet(
+        uiState = uiState,
+        onHandleEvent = { viewModel.handleEvent(it) },
+        onDismissRequest = {
+            onDismissSheet()
+            viewModel.handleEvent(ReminderAddEditEvent.ClearReminder)
+        },
+        isReminderValid = viewModel.isReminderValid(uiState.reminder)
+    )
+}
 
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+private fun ReminderAddBottomSheet(
+    uiState: ReminderAddEditUiState,
+    onHandleEvent: (ReminderAddEditEvent) -> Unit,
+    onDismissRequest: () -> Unit,
+    isReminderValid: Boolean
+) {
     ModalBottomSheet(
         onDismissRequest = onDismissRequest,
         sheetState = rememberModalBottomSheetState(
@@ -47,9 +64,9 @@ fun ReminderAddBottomSheet(
     ) {
         ReminderAddEditContent(
             reminder = uiState.reminder,
-            isReminderValid = viewModel.isReminderValid(uiState.reminder),
-            onHandleEvent = { viewModel.handleEvent(it) },
+            onHandleEvent = onHandleEvent,
             onNavigateUp = onDismissRequest,
+            isReminderValid = isReminderValid,
             modifier = Modifier
                 .imePadding()
                 .disableBottomSheetSwipe()
@@ -58,12 +75,17 @@ fun ReminderAddBottomSheet(
 }
 
 @Composable
-@Preview(name = "Light Mode", showBackground = true)
-@Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
-fun AddReminderBottomSheetPreview() {
+@Preview(name = "Light Mode")
+@Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
+fun AddReminderBottomSheetPreview(
+    @PreviewParameter(EmptyReminderProvider::class) reminder: Reminder
+) {
     AppTheme {
         ReminderAddBottomSheet(
-            onDismissSheet = {}
+            uiState = ReminderAddEditUiState(initialReminder = reminder),
+            onHandleEvent = {},
+            onDismissRequest = {},
+            isReminderValid = true
         )
     }
 }
