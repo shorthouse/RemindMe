@@ -1,8 +1,8 @@
-package dev.shorthouse.remindme.ui.details
+package dev.shorthouse.remindme.ui.addedit
 
 import dev.shorthouse.remindme.model.Reminder
 
-data class ReminderDetailsUiState(
+data class ReminderAddEditUiState(
     val reminder: Reminder = Reminder(),
     val initialReminder: Reminder = Reminder(),
     val isLoading: Boolean = false

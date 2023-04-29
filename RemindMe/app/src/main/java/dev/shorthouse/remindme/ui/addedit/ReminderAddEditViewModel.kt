@@ -1,4 +1,4 @@
-package dev.shorthouse.remindme.ui.details
+package dev.shorthouse.remindme.ui.addedit
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -26,7 +26,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 @HiltViewModel
-class ReminderDetailsViewModel @Inject constructor(
+class ReminderAddEditViewModel @Inject constructor(
     private val reminderRepository: ReminderRepository,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
     private val addReminderUseCase: AddReminderUseCase,
@@ -36,13 +36,13 @@ class ReminderDetailsViewModel @Inject constructor(
     private val completeRepeatReminderSeriesUseCase: CompleteRepeatReminderSeriesUseCase,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-    private val _uiState = MutableStateFlow(ReminderDetailsUiState())
+    private val _uiState = MutableStateFlow(ReminderAddEditUiState())
 
-    val uiState: StateFlow<ReminderDetailsUiState>
+    val uiState: StateFlow<ReminderAddEditUiState>
         get() = _uiState
 
     init {
-        val navArgs = savedStateHandle.navArgs<ReminderDetailsScreenNavArgs>()
+        val navArgs = savedStateHandle.navArgs<ReminderAddEditScreenNavArgs>()
 
         if (navArgs.reminderId == null) {
             setAddReminder()
@@ -51,19 +51,19 @@ class ReminderDetailsViewModel @Inject constructor(
         }
     }
 
-    fun handleEvent(event: ReminderDetailsEvent) {
+    fun handleEvent(event: ReminderAddEditEvent) {
         when (event) {
-            is ReminderDetailsEvent.CompleteReminder -> handleCompleteReminder(event.reminder)
-            is ReminderDetailsEvent.DeleteReminder -> handleDeleteReminder(event.reminder)
-            is ReminderDetailsEvent.SaveReminder -> handleSaveReminder(event.reminder)
-            is ReminderDetailsEvent.UpdateName -> handleUpdateName(event.name)
-            is ReminderDetailsEvent.UpdateDate -> handleUpdateDate(event.date)
-            is ReminderDetailsEvent.UpdateTime -> handleUpdateTime(event.time)
-            is ReminderDetailsEvent.UpdateNotification ->
+            is ReminderAddEditEvent.CompleteReminder -> handleCompleteReminder(event.reminder)
+            is ReminderAddEditEvent.DeleteReminder -> handleDeleteReminder(event.reminder)
+            is ReminderAddEditEvent.SaveReminder -> handleSaveReminder(event.reminder)
+            is ReminderAddEditEvent.UpdateName -> handleUpdateName(event.name)
+            is ReminderAddEditEvent.UpdateDate -> handleUpdateDate(event.date)
+            is ReminderAddEditEvent.UpdateTime -> handleUpdateTime(event.time)
+            is ReminderAddEditEvent.UpdateNotification ->
                 handleUpdateNotification(event.isNotificationSent)
-            is ReminderDetailsEvent.UpdateRepeatInterval ->
+            is ReminderAddEditEvent.UpdateRepeatInterval ->
                 handleUpdateRepeatInterval(event.repeatInterval)
-            is ReminderDetailsEvent.UpdateNotes -> handleUpdateNotes(event.notes)
+            is ReminderAddEditEvent.UpdateNotes -> handleUpdateNotes(event.notes)
         }
     }
 
