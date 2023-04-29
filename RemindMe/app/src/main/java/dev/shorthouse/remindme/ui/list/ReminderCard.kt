@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -14,11 +13,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.TextSnippet
 import androidx.compose.material.icons.rounded.Done
-import androidx.compose.material.icons.rounded.Notes
+import androidx.compose.material.icons.rounded.Loop
 import androidx.compose.material.icons.rounded.NotificationsNone
 import androidx.compose.material.icons.rounded.RadioButtonUnchecked
-import androidx.compose.material.icons.rounded.Repeat
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -33,7 +32,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -45,7 +43,6 @@ import dev.shorthouse.remindme.ui.theme.AppTheme
 import dev.shorthouse.remindme.ui.theme.Blue
 import dev.shorthouse.remindme.ui.theme.Green
 import dev.shorthouse.remindme.ui.theme.Red
-import java.time.temporal.ChronoUnit
 import kotlin.time.Duration.Companion.milliseconds
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -80,43 +77,10 @@ fun ReminderCard(
                     .width(8.dp)
             )
 
-            var isReminderCompleted by remember { mutableStateOf(false) }
-            val coroutineScope = rememberCoroutineScope()
-
-            if (!reminder.isCompleted) {
-                IconButton(onClick = {
-                    coroutineScope.launch {
-                        isReminderCompleted = true
-                        delay(350.milliseconds)
-                        onCompleteReminder(reminder)
-                        if (reminder.isRepeatReminder) isReminderCompleted = false
-                    }
-                }) {
-                    Icon(
-                        imageVector = if (isReminderCompleted) {
-                            Icons.Rounded.Done
-                        } else {
-                            Icons.Rounded.RadioButtonUnchecked
-                        },
-                        tint = if (isReminderCompleted) {
-                            MaterialTheme.colorScheme.primary
-                        } else {
-                            MaterialTheme.colorScheme.outline
-                        },
-                        contentDescription = stringResource(R.string.cd_complete_reminder)
-                    )
-                }
-            }
-
             Column(
                 modifier = Modifier
-                    .padding(
-                        start = if (reminder.isCompleted) 12.dp else 0.dp,
-                        top = 8.dp,
-                        end = 12.dp,
-                        bottom = 8.dp
-                    )
-                    .fillMaxWidth()
+                    .weight(1f)
+                    .padding(12.dp)
             ) {
                 Text(
                     text = reminder.name,
@@ -132,77 +96,78 @@ fun ReminderCard(
                     style = MaterialTheme.typography.bodyMedium
                 )
 
-                if (reminder.isNotificationSent || reminder.repeatInterval != null) {
+                if (reminder.hasOptionalParts()) {
                     Row(
-                        horizontalArrangement = Arrangement.spacedBy(12.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.padding(top = 8.dp)
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        modifier = Modifier.padding(top = 4.dp)
                     ) {
+                        val tint = MaterialTheme.colorScheme.outline
+                        val sizeModifier = Modifier.size(20.dp)
+
                         if (reminder.isNotificationSent) {
                             Icon(
                                 imageVector = Icons.Rounded.NotificationsNone,
-                                tint = MaterialTheme.colorScheme.outline,
                                 contentDescription = stringResource(
-                                    R.string.cd_details_notification
+                                    R.string.cd_card_notification_enabled
                                 ),
-                                modifier = Modifier.size(20.dp)
+                                tint = tint,
+                                modifier = sizeModifier
                             )
                         }
 
-                        reminder.repeatInterval?.let { repeatInterval ->
-                            val pluralId = when (repeatInterval.unit) {
-                                ChronoUnit.DAYS -> R.plurals.repeat_interval_days
-                                else -> R.plurals.repeat_interval_days
-                            }
+                        reminder.repeatInterval?.let {
+                            Icon(
+                                imageVector = Icons.Rounded.Loop,
+                                contentDescription = stringResource(
+                                    R.string.cd_card_repeat_reminder
+                                ),
+                                tint = tint,
+                                modifier = sizeModifier
+                            )
+                        }
 
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                modifier = modifier
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Rounded.Repeat,
-                                    contentDescription = stringResource(
-                                        R.string.cd_details_repeat_interval
-                                    ),
-                                    tint = MaterialTheme.colorScheme.outline,
-                                    modifier = Modifier.size(20.dp)
-                                )
-
-                                Spacer(Modifier.width(8.dp))
-
-                                Text(
-                                    text = pluralStringResource(
-                                        pluralId,
-                                        repeatInterval.amount.toInt(),
-                                        repeatInterval.amount
-                                    ),
-                                    style = MaterialTheme.typography.bodyMedium,
-                                    color = MaterialTheme.colorScheme.onBackground
-                                )
-                            }
+                        reminder.notes?.let {
+                            Icon(
+                                imageVector = Icons.Outlined.TextSnippet,
+                                contentDescription = stringResource(
+                                    R.string.cd_card_has_notes
+                                ),
+                                tint = tint,
+                                modifier = sizeModifier
+                            )
                         }
                     }
                 }
+            }
 
-                reminder.notes?.let { notes ->
-                    Row(modifier = Modifier.padding(top = 8.dp)) {
-                        Icon(
-                            imageVector = Icons.Rounded.Notes,
-                            contentDescription = stringResource(R.string.cd_details_notes),
-                            tint = MaterialTheme.colorScheme.outline,
-                            modifier = Modifier
-                                .size(22.dp)
-                                .padding(top = 2.dp)
-                        )
+            var isReminderCompleted by remember { mutableStateOf(false) }
+            val coroutineScope = rememberCoroutineScope()
 
-                        Spacer(Modifier.width(8.dp))
-
-                        Text(
-                            text = notes,
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onBackground
-                        )
-                    }
+            if (!reminder.isCompleted) {
+                IconButton(
+                    onClick = {
+                        coroutineScope.launch {
+                            isReminderCompleted = true
+                            delay(350.milliseconds)
+                            onCompleteReminder(reminder)
+                            if (reminder.isRepeatReminder) isReminderCompleted = false
+                        }
+                    },
+                    modifier = Modifier.padding(end = 8.dp)
+                ) {
+                    Icon(
+                        imageVector = if (isReminderCompleted) {
+                            Icons.Rounded.Done
+                        } else {
+                            Icons.Rounded.RadioButtonUnchecked
+                        },
+                        tint = if (isReminderCompleted) {
+                            MaterialTheme.colorScheme.primary
+                        } else {
+                            MaterialTheme.colorScheme.outline
+                        },
+                        contentDescription = stringResource(R.string.cd_complete_reminder)
+                    )
                 }
             }
         }
