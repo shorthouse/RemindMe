@@ -303,7 +303,7 @@ fun ReminderListPreview(
 ) {
     AppTheme {
         ReminderListScaffold(
-            uiState = ReminderListUiState(reminders = reminders),
+            uiState = ReminderListUiState(reminders = reminders, isLoading = false),
             onHandleEvent = {},
             onNavigateDetails = {}
         )

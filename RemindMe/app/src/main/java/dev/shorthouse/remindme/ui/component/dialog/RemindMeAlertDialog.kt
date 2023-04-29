@@ -29,16 +29,12 @@ fun RemindMeAlertDialog(
         },
         confirmButton = {
             TextButton(onClick = onConfirm) {
-                Text(
-                    text = confirmText
-                )
+                Text(text = confirmText)
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text(
-                    text = stringResource(R.string.dialog_action_cancel)
-                )
+                Text(text = stringResource(R.string.dialog_action_cancel))
             }
         },
         onDismissRequest = onDismiss,

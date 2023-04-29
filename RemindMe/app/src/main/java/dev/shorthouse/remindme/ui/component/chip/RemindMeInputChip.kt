@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import dev.shorthouse.remindme.ui.theme.AppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -70,21 +71,23 @@ fun RemindMeUnselectedInputChipPreview() {
 @Preview(name = "Light Mode", showBackground = true)
 @Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 fun RemindMeSelectedInputChipPreview() {
-    RemindMeInputChip(
-        selected = true,
-        onClick = { },
-        label = { Text("Unselected") },
-        leadingIcon = {
-            Icon(
-                imageVector = Icons.Rounded.NotificationsNone,
-                contentDescription = null
-            )
-        },
-        trailingIcon = {
-            Icon(
-                imageVector = Icons.Rounded.Close,
-                contentDescription = null
-            )
-        }
-    )
+    AppTheme {
+        RemindMeInputChip(
+            selected = true,
+            onClick = { },
+            label = { Text("Unselected") },
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Rounded.NotificationsNone,
+                    contentDescription = null
+                )
+            },
+            trailingIcon = {
+                Icon(
+                    imageVector = Icons.Rounded.Close,
+                    contentDescription = null
+                )
+            }
+        )
+    }
 }

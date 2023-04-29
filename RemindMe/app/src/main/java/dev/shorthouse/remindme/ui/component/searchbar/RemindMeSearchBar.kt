@@ -103,7 +103,7 @@ private fun RemindMeSearchBarTextField(
     onCloseSearch: () -> Unit,
     innerTextField: @Composable () -> Unit
 ) {
-    TextFieldDefaults.TextFieldDecorationBox(
+    TextFieldDefaults.DecorationBox(
         value = searchQuery,
         innerTextField = innerTextField,
         singleLine = true,
