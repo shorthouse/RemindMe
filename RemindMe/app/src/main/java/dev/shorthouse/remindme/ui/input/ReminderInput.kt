@@ -59,7 +59,6 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import dev.shorthouse.remindme.R
-import dev.shorthouse.remindme.ui.component.dialog.ReminderDatePicker
 import dev.shorthouse.remindme.ui.component.dialog.ReminderTimePicker
 import dev.shorthouse.remindme.ui.component.text.RemindMeTextField
 import dev.shorthouse.remindme.ui.component.topappbar.RemindMeTopAppBar
@@ -251,13 +250,13 @@ fun ReminderNameInput(
 fun ReminderDateInput(reminderState: ReminderState, modifier: Modifier = Modifier) {
     var isDatePickerShown by remember { mutableStateOf(false) }
 
-    if (isDatePickerShown) {
-        ReminderDatePicker(
-            initialDate = reminderState.date,
-            onConfirm = { reminderState.date = it },
-            onDismiss = { isDatePickerShown = false }
-        )
-    }
+//    if (isDatePickerShown) {
+//        ReminderDatePicker(
+//            initialDateOld = reminderState.date,
+//            onConfirm = { reminderState.date = it },
+//            onDismiss = { isDatePickerShown = false }
+//        )
+//    }
 
     TextWithLeftIcon(
         icon = Icons.Rounded.CalendarToday,
