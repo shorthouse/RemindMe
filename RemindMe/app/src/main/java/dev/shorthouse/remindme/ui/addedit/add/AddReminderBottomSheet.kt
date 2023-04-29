@@ -1,7 +1,6 @@
 package dev.shorthouse.remindme.ui.addedit.add
 
 import android.content.res.Configuration
-import androidx.compose.foundation.layout.imeNestedScroll
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -19,6 +18,7 @@ import dev.shorthouse.remindme.ui.addedit.ReminderAddEditContent
 import dev.shorthouse.remindme.ui.addedit.ReminderAddEditEvent
 import dev.shorthouse.remindme.ui.addedit.ReminderAddEditViewModel
 import dev.shorthouse.remindme.ui.theme.AppTheme
+import dev.shorthouse.remindme.util.disableBottomSheetSwipe
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
