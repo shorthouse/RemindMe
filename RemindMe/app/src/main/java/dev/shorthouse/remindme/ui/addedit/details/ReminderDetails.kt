@@ -1,4 +1,4 @@
-package dev.shorthouse.remindme.ui.details
+package dev.shorthouse.remindme.ui.addedit.details
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.fillMaxSize
