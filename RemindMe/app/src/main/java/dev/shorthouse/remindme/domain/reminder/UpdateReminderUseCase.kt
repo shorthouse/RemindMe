@@ -11,7 +11,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-class EditReminderUseCase @Inject constructor(
+class UpdateReminderUseCase @Inject constructor(
     private val reminderRepository: ReminderRepository,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
     private val scheduleNotificationUseCase: ScheduleNotificationUseCase,
@@ -21,10 +21,10 @@ class EditReminderUseCase @Inject constructor(
     private val coroutineScope = CoroutineScope(ioDispatcher)
 
     operator fun invoke(reminder: Reminder) {
-        editReminder(reminder)
+        updateReminder(reminder)
     }
 
-    private fun editReminder(reminder: Reminder) {
+    private fun updateReminder(reminder: Reminder) {
         coroutineScope.launch {
             reminderRepository.updateReminder(reminder)
 

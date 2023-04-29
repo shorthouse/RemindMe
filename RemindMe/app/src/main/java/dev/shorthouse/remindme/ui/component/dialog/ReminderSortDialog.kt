@@ -95,10 +95,13 @@ fun ReminderSortDialog(
                         .fillMaxWidth()
                         .padding(horizontal = 4.dp)
                 ) {
-                    TextButton(onClick = {
-                        onApplySort(selectedSortOption)
-                        onDismiss()
-                    }) {
+                    TextButton(
+                        onClick = {
+                            onApplySort(selectedSortOption)
+                            onDismiss()
+                        },
+                        shape = MaterialTheme.shapes.small
+                    ) {
                         Text(
                             text = stringResource(R.string.dialog_action_apply),
                             style = MaterialTheme.typography.labelLarge,

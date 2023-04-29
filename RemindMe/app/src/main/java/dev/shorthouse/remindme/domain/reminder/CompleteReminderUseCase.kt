@@ -17,7 +17,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-class CompleteRepeatReminderOccurrenceUseCase @Inject constructor(
+class CompleteReminderUseCase @Inject constructor(
     private val reminderRepository: ReminderRepository,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
     private val scheduleNotificationUseCase: ScheduleNotificationUseCase,
@@ -27,24 +27,38 @@ class CompleteRepeatReminderOccurrenceUseCase @Inject constructor(
     private val coroutineScope = CoroutineScope(ioDispatcher)
 
     operator fun invoke(reminder: Reminder) {
-        completeRepeatReminderOccurrence(reminder)
+        completeReminder(reminder)
+    }
+
+    private fun completeReminder(reminder: Reminder) {
+        coroutineScope.launch {
+            if (reminder.isRepeatReminder) {
+                completeRepeatReminderOccurrence(reminder)
+            } else {
+                completeOnetimeReminder(reminder)
+            }
+        }
     }
 
     private fun completeRepeatReminderOccurrence(reminder: Reminder) {
-        coroutineScope.launch {
-            val updatedReminder = reminder.copy(
-                startDateTime = getUpdatedReminderStartDateTime(reminder)
-            )
+        val updatedReminder = reminder.copy(
+            startDateTime = getUpdatedReminderStartDateTime(reminder)
+        )
 
-            reminderRepository.updateReminder(updatedReminder)
+        reminderRepository.updateReminder(updatedReminder)
 
-            cancelScheduledNotificationUseCase(reminder)
-            removeDisplayingNotificationUseCase(reminder)
+        cancelScheduledNotificationUseCase(reminder)
+        removeDisplayingNotificationUseCase(reminder)
 
-            if (reminder.isNotificationSent) {
-                scheduleNotificationUseCase(reminder)
-            }
+        if (reminder.isNotificationSent) {
+            scheduleNotificationUseCase(reminder)
         }
+    }
+
+    private fun completeOnetimeReminder(reminder: Reminder) {
+        reminderRepository.completeReminder(reminder.id)
+        cancelScheduledNotificationUseCase(reminder)
+        removeDisplayingNotificationUseCase(reminder)
     }
 
     private fun getUpdatedReminderStartDateTime(reminder: Reminder): ZonedDateTime {

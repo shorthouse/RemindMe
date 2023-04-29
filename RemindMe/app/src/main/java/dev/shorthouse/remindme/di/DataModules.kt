@@ -18,7 +18,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class DataSourceModule {
-
     @Singleton
     @Binds
     abstract fun bindLocalDataSource(dataSource: ReminderLocalDataSource): ReminderDataSource
@@ -27,7 +26,6 @@ abstract class DataSourceModule {
 @Module
 @InstallIn(SingletonComponent::class)
 class RepositoryModule {
-
     @Singleton
     @Provides
     fun provideReminderRepository(reminderDataSource: ReminderDataSource): ReminderRepository {
@@ -38,7 +36,6 @@ class RepositoryModule {
 @Module
 @InstallIn(SingletonComponent::class)
 object DatabaseModule {
-
     @Singleton
     @Provides
     fun provideDatabase(@ApplicationContext context: Context): ReminderDatabase {

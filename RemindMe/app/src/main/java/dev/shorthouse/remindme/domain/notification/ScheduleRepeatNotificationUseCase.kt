@@ -34,7 +34,7 @@ class ScheduleRepeatNotificationUseCase @Inject constructor(
                 AlarmManager.RTC_WAKEUP,
                 reminder.startDateTime.toInstant().toEpochMilli(),
                 reminder.repeatInterval.unit.duration
-                    .multipliedBy(reminder.repeatInterval.amount)
+                    .multipliedBy(reminder.repeatInterval.amount.toLong())
                     .toMillis(),
                 receiverIntent
             )

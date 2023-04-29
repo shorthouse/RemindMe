@@ -15,11 +15,11 @@ import dev.shorthouse.remindme.data.protodatastore.ReminderFilter
 import dev.shorthouse.remindme.model.RepeatInterval
 import dev.shorthouse.remindme.ui.theme.AppTheme
 import dev.shorthouse.remindme.util.ReminderTestUtil
+import java.time.ZonedDateTime
+import java.time.temporal.ChronoUnit
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import java.time.ZonedDateTime
-import java.time.temporal.ChronoUnit
 
 @HiltAndroidTest
 class ReminderListTest {
@@ -48,7 +48,7 @@ class ReminderListTest {
                     onCloseSearch = {},
                     onNavigateAdd = {},
                     onDismissBottomSheet = {},
-                    onReminderCard = {},
+                    onNavigateDetails = {},
                     onReminderActionSelected = {}
                 )
             }

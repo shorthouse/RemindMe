@@ -8,7 +8,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -19,20 +18,17 @@ import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.ZonedDateTime
-import java.time.format.DateTimeFormatter
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReminderDatePicker(
-    initialDate: String,
-    onConfirm: (String) -> Unit,
+    initialDate: LocalDate,
+    onConfirm: (LocalDate) -> Unit,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val dateFormatter = remember { DateTimeFormatter.ofPattern("EEE, dd MMM yyyy") }
-
     val datePickerState = rememberDatePickerState(
-        initialSelectedDateMillis = dateStringToEpochMillis(initialDate, dateFormatter)
+        initialSelectedDateMillis = localDateToEpochMillis(initialDate)
     )
 
     DatePickerDialog(
@@ -40,7 +36,7 @@ fun ReminderDatePicker(
         confirmButton = {
             TextButton(onClick = {
                 datePickerState.selectedDateMillis?.let { utcMillis ->
-                    onConfirm(epochMillisToDateString(utcMillis, dateFormatter))
+                    onConfirm(epochMillisToLocalDate(utcMillis))
                     onDismiss()
                 }
             }) {
@@ -71,8 +67,8 @@ fun ReminderDatePicker(
     }
 }
 
-private fun dateStringToEpochMillis(date: String, dateFormatter: DateTimeFormatter): Long {
-    return LocalDate.parse(date, dateFormatter)
+private fun localDateToEpochMillis(date: LocalDate): Long {
+    return date
         .atStartOfDay()
         .plusDays(1)
         .atZone(ZoneId.systemDefault())
@@ -80,13 +76,11 @@ private fun dateStringToEpochMillis(date: String, dateFormatter: DateTimeFormatt
         .toEpochMilli()
 }
 
-private fun epochMillisToDateString(utcMillis: Long, dateFormatter: DateTimeFormatter): String {
+private fun epochMillisToLocalDate(utcMillis: Long): LocalDate {
     return Instant.ofEpochMilli(utcMillis)
         .atZone(ZoneId.of("UTC"))
         .withZoneSameInstant(ZoneId.systemDefault())
         .toLocalDate()
-        .format(dateFormatter)
-        .toString()
 }
 
 @Composable
@@ -95,7 +89,7 @@ private fun epochMillisToDateString(utcMillis: Long, dateFormatter: DateTimeForm
 fun DatePickerDialogPreview() {
     AppTheme {
         ReminderDatePicker(
-            initialDate = "Wed, 01 Jan 2020",
+            initialDate = LocalDate.now(),
             onConfirm = {},
             onDismiss = {}
         )

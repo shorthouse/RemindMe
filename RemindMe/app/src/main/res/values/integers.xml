@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <integer name="reminder_name_max_length">200</integer>
-    <integer name="reminder_notes_max_length">2000</integer>
-    <integer name="reminder_repeat_amount_max_length">2</integer>
-</resources>

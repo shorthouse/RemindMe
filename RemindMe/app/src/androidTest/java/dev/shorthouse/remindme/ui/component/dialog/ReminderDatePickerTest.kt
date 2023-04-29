@@ -34,7 +34,7 @@ class ReminderDatePickerTest {
         composeTestRule.setContent {
             AppTheme {
                 ReminderDatePicker(
-                    initialDate = initialDate,
+                    initialDateOld = initialDate,
                     onConfirm = onConfirm,
                     onDismiss = onDismiss
                 )
