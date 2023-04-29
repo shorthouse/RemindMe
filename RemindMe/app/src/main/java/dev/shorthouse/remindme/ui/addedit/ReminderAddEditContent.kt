@@ -147,7 +147,8 @@ fun ReminderAddEditContent(
                 onTextChange = { onHandleEvent(ReminderAddEditEvent.UpdateNotes(it)) },
                 textStyle = MaterialTheme.typography.bodyMedium,
                 hintText = stringResource(R.string.hint_reminder_notes),
-                imeAction = ImeAction.Done
+                imeAction = ImeAction.Done,
+                modifier = Modifier.fillMaxWidth()
             )
         }
 
