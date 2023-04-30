@@ -7,7 +7,8 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class UserPreferences(
     val reminderFilter: ReminderFilter = ReminderFilter.UPCOMING,
-    val reminderSortOrder: ReminderSort = ReminderSort.BY_EARLIEST_DATE_FIRST
+    val reminderSortOrder: ReminderSort = ReminderSort.BY_EARLIEST_DATE_FIRST,
+    val theme: Theme = Theme.AUTO
 )
 
 enum class ReminderFilter(@StringRes val nameStringId: Int) {
@@ -21,4 +22,10 @@ enum class ReminderSort(@StringRes val nameStringId: Int) {
     BY_LATEST_DATE_FIRST(R.string.sort_dialog_option_date_latest),
     BY_ALPHABETICAL_A_TO_Z(R.string.sort_dialog_option_alphabetical_a_to_z),
     BY_ALPHABETICAL_Z_TO_A(R.string.sort_dialog_option_alphabetical_z_to_a)
+}
+
+enum class Theme {
+    LIGHT,
+    DARK,
+    AUTO
 }
