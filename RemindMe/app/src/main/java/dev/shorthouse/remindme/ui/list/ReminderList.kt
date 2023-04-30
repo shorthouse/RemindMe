@@ -19,8 +19,11 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.SwapVert
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ElevatedFilterChip
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChipDefaults
@@ -40,7 +43,9 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ramcosta.composedestinations.annotation.Destination
@@ -60,6 +65,7 @@ import dev.shorthouse.remindme.ui.component.emptystate.EmptyStateUpcomingReminde
 import dev.shorthouse.remindme.ui.component.searchbar.RemindMeSearchBar
 import dev.shorthouse.remindme.ui.component.topappbar.RemindMeTopAppBar
 import dev.shorthouse.remindme.ui.destinations.ReminderDetailsScreenDestination
+import dev.shorthouse.remindme.ui.destinations.SettingsScreenDestination
 import dev.shorthouse.remindme.ui.previewprovider.ReminderListProvider
 import dev.shorthouse.remindme.ui.theme.AppTheme
 
@@ -77,6 +83,7 @@ fun ReminderListScreen(
     ReminderListScaffold(
         uiState = uiState,
         onHandleEvent = { viewModel.handleEvent(it) },
+        onNavigateSettings = { navigator.navigate(SettingsScreenDestination) },
         onNavigateDetails = { navigator.navigate(ReminderDetailsScreenDestination(it.id)) }
     )
 }
@@ -86,6 +93,7 @@ fun ReminderListScreen(
 fun ReminderListScaffold(
     uiState: ReminderListUiState,
     onHandleEvent: (ReminderListEvent) -> Unit,
+    onNavigateSettings: () -> Unit,
     onNavigateDetails: (Reminder) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -98,7 +106,8 @@ fun ReminderListScaffold(
                 onApplySort = { onHandleEvent(ReminderListEvent.Sort(it)) },
                 onShowSearch = { onHandleEvent(ReminderListEvent.ShowSearch) },
                 onHideSearch = { onHandleEvent(ReminderListEvent.HideSearch) },
-                onSearchQueryChange = { onHandleEvent(ReminderListEvent.Search(it)) }
+                onSearchQueryChange = { onHandleEvent(ReminderListEvent.Search(it)) },
+                onNavigateSettings = onNavigateSettings
             )
         },
         content = { scaffoldPadding ->
@@ -178,6 +187,7 @@ fun ReminderListTopBar(
     onSearchQueryChange: (String) -> Unit,
     onHideSearch: () -> Unit,
     isSearchBarShown: Boolean,
+    onNavigateSettings: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     var isSortDialogOpen by remember { mutableStateOf(false) }
@@ -201,6 +211,8 @@ fun ReminderListTopBar(
             onCloseSearch = onHideSearch
         )
     } else {
+        var showOverflowMenu by remember { mutableStateOf(false) }
+
         RemindMeTopAppBar(
             title = stringResource(R.string.app_name),
             actions = {
@@ -214,6 +226,30 @@ fun ReminderListTopBar(
                     Icon(
                         imageVector = Icons.Rounded.Search,
                         contentDescription = stringResource(R.string.cd_search_reminders)
+                    )
+                }
+                IconButton(onClick = { showOverflowMenu = !showOverflowMenu }) {
+                    Icon(
+                        imageVector = Icons.Rounded.MoreVert,
+                        contentDescription = stringResource(R.string.cd_more)
+                    )
+                }
+                DropdownMenu(
+                    expanded = showOverflowMenu,
+                    onDismissRequest = { showOverflowMenu = false },
+                    offset = DpOffset(
+                        x = (-400).dp,
+                        y = (-400).dp
+                    )
+                ) {
+                    DropdownMenuItem(
+                        text = {
+                            Text(
+                                text = stringResource(R.string.dropdown_settings),
+                                style = MaterialTheme.typography.bodyMedium.copy(fontSize = 17.sp)
+                            )
+                        },
+                        onClick = onNavigateSettings
                     )
                 }
             },
@@ -305,6 +341,7 @@ fun ReminderListPreview(
         ReminderListScaffold(
             uiState = ReminderListUiState(reminders = reminders, isLoading = false),
             onHandleEvent = {},
+            onNavigateSettings = {},
             onNavigateDetails = {}
         )
     }
