@@ -109,4 +109,14 @@
     <string name="repeat_unit_option_week">Week(s)</string>
     <string name="cd_card_repeat_reminder">Repeat reminder</string>
     <string name="cd_card_has_notes">Has notes</string>
+    <string name="dropdown_settings">Settings</string>
+    <string name="top_app_bar_title_settings">Settings</string>
+    <string name="settings_header_personalisation">Personalisation</string>
+    <string name="settings_header_about">About</string>
+    <string name="settings_title_theme">Theme</string>
+    <string name="settings_title_date_format">Date format</string>
+    <string name="settings_title_notification_behaviour">Notification behaviour</string>
+    <string name="settings_title_version_number">Version number</string>
+    <string name="settings_title_source_code">Source code</string>
+    <string name="settings_subtitle_github">Available on GitHub</string>
 </resources>
