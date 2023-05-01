@@ -41,4 +41,10 @@ class UserPreferencesRepository @Inject constructor(
             userPreferences.copy(theme = theme)
         }
     }
+
+    suspend fun updateIsNotificationOnByDefault(isNotificationOnByDefault: Boolean) {
+        userPreferencesDataStore.updateData { userPreferences ->
+            userPreferences.copy(isNotificationOnByDefault = isNotificationOnByDefault)
+        }
+    }
 }
