@@ -2,11 +2,12 @@ package dev.shorthouse.remindme.ui.settings
 
 import android.content.res.Configuration
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.ChevronRight
@@ -15,15 +16,20 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -33,6 +39,8 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import dev.shorthouse.remindme.BuildConfig
 import dev.shorthouse.remindme.R
+import dev.shorthouse.remindme.data.protodatastore.Theme
+import dev.shorthouse.remindme.ui.component.dialog.RemindMeAlertDialog
 import dev.shorthouse.remindme.ui.component.topappbar.RemindMeTopAppBar
 import dev.shorthouse.remindme.ui.theme.AppTheme
 
@@ -46,6 +54,7 @@ fun SettingsScreen(
 
     SettingsScreen(
         uiState = uiState,
+        onHandleEvent = { viewModel.handleEvent(it) },
         onNavigateUp = { navigator.navigateUp() }
     )
 }
@@ -53,6 +62,7 @@ fun SettingsScreen(
 @Composable
 fun SettingsScreen(
     uiState: SettingsUiState,
+    onHandleEvent: (SettingsEvent) -> Unit,
     onNavigateUp: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -73,6 +83,13 @@ fun SettingsScreen(
         content = { scaffoldPadding ->
             if (!uiState.isLoading) {
                 SettingsContent(
+                    theme = uiState.theme,
+                    onThemeChange = { onHandleEvent(SettingsEvent.SetTheme(it)) },
+                    isNotificationOnByDefault = uiState.isNotificationOnByDefault,
+                    onIsNotificationOnByDefaultChange = {
+                        onHandleEvent(SettingsEvent.SetNotification(it))
+                    },
+
                     modifier = Modifier.padding(scaffoldPadding)
                 )
             }
@@ -82,23 +99,87 @@ fun SettingsScreen(
 }
 
 @Composable
-fun SettingsContent(modifier: Modifier = Modifier) {
+fun SettingsContent(
+    theme: Theme,
+    onThemeChange: (Theme) -> Unit,
+    isNotificationOnByDefault: Boolean,
+    onIsNotificationOnByDefaultChange: (Boolean) -> Unit,
+    modifier: Modifier = Modifier
+) {
     Column(modifier = modifier) {
         SettingsGroup(
-            header = stringResource(R.string.settings_header_personalisation),
+            header = stringResource(R.string.settings_header_customisation),
             content = {
+                var isThemeDialogOpen by remember { mutableStateOf(false) }
+
                 SettingsOption(
                     title = stringResource(R.string.settings_title_theme),
-                    subtitle = "Follow system",
-                    actionIcon = Icons.Rounded.ChevronRight,
-                    onClick = {}
+                    subtitle = stringResource(theme.nameStringId),
+                    action = {
+                        Icon(
+                            imageVector = Icons.Rounded.ChevronRight,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.65f)
+                        )
+                    },
+                    onClick = { isThemeDialogOpen = true }
                 )
+
+                if (isThemeDialogOpen) {
+                    var selectedThemeOption by remember { mutableStateOf(theme) }
+                    val themeOptions = Theme.values()
+
+                    RemindMeAlertDialog(
+                        title = stringResource(R.string.alert_dialog_title_app_theme),
+                        content = {
+                            Column {
+                                themeOptions.forEach { themeOption ->
+                                    Row(
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                        modifier = Modifier
+                                            .selectable(
+                                                selected = (themeOption == selectedThemeOption),
+                                                onClick = { selectedThemeOption = themeOption },
+                                                role = Role.RadioButton
+                                            )
+                                            .fillMaxWidth()
+                                            .padding(12.dp)
+                                    ) {
+                                        RadioButton(
+                                            selected = (themeOption == selectedThemeOption),
+                                            onClick = null
+                                        )
+
+                                        Text(
+                                            text = stringResource(themeOption.nameStringId),
+                                            style = MaterialTheme.typography.bodyMedium,
+                                            color = MaterialTheme.colorScheme.onSurface
+                                        )
+                                    }
+                                }
+                            }
+                        },
+                        onConfirm = { onThemeChange(selectedThemeOption) },
+                        confirmText = stringResource(R.string.dialog_action_apply),
+                        onDismiss = { isThemeDialogOpen = false }
+                    )
+                }
 
                 SettingsOption(
                     title = stringResource(R.string.settings_title_notification_behaviour),
-                    subtitle = "Off by default when adding reminder",
-                    actionIcon = Icons.Rounded.ChevronRight,
-                    onClick = {}
+                    subtitle = if (isNotificationOnByDefault) {
+                        stringResource(R.string.settings_subtitle_notification_on)
+                    } else {
+                        stringResource(R.string.settings_subtitle_notification_off)
+                    },
+                    action = {
+                        Switch(
+                            checked = isNotificationOnByDefault,
+                            onCheckedChange = { onIsNotificationOnByDefaultChange(it) }
+                        )
+                    },
+                    onClick = { onIsNotificationOnByDefaultChange(!isNotificationOnByDefault) }
                 )
             }
         )
@@ -118,11 +199,19 @@ fun SettingsContent(modifier: Modifier = Modifier) {
                 )
 
                 val uriHandler = LocalUriHandler.current
+                val uri = stringResource(R.string.app_url)
+
                 SettingsOption(
                     title = stringResource(R.string.settings_title_source_code),
                     subtitle = stringResource(R.string.settings_subtitle_github),
-                    actionIcon = Icons.Rounded.Launch,
-                    onClick = { uriHandler.openUri("https://github.com/shorthouse/RemindMe") }
+                    action = {
+                        Icon(
+                            imageVector = Icons.Rounded.Launch,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.65f)
+                        )
+                    },
+                    onClick = { uriHandler.openUri(uri) }
                 )
             }
         )
@@ -158,16 +247,16 @@ fun SettingsOption(
     subtitle: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    actionIcon: ImageVector? = null
+    action: @Composable () -> Unit = {}
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
             .fillMaxWidth()
             .clickable { onClick() }
-            .padding(horizontal = 16.dp, vertical = 16.dp)
+            .padding(horizontal = 16.dp, vertical = 12.dp)
     ) {
-        Column {
+        Column(modifier = Modifier.weight(0.8f)) {
             Text(
                 text = title,
                 style = MaterialTheme.typography.labelMedium,
@@ -182,25 +271,18 @@ fun SettingsOption(
             )
         }
 
-        Spacer(Modifier.weight(1f))
-
-        actionIcon?.let {
-            Icon(
-                imageVector = actionIcon,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.65f)
-            )
-        }
+        action()
     }
 }
 
 @Composable
 @Preview(name = "Light Mode")
 @Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
-fun ReminderListPreview() {
+fun SettingsPreview() {
     AppTheme {
         SettingsScreen(
-            uiState = SettingsUiState(),
+            uiState = SettingsUiState(isNotificationOnByDefault = true),
+            onHandleEvent = {},
             onNavigateUp = {}
         )
     }

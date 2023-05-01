@@ -1,3 +1,8 @@
 package dev.shorthouse.remindme.ui.settings
 
-sealed interface SettingsEvent
+import dev.shorthouse.remindme.data.protodatastore.Theme
+
+sealed interface SettingsEvent {
+    data class SetTheme(val theme: Theme) : SettingsEvent
+    data class SetNotification(val isNotificationOnByDefault: Boolean) : SettingsEvent
+}
