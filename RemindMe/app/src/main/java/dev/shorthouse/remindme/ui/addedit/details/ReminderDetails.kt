@@ -118,8 +118,8 @@ fun ReminderDetailsTopBar(
                 expanded = showOverflowMenu,
                 onDismissRequest = { showOverflowMenu = false },
                 offset = DpOffset(
-                    x = 0.dp,
-                    y = (-60).dp
+                    x = (-400).dp,
+                    y = (-400).dp
                 )
             ) {
                 DropdownMenuItem(
