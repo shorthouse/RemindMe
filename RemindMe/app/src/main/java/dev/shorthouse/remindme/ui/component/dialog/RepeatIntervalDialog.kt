@@ -11,13 +11,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -33,8 +30,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.model.RepeatInterval
 import dev.shorthouse.remindme.ui.theme.AppTheme
@@ -47,90 +42,37 @@ fun RepeatIntervalDialog(
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Dialog(
-        properties = DialogProperties(usePlatformDefaultWidth = false),
-        onDismissRequest = onDismiss
-    ) {
-        Surface(
-            shape = MaterialTheme.shapes.medium,
-            modifier = modifier
-        ) {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-                modifier = Modifier
-                    .padding(12.dp)
-                    .fillMaxWidth(0.9f)
-            ) {
-                Text(
-                    text = stringResource(R.string.repeats_every_header),
-                    style = MaterialTheme.typography.headlineSmall,
-                    modifier = Modifier.padding(
-                        horizontal = 16.dp,
-                        vertical = 8.dp
-                    )
-                )
-
-                var repeatAmount by remember {
-                    mutableStateOf(initialRepeatInterval?.amount?.toString() ?: "1")
-                }
-
-                var repeatUnit by remember {
-                    mutableStateOf(initialRepeatInterval?.unit ?: ChronoUnit.DAYS)
-                }
-
-                RepeatIntervalDialogContent(
-                    repeatAmount = repeatAmount,
-                    onRepeatAmountChange = { repeatAmount = it },
-                    repeatUnit = repeatUnit,
-                    onRepeatUnitChange = { repeatUnit = it }
-                )
-
-                Row(
-                    horizontalArrangement = Arrangement.End,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 4.dp)
-                ) {
-                    TextButton(
-                        onClick = {
-                            onDismiss()
-                        },
-                        shape = MaterialTheme.shapes.small,
-                        colors = ButtonDefaults.textButtonColors(
-                            contentColor = MaterialTheme.colorScheme.primary
-                        )
-                    ) {
-                        Text(
-                            text = stringResource(R.string.dialog_action_cancel),
-                            style = MaterialTheme.typography.labelLarge
-                        )
-                    }
-
-                    TextButton(
-                        onClick = {
-                            val repeatInterval = RepeatInterval(
-                                amount = repeatAmount.toIntOrNull() ?: 1,
-                                unit = repeatUnit
-                            )
-                            onConfirm(repeatInterval)
-                            onDismiss()
-                        },
-                        shape = MaterialTheme.shapes.small,
-                        colors = ButtonDefaults.textButtonColors(
-                            contentColor = MaterialTheme.colorScheme.primary,
-                            disabledContentColor = MaterialTheme.colorScheme.outline
-                        ),
-                        enabled = repeatAmount.isNotEmpty()
-                    ) {
-                        Text(
-                            text = stringResource(R.string.dialog_action_apply),
-                            style = MaterialTheme.typography.labelLarge
-                        )
-                    }
-                }
-            }
-        }
+    var repeatAmount by remember {
+        mutableStateOf(initialRepeatInterval?.amount?.toString() ?: "1")
     }
+
+    var repeatUnit by remember {
+        mutableStateOf(initialRepeatInterval?.unit ?: ChronoUnit.DAYS)
+    }
+
+    RemindMeAlertDialog(
+        title = stringResource(R.string.repeats_every_header),
+        content = {
+            RepeatIntervalDialogContent(
+                repeatAmount = repeatAmount,
+                onRepeatAmountChange = { repeatAmount = it },
+                repeatUnit = repeatUnit,
+                onRepeatUnitChange = { repeatUnit = it }
+            )
+        },
+        onConfirm = {
+            val repeatInterval = RepeatInterval(
+                amount = repeatAmount.toIntOrNull() ?: 1,
+                unit = repeatUnit
+            )
+            onConfirm(repeatInterval)
+            onDismiss()
+        },
+        confirmText = stringResource(R.string.dialog_action_apply),
+        isConfirmEnabled = repeatAmount.isNotEmpty(),
+        onDismiss = onDismiss,
+        modifier = modifier
+    )
 }
 
 @Composable
@@ -221,7 +163,7 @@ private fun RepeatUnitInput(
                     onClick = { onRepeatUnitChange(chronoUnit) },
                     role = Role.RadioButton
                 )
-                .fillMaxWidth(0.8f)
+                .fillMaxWidth()
         ) {
             RadioButton(
                 selected = (chronoUnit == repeatUnit),
