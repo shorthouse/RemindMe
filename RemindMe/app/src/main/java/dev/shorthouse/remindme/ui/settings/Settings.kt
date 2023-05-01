@@ -95,13 +95,6 @@ fun SettingsContent(modifier: Modifier = Modifier) {
                 )
 
                 SettingsOption(
-                    title = stringResource(R.string.settings_title_date_format),
-                    subtitle = "Fri, 28th July 2023",
-                    actionIcon = Icons.Rounded.ChevronRight,
-                    onClick = {}
-                )
-
-                SettingsOption(
                     title = stringResource(R.string.settings_title_notification_behaviour),
                     subtitle = "Off by default when adding reminder",
                     actionIcon = Icons.Rounded.ChevronRight,
@@ -149,7 +142,7 @@ fun SettingsGroup(
             color = MaterialTheme.colorScheme.primary,
             modifier = modifier.padding(
                 start = 8.dp,
-                top = 8.dp,
+                top = 16.dp,
                 end = 8.dp,
                 bottom = 0.dp
             )
