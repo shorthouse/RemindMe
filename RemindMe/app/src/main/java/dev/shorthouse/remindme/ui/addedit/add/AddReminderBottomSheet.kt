@@ -33,12 +33,12 @@ fun ReminderAddBottomSheet(
 
     ReminderAddBottomSheet(
         uiState = uiState,
+        isReminderValid = viewModel.isReminderValid(uiState.reminder),
         onHandleEvent = { viewModel.handleEvent(it) },
         onDismissRequest = {
             onDismissSheet()
             viewModel.handleEvent(ReminderAddEditEvent.ClearReminder)
-        },
-        isReminderValid = viewModel.isReminderValid(uiState.reminder)
+        }
     )
 }
 
@@ -46,9 +46,10 @@ fun ReminderAddBottomSheet(
 @OptIn(ExperimentalMaterial3Api::class)
 private fun ReminderAddBottomSheet(
     uiState: ReminderAddEditUiState,
+    isReminderValid: Boolean,
     onHandleEvent: (ReminderAddEditEvent) -> Unit,
     onDismissRequest: () -> Unit,
-    isReminderValid: Boolean
+    modifier: Modifier = Modifier
 ) {
     ModalBottomSheet(
         onDismissRequest = onDismissRequest,
@@ -60,17 +61,20 @@ private fun ReminderAddBottomSheet(
             bottomEnd = CornerSize(0.dp)
         ),
         tonalElevation = 0.dp,
-        dragHandle = null
+        dragHandle = null,
+        modifier = modifier
     ) {
-        ReminderAddEditContent(
-            reminder = uiState.reminder,
-            onHandleEvent = onHandleEvent,
-            onNavigateUp = onDismissRequest,
-            isReminderValid = isReminderValid,
-            modifier = Modifier
-                .imePadding()
-                .disableBottomSheetSwipe()
-        )
+        if (!uiState.isLoading) {
+            ReminderAddEditContent(
+                reminder = uiState.reminder,
+                onHandleEvent = onHandleEvent,
+                onNavigateUp = onDismissRequest,
+                isReminderValid = isReminderValid,
+                modifier = Modifier
+                    .imePadding()
+                    .disableBottomSheetSwipe()
+            )
+        }
     }
 }
 
