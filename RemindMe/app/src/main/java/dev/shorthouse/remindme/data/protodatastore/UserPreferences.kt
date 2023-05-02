@@ -8,13 +8,13 @@ import kotlinx.serialization.Serializable
 data class UserPreferences(
     val reminderFilter: ReminderFilter = ReminderFilter.UPCOMING,
     val reminderSortOrder: ReminderSort = ReminderSort.BY_EARLIEST_DATE_FIRST,
-    val theme: Theme = Theme.AUTO,
-    val isNotificationOnByDefault: Boolean = false
+    val themeStyle: ThemeStyle = ThemeStyle.AUTO,
+    val isNotificationDefaultOn: Boolean = false
 )
 
 enum class ReminderFilter(@StringRes val nameStringId: Int) {
-    OVERDUE(R.string.reminder_overdue),
     UPCOMING(R.string.reminder_upcoming),
+    OVERDUE(R.string.reminder_overdue),
     COMPLETED(R.string.reminder_completed)
 }
 
@@ -25,7 +25,7 @@ enum class ReminderSort(@StringRes val nameStringId: Int) {
     BY_ALPHABETICAL_Z_TO_A(R.string.sort_dialog_option_alphabetical_z_to_a)
 }
 
-enum class Theme(@StringRes val nameStringId: Int) {
+enum class ThemeStyle(@StringRes val nameStringId: Int) {
     LIGHT(R.string.theme_light),
     DARK(R.string.theme_dark),
     AUTO(R.string.theme_auto)
