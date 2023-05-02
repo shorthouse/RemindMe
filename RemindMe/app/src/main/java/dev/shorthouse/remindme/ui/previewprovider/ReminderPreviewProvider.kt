@@ -64,20 +64,20 @@ private object ReminderPreviewData {
         isCompleted = false
     )
 
-    val overdue = Reminder(
+    val upcoming = Reminder(
         id = 2,
-        name = "Overdue",
-        startDateTime = ZonedDateTime.parse("2020-01-01T08:30:00Z"),
+        name = "Upcoming",
+        startDateTime = ZonedDateTime.parse("3020-01-01T08:30:00Z"),
         isNotificationSent = false,
         repeatInterval = null,
         notes = null,
         isCompleted = false
     )
 
-    val upcoming = Reminder(
+    val overdue = Reminder(
         id = 3,
-        name = "Upcoming",
-        startDateTime = ZonedDateTime.parse("3020-01-01T08:30:00Z"),
+        name = "Overdue",
+        startDateTime = ZonedDateTime.parse("2020-01-01T08:30:00Z"),
         isNotificationSent = false,
         repeatInterval = null,
         notes = null,
