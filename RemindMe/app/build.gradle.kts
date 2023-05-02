@@ -28,8 +28,8 @@ android {
         applicationId = "dev.shorthouse.remindme"
         minSdk = 26
         targetSdk = 33
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 3
+        versionName = "1.1.0"
 
         testInstrumentationRunner = "dev.shorthouse.remindme.runner.CustomTestRunner"
     }

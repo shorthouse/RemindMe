@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.shorthouse.remindme.data.protodatastore.UserPreferencesRepository
 import dev.shorthouse.remindme.data.source.local.ReminderRepository
 import dev.shorthouse.remindme.di.IoDispatcher
 import dev.shorthouse.remindme.domain.reminder.AddReminderUseCase
@@ -22,6 +23,7 @@ import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -29,6 +31,7 @@ import kotlinx.coroutines.launch
 class ReminderAddEditViewModel @Inject constructor(
     private val reminderRepository: ReminderRepository,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
+    private val userPreferencesRepository: UserPreferencesRepository,
     private val addReminderUseCase: AddReminderUseCase,
     private val updateReminderUseCase: UpdateReminderUseCase,
     private val deleteReminderUseCase: DeleteReminderUseCase,
@@ -44,8 +47,10 @@ class ReminderAddEditViewModel @Inject constructor(
     init {
         val navArgs = savedStateHandle.navArgs<ReminderAddEditScreenNavArgs>()
 
-        navArgs.reminderId?.let { reminderId ->
-            setEditReminder(reminderId)
+        if (navArgs.reminderId == null) {
+            setAddReminder()
+        } else {
+            setEditReminder(navArgs.reminderId)
         }
     }
 
@@ -70,6 +75,26 @@ class ReminderAddEditViewModel @Inject constructor(
         return reminder.name.isNotBlank() &&
                 reminder.startDateTime.isAfter(ZonedDateTime.now()) &&
                 reminder.validated() != _uiState.value.initialReminder.validated()
+    }
+
+    private fun setAddReminder() {
+        _uiState.update { it.copy(isLoading = true) }
+
+        viewModelScope.launch(ioDispatcher) {
+            userPreferencesRepository.userPreferencesFlow.collectLatest { userPreferences ->
+                val initialReminder = _uiState.value.initialReminder.copy(
+                    isNotificationSent = userPreferences.isNotificationOnByDefault
+                )
+
+                _uiState.update {
+                    it.copy(
+                        reminder = initialReminder,
+                        initialReminder = initialReminder,
+                        isLoading = false
+                    )
+                }
+            }
+        }
     }
 
     private fun setEditReminder(reminderId: Long) {

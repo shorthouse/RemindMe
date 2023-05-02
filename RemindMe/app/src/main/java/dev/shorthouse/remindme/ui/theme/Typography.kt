@@ -48,7 +48,7 @@ val AppTypography = Typography(
     bodySmall = TextStyle(
         fontSize = 15.sp,
         letterSpacing = 0.2.sp,
-        fontWeight = FontWeight.Medium,
+        fontWeight = FontWeight.Normal,
         fontFamily = Roboto
     ),
     labelLarge = TextStyle(
@@ -58,6 +58,12 @@ val AppTypography = Typography(
     ),
     labelMedium = TextStyle(
         fontSize = 16.sp,
+        fontWeight = FontWeight.Bold,
+        fontFamily = Roboto
+    ),
+    labelSmall = TextStyle(
+        fontSize = 15.sp,
+        letterSpacing = 0.2.sp,
         fontWeight = FontWeight.Bold,
         fontFamily = Roboto
     )

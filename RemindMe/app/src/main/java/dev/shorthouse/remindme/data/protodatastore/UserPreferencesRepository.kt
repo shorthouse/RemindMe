@@ -35,4 +35,16 @@ class UserPreferencesRepository @Inject constructor(
             userPreferences.copy(reminderSortOrder = reminderSortOrder)
         }
     }
+
+    suspend fun updateTheme(theme: Theme) {
+        userPreferencesDataStore.updateData { userPreferences ->
+            userPreferences.copy(theme = theme)
+        }
+    }
+
+    suspend fun updateIsNotificationOnByDefault(isNotificationOnByDefault: Boolean) {
+        userPreferencesDataStore.updateData { userPreferences ->
+            userPreferences.copy(isNotificationOnByDefault = isNotificationOnByDefault)
+        }
+    }
 }
