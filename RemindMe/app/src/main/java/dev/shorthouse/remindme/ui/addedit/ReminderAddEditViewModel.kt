@@ -22,8 +22,10 @@ import java.time.ZonedDateTime
 import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -37,14 +39,17 @@ class ReminderAddEditViewModel @Inject constructor(
     private val deleteReminderUseCase: DeleteReminderUseCase,
     private val completeOnetimeReminderUseCase: CompleteOnetimeReminderUseCase,
     private val completeRepeatReminderSeriesUseCase: CompleteRepeatReminderSeriesUseCase,
-    savedStateHandle: SavedStateHandle
+    private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(ReminderAddEditUiState())
 
-    val uiState: StateFlow<ReminderAddEditUiState>
-        get() = _uiState
+    val uiState = _uiState.asStateFlow()
 
     init {
+        initialiseUiState()
+    }
+
+    private fun initialiseUiState() {
         val navArgs = savedStateHandle.navArgs<ReminderAddEditScreenNavArgs>()
 
         if (navArgs.reminderId == null) {
@@ -80,10 +85,11 @@ class ReminderAddEditViewModel @Inject constructor(
     private fun setAddReminder() {
         _uiState.update { it.copy(isLoading = true) }
 
-        viewModelScope.launch(ioDispatcher) {
-            userPreferencesRepository.userPreferencesFlow.collectLatest { userPreferences ->
+        userPreferencesRepository.userPreferencesFlow
+            .flowOn(ioDispatcher)
+            .onEach { userPreferences ->
                 val initialReminder = _uiState.value.initialReminder.copy(
-                    isNotificationSent = userPreferences.isNotificationOnByDefault
+                    isNotificationSent = userPreferences.isNotificationDefaultOn
                 )
 
                 _uiState.update {
@@ -94,7 +100,7 @@ class ReminderAddEditViewModel @Inject constructor(
                     )
                 }
             }
-        }
+            .launchIn(viewModelScope)
     }
 
     private fun setEditReminder(reminderId: Long) {

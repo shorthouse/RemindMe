@@ -14,8 +14,11 @@ import java.time.ZonedDateTime
 import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -28,94 +31,61 @@ class ReminderListViewModel @Inject constructor(
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(ReminderListUiState())
 
-    val uiState: StateFlow<ReminderListUiState>
-        get() = _uiState
-
-    private val _searchQuery = MutableStateFlow("")
-    private val _isSearchBarShown = MutableStateFlow(false)
+    val uiState = _uiState.asStateFlow()
 
     init {
         initialiseUiState()
     }
 
     fun initialiseUiState() {
-        viewModelScope.launch(ioDispatcher) {
-            val remindersFlow = reminderRepository.getReminders()
-            val userPreferencesFlow = userPreferencesRepository.userPreferencesFlow
-            val searchQueryFlow = _searchQuery
-            val isSearchBarShownFlow = _isSearchBarShown
+        _uiState.update { it.copy(isLoading = true) }
 
-            combine(
-                remindersFlow,
-                userPreferencesFlow,
-                searchQueryFlow,
-                isSearchBarShownFlow
-            ) { reminders, userPreferences, searchQuery, isSearchBarShown ->
+        val remindersFlow = reminderRepository.getReminders()
+        val userPreferencesFlow = userPreferencesRepository.userPreferencesFlow
 
-                val searchReminders = when {
-                    !isSearchBarShown -> reminders
-                    searchQuery.isEmpty() -> emptyList()
-                    else -> reminders.filter { it.name.contains(searchQuery, ignoreCase = true) }
+        combine(remindersFlow, userPreferencesFlow) { reminders, userPreferences ->
+            val now = ZonedDateTime.now()
+
+            val filteredReminders = reminders.filter {
+                when (userPreferences.reminderFilter) {
+                    ReminderFilter.UPCOMING -> !it.startDateTime.isBefore(now) && !it.isCompleted
+                    ReminderFilter.OVERDUE -> it.startDateTime.isBefore(now) && !it.isCompleted
+                    ReminderFilter.COMPLETED -> it.isCompleted
                 }
+            }
 
-                val filteredReminders = if (isSearchBarShown) {
-                    searchReminders
-                } else {
-                    val now = ZonedDateTime.now()
-
-                    when (userPreferences.reminderFilter) {
-                        ReminderFilter.OVERDUE -> {
-                            reminders.filter {
-                                it.startDateTime.isBefore(now) && !it.isCompleted
-                            }
-                        }
-                        ReminderFilter.UPCOMING -> {
-                            reminders.filter {
-                                !it.startDateTime.isBefore(now) && !it.isCompleted
-                            }
-                        }
-                        ReminderFilter.COMPLETED -> {
-                            reminders.filter {
-                                it.isCompleted
-                            }
-                        }
-                    }
+            val sortedReminders = when (userPreferences.reminderSortOrder) {
+                ReminderSort.BY_EARLIEST_DATE_FIRST -> {
+                    filteredReminders.sortedBy { it.startDateTime }
                 }
-
-                val sortedReminders = when (userPreferences.reminderSortOrder) {
-                    ReminderSort.BY_EARLIEST_DATE_FIRST -> {
-                        filteredReminders.sortedBy { it.startDateTime }
-                    }
-                    ReminderSort.BY_LATEST_DATE_FIRST -> {
-                        filteredReminders.sortedByDescending { it.startDateTime }
-                    }
-                    ReminderSort.BY_ALPHABETICAL_A_TO_Z -> {
-                        filteredReminders.sortedBy { it.name }
-                    }
-                    ReminderSort.BY_ALPHABETICAL_Z_TO_A -> {
-                        filteredReminders.sortedByDescending { it.name }
-                    }
+                ReminderSort.BY_LATEST_DATE_FIRST -> {
+                    filteredReminders.sortedByDescending { it.startDateTime }
                 }
+                ReminderSort.BY_ALPHABETICAL_A_TO_Z -> {
+                    filteredReminders.sortedBy { it.name }
+                }
+                ReminderSort.BY_ALPHABETICAL_Z_TO_A -> {
+                    filteredReminders.sortedByDescending { it.name }
+                }
+            }
 
-                _uiState.value.copy(
-                    reminders = sortedReminders,
-                    reminderFilter = userPreferences.reminderFilter,
-                    reminderSortOrder = userPreferences.reminderSortOrder,
-                    searchQuery = searchQuery,
-                    isLoading = false
-                )
-            }.collect { _uiState.value = it }
+            _uiState.value.copy(
+                reminders = sortedReminders,
+                reminderFilter = userPreferences.reminderFilter,
+                reminderSortOrder = userPreferences.reminderSortOrder,
+                isLoading = false
+            )
         }
+            .flowOn(ioDispatcher)
+            .onEach { _uiState.value = it }
+            .launchIn(viewModelScope)
     }
 
     fun handleEvent(event: ReminderListEvent) {
         when (event) {
             is ReminderListEvent.Filter -> handleFilter(event.filter)
             is ReminderListEvent.Sort -> handleSort(event.sortOrder)
-            is ReminderListEvent.Search -> handleSearch(event.query)
             is ReminderListEvent.CompleteReminder -> handleCompleteReminder(event.reminder)
-            ReminderListEvent.ShowSearch -> handleShowSearch()
-            ReminderListEvent.HideSearch -> handleHideSearch()
             ReminderListEvent.ShowAddReminderSheet -> handleShowAddReminderSheet()
             ReminderListEvent.HideAddReminderSheet -> handleHideAddReminderSheet()
         }
@@ -133,23 +103,8 @@ class ReminderListViewModel @Inject constructor(
         }
     }
 
-    private fun handleSearch(query: String) {
-        _searchQuery.value = query
-        _uiState.update { it.copy(searchQuery = query) }
-    }
-
     private fun handleCompleteReminder(reminder: Reminder) {
         completeReminderUseCase(reminder)
-    }
-
-    private fun handleShowSearch() {
-        _uiState.update { it.copy(isSearchBarShown = true) }
-    }
-
-    private fun handleHideSearch() {
-        _uiState.update {
-            it.copy(isSearchBarShown = false, searchQuery = "")
-        }
     }
 
     private fun handleShowAddReminderSheet() {
