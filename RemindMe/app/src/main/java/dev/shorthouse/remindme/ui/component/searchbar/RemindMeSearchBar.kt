@@ -40,8 +40,8 @@ import dev.shorthouse.remindme.ui.previewprovider.SearchQueryProvider
 import dev.shorthouse.remindme.ui.theme.AppTheme
 import dev.shorthouse.remindme.ui.theme.Grey
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
+@OptIn(ExperimentalComposeUiApi::class)
 fun RemindMeSearchBar(
     searchQuery: String,
     onSearchQueryChange: (String) -> Unit,
@@ -101,7 +101,8 @@ private fun RemindMeSearchBarTextField(
     searchQuery: String,
     onSearchQueryChange: (String) -> Unit,
     onCloseSearch: () -> Unit,
-    innerTextField: @Composable () -> Unit
+    innerTextField: @Composable () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     TextFieldDefaults.DecorationBox(
         value = searchQuery,
@@ -152,11 +153,11 @@ private fun RemindMeSearchBarTextField(
                 shape = MaterialTheme.shapes.small,
                 color = Color.White,
                 content = {},
-                modifier = Modifier
+                modifier = modifier
                     .fillMaxWidth()
                     .padding(6.dp)
             )
-        }
+        },
     )
 }
 
