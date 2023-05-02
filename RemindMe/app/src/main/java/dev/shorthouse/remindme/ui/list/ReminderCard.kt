@@ -50,8 +50,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun ReminderCard(
     reminder: Reminder,
-    onCompleteReminder: (Reminder) -> Unit,
     onReminderCard: (Reminder) -> Unit,
+    onCompleteReminder: (Reminder) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Surface(
