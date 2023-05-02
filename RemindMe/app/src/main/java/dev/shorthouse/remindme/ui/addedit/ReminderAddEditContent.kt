@@ -48,9 +48,9 @@ import java.time.temporal.ChronoUnit
 @Composable
 fun ReminderAddEditContent(
     reminder: Reminder,
+    isReminderValid: Boolean,
     onHandleEvent: (ReminderAddEditEvent) -> Unit,
     onNavigateUp: () -> Unit,
-    isReminderValid: Boolean,
     modifier: Modifier = Modifier
 ) {
     Column(

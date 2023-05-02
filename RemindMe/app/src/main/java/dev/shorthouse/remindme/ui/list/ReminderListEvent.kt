@@ -7,10 +7,7 @@ import dev.shorthouse.remindme.model.Reminder
 sealed interface ReminderListEvent {
     data class Filter(val filter: ReminderFilter) : ReminderListEvent
     data class Sort(val sortOrder: ReminderSort) : ReminderListEvent
-    data class Search(val query: String) : ReminderListEvent
     data class CompleteReminder(val reminder: Reminder) : ReminderListEvent
-    object ShowSearch : ReminderListEvent
-    object HideSearch : ReminderListEvent
     object ShowAddReminderSheet : ReminderListEvent
     object HideAddReminderSheet : ReminderListEvent
 }

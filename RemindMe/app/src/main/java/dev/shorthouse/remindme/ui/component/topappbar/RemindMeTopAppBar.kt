@@ -1,7 +1,6 @@
 package dev.shorthouse.remindme.ui.component.topappbar
 
 import android.content.res.Configuration
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
@@ -16,25 +15,26 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import dev.shorthouse.remindme.ui.theme.AppTheme
+import dev.shorthouse.remindme.ui.theme.isLight
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
+@OptIn(ExperimentalMaterial3Api::class)
 fun RemindMeTopAppBar(
     title: String,
     modifier: Modifier = Modifier,
     navigationIcon: @Composable () -> Unit = {},
     actions: @Composable RowScope.() -> Unit = {}
 ) {
-    val containerColor = if (isSystemInDarkTheme()) {
-        MaterialTheme.colorScheme.surface
-    } else {
+    val containerColor = if (MaterialTheme.colorScheme.isLight()) {
         MaterialTheme.colorScheme.primary
+    } else {
+        MaterialTheme.colorScheme.surface
     }
 
-    val onContainerColor = if (isSystemInDarkTheme()) {
-        MaterialTheme.colorScheme.onSurface
-    } else {
+    val onContainerColor = if (MaterialTheme.colorScheme.isLight()) {
         MaterialTheme.colorScheme.onPrimary
+    } else {
+        MaterialTheme.colorScheme.onSurface
     }
 
     TopAppBar(
@@ -56,9 +56,9 @@ fun RemindMeTopAppBar(
     )
 }
 
+@Composable
 @Preview(name = "Light Mode", showBackground = true)
 @Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
-@Composable
 fun RemindMeTopAppBarPreview() {
     AppTheme {
         RemindMeTopAppBar(

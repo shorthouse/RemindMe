@@ -24,8 +24,8 @@ import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.ui.theme.AppTheme
 import java.time.LocalTime
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
+@OptIn(ExperimentalMaterial3Api::class)
 fun ReminderTimePicker(
     initialTime: LocalTime,
     onConfirm: (LocalTime) -> Unit,

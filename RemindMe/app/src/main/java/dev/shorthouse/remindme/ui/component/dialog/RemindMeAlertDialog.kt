@@ -17,11 +17,11 @@ import dev.shorthouse.remindme.ui.theme.AppTheme
 @Composable
 fun RemindMeAlertDialog(
     title: String,
-    content: @Composable () -> Unit,
-    onConfirm: () -> Unit,
     confirmText: String,
     isConfirmEnabled: Boolean = true,
+    onConfirm: () -> Unit,
     onDismiss: () -> Unit,
+    content: @Composable () -> Unit,
     modifier: Modifier = Modifier
 ) {
     AlertDialog(

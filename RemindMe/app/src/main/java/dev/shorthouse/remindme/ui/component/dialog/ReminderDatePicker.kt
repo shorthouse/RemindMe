@@ -19,8 +19,8 @@ import java.time.LocalDate
 import java.time.ZoneId
 import java.time.ZonedDateTime
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
+@OptIn(ExperimentalMaterial3Api::class)
 fun ReminderDatePicker(
     initialDate: LocalDate,
     onConfirm: (LocalDate) -> Unit,
