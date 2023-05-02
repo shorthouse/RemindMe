@@ -34,55 +34,56 @@ import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.ui.addedit.ReminderAddEditContent
 import dev.shorthouse.remindme.ui.addedit.ReminderAddEditEvent
 import dev.shorthouse.remindme.ui.addedit.ReminderAddEditScreenNavArgs
+import dev.shorthouse.remindme.ui.addedit.ReminderAddEditUiState
 import dev.shorthouse.remindme.ui.addedit.ReminderAddEditViewModel
 import dev.shorthouse.remindme.ui.component.topappbar.RemindMeTopAppBar
 import dev.shorthouse.remindme.ui.previewprovider.DefaultReminderProvider
 import dev.shorthouse.remindme.ui.theme.AppTheme
 
-@Destination(navArgsDelegate = ReminderAddEditScreenNavArgs::class)
 @Composable
+@Destination(navArgsDelegate = ReminderAddEditScreenNavArgs::class)
 fun ReminderDetailsScreen(
     viewModel: ReminderAddEditViewModel = hiltViewModel(),
     navigator: DestinationsNavigator
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    if (!uiState.isLoading) {
-        ReminderDetailsScaffold(
-            reminder = uiState.reminder,
-            onHandleEvent = { viewModel.handleEvent(it) },
-            onNavigateUp = { navigator.navigateUp() },
-            isReminderValid = viewModel.isReminderValid(uiState.reminder)
-        )
-    }
+    ReminderDetailsScreen(
+        uiState = uiState,
+        isReminderValid = viewModel.isReminderValid(uiState.reminder),
+        onHandleEvent = { viewModel.handleEvent(it) },
+        onNavigateUp = { navigator.navigateUp() }
+    )
 }
 
 @Composable
-fun ReminderDetailsScaffold(
-    reminder: Reminder,
+fun ReminderDetailsScreen(
+    uiState: ReminderAddEditUiState,
+    isReminderValid: Boolean,
     onHandleEvent: (ReminderAddEditEvent) -> Unit,
     onNavigateUp: () -> Unit,
-    isReminderValid: Boolean,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
         topBar = {
             ReminderDetailsTopBar(
-                reminder = reminder,
+                reminder = uiState.reminder,
                 onHandleEvent = onHandleEvent,
                 onNavigateUp = onNavigateUp
             )
         },
         content = { scaffoldPadding ->
-            ReminderAddEditContent(
-                reminder = reminder,
-                onHandleEvent = onHandleEvent,
-                onNavigateUp = onNavigateUp,
-                isReminderValid = isReminderValid,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(scaffoldPadding)
-            )
+            if (!uiState.isLoading) {
+                ReminderAddEditContent(
+                    reminder = uiState.reminder,
+                    isReminderValid = isReminderValid,
+                    onHandleEvent = onHandleEvent,
+                    onNavigateUp = onNavigateUp,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(scaffoldPadding)
+                )
+            }
         },
         modifier = modifier
     )
@@ -159,11 +160,11 @@ private fun ReminderDetailsPreview(
     @PreviewParameter(DefaultReminderProvider::class) reminder: Reminder
 ) {
     AppTheme {
-        ReminderDetailsScaffold(
-            reminder = Reminder(),
+        ReminderDetailsScreen(
+            uiState = ReminderAddEditUiState(),
+            isReminderValid = true,
             onHandleEvent = {},
-            onNavigateUp = {},
-            isReminderValid = true
+            onNavigateUp = {}
         )
     }
 }
