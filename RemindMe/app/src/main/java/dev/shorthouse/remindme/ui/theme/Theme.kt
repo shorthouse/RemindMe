@@ -5,9 +5,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.DisposableEffect
 import com.google.accompanist.systemuicontroller.SystemUiController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import dev.shorthouse.remindme.data.protodatastore.ThemeStyle
 
 private val LightColors = lightColorScheme(
     primary = md_theme_light_primary,
@@ -79,10 +80,12 @@ fun AppTheme(
     systemUiController: SystemUiController = rememberSystemUiController(),
     content: @Composable () -> Unit
 ) {
-    SideEffect {
+    DisposableEffect(useDarkTheme, systemUiController) {
         systemUiController.setSystemBarsColor(
             color = if (useDarkTheme) DarkColors.surface else LightColors.primary
         )
+
+        onDispose { }
     }
 
     MaterialTheme(
@@ -91,4 +94,13 @@ fun AppTheme(
         typography = AppTypography,
         content = content
     )
+}
+
+@Composable
+fun shouldUseDarkTheme(theme: ThemeStyle): Boolean {
+    return when (theme) {
+        ThemeStyle.LIGHT -> false
+        ThemeStyle.DARK -> true
+        ThemeStyle.AUTO -> isSystemInDarkTheme()
+    }
 }
