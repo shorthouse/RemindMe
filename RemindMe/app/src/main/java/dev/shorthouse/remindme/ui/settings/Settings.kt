@@ -39,13 +39,13 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import dev.shorthouse.remindme.BuildConfig
 import dev.shorthouse.remindme.R
-import dev.shorthouse.remindme.data.protodatastore.Theme
+import dev.shorthouse.remindme.data.protodatastore.ThemeStyle
 import dev.shorthouse.remindme.ui.component.dialog.RemindMeAlertDialog
 import dev.shorthouse.remindme.ui.component.topappbar.RemindMeTopAppBar
 import dev.shorthouse.remindme.ui.theme.AppTheme
 
-@Destination
 @Composable
+@Destination
 fun SettingsScreen(
     viewModel: SettingsViewModel = hiltViewModel(),
     navigator: DestinationsNavigator
@@ -83,13 +83,12 @@ fun SettingsScreen(
         content = { scaffoldPadding ->
             if (!uiState.isLoading) {
                 SettingsContent(
-                    theme = uiState.theme,
-                    onThemeChange = { onHandleEvent(SettingsEvent.SetTheme(it)) },
-                    isNotificationOnByDefault = uiState.isNotificationOnByDefault,
-                    onIsNotificationOnByDefaultChange = {
-                        onHandleEvent(SettingsEvent.SetNotification(it))
+                    themeStyle = uiState.themeStyle,
+                    onThemeStyleChange = { onHandleEvent(SettingsEvent.Theme(it)) },
+                    isNotificationDefaultOn = uiState.isNotificationOnByDefault,
+                    onNotificationDefaultChange = {
+                        onHandleEvent(SettingsEvent.NotificationDefault(it))
                     },
-
                     modifier = Modifier.padding(scaffoldPadding)
                 )
             }
@@ -100,122 +99,141 @@ fun SettingsScreen(
 
 @Composable
 fun SettingsContent(
-    theme: Theme,
-    onThemeChange: (Theme) -> Unit,
-    isNotificationOnByDefault: Boolean,
-    onIsNotificationOnByDefaultChange: (Boolean) -> Unit,
+    themeStyle: ThemeStyle,
+    onThemeStyleChange: (ThemeStyle) -> Unit,
+    isNotificationDefaultOn: Boolean,
+    onNotificationDefaultChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier) {
-        SettingsGroup(
-            header = stringResource(R.string.settings_header_customisation),
-            content = {
-                var isThemeDialogOpen by remember { mutableStateOf(false) }
+        SettingsGroupCustomisation(
+            themeStyle,
+            onThemeStyleChange,
+            isNotificationDefaultOn,
+            onNotificationDefaultChange
+        )
 
-                SettingsOption(
-                    title = stringResource(R.string.settings_title_theme),
-                    subtitle = stringResource(theme.nameStringId),
-                    action = {
-                        Icon(
-                            imageVector = Icons.Rounded.ChevronRight,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.65f)
-                        )
-                    },
-                    onClick = { isThemeDialogOpen = true }
-                )
+        Divider(color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f))
 
-                if (isThemeDialogOpen) {
-                    var selectedThemeOption by remember { mutableStateOf(theme) }
-                    val themeOptions = Theme.values()
+        SettingsGroupAbout()
+    }
+}
 
-                    RemindMeAlertDialog(
-                        title = stringResource(R.string.alert_dialog_title_app_theme),
-                        content = {
-                            Column {
-                                themeOptions.forEach { themeOption ->
-                                    Row(
-                                        verticalAlignment = Alignment.CenterVertically,
-                                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                                        modifier = Modifier
-                                            .selectable(
-                                                selected = (themeOption == selectedThemeOption),
-                                                onClick = { selectedThemeOption = themeOption },
-                                                role = Role.RadioButton
-                                            )
-                                            .fillMaxWidth()
-                                            .padding(12.dp)
-                                    ) {
-                                        RadioButton(
-                                            selected = (themeOption == selectedThemeOption),
-                                            onClick = null
+@Composable
+private fun SettingsGroupCustomisation(
+    themeStyle: ThemeStyle,
+    onThemeStyleChange: (ThemeStyle) -> Unit,
+    isNotificationDefaultOn: Boolean,
+    onNotificationDefaultChange: (Boolean) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    SettingsGroup(
+        header = stringResource(R.string.settings_header_customisation),
+        content = {
+            var isThemeStyleDialogOpen by remember { mutableStateOf(false) }
+
+            SettingsOption(
+                title = stringResource(R.string.settings_title_theme),
+                subtitle = stringResource(themeStyle.nameStringId),
+                action = {
+                    Icon(
+                        imageVector = Icons.Rounded.ChevronRight,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.65f)
+                    )
+                },
+                onClick = { isThemeStyleDialogOpen = true }
+            )
+
+            if (isThemeStyleDialogOpen) {
+                var selectedThemeOption by remember { mutableStateOf(themeStyle) }
+
+                RemindMeAlertDialog(
+                    title = stringResource(R.string.alert_dialog_title_app_theme),
+                    confirmText = stringResource(R.string.dialog_action_apply),
+                    onConfirm = { onThemeStyleChange(selectedThemeOption) },
+                    onDismiss = { isThemeStyleDialogOpen = false },
+                    content = {
+                        Column {
+                            ThemeStyle.values().forEach { themeStyleOption ->
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                    modifier = Modifier
+                                        .selectable(
+                                            selected = (themeStyleOption == selectedThemeOption),
+                                            onClick = { selectedThemeOption = themeStyleOption },
+                                            role = Role.RadioButton
                                         )
+                                        .fillMaxWidth()
+                                        .padding(12.dp)
+                                ) {
+                                    RadioButton(
+                                        selected = (themeStyleOption == selectedThemeOption),
+                                        onClick = null
+                                    )
 
-                                        Text(
-                                            text = stringResource(themeOption.nameStringId),
-                                            style = MaterialTheme.typography.bodyMedium,
-                                            color = MaterialTheme.colorScheme.onSurface
-                                        )
-                                    }
+                                    Text(
+                                        text = stringResource(themeStyleOption.nameStringId),
+                                        style = MaterialTheme.typography.bodyMedium,
+                                        color = MaterialTheme.colorScheme.onSurface
+                                    )
                                 }
                             }
-                        },
-                        onConfirm = { onThemeChange(selectedThemeOption) },
-                        confirmText = stringResource(R.string.dialog_action_apply),
-                        onDismiss = { isThemeDialogOpen = false }
+                        }
+                    }
+                )
+            }
+
+            SettingsOption(
+                title = stringResource(R.string.settings_title_notification_behaviour),
+                subtitle = if (isNotificationDefaultOn) {
+                    stringResource(R.string.settings_subtitle_notification_on)
+                } else {
+                    stringResource(R.string.settings_subtitle_notification_off)
+                },
+                action = {
+                    Switch(
+                        checked = isNotificationDefaultOn,
+                        onCheckedChange = { onNotificationDefaultChange(it) }
                     )
-                }
+                },
+                onClick = { onNotificationDefaultChange(!isNotificationDefaultOn) }
+            )
+        },
+        modifier = modifier
+    )
+}
 
-                SettingsOption(
-                    title = stringResource(R.string.settings_title_notification_behaviour),
-                    subtitle = if (isNotificationOnByDefault) {
-                        stringResource(R.string.settings_subtitle_notification_on)
-                    } else {
-                        stringResource(R.string.settings_subtitle_notification_off)
-                    },
-                    action = {
-                        Switch(
-                            checked = isNotificationOnByDefault,
-                            onCheckedChange = { onIsNotificationOnByDefaultChange(it) }
-                        )
-                    },
-                    onClick = { onIsNotificationOnByDefaultChange(!isNotificationOnByDefault) }
-                )
-            }
-        )
+@Composable
+private fun SettingsGroupAbout(modifier: Modifier = Modifier) {
+    SettingsGroup(
+        header = stringResource(R.string.settings_header_about),
+        content = {
+            SettingsOption(
+                title = stringResource(R.string.settings_title_version_number),
+                subtitle = BuildConfig.VERSION_NAME,
+                onClick = {}
+            )
 
-        Divider(
-            thickness = 1.dp,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f)
-        )
+            val uriHandler = LocalUriHandler.current
+            val uri = stringResource(R.string.app_url)
 
-        SettingsGroup(
-            header = stringResource(R.string.settings_header_about),
-            content = {
-                SettingsOption(
-                    title = stringResource(R.string.settings_title_version_number),
-                    subtitle = BuildConfig.VERSION_NAME,
-                    onClick = {}
-                )
-
-                val uriHandler = LocalUriHandler.current
-                val uri = stringResource(R.string.app_url)
-
-                SettingsOption(
-                    title = stringResource(R.string.settings_title_source_code),
-                    subtitle = stringResource(R.string.settings_subtitle_github),
-                    action = {
-                        Icon(
-                            imageVector = Icons.Rounded.Launch,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.65f)
-                        )
-                    },
-                    onClick = { uriHandler.openUri(uri) }
-                )
-            }
-        )
-    }
+            SettingsOption(
+                title = stringResource(R.string.settings_title_source_code),
+                subtitle = stringResource(R.string.settings_subtitle_github),
+                action = {
+                    Icon(
+                        imageVector = Icons.Rounded.Launch,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.65f)
+                    )
+                },
+                onClick = { uriHandler.openUri(uri) }
+            )
+        },
+        modifier = modifier
+    )
 }
 
 @Composable

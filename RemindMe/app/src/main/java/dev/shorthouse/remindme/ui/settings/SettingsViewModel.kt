@@ -3,7 +3,7 @@ package dev.shorthouse.remindme.ui.settings
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.shorthouse.remindme.data.protodatastore.Theme
+import dev.shorthouse.remindme.data.protodatastore.ThemeStyle
 import dev.shorthouse.remindme.data.protodatastore.UserPreferencesRepository
 import dev.shorthouse.remindme.di.IoDispatcher
 import javax.inject.Inject
@@ -37,8 +37,8 @@ class SettingsViewModel @Inject constructor(
             .onEach { userPreferences ->
                 _uiState.update {
                     it.copy(
-                        theme = userPreferences.theme,
-                        isNotificationOnByDefault = userPreferences.isNotificationOnByDefault,
+                        themeStyle = userPreferences.themeStyle,
+                        isNotificationOnByDefault = userPreferences.isNotificationDefaultOn,
                         isLoading = false
                     )
                 }
@@ -48,21 +48,21 @@ class SettingsViewModel @Inject constructor(
 
     fun handleEvent(event: SettingsEvent) {
         when (event) {
-            is SettingsEvent.SetTheme -> handleSetTheme(event.theme)
-            is SettingsEvent.SetNotification ->
-                handleSetNotificationDefault(event.isNotificationOnByDefault)
+            is SettingsEvent.Theme -> handleAppTheme(event.theme)
+            is SettingsEvent.NotificationDefault ->
+                handleNotificationDefault(event.isNotificationDefaultOn)
         }
     }
 
-    private fun handleSetTheme(theme: Theme) {
+    private fun handleAppTheme(theme: ThemeStyle) {
         viewModelScope.launch(ioDispatcher) {
-            userPreferencesRepository.updateTheme(theme)
+            userPreferencesRepository.updateThemeStyle(theme)
         }
     }
 
-    private fun handleSetNotificationDefault(isNotificationOnByDefault: Boolean) {
+    private fun handleNotificationDefault(isNotificationDefaultOn: Boolean) {
         viewModelScope.launch(ioDispatcher) {
-            userPreferencesRepository.updateIsNotificationOnByDefault(isNotificationOnByDefault)
+            userPreferencesRepository.updateIsNotificationDefaultOn(isNotificationDefaultOn)
         }
     }
 }
