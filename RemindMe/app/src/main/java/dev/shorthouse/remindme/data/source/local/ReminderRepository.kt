@@ -27,12 +27,12 @@ class ReminderRepository @Inject constructor(
         return reminderLocalDataSource.getRemindersOneShot()
     }
 
-    fun getOverdueReminders(now: ZonedDateTime): Flow<List<Reminder>> {
-        return reminderLocalDataSource.getOverdueReminders(now)
-    }
-
     fun getUpcomingReminders(now: ZonedDateTime): Flow<List<Reminder>> {
         return reminderLocalDataSource.getUpcomingReminders(now)
+    }
+
+    fun getOverdueReminders(now: ZonedDateTime): Flow<List<Reminder>> {
+        return reminderLocalDataSource.getOverdueReminders(now)
     }
 
     fun getCompletedReminders(): Flow<List<Reminder>> {
