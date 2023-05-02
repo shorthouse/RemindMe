@@ -36,15 +36,15 @@ class UserPreferencesRepository @Inject constructor(
         }
     }
 
-    suspend fun updateTheme(theme: Theme) {
+    suspend fun updateThemeStyle(themeStyle: ThemeStyle) {
         userPreferencesDataStore.updateData { userPreferences ->
-            userPreferences.copy(theme = theme)
+            userPreferences.copy(themeStyle = themeStyle)
         }
     }
 
-    suspend fun updateIsNotificationOnByDefault(isNotificationOnByDefault: Boolean) {
+    suspend fun updateIsNotificationDefaultOn(isNotificationDefaultOn: Boolean) {
         userPreferencesDataStore.updateData { userPreferences ->
-            userPreferences.copy(isNotificationOnByDefault = isNotificationOnByDefault)
+            userPreferences.copy(isNotificationDefaultOn = isNotificationDefaultOn)
         }
     }
 }
