@@ -71,4 +71,4 @@ val Blue = Color(0xFF2A60EB)
 val Grey = Color(0xFF767680)
 
 @Composable
-fun ColorScheme.isLight() = this.background.luminance() > 0.5
+fun ColorScheme.isLightColors() = this.background.luminance() > 0.5
