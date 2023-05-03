@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -63,6 +64,7 @@ import dev.shorthouse.remindme.ui.component.emptystate.EmptyStateOverdueReminder
 import dev.shorthouse.remindme.ui.component.emptystate.EmptyStateUpcomingReminders
 import dev.shorthouse.remindme.ui.component.topappbar.RemindMeTopAppBar
 import dev.shorthouse.remindme.ui.destinations.ReminderDetailsScreenDestination
+import dev.shorthouse.remindme.ui.destinations.ReminderSearchScreenDestination
 import dev.shorthouse.remindme.ui.destinations.SettingsScreenDestination
 import dev.shorthouse.remindme.ui.previewprovider.ReminderListProvider
 import dev.shorthouse.remindme.ui.theme.AppTheme
@@ -81,6 +83,7 @@ fun ReminderListScreen(
     ReminderListScreen(
         uiState = uiState,
         onHandleEvent = { viewModel.handleEvent(it) },
+        onNavigateSearch = { navigator.navigate(ReminderSearchScreenDestination) },
         onNavigateSettings = { navigator.navigate(SettingsScreenDestination) },
         onNavigateDetails = { navigator.navigate(ReminderDetailsScreenDestination(it.id)) }
     )
@@ -91,6 +94,7 @@ fun ReminderListScreen(
 fun ReminderListScreen(
     uiState: ReminderListUiState,
     onHandleEvent: (ReminderListEvent) -> Unit,
+    onNavigateSearch: () -> Unit,
     onNavigateSettings: () -> Unit,
     onNavigateDetails: (Reminder) -> Unit,
     modifier: Modifier = Modifier
@@ -100,6 +104,7 @@ fun ReminderListScreen(
             ReminderListTopBar(
                 reminderSortOrder = uiState.reminderSortOrder,
                 onApplySort = { onHandleEvent(ReminderListEvent.Sort(it)) },
+                onNavigateSearch = onNavigateSearch,
                 onNavigateSettings = onNavigateSettings
             )
         },
@@ -148,6 +153,7 @@ fun ReminderListScreen(
 fun ReminderListTopBar(
     reminderSortOrder: ReminderSort,
     onApplySort: (ReminderSort) -> Unit,
+    onNavigateSearch: () -> Unit,
     onNavigateSettings: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -171,7 +177,7 @@ fun ReminderListTopBar(
                     contentDescription = stringResource(R.string.cd_sort_reminders)
                 )
             }
-            IconButton(onClick = {}) {
+            IconButton(onClick = onNavigateSearch) {
                 Icon(
                     imageVector = Icons.Rounded.Search,
                     contentDescription = stringResource(R.string.cd_search_reminders)
@@ -232,7 +238,7 @@ private fun ReminderListContent(
             },
             onReminderCard = { onNavigateDetails(it) },
             onCompleteReminder = onCompleteReminder,
-            contentPadding = PaddingValues(start = 8.dp, top = 8.dp, end = 8.dp, bottom = 92.dp)
+            contentPadding = PaddingValues(bottom = 92.dp)
         )
     }
 }
@@ -250,7 +256,7 @@ fun ReminderListFilterChips(
         modifier = modifier
             .fillMaxWidth()
             .horizontalScroll(rememberScrollState())
-            .padding(top = 8.dp)
+            .padding(top = 6.dp, bottom = 4.dp)
     ) {
         ReminderFilter.values().forEach { reminderFilter ->
             ElevatedFilterChip(
@@ -291,13 +297,16 @@ fun ReminderList(
         emptyState()
     } else {
         LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(8.dp),
             contentPadding = contentPadding,
             modifier = modifier
                 .fillMaxSize()
+                .padding(horizontal = 8.dp)
                 .testTag(stringResource(R.string.test_tag_reminder_list_lazy_column))
         ) {
-            item(key = "0") {} // Workaround for https://issuetracker.google.com/issues/209652366
+            // Workaround for https://issuetracker.google.com/issues/209652366
+            item(key = "0") {
+                Spacer(Modifier.padding(1.dp))
+            }
             items(
                 count = reminders.size,
                 key = { reminders[it].id },
@@ -306,7 +315,9 @@ fun ReminderList(
                         reminder = reminders[index],
                         onReminderCard = onReminderCard,
                         onCompleteReminder = onCompleteReminder,
-                        modifier = Modifier.animateItemPlacement()
+                        modifier = Modifier
+                            .padding(bottom = 8.dp)
+                            .animateItemPlacement()
                     )
                 }
             )
@@ -324,6 +335,7 @@ fun ReminderListPreview(
         ReminderListScreen(
             uiState = ReminderListUiState(),
             onHandleEvent = {},
+            onNavigateSearch = {},
             onNavigateSettings = {},
             onNavigateDetails = {}
         )
