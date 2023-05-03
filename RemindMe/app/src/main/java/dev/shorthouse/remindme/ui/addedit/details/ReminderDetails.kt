@@ -50,7 +50,6 @@ fun ReminderDetailsScreen(
 
     ReminderDetailsScreen(
         uiState = uiState,
-        isReminderValid = viewModel.isReminderValid(uiState.reminder),
         onHandleEvent = { viewModel.handleEvent(it) },
         onNavigateUp = { navigator.navigateUp() }
     )
@@ -59,7 +58,6 @@ fun ReminderDetailsScreen(
 @Composable
 fun ReminderDetailsScreen(
     uiState: ReminderAddEditUiState,
-    isReminderValid: Boolean,
     onHandleEvent: (ReminderAddEditEvent) -> Unit,
     onNavigateUp: () -> Unit,
     modifier: Modifier = Modifier
@@ -76,7 +74,7 @@ fun ReminderDetailsScreen(
             if (!uiState.isLoading) {
                 ReminderAddEditContent(
                     reminder = uiState.reminder,
-                    isReminderValid = isReminderValid,
+                    isReminderValid = uiState.isReminderValid,
                     onHandleEvent = onHandleEvent,
                     onNavigateUp = onNavigateUp,
                     modifier = Modifier
@@ -161,8 +159,7 @@ private fun ReminderDetailsPreview(
 ) {
     AppTheme {
         ReminderDetailsScreen(
-            uiState = ReminderAddEditUiState(),
-            isReminderValid = true,
+            uiState = ReminderAddEditUiState(isReminderValid = true),
             onHandleEvent = {},
             onNavigateUp = {}
         )
