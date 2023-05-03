@@ -127,4 +127,5 @@
     <string name="theme_auto">Follow system</string>
     <string name="settings_subtitle_theme">Follow system</string>
     <string name="alert_dialog_title_app_theme">Set app theme</string>
+    <string name="top_bar_title_reminder_search">Search</string>
 </resources>
