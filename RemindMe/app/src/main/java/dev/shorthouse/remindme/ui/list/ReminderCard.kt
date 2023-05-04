@@ -101,7 +101,7 @@ fun ReminderCard(
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
                         modifier = Modifier.padding(top = 4.dp)
                     ) {
-                        val tint = MaterialTheme.colorScheme.outline
+                        val tint = MaterialTheme.colorScheme.onSurfaceVariant
                         val sizeModifier = Modifier.size(20.dp)
 
                         if (reminder.isNotificationSent) {
@@ -164,7 +164,7 @@ fun ReminderCard(
                         tint = if (isReminderCompleted) {
                             MaterialTheme.colorScheme.primary
                         } else {
-                            MaterialTheme.colorScheme.outline
+                            MaterialTheme.colorScheme.onSurfaceVariant
                         },
                         contentDescription = stringResource(R.string.cd_complete_reminder)
                     )

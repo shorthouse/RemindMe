@@ -283,7 +283,7 @@ fun SettingsOption(
             Text(
                 text = subtitle,
                 style = MaterialTheme.typography.bodySmall.copy(
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.65f)
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 ),
                 fontWeight = FontWeight.Medium
             )
