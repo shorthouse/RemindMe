@@ -23,8 +23,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.unit.DpOffset
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -131,18 +129,22 @@ fun ReminderDetailsTopBar(
                             onNavigateUp()
                         }
                     )
-                    DropdownMenuItem(
-                        text = {
-                            Text(
-                                text = stringResource(R.string.dropdown_complete_reminder),
-                                style = MaterialTheme.typography.bodyMedium.copy(fontSize = 17.sp)
-                            )
-                        },
-                        onClick = {
-                            onHandleEvent(ReminderAddEditEvent.CompleteReminder(reminder))
-                            onNavigateUp()
-                        }
-                    )
+                    if (!reminder.isCompleted) {
+                        DropdownMenuItem(
+                            text = {
+                                Text(
+                                    text = stringResource(R.string.dropdown_complete_reminder),
+                                    style = MaterialTheme.typography.bodyMedium.copy(
+                                        fontSize = 17.sp
+                                    )
+                                )
+                            },
+                            onClick = {
+                                onHandleEvent(ReminderAddEditEvent.CompleteReminder(reminder))
+                                onNavigateUp()
+                            }
+                        )
+                    }
                 }
             }
         },
