@@ -1,6 +1,7 @@
 package dev.shorthouse.remindme.ui.addedit.details
 
 import android.content.res.Configuration
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -113,38 +114,36 @@ fun ReminderDetailsTopBar(
                     contentDescription = stringResource(R.string.cd_more)
                 )
             }
-            DropdownMenu(
-                expanded = showOverflowMenu,
-                onDismissRequest = { showOverflowMenu = false },
-                offset = DpOffset(
-                    x = (-400).dp,
-                    y = (-400).dp
-                )
-            ) {
-                DropdownMenuItem(
-                    text = {
-                        Text(
-                            text = stringResource(R.string.dropdown_delete_reminder),
-                            style = MaterialTheme.typography.bodyMedium.copy(fontSize = 17.sp)
-                        )
-                    },
-                    onClick = {
-                        onHandleEvent(ReminderAddEditEvent.DeleteReminder(reminder))
-                        onNavigateUp()
-                    }
-                )
-                DropdownMenuItem(
-                    text = {
-                        Text(
-                            text = stringResource(R.string.dropdown_complete_reminder),
-                            style = MaterialTheme.typography.bodyMedium.copy(fontSize = 17.sp)
-                        )
-                    },
-                    onClick = {
-                        onHandleEvent(ReminderAddEditEvent.CompleteReminder(reminder))
-                        onNavigateUp()
-                    }
-                )
+            Box {
+                DropdownMenu(
+                    expanded = showOverflowMenu,
+                    onDismissRequest = { showOverflowMenu = false }
+                ) {
+                    DropdownMenuItem(
+                        text = {
+                            Text(
+                                text = stringResource(R.string.dropdown_delete_reminder),
+                                style = MaterialTheme.typography.bodyMedium.copy(fontSize = 17.sp)
+                            )
+                        },
+                        onClick = {
+                            onHandleEvent(ReminderAddEditEvent.DeleteReminder(reminder))
+                            onNavigateUp()
+                        }
+                    )
+                    DropdownMenuItem(
+                        text = {
+                            Text(
+                                text = stringResource(R.string.dropdown_complete_reminder),
+                                style = MaterialTheme.typography.bodyMedium.copy(fontSize = 17.sp)
+                            )
+                        },
+                        onClick = {
+                            onHandleEvent(ReminderAddEditEvent.CompleteReminder(reminder))
+                            onNavigateUp()
+                        }
+                    )
+                }
             }
         },
         modifier = modifier
