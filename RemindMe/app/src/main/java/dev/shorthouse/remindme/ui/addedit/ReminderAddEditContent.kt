@@ -90,7 +90,7 @@ fun ReminderAddEditContent(
         ) {
             Icon(
                 imageVector = Icons.Rounded.CalendarToday,
-                tint = MaterialTheme.colorScheme.outline,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 contentDescription = stringResource(R.string.cd_details_date)
             )
 
@@ -121,7 +121,7 @@ fun ReminderAddEditContent(
         ) {
             Icon(
                 imageVector = Icons.Rounded.Schedule,
-                tint = MaterialTheme.colorScheme.outline,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 contentDescription = stringResource(R.string.cd_details_time)
             )
 
@@ -142,7 +142,7 @@ fun ReminderAddEditContent(
             Icon(
                 imageVector = Icons.Outlined.TextSnippet,
                 contentDescription = stringResource(R.string.cd_details_notes),
-                tint = MaterialTheme.colorScheme.outline
+                tint = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             Spacer(Modifier.width(16.dp))

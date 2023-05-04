@@ -1,6 +1,7 @@
 package dev.shorthouse.remindme.ui.component.topappbar
 
 import android.content.res.Configuration
+import android.util.Log
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack

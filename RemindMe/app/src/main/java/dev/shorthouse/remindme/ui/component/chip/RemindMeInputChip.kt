@@ -43,7 +43,7 @@ fun RemindMeInputChip(
         ),
         border = InputChipDefaults.inputChipBorder(
             borderWidth = 2.dp,
-            disabledBorderColor = MaterialTheme.colorScheme.outline
+            disabledBorderColor = MaterialTheme.colorScheme.onSurfaceVariant
         ),
         modifier = modifier
     )

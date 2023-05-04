@@ -2,7 +2,6 @@ package dev.shorthouse.remindme.ui.component.searchbar
 
 import android.content.res.Configuration
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -38,7 +37,7 @@ import androidx.compose.ui.unit.dp
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.ui.previewprovider.SearchQueryProvider
 import dev.shorthouse.remindme.ui.theme.AppTheme
-import dev.shorthouse.remindme.ui.theme.Grey
+import dev.shorthouse.remindme.ui.theme.isLightColors
 
 @Composable
 @OptIn(ExperimentalComposeUiApi::class)
@@ -51,10 +50,10 @@ fun RemindMeSearchBar(
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusRequester = remember { FocusRequester() }
 
-    val topAppBarColor = if (isSystemInDarkTheme()) {
-        MaterialTheme.colorScheme.surface
-    } else {
+    val topAppBarColor = if (MaterialTheme.colorScheme.isLightColors()) {
         MaterialTheme.colorScheme.primary
+    } else {
+        MaterialTheme.colorScheme.surface
     }
 
     Surface(
@@ -115,20 +114,18 @@ private fun RemindMeSearchBarTextField(
             Text(
                 text = stringResource(R.string.top_app_bar_search_hint),
                 style = MaterialTheme.typography.bodyMedium,
-                color = Grey
+                color = MaterialTheme.colorScheme.outline
             )
         },
         leadingIcon = {
             IconButton(
                 onClick = onCloseSearch,
-                modifier = Modifier.padding(
-                    start = 8.dp
-                )
+                modifier = Modifier.padding(start = 8.dp)
             ) {
                 Icon(
                     imageVector = Icons.Rounded.ArrowBack,
                     contentDescription = stringResource(R.string.cd_top_app_bar_back),
-                    tint = Grey
+                    tint = MaterialTheme.colorScheme.outline
                 )
             }
         },
@@ -136,14 +133,12 @@ private fun RemindMeSearchBarTextField(
             if (searchQuery.isNotEmpty()) {
                 IconButton(
                     onClick = { onSearchQueryChange("") },
-                    modifier = Modifier.padding(
-                        end = 8.dp
-                    )
+                    modifier = Modifier.padding(end = 8.dp)
                 ) {
                     Icon(
                         imageVector = Icons.Rounded.Close,
                         contentDescription = stringResource(R.string.cd_clear_search),
-                        tint = Grey
+                        tint = MaterialTheme.colorScheme.outline
                     )
                 }
             }
@@ -157,7 +152,7 @@ private fun RemindMeSearchBarTextField(
                     .fillMaxWidth()
                     .padding(6.dp)
             )
-        },
+        }
     )
 }
 
