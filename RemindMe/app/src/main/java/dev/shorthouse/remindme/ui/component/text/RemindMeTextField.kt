@@ -42,7 +42,7 @@ fun RemindMeTextField(
                 Text(
                     text = hintText,
                     style = textStyle,
-                    color = MaterialTheme.colorScheme.outline
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
             innerTextField()
