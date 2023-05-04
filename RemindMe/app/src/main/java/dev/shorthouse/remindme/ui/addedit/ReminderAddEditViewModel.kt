@@ -76,12 +76,6 @@ class ReminderAddEditViewModel @Inject constructor(
         }
     }
 
-    fun isReminderValid(reminder: Reminder): Boolean {
-        return reminder.name.isNotBlank() &&
-                reminder.startDateTime.isAfter(ZonedDateTime.now()) &&
-                reminder.validated() != _uiState.value.initialReminder.validated()
-    }
-
     private fun setAddReminder() {
         _uiState.update { it.copy(isLoading = true) }
 
@@ -144,7 +138,12 @@ class ReminderAddEditViewModel @Inject constructor(
     }
 
     private fun updateReminder(updatedReminder: Reminder) {
-        _uiState.update { it.copy(reminder = updatedReminder) }
+        _uiState.update {
+            it.copy(
+                reminder = updatedReminder,
+                isReminderValid = isReminderValid(updatedReminder)
+            )
+        }
     }
 
     private fun handleUpdateName(name: String) {
@@ -187,5 +186,11 @@ class ReminderAddEditViewModel @Inject constructor(
 
         val updatedReminder = _uiState.value.reminder.copy(notes = notes)
         updateReminder(updatedReminder)
+    }
+
+    private fun isReminderValid(reminder: Reminder): Boolean {
+        return reminder.name.isNotBlank() &&
+                reminder.startDateTime.isAfter(ZonedDateTime.now()) &&
+                reminder.validated() != _uiState.value.initialReminder.validated()
     }
 }

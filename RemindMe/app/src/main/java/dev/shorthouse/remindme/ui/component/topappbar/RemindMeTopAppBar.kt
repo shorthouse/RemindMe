@@ -15,7 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import dev.shorthouse.remindme.ui.theme.AppTheme
-import dev.shorthouse.remindme.ui.theme.isLight
+import dev.shorthouse.remindme.ui.theme.isLightColors
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
@@ -25,13 +25,13 @@ fun RemindMeTopAppBar(
     navigationIcon: @Composable () -> Unit = {},
     actions: @Composable RowScope.() -> Unit = {}
 ) {
-    val containerColor = if (MaterialTheme.colorScheme.isLight()) {
+    val containerColor = if (MaterialTheme.colorScheme.isLightColors()) {
         MaterialTheme.colorScheme.primary
     } else {
         MaterialTheme.colorScheme.surface
     }
 
-    val onContainerColor = if (MaterialTheme.colorScheme.isLight()) {
+    val onContainerColor = if (MaterialTheme.colorScheme.isLightColors()) {
         MaterialTheme.colorScheme.onPrimary
     } else {
         MaterialTheme.colorScheme.onSurface
