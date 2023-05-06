@@ -3,7 +3,6 @@ package dev.shorthouse.remindme.domain.reminder
 import dev.shorthouse.remindme.data.source.local.ReminderRepository
 import dev.shorthouse.remindme.di.IoDispatcher
 import dev.shorthouse.remindme.domain.notification.CancelScheduledNotificationUseCase
-import dev.shorthouse.remindme.domain.notification.RemoveDisplayingNotificationUseCase
 import dev.shorthouse.remindme.domain.notification.ScheduleNotificationUseCase
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.util.floor
@@ -21,8 +20,7 @@ class CompleteReminderUseCase @Inject constructor(
     private val reminderRepository: ReminderRepository,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
     private val scheduleNotificationUseCase: ScheduleNotificationUseCase,
-    private val cancelScheduledNotificationUseCase: CancelScheduledNotificationUseCase,
-    private val removeDisplayingNotificationUseCase: RemoveDisplayingNotificationUseCase
+    private val cancelScheduledNotificationUseCase: CancelScheduledNotificationUseCase
 ) {
     private val coroutineScope = CoroutineScope(ioDispatcher)
 
@@ -48,7 +46,6 @@ class CompleteReminderUseCase @Inject constructor(
         reminderRepository.updateReminder(updatedReminder)
 
         cancelScheduledNotificationUseCase(reminder)
-        removeDisplayingNotificationUseCase(reminder)
 
         if (reminder.isNotificationSent) {
             scheduleNotificationUseCase(reminder)
@@ -58,7 +55,6 @@ class CompleteReminderUseCase @Inject constructor(
     private fun completeOnetimeReminder(reminder: Reminder) {
         reminderRepository.completeReminder(reminder.id)
         cancelScheduledNotificationUseCase(reminder)
-        removeDisplayingNotificationUseCase(reminder)
     }
 
     private fun getUpdatedReminderStartDateTime(reminder: Reminder): ZonedDateTime {

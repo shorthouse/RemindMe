@@ -4,6 +4,7 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import androidx.core.app.NotificationManagerCompat
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.model.Reminder
@@ -12,6 +13,7 @@ import javax.inject.Inject
 
 class CancelScheduledNotificationUseCase @Inject constructor(
     private val alarmManager: AlarmManager,
+    private val notificationManager: NotificationManagerCompat,
     @ApplicationContext private val context: Context
 ) {
     operator fun invoke(reminder: Reminder) {
@@ -32,5 +34,7 @@ class CancelScheduledNotificationUseCase @Inject constructor(
         receiverIntent?.let {
             alarmManager.cancel(it)
         }
+
+        notificationManager.cancel(reminder.id.toInt())
     }
 }
