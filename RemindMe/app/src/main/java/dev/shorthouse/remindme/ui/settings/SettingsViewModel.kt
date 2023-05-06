@@ -4,13 +4,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.shorthouse.remindme.data.protodatastore.ThemeStyle
-import dev.shorthouse.remindme.data.protodatastore.UserPreferencesRepository
 import dev.shorthouse.remindme.di.IoDispatcher
+import dev.shorthouse.remindme.domain.GetUserPreferencesFlowUseCase
 import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
@@ -18,7 +17,7 @@ import kotlinx.coroutines.launch
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
-    private val userPreferencesRepository: UserPreferencesRepository,
+    private val getUserPreferencesFlowUseCase: GetUserPreferencesFlowUseCase,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(SettingsUiState())
@@ -32,8 +31,7 @@ class SettingsViewModel @Inject constructor(
     private fun initialiseUiState() {
         _uiState.update { it.copy(isLoading = true) }
 
-        userPreferencesRepository.userPreferencesFlow
-            .flowOn(ioDispatcher)
+        getUserPreferencesFlowUseCase()
             .onEach { userPreferences ->
                 _uiState.update {
                     it.copy(
