@@ -1,4 +1,4 @@
-package dev.shorthouse.remindme.domain
+package dev.shorthouse.remindme.domain.userpreferences
 
 import dev.shorthouse.remindme.data.protodatastore.UserPreferences
 import dev.shorthouse.remindme.data.protodatastore.UserPreferencesRepository

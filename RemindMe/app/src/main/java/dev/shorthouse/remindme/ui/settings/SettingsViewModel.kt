@@ -4,10 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.shorthouse.remindme.data.protodatastore.ThemeStyle
-import dev.shorthouse.remindme.di.IoDispatcher
-import dev.shorthouse.remindme.domain.GetUserPreferencesFlowUseCase
+import dev.shorthouse.remindme.domain.userpreferences.GetUserPreferencesFlowUseCase
+import dev.shorthouse.remindme.domain.userpreferences.UpdateIsNotificationDefaultOnUseCase
+import dev.shorthouse.remindme.domain.userpreferences.UpdateThemeStyleUseCase
 import javax.inject.Inject
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -18,7 +18,8 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
     private val getUserPreferencesFlowUseCase: GetUserPreferencesFlowUseCase,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+    private val updateThemeStyleUseCase: UpdateThemeStyleUseCase,
+    private val updateIsNotificationDefaultOnUseCase: UpdateIsNotificationDefaultOnUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(SettingsUiState())
 
@@ -52,15 +53,15 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    private fun handleAppTheme(theme: ThemeStyle) {
-        viewModelScope.launch(ioDispatcher) {
-            userPreferencesRepository.updateThemeStyle(theme)
+    private fun handleAppTheme(themeStyle: ThemeStyle) {
+        viewModelScope.launch {
+            updateThemeStyleUseCase(themeStyle = themeStyle)
         }
     }
 
     private fun handleNotificationDefault(isNotificationDefaultOn: Boolean) {
-        viewModelScope.launch(ioDispatcher) {
-            userPreferencesRepository.updateIsNotificationDefaultOn(isNotificationDefaultOn)
+        viewModelScope.launch {
+            updateIsNotificationDefaultOnUseCase(isNotificationDefaultOn = isNotificationDefaultOn)
         }
     }
 }
