@@ -51,7 +51,7 @@ fun RepeatIntervalDialog(
     }
 
     RemindMeAlertDialog(
-        title = stringResource(R.string.repeats_every_header),
+        title = stringResource(R.string.dialog_title_repeat_interval),
         content = {
             RepeatIntervalDialogContent(
                 repeatAmount = repeatAmount,

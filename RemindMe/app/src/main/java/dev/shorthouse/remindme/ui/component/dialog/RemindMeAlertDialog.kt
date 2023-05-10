@@ -11,26 +11,30 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.DialogProperties
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.ui.theme.AppTheme
 
 @Composable
 fun RemindMeAlertDialog(
-    title: String,
+    title: String?,
     confirmText: String,
     isConfirmEnabled: Boolean = true,
     onConfirm: () -> Unit,
     onDismiss: () -> Unit,
     content: @Composable () -> Unit,
+    properties: DialogProperties = DialogProperties(),
     modifier: Modifier = Modifier
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
         title = {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.headlineSmall
-            )
+            title?.let {
+                Text(
+                    text = it,
+                    style = MaterialTheme.typography.headlineSmall
+                )
+            }
         },
         text = content,
         confirmButton = {
@@ -67,6 +71,7 @@ fun RemindMeAlertDialog(
             }
         },
         tonalElevation = 0.dp,
+        properties = properties,
         modifier = modifier
     )
 }

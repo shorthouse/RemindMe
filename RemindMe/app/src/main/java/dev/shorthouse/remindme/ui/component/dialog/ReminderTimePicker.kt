@@ -1,25 +1,13 @@
 package dev.shorthouse.remindme.ui.component.dialog
 
 import android.content.res.Configuration
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TimePicker
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.ui.theme.AppTheme
 import java.time.LocalTime
@@ -38,36 +26,19 @@ fun ReminderTimePicker(
         is24Hour = true
     )
 
-    Dialog(onDismissRequest = onDismiss) {
-        Surface(
-            shape = MaterialTheme.shapes.extraLarge,
-            modifier = modifier
-        ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .padding(16.dp)
-            ) {
-                TimePicker(state = timePickerState)
-
-                Row(
-                    horizontalArrangement = Arrangement.End,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    TextButton(onClick = onDismiss) {
-                        Text(text = stringResource(R.string.dialog_action_cancel))
-                    }
-
-                    TextButton(onClick = {
-                        onConfirm(LocalTime.of(timePickerState.hour, timePickerState.minute))
-                        onDismiss()
-                    }) {
-                        Text(text = stringResource(R.string.dialog_action_ok))
-                    }
-                }
-            }
-        }
-    }
+    RemindMeAlertDialog(
+        title = null,
+        content = {
+            TimePicker(state = timePickerState)
+        },
+        confirmText = stringResource(R.string.dialog_action_ok),
+        onConfirm = {
+            onConfirm(LocalTime.of(timePickerState.hour, timePickerState.minute))
+            onDismiss()
+        },
+        onDismiss = onDismiss,
+        modifier = modifier
+    )
 }
 
 @Composable
