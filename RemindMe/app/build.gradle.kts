@@ -30,7 +30,6 @@ android {
         targetSdk = 33
         versionCode = 17
         versionName = "2.1.4"
-
         testInstrumentationRunner = "dev.shorthouse.remindme.runner.CustomTestRunner"
     }
 
@@ -73,7 +72,7 @@ android {
 }
 
 configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
-    version.set("11.3.1")
+    version.set("11.3.2")
     ignoreFailures.set(false)
     android.set(true)
 }
@@ -85,20 +84,20 @@ kapt {
 dependencies {
     // Core
     implementation("androidx.core:core-ktx:1.9.0")
-    implementation("com.google.android.material:material:1.8.0")
+    implementation("com.google.android.material:material:1.9.0")
     implementation("androidx.core:core-splashscreen:1.0.1")
-    implementation("androidx.compose.ui:ui-tooling-preview:1.4.2")
+    implementation("androidx.compose.ui:ui-tooling-preview:1.4.3")
 
     // Compose
     val composeBom = platform("androidx.compose:compose-bom:2023.04.01")
     implementation(composeBom)
     androidTestImplementation(composeBom)
     implementation("androidx.compose.material3:material3:1.1.0-rc01")
-    implementation("androidx.compose.material:material-icons-extended:1.4.2")
+    implementation("androidx.compose.material:material-icons-extended:1.4.3")
     implementation("com.google.accompanist:accompanist-permissions:0.30.0")
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.30.0")
     implementation("io.github.raamcosta.compose-destinations:core:1.8.38-beta")
-    debugImplementation("androidx.compose.ui:ui-tooling:1.4.2")
+    debugImplementation("androidx.compose.ui:ui-tooling:1.4.3")
     ksp("io.github.raamcosta.compose-destinations:ksp:1.8.38-beta")
 
     // Firebase
@@ -159,7 +158,7 @@ dependencies {
     androidTestImplementation("org.mockito:mockito-android:5.2.0")
     androidTestImplementation("androidx.test.uiautomator:uiautomator:2.2.0")
     androidTestImplementation("com.google.dagger:hilt-android-testing:2.45")
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.4.2")
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.4.3")
     kaptAndroidTest("com.google.dagger:hilt-android-compiler:2.45")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 }
