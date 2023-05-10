@@ -6,13 +6,14 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.shorthouse.remindme.domain.reminder.CompleteReminderUseCase
 import dev.shorthouse.remindme.domain.reminder.GetRemindersFlowUseCase
 import dev.shorthouse.remindme.model.Reminder
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 class ReminderSearchViewModel @Inject constructor(
@@ -54,6 +55,8 @@ class ReminderSearchViewModel @Inject constructor(
     }
 
     fun completeReminder(reminder: Reminder) {
-        completeReminderUseCase(reminder)
+        viewModelScope.launch {
+            completeReminderUseCase(reminder)
+        }
     }
 }

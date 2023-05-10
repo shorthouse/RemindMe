@@ -108,7 +108,7 @@ fun ReminderCard(
                             Icon(
                                 imageVector = Icons.Rounded.NotificationsNone,
                                 contentDescription = stringResource(
-                                    R.string.cd_card_notification_enabled
+                                    R.string.cd_notification_enabled_icon
                                 ),
                                 tint = tint,
                                 modifier = sizeModifier
@@ -119,7 +119,7 @@ fun ReminderCard(
                             Icon(
                                 imageVector = Icons.Rounded.Loop,
                                 contentDescription = stringResource(
-                                    R.string.cd_card_repeat_reminder
+                                    R.string.cd_repeat_reminder_icon
                                 ),
                                 tint = tint,
                                 modifier = sizeModifier
@@ -130,7 +130,7 @@ fun ReminderCard(
                             Icon(
                                 imageVector = Icons.Outlined.TextSnippet,
                                 contentDescription = stringResource(
-                                    R.string.cd_card_has_notes
+                                    R.string.cd_has_notes_icon
                                 ),
                                 tint = tint,
                                 modifier = sizeModifier

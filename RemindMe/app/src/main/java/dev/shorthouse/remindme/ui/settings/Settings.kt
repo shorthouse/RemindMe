@@ -74,7 +74,7 @@ fun SettingsScreen(
                     IconButton(onClick = onNavigateUp) {
                         Icon(
                             imageVector = Icons.Rounded.ArrowBack,
-                            contentDescription = stringResource(R.string.cd_top_app_bar_back)
+                            contentDescription = stringResource(R.string.cd_back)
                         )
                     }
                 }
@@ -85,7 +85,7 @@ fun SettingsScreen(
                 SettingsContent(
                     themeStyle = uiState.themeStyle,
                     onThemeStyleChange = { onHandleEvent(SettingsEvent.Theme(it)) },
-                    isNotificationDefaultOn = uiState.isNotificationOnByDefault,
+                    isNotificationDefaultOn = uiState.isNotificationDefaultOn,
                     onNotificationDefaultChange = {
                         onHandleEvent(SettingsEvent.NotificationDefault(it))
                     },
@@ -139,7 +139,7 @@ private fun SettingsGroupCustomisation(
                     Icon(
                         imageVector = Icons.Rounded.ChevronRight,
                         contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.65f)
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 },
                 onClick = { isThemeStyleDialogOpen = true }
@@ -149,7 +149,7 @@ private fun SettingsGroupCustomisation(
                 var selectedThemeOption by remember { mutableStateOf(themeStyle) }
 
                 RemindMeAlertDialog(
-                    title = stringResource(R.string.alert_dialog_title_app_theme),
+                    title = stringResource(R.string.dialog_title_app_theme),
                     confirmText = stringResource(R.string.dialog_action_apply),
                     onConfirm = { onThemeStyleChange(selectedThemeOption) },
                     onDismiss = { isThemeStyleDialogOpen = false },
@@ -226,7 +226,7 @@ private fun SettingsGroupAbout(modifier: Modifier = Modifier) {
                     Icon(
                         imageVector = Icons.Rounded.Launch,
                         contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.65f)
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 },
                 onClick = { uriHandler.openUri(uri) }
@@ -245,7 +245,7 @@ fun SettingsGroup(
     Column {
         Text(
             text = header,
-            style = MaterialTheme.typography.labelMedium,
+            style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.primary,
             modifier = modifier.padding(
                 start = 8.dp,
@@ -277,9 +277,10 @@ fun SettingsOption(
         Column(modifier = Modifier.weight(0.8f)) {
             Text(
                 text = title,
-                style = MaterialTheme.typography.labelMedium,
+                style = MaterialTheme.typography.bodyMedium,
                 fontWeight = FontWeight.Medium
             )
+
             Text(
                 text = subtitle,
                 style = MaterialTheme.typography.bodySmall.copy(
@@ -299,7 +300,7 @@ fun SettingsOption(
 fun SettingsPreview() {
     AppTheme {
         SettingsScreen(
-            uiState = SettingsUiState(isNotificationOnByDefault = true),
+            uiState = SettingsUiState(isNotificationDefaultOn = true),
             onHandleEvent = {},
             onNavigateUp = {}
         )

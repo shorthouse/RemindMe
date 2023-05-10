@@ -5,21 +5,21 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.shorthouse.remindme.data.protodatastore.ThemeStyle
 import dev.shorthouse.remindme.domain.userpreferences.GetUserPreferencesFlowUseCase
-import dev.shorthouse.remindme.domain.userpreferences.UpdateIsNotificationDefaultOnUseCase
+import dev.shorthouse.remindme.domain.userpreferences.UpdateNotificationDefaultUseCase
 import dev.shorthouse.remindme.domain.userpreferences.UpdateThemeStyleUseCase
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
     private val getUserPreferencesFlowUseCase: GetUserPreferencesFlowUseCase,
     private val updateThemeStyleUseCase: UpdateThemeStyleUseCase,
-    private val updateIsNotificationDefaultOnUseCase: UpdateIsNotificationDefaultOnUseCase
+    private val updateNotificationDefaultUseCase: UpdateNotificationDefaultUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(SettingsUiState())
 
@@ -37,7 +37,7 @@ class SettingsViewModel @Inject constructor(
                 _uiState.update {
                     it.copy(
                         themeStyle = userPreferences.themeStyle,
-                        isNotificationOnByDefault = userPreferences.isNotificationDefaultOn,
+                        isNotificationDefaultOn = userPreferences.isNotificationDefaultOn,
                         isLoading = false
                     )
                 }
@@ -48,8 +48,7 @@ class SettingsViewModel @Inject constructor(
     fun handleEvent(event: SettingsEvent) {
         when (event) {
             is SettingsEvent.Theme -> handleAppTheme(event.theme)
-            is SettingsEvent.NotificationDefault ->
-                handleNotificationDefault(event.isNotificationDefaultOn)
+            is SettingsEvent.NotificationDefault -> handleNotificationDefault(event.isDefaultOn)
         }
     }
 
@@ -59,9 +58,9 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    private fun handleNotificationDefault(isNotificationDefaultOn: Boolean) {
+    private fun handleNotificationDefault(isDefaultOn: Boolean) {
         viewModelScope.launch {
-            updateIsNotificationDefaultOnUseCase(isNotificationDefaultOn = isNotificationDefaultOn)
+            updateNotificationDefaultUseCase(isDefaultOn = isDefaultOn)
         }
     }
 }

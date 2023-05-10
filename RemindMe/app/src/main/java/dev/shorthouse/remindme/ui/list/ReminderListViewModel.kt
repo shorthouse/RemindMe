@@ -11,8 +11,6 @@ import dev.shorthouse.remindme.domain.userpreferences.GetUserPreferencesFlowUseC
 import dev.shorthouse.remindme.domain.userpreferences.UpdateReminderFilterUseCase
 import dev.shorthouse.remindme.domain.userpreferences.UpdateReminderSortOrderUseCase
 import dev.shorthouse.remindme.model.Reminder
-import java.time.ZonedDateTime
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
@@ -20,6 +18,8 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.time.ZonedDateTime
+import javax.inject.Inject
 
 @HiltViewModel
 class ReminderListViewModel @Inject constructor(
@@ -58,12 +58,15 @@ class ReminderListViewModel @Inject constructor(
                 ReminderSort.BY_EARLIEST_DATE_FIRST -> {
                     filteredReminders.sortedBy { it.startDateTime }
                 }
+
                 ReminderSort.BY_LATEST_DATE_FIRST -> {
                     filteredReminders.sortedByDescending { it.startDateTime }
                 }
+
                 ReminderSort.BY_ALPHABETICAL_A_TO_Z -> {
                     filteredReminders.sortedBy { it.name }
                 }
+
                 ReminderSort.BY_ALPHABETICAL_Z_TO_A -> {
                     filteredReminders.sortedByDescending { it.name }
                 }
@@ -103,7 +106,9 @@ class ReminderListViewModel @Inject constructor(
     }
 
     private fun handleCompleteReminder(reminder: Reminder) {
-        completeReminderUseCase(reminder)
+        viewModelScope.launch {
+            completeReminderUseCase(reminder)
+        }
     }
 
     private fun handleShowAddReminderSheet() {

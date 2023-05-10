@@ -91,7 +91,7 @@ fun ReminderAddEditContent(
             Icon(
                 imageVector = Icons.Rounded.CalendarToday,
                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                contentDescription = stringResource(R.string.cd_details_date)
+                contentDescription = stringResource(R.string.cd_date_icon)
             )
 
             Spacer(Modifier.width(16.dp))
@@ -122,7 +122,7 @@ fun ReminderAddEditContent(
             Icon(
                 imageVector = Icons.Rounded.Schedule,
                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                contentDescription = stringResource(R.string.cd_details_time)
+                contentDescription = stringResource(R.string.cd_time_icon)
             )
 
             Spacer(Modifier.width(16.dp))
@@ -141,7 +141,7 @@ fun ReminderAddEditContent(
         ) {
             Icon(
                 imageVector = Icons.Outlined.TextSnippet,
-                contentDescription = stringResource(R.string.cd_details_notes),
+                contentDescription = stringResource(R.string.cd_notes_icon),
                 tint = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
@@ -167,9 +167,9 @@ fun ReminderAddEditContent(
                 },
                 label = {
                     val labelText = if (reminder.isNotificationSent) {
-                        stringResource(R.string.reminder_details_notification_on)
+                        stringResource(R.string.input_chip_notification_on)
                     } else {
-                        stringResource(R.string.reminder_details_add_notification)
+                        stringResource(R.string.input_chip_no_notification)
                     }
 
                     Text(
@@ -195,7 +195,7 @@ fun ReminderAddEditContent(
                 onClick = { isRepeatIntervalDialogShown = true },
                 label = {
                     val labelText = if (reminder.repeatInterval == null) {
-                        stringResource(R.string.reminder_details_add_repeat)
+                        stringResource(R.string.input_chip_no_repeat)
                     } else {
                         val pluralId = when (reminder.repeatInterval.unit) {
                             ChronoUnit.DAYS -> R.plurals.repeat_interval_days

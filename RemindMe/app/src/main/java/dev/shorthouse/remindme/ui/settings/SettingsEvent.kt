@@ -4,5 +4,5 @@ import dev.shorthouse.remindme.data.protodatastore.ThemeStyle
 
 sealed interface SettingsEvent {
     data class Theme(val theme: ThemeStyle) : SettingsEvent
-    data class NotificationDefault(val isNotificationDefaultOn: Boolean) : SettingsEvent
+    data class NotificationDefault(val isDefaultOn: Boolean) : SettingsEvent
 }

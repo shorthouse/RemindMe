@@ -101,7 +101,7 @@ fun ReminderDetailsTopBar(
             IconButton(onClick = { onNavigateUp() }) {
                 Icon(
                     imageVector = Icons.Rounded.ArrowBack,
-                    contentDescription = stringResource(R.string.cd_top_app_bar_back)
+                    contentDescription = stringResource(R.string.cd_back)
                 )
             }
         },

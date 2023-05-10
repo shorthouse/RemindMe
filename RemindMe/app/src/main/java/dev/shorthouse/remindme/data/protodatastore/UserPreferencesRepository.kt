@@ -42,9 +42,9 @@ class UserPreferencesRepository @Inject constructor(
         }
     }
 
-    suspend fun updateIsNotificationDefaultOn(isNotificationDefaultOn: Boolean) {
+    suspend fun updateNotificationDefault(isDefaultOn: Boolean) {
         userPreferencesDataStore.updateData { userPreferences ->
-            userPreferences.copy(isNotificationDefaultOn = isNotificationDefaultOn)
+            userPreferences.copy(isNotificationDefaultOn = isDefaultOn)
         }
     }
 }

@@ -19,10 +19,10 @@ enum class ReminderFilter(@StringRes val nameStringId: Int) {
 }
 
 enum class ReminderSort(@StringRes val nameStringId: Int) {
-    BY_EARLIEST_DATE_FIRST(R.string.sort_dialog_option_date_earliest),
-    BY_LATEST_DATE_FIRST(R.string.sort_dialog_option_date_latest),
-    BY_ALPHABETICAL_A_TO_Z(R.string.sort_dialog_option_alphabetical_a_to_z),
-    BY_ALPHABETICAL_Z_TO_A(R.string.sort_dialog_option_alphabetical_z_to_a)
+    BY_EARLIEST_DATE_FIRST(R.string.date_earliest),
+    BY_LATEST_DATE_FIRST(R.string.date_latest),
+    BY_ALPHABETICAL_A_TO_Z(R.string.alphabetical_a_to_z),
+    BY_ALPHABETICAL_Z_TO_A(R.string.alphabetical_z_to_a)
 }
 
 enum class ThemeStyle(@StringRes val nameStringId: Int) {
