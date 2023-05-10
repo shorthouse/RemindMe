@@ -36,12 +36,12 @@ val AppTypography = Typography(
         fontFamily = Roboto
     ),
     bodyLarge = TextStyle(
-        fontSize = 18.sp,
+        fontSize = 17.sp,
         fontWeight = FontWeight.Normal,
         fontFamily = Roboto
     ),
     bodyMedium = TextStyle(
-        fontSize = 18.sp,
+        fontSize = 17.sp,
         fontWeight = FontWeight.Normal,
         fontFamily = Roboto
     ),
