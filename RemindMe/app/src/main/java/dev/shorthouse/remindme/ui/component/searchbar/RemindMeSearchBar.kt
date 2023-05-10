@@ -124,7 +124,7 @@ private fun RemindMeSearchBarTextField(
             ) {
                 Icon(
                     imageVector = Icons.Rounded.ArrowBack,
-                    contentDescription = stringResource(R.string.cd_top_app_bar_back),
+                    contentDescription = stringResource(R.string.cd_back),
                     tint = MaterialTheme.colorScheme.outline
                 )
             }

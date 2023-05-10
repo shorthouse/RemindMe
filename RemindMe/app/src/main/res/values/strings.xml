@@ -1,66 +1,42 @@
 <resources>
     <string name="app_name" translatable="false">RemindMe</string>
     <string name="app_url" translatable="false">https://github.com/shorthouse/RemindMe</string>
-    <string name="reminder_database_name">reminder_database</string>
 
-    <!-- Reminder List -->
-    <string name="cd_fab_add_reminder">Add reminder</string>
-    <string name="reminder_card_date_time">%1$s • %2$s</string>
-    <string name="reminder_overdue">Overdue</string>
-    <string name="reminder_upcoming">Upcoming</string>
-    <string name="reminder_completed">Completed</string>
-    <string name="cd_top_app_bar_back">Back</string>
-    <string name="cd_search_reminders">Search reminders</string>
+    <!-- Top app bar -->
+    <string name="top_bar_title_reminder_details">Details</string>
+    <string name="top_app_bar_title_settings">Settings</string>
     <string name="cd_sort_reminders">Sort reminders</string>
+    <string name="cd_search_reminders">Search reminders</string>
+    <string name="cd_more">More</string>
+    <string name="cd_back">Back</string>
+    <string name="dropdown_complete_reminder">Complete</string>
+    <string name="dropdown_delete_reminder">Delete</string>
+    <string name="dropdown_settings">Settings</string>
     <string name="top_app_bar_search_hint">Search…</string>
     <string name="cd_clear_search">Clear Search</string>
 
+    <!-- Reminder List -->
+    <string name="reminder_overdue">Overdue</string>
+    <string name="reminder_upcoming">Upcoming</string>
+    <string name="reminder_completed">Completed</string>
+    <string name="reminder_card_date_time">%1$s • %2$s</string>
+    <string name="cd_notification_enabled_icon">Notification enabled</string>
+    <string name="cd_repeat_reminder_icon">Repeat reminder</string>
+    <string name="cd_has_notes_icon">Has notes</string>
+    <string name="cd_complete_reminder">Complete reminder</string>
+    <string name="cd_fab_add_reminder">Add reminder</string>
+
     <!-- Add / edit reminder -->
-    <string name="top_bar_title_add_reminder">Add Reminder</string>
-    <string name="top_bar_title_edit_reminder">Edit Reminder</string>
-    <string name="top_bar_title_input_reminder">Input Reminder</string>
-    <string name="cd_top_bar_close_reminder">Close</string>
-    <string name="cd_top_bar_save_reminder">Save reminder</string>
     <string name="hint_reminder_name">RemindMe to…</string>
+    <string name="cd_date_icon">Date</string>
+    <string name="cd_time_icon">Time</string>
+    <string name="cd_notes_icon">Notes</string>
     <string name="hint_reminder_notes">Add notes</string>
-    <string name="title_repeat_reminder">Repeat reminder</string>
-    <string name="title_send_notification">Send notification</string>
-    <string name="repeats_every_header">Repeats every</string>
-    <string name="error_name_empty">The reminder name cannot be empty</string>
-    <string name="error_time_past">The reminder start time cannot be in the past</string>
-    <string name="cd_details_date">Date</string>
-    <string name="cd_details_time">Time</string>
-    <string name="cd_card_notification_enabled">Notification enabled</string>
-    <string name="cd_details_notification">Notification</string>
-    <string name="cd_details_repeat_interval">Repeat Interval</string>
-    <string name="cd_details_notes">Notes</string>
-    <string name="day">Day</string>
-    <plurals name="repeat_unit_days">
-        <item quantity="one">Day</item>
-        <item quantity="other">Days</item>
-    </plurals>
-    <plurals name="repeat_unit_weeks">
-        <item quantity="one">Week</item>
-        <item quantity="other">Weeks</item>
-    </plurals>
+    <string name="input_chip_notification_on">Notification on</string>
+    <string name="input_chip_no_notification">No notification</string>
+    <string name="input_chip_no_repeat">No repeat</string>
+    <string name="button_save_reminder">Save</string>
 
-    <!-- Empty States -->
-    <string name="empty_state_overdue_title">No overdue reminders</string>
-    <string name="empty_state_overdue_subtitle">You\'re all caught up</string>
-    <string name="empty_state_upcoming_title">No upcoming reminders</string>
-    <string name="empty_state_upcoming_subtitle">Add a reminder to get started</string>
-    <string name="empty_state_completed_title">No completed reminders</string>
-    <string name="empty_state_completed_subtitle">Completed reminders will show up here</string>
-    <string name="empty_state_search_title">No reminders found</string>
-    <string name="empty_state_search_subtitle">Try adjusting your search</string>
-
-    <!-- Sheets -->
-    <string name="sheet_action_complete">Complete</string>
-    <string name="sheet_action_edit">Edit</string>
-    <string name="sheet_action_delete">Delete</string>
-    <string name="sheet_action_complete_series">Complete Series</string>
-
-    <!-- Alert Dialogs -->
     <plurals name="repeat_interval_days">
         <item quantity="one">%1$d day</item>
         <item quantity="other">%1$d days</item>
@@ -69,18 +45,55 @@
         <item quantity="one">%1$d week</item>
         <item quantity="other">%1$d weeks</item>
     </plurals>
+
+    <!-- Settings -->
+    <string name="settings_header_customisation">Customisation</string>
+    <string name="settings_title_theme">App theme</string>
+    <string name="settings_title_notification_behaviour">Notification behaviour</string>
+    <string name="settings_subtitle_notification_on">On by default when adding reminders</string>
+    <string name="settings_subtitle_notification_off">Off by default when adding reminders</string>
+
+    <string name="settings_header_about">About</string>
+    <string name="settings_title_version_number">Version number</string>
+    <string name="settings_title_source_code">Source code</string>
+    <string name="settings_subtitle_github">Available on GitHub</string>
+
+    <!-- Empty States -->
+    <string name="empty_state_overdue_title">No overdue reminders</string>
+    <string name="empty_state_overdue_subtitle">You\'re all caught up</string>
+
+    <string name="empty_state_upcoming_title">No upcoming reminders</string>
+    <string name="empty_state_upcoming_subtitle">Add a reminder to get started</string>
+
+    <string name="empty_state_completed_title">No completed reminders</string>
+    <string name="empty_state_completed_subtitle">Completed reminders will show up here</string>
+
+    <string name="empty_state_search_title">No reminders found</string>
+    <string name="empty_state_search_subtitle">Try adjusting your search</string>
+
+    <!-- Dialogs -->
+    <string name="dialog_title_sort">Sort reminders by</string>
+    <string name="date_earliest">Date - Earliest first</string>
+    <string name="date_latest">Date - Latest first</string>
+    <string name="alphabetical_a_to_z">Alphabetical A-Z</string>
+    <string name="alphabetical_z_to_a">Alphabetical Z-A</string>
+
+    <string name="dialog_title_repeat_interval">Repeats every</string>
+    <string name="repeat_unit_option_day">Day(s)</string>
+    <string name="repeat_unit_option_week">Week(s)</string>
+
+    <string name="dialog_title_app_theme">Set app theme</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="theme_auto">Follow system</string>
+
     <string name="dialog_action_ok">OK</string>
     <string name="dialog_action_cancel">Cancel</string>
     <string name="dialog_action_apply">Apply</string>
-    <string name="sort_dialog_title">Sort reminders by</string>
-    <string name="sort_dialog_option_date_earliest">Date - Earliest first</string>
-    <string name="sort_dialog_option_date_latest">Date - Latest first</string>
-    <string name="sort_dialog_option_alphabetical_a_to_z">Alphabetical A-Z</string>
-    <string name="sort_dialog_option_alphabetical_z_to_a">Alphabetical Z-A</string>
 
     <!-- Notifications -->
-    <string name="notification_body_text_reboot_reschedule">Scheduling reminder notifications after reboot</string>
-    <string name="notification_body_text_time_zone_update">Updating reminder timezones</string>
+    <string name="notification_reboot_reschedule">Scheduling reminder notifications after reboot</string>
+    <string name="notification_time_zone_update">Updating reminder timezones</string>
     <string name="reminder_notification_action_complete_text">Complete</string>
     <string name="notification_channel_name_reminder">Reminders</string>
     <string name="notification_channel_id_reminder">NOTIFICATION_CHANNEL_ID_REMINDER</string>
@@ -90,42 +103,6 @@
     <string name="intent_key_timeZone">"time-zone"</string>
 
     <!-- Test tags -->
-    <string name="test_tag_switch_notification">Test Tag Switch Notification</string>
-    <string name="test_tag_switch_repeat_interval">Test Tag Switch Repeat Interval</string>
     <string name="test_tag_text_field_repeat_amount">Test Tag Text Field Repeat Amount</string>
     <string name="test_tag_reminder_list_lazy_column">test_tag_reminder_list_lazy_column</string>
-    <string name="reminder_all">All</string>
-    <string name="cd_complete_reminder">Complete reminder</string>
-    <string name="top_bar_title_reminder_details">Details</string>
-    <string name="cd_more">More</string>
-    <string name="dropdown_complete_reminder">Complete</string>
-    <string name="dropdown_delete_reminder">Delete</string>
-    <string name="button_save_reminder">Save</string>
-
-    <string name="reminder_repeat_interval">%1$s %2$s</string>
-    <string name="reminder_details_notification_on">Notification on</string>
-    <string name="reminder_details_add_notification">No notification</string>
-    <string name="reminder_details_add_repeat">No repeat</string>
-    <string name="repeat_unit_option_day">Day(s)</string>
-    <string name="repeat_unit_option_week">Week(s)</string>
-    <string name="cd_card_repeat_reminder">Repeat reminder</string>
-    <string name="cd_card_has_notes">Has notes</string>
-    <string name="dropdown_settings">Settings</string>
-    <string name="top_app_bar_title_settings">Settings</string>
-    <string name="settings_header_customisation">Customisation</string>
-    <string name="settings_header_about">About</string>
-    <string name="settings_title_theme">App theme</string>
-    <string name="settings_title_date_format">Date format</string>
-    <string name="settings_title_notification_behaviour">Notification behaviour</string>
-    <string name="settings_title_version_number">Version number</string>
-    <string name="settings_title_source_code">Source code</string>
-    <string name="settings_subtitle_github">Available on GitHub</string>
-    <string name="settings_subtitle_notification_on">On by default when adding reminders</string>
-    <string name="settings_subtitle_notification_off">Off by default when adding reminders</string>
-    <string name="theme_light">Light</string>
-    <string name="theme_dark">Dark</string>
-    <string name="theme_auto">Follow system</string>
-    <string name="settings_subtitle_theme">Follow system</string>
-    <string name="alert_dialog_title_app_theme">Set app theme</string>
-    <string name="top_bar_title_reminder_search">Search</string>
 </resources>
