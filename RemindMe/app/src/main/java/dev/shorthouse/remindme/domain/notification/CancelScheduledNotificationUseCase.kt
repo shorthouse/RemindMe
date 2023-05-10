@@ -17,10 +17,10 @@ class CancelScheduledNotificationUseCase @Inject constructor(
     @ApplicationContext private val context: Context
 ) {
     operator fun invoke(reminder: Reminder) {
-        cancelScheduledNotificationUseCase(reminder)
+        cancelScheduledNotification(reminder)
     }
 
-    private fun cancelScheduledNotificationUseCase(reminder: Reminder) {
+    private fun cancelScheduledNotification(reminder: Reminder) {
         val alarmIntent = Intent(context, DisplayReminderNotificationReceiver::class.java)
             .putExtra(context.getString(R.string.intent_key_reminderId), reminder.id)
 
