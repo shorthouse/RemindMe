@@ -4,24 +4,21 @@ import dev.shorthouse.remindme.data.source.local.ReminderRepository
 import dev.shorthouse.remindme.di.IoDispatcher
 import dev.shorthouse.remindme.domain.notification.CancelScheduledNotificationUseCase
 import dev.shorthouse.remindme.model.Reminder
-import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
 class CompleteRepeatReminderSeriesUseCase @Inject constructor(
     private val reminderRepository: ReminderRepository,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
-    private val cancelScheduledNotificationUseCase: CancelScheduledNotificationUseCase
+    private val cancelScheduledNotificationUseCase: CancelScheduledNotificationUseCase,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
-    private val coroutineScope = CoroutineScope(ioDispatcher)
-
-    operator fun invoke(reminder: Reminder) {
+    suspend operator fun invoke(reminder: Reminder) {
         completeRepeatReminderSeries(reminder)
     }
 
-    private fun completeRepeatReminderSeries(reminder: Reminder) {
-        coroutineScope.launch(ioDispatcher) {
+    private suspend fun completeRepeatReminderSeries(reminder: Reminder) {
+        withContext(ioDispatcher) {
             reminderRepository.completeReminder(reminder.id)
 
             cancelScheduledNotificationUseCase(reminder)

@@ -6,30 +6,27 @@ import dev.shorthouse.remindme.domain.notification.CancelScheduledNotificationUs
 import dev.shorthouse.remindme.domain.notification.ScheduleNotificationUseCase
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.util.floor
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.withContext
 import java.time.ZonedDateTime
 import javax.inject.Inject
 import kotlin.time.DurationUnit
 import kotlin.time.times
 import kotlin.time.toDuration
 import kotlin.time.toKotlinDuration
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 
 class CompleteReminderUseCase @Inject constructor(
     private val reminderRepository: ReminderRepository,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
     private val scheduleNotificationUseCase: ScheduleNotificationUseCase,
-    private val cancelScheduledNotificationUseCase: CancelScheduledNotificationUseCase
+    private val cancelScheduledNotificationUseCase: CancelScheduledNotificationUseCase,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
-    private val coroutineScope = CoroutineScope(ioDispatcher)
-
-    operator fun invoke(reminder: Reminder) {
+    suspend operator fun invoke(reminder: Reminder) {
         completeReminder(reminder)
     }
 
-    private fun completeReminder(reminder: Reminder) {
-        coroutineScope.launch {
+    private suspend fun completeReminder(reminder: Reminder) {
+        withContext(ioDispatcher) {
             if (reminder.isRepeatReminder) {
                 completeRepeatReminderOccurrence(reminder)
             } else {

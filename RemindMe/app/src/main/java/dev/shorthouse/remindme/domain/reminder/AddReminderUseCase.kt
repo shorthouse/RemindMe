@@ -4,24 +4,21 @@ import dev.shorthouse.remindme.data.source.local.ReminderRepository
 import dev.shorthouse.remindme.di.IoDispatcher
 import dev.shorthouse.remindme.domain.notification.ScheduleNotificationUseCase
 import dev.shorthouse.remindme.model.Reminder
-import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
 class AddReminderUseCase @Inject constructor(
     private val reminderRepository: ReminderRepository,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
-    private val scheduleReminderNotificationUseCase: ScheduleNotificationUseCase
+    private val scheduleReminderNotificationUseCase: ScheduleNotificationUseCase,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
-    private val coroutineScope = CoroutineScope(ioDispatcher)
-
-    operator fun invoke(reminder: Reminder) {
+    suspend operator fun invoke(reminder: Reminder) {
         addReminder(reminder)
     }
 
-    private fun addReminder(reminder: Reminder) {
-        coroutineScope.launch {
+    private suspend fun addReminder(reminder: Reminder) {
+        withContext(ioDispatcher) {
             val addedReminderId = reminderRepository.insertReminder(reminder)
 
             if (reminder.isNotificationSent) {
