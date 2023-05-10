@@ -14,17 +14,17 @@ import dev.shorthouse.remindme.domain.userpreferences.GetUserPreferencesFlowUseC
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.model.RepeatInterval
 import dev.shorthouse.remindme.ui.navArgs
-import java.time.LocalDate
-import java.time.LocalTime
-import java.time.ZoneId
-import java.time.ZonedDateTime
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.LocalTime
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import javax.inject.Inject
 
 @HiltViewModel
 class ReminderAddEditViewModel @Inject constructor(
@@ -66,8 +66,10 @@ class ReminderAddEditViewModel @Inject constructor(
             is ReminderAddEditEvent.UpdateTime -> handleUpdateTime(event.time)
             is ReminderAddEditEvent.UpdateNotification ->
                 handleUpdateNotification(event.isNotificationSent)
+
             is ReminderAddEditEvent.UpdateRepeatInterval ->
                 handleUpdateRepeatInterval(event.repeatInterval)
+
             is ReminderAddEditEvent.UpdateNotes -> handleUpdateNotes(event.notes)
         }
     }
@@ -109,22 +111,28 @@ class ReminderAddEditViewModel @Inject constructor(
     }
 
     private fun handleCompleteReminder(reminder: Reminder) {
-        if (reminder.isRepeatReminder) {
-            completeRepeatReminderSeriesUseCase(reminder)
-        } else {
-            completeOnetimeReminderUseCase(reminder)
+        viewModelScope.launch {
+            if (reminder.isRepeatReminder) {
+                completeRepeatReminderSeriesUseCase(reminder)
+            } else {
+                completeOnetimeReminderUseCase(reminder)
+            }
         }
     }
 
     private fun handleDeleteReminder(reminder: Reminder) {
-        deleteReminderUseCase(reminder)
+        viewModelScope.launch {
+            deleteReminderUseCase(reminder)
+        }
     }
 
     private fun handleSaveReminder(reminder: Reminder) {
-        if (reminder.id == 0L) {
-            addReminderUseCase(reminder.validated())
-        } else {
-            updateReminderUseCase(reminder.validated())
+        viewModelScope.launch {
+            if (reminder.id == 0L) {
+                addReminderUseCase(reminder.validated())
+            } else {
+                updateReminderUseCase(reminder.validated())
+            }
         }
     }
 
@@ -185,7 +193,7 @@ class ReminderAddEditViewModel @Inject constructor(
 
     private fun isReminderValid(reminder: Reminder): Boolean {
         return reminder.name.isNotBlank() &&
-            reminder.startDateTime.isAfter(ZonedDateTime.now()) &&
-            reminder.validated() != _uiState.value.initialReminder.validated()
+                reminder.startDateTime.isAfter(ZonedDateTime.now()) &&
+                reminder.validated() != _uiState.value.initialReminder.validated()
     }
 }
