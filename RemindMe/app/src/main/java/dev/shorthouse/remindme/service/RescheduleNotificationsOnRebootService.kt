@@ -12,24 +12,24 @@ import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.data.source.local.ReminderRepository
 import dev.shorthouse.remindme.di.IoDispatcher
 import dev.shorthouse.remindme.domain.notification.ScheduleNotificationUseCase
-import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class RescheduleNotificationsOnRebootService : Service() {
 
     @Inject
-    @IoDispatcher
-    lateinit var ioDispatcher: CoroutineDispatcher
-
-    @Inject
-    lateinit var repository: ReminderRepository
+    lateinit var reminderRepository: ReminderRepository
 
     @Inject
     lateinit var scheduleNotificationUseCase: ScheduleNotificationUseCase
+
+    @Inject
+    @IoDispatcher
+    lateinit var ioDispatcher: CoroutineDispatcher
 
     override fun onCreate() {
         super.onCreate()
@@ -46,10 +46,12 @@ class RescheduleNotificationsOnRebootService : Service() {
 
     private fun rescheduleNotifications() {
         CoroutineScope(ioDispatcher + SupervisorJob()).launch {
-            val reminders = repository.getRemindersOneShot()
+            val reminders = reminderRepository.getRemindersOneShot()
 
             reminders
-                .filter { reminder -> reminder.isNotificationSent && !reminder.isCompleted }
+                .filter { reminder ->
+                    reminder.isNotificationSent && !reminder.isCompleted && !reminder.isOverdue
+                }
                 .forEach { reminder -> scheduleNotificationUseCase(reminder) }
 
             stopForeground(STOP_FOREGROUND_REMOVE)
@@ -75,7 +77,7 @@ class RescheduleNotificationsOnRebootService : Service() {
             getString(R.string.notification_channel_id_reminder)
         )
             .setContentTitle(getString(R.string.app_name))
-            .setContentText(getString(R.string.notification_body_text_reboot_reschedule))
+            .setContentText(getString(R.string.notification_reboot_reschedule))
             .setSmallIcon(R.drawable.ic_user_notification)
             .build()
     }

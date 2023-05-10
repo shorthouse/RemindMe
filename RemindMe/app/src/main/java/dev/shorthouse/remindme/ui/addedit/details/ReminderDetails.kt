@@ -160,7 +160,11 @@ private fun ReminderDetailsPreview(
 ) {
     AppTheme {
         ReminderDetailsScreen(
-            uiState = ReminderAddEditUiState(isReminderValid = true),
+            uiState = ReminderAddEditUiState(
+                reminder = reminder,
+                initialReminder = reminder,
+                isReminderValid = true
+            ),
             onHandleEvent = {},
             onNavigateUp = {}
         )

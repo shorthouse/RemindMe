@@ -4,14 +4,13 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.shorthouse.remindme.data.protodatastore.UserPreferencesRepository
-import dev.shorthouse.remindme.data.source.local.ReminderRepository
-import dev.shorthouse.remindme.di.IoDispatcher
 import dev.shorthouse.remindme.domain.reminder.AddReminderUseCase
 import dev.shorthouse.remindme.domain.reminder.CompleteOnetimeReminderUseCase
 import dev.shorthouse.remindme.domain.reminder.CompleteRepeatReminderSeriesUseCase
 import dev.shorthouse.remindme.domain.reminder.DeleteReminderUseCase
+import dev.shorthouse.remindme.domain.reminder.GetReminderUseCase
 import dev.shorthouse.remindme.domain.reminder.UpdateReminderUseCase
+import dev.shorthouse.remindme.domain.userpreferences.GetUserPreferencesFlowUseCase
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.model.RepeatInterval
 import dev.shorthouse.remindme.ui.navArgs
@@ -20,10 +19,8 @@ import java.time.LocalTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import javax.inject.Inject
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
@@ -31,9 +28,8 @@ import kotlinx.coroutines.launch
 
 @HiltViewModel
 class ReminderAddEditViewModel @Inject constructor(
-    private val reminderRepository: ReminderRepository,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
-    private val userPreferencesRepository: UserPreferencesRepository,
+    private val getUserPreferencesFlowUseCase: GetUserPreferencesFlowUseCase,
+    private val getReminderUseCase: GetReminderUseCase,
     private val addReminderUseCase: AddReminderUseCase,
     private val updateReminderUseCase: UpdateReminderUseCase,
     private val deleteReminderUseCase: DeleteReminderUseCase,
@@ -79,8 +75,7 @@ class ReminderAddEditViewModel @Inject constructor(
     private fun setAddReminder() {
         _uiState.update { it.copy(isLoading = true) }
 
-        userPreferencesRepository.userPreferencesFlow
-            .flowOn(ioDispatcher)
+        getUserPreferencesFlowUseCase()
             .onEach { userPreferences ->
                 val initialReminder = _uiState.value.initialReminder.copy(
                     isNotificationSent = userPreferences.isNotificationDefaultOn
@@ -100,8 +95,8 @@ class ReminderAddEditViewModel @Inject constructor(
     private fun setEditReminder(reminderId: Long) {
         _uiState.update { it.copy(isLoading = true) }
 
-        viewModelScope.launch(ioDispatcher) {
-            val initialReminder = reminderRepository.getReminderOneShot(reminderId)
+        viewModelScope.launch {
+            val initialReminder = getReminderUseCase(reminderId = reminderId)
 
             _uiState.update {
                 it.copy(
@@ -190,7 +185,7 @@ class ReminderAddEditViewModel @Inject constructor(
 
     private fun isReminderValid(reminder: Reminder): Boolean {
         return reminder.name.isNotBlank() &&
-                reminder.startDateTime.isAfter(ZonedDateTime.now()) &&
-                reminder.validated() != _uiState.value.initialReminder.validated()
+            reminder.startDateTime.isAfter(ZonedDateTime.now()) &&
+            reminder.validated() != _uiState.value.initialReminder.validated()
     }
 }

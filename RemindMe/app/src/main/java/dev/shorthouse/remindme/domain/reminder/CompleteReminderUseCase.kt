@@ -3,35 +3,30 @@ package dev.shorthouse.remindme.domain.reminder
 import dev.shorthouse.remindme.data.source.local.ReminderRepository
 import dev.shorthouse.remindme.di.IoDispatcher
 import dev.shorthouse.remindme.domain.notification.CancelScheduledNotificationUseCase
-import dev.shorthouse.remindme.domain.notification.RemoveDisplayingNotificationUseCase
 import dev.shorthouse.remindme.domain.notification.ScheduleNotificationUseCase
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.util.floor
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.withContext
 import java.time.ZonedDateTime
 import javax.inject.Inject
 import kotlin.time.DurationUnit
 import kotlin.time.times
 import kotlin.time.toDuration
 import kotlin.time.toKotlinDuration
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 
 class CompleteReminderUseCase @Inject constructor(
     private val reminderRepository: ReminderRepository,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
     private val scheduleNotificationUseCase: ScheduleNotificationUseCase,
     private val cancelScheduledNotificationUseCase: CancelScheduledNotificationUseCase,
-    private val removeDisplayingNotificationUseCase: RemoveDisplayingNotificationUseCase
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
-    private val coroutineScope = CoroutineScope(ioDispatcher)
-
-    operator fun invoke(reminder: Reminder) {
+    suspend operator fun invoke(reminder: Reminder) {
         completeReminder(reminder)
     }
 
-    private fun completeReminder(reminder: Reminder) {
-        coroutineScope.launch {
+    private suspend fun completeReminder(reminder: Reminder) {
+        withContext(ioDispatcher) {
             if (reminder.isRepeatReminder) {
                 completeRepeatReminderOccurrence(reminder)
             } else {
@@ -48,7 +43,6 @@ class CompleteReminderUseCase @Inject constructor(
         reminderRepository.updateReminder(updatedReminder)
 
         cancelScheduledNotificationUseCase(reminder)
-        removeDisplayingNotificationUseCase(reminder)
 
         if (reminder.isNotificationSent) {
             scheduleNotificationUseCase(reminder)
@@ -58,7 +52,6 @@ class CompleteReminderUseCase @Inject constructor(
     private fun completeOnetimeReminder(reminder: Reminder) {
         reminderRepository.completeReminder(reminder.id)
         cancelScheduledNotificationUseCase(reminder)
-        removeDisplayingNotificationUseCase(reminder)
     }
 
     private fun getUpdatedReminderStartDateTime(reminder: Reminder): ZonedDateTime {

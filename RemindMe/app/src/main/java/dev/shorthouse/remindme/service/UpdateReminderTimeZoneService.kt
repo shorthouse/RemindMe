@@ -11,23 +11,23 @@ import dagger.hilt.android.AndroidEntryPoint
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.data.source.local.ReminderRepository
 import dev.shorthouse.remindme.di.IoDispatcher
-import java.time.ZoneId
-import java.time.ZonedDateTime
-import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class UpdateReminderTimeZoneService : Service() {
 
     @Inject
-    @IoDispatcher
-    lateinit var ioDispatcher: CoroutineDispatcher
+    lateinit var reminderRepository: ReminderRepository
 
     @Inject
-    lateinit var repository: ReminderRepository
+    @IoDispatcher
+    lateinit var ioDispatcher: CoroutineDispatcher
 
     override fun onCreate() {
         super.onCreate()
@@ -51,7 +51,7 @@ class UpdateReminderTimeZoneService : Service() {
 
     private fun updateReminderTimeZones(newTimeZone: String) {
         CoroutineScope(ioDispatcher + SupervisorJob()).launch {
-            val reminders = repository.getRemindersOneShot()
+            val reminders = reminderRepository.getRemindersOneShot()
             val newTimeZoneId = ZoneId.of(newTimeZone)
 
             reminders.forEach { reminder ->
@@ -64,7 +64,7 @@ class UpdateReminderTimeZoneService : Service() {
                     startDateTime = newStartDateTime
                 )
 
-                repository.updateReminder(updatedReminder)
+                reminderRepository.updateReminder(updatedReminder)
 
                 stopForeground(STOP_FOREGROUND_REMOVE)
                 stopSelf()
@@ -90,7 +90,7 @@ class UpdateReminderTimeZoneService : Service() {
             getString(R.string.notification_channel_id_reminder)
         )
             .setContentTitle(getString(R.string.app_name))
-            .setContentText(getString(R.string.notification_body_text_time_zone_update))
+            .setContentText(getString(R.string.notification_time_zone_update))
             .setSmallIcon(R.drawable.ic_user_notification)
             .build()
     }

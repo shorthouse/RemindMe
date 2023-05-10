@@ -5,18 +5,17 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.shorthouse.remindme.data.protodatastore.ReminderFilter
 import dev.shorthouse.remindme.data.protodatastore.ReminderSort
-import dev.shorthouse.remindme.data.protodatastore.UserPreferencesRepository
-import dev.shorthouse.remindme.data.source.local.ReminderRepository
-import dev.shorthouse.remindme.di.IoDispatcher
 import dev.shorthouse.remindme.domain.reminder.CompleteReminderUseCase
+import dev.shorthouse.remindme.domain.reminder.GetRemindersFlowUseCase
+import dev.shorthouse.remindme.domain.userpreferences.GetUserPreferencesFlowUseCase
+import dev.shorthouse.remindme.domain.userpreferences.UpdateReminderFilterUseCase
+import dev.shorthouse.remindme.domain.userpreferences.UpdateReminderSortOrderUseCase
 import dev.shorthouse.remindme.model.Reminder
 import java.time.ZonedDateTime
 import javax.inject.Inject
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
@@ -24,9 +23,10 @@ import kotlinx.coroutines.launch
 
 @HiltViewModel
 class ReminderListViewModel @Inject constructor(
-    private val reminderRepository: ReminderRepository,
-    private val userPreferencesRepository: UserPreferencesRepository,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
+    private val getRemindersFlowUseCase: GetRemindersFlowUseCase,
+    private val getUserPreferencesFlowUseCase: GetUserPreferencesFlowUseCase,
+    private val updateReminderFilterUseCase: UpdateReminderFilterUseCase,
+    private val updateReminderSortOrderUseCase: UpdateReminderSortOrderUseCase,
     private val completeReminderUseCase: CompleteReminderUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(ReminderListUiState())
@@ -40,8 +40,8 @@ class ReminderListViewModel @Inject constructor(
     fun initialiseUiState() {
         _uiState.update { it.copy(isLoading = true) }
 
-        val remindersFlow = reminderRepository.getReminders()
-        val userPreferencesFlow = userPreferencesRepository.userPreferencesFlow
+        val remindersFlow = getRemindersFlowUseCase()
+        val userPreferencesFlow = getUserPreferencesFlowUseCase()
 
         combine(remindersFlow, userPreferencesFlow) { reminders, userPreferences ->
             val now = ZonedDateTime.now()
@@ -76,7 +76,6 @@ class ReminderListViewModel @Inject constructor(
                 isLoading = false
             )
         }
-            .flowOn(ioDispatcher)
             .onEach { _uiState.value = it }
             .launchIn(viewModelScope)
     }
@@ -86,20 +85,20 @@ class ReminderListViewModel @Inject constructor(
             is ReminderListEvent.Filter -> handleFilter(event.filter)
             is ReminderListEvent.Sort -> handleSort(event.sortOrder)
             is ReminderListEvent.CompleteReminder -> handleCompleteReminder(event.reminder)
-            ReminderListEvent.ShowAddReminderSheet -> handleShowAddReminderSheet()
-            ReminderListEvent.HideAddReminderSheet -> handleHideAddReminderSheet()
+            is ReminderListEvent.ShowAddReminderSheet -> handleShowAddReminderSheet()
+            is ReminderListEvent.HideAddReminderSheet -> handleHideAddReminderSheet()
         }
     }
 
     private fun handleFilter(filter: ReminderFilter) {
-        viewModelScope.launch(ioDispatcher) {
-            userPreferencesRepository.updateReminderFilter(filter)
+        viewModelScope.launch {
+            updateReminderFilterUseCase(filter = filter)
         }
     }
 
     private fun handleSort(sortOrder: ReminderSort) {
-        viewModelScope.launch(ioDispatcher) {
-            userPreferencesRepository.updateReminderSortOrder(sortOrder)
+        viewModelScope.launch {
+            updateReminderSortOrderUseCase(sortOrder = sortOrder)
         }
     }
 
