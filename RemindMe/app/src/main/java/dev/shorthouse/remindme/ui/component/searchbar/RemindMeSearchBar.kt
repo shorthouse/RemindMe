@@ -38,6 +38,8 @@ import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.ui.previewprovider.SearchQueryProvider
 import dev.shorthouse.remindme.ui.theme.AppTheme
 import dev.shorthouse.remindme.ui.theme.isLightColors
+import kotlin.time.Duration.Companion.milliseconds
+import kotlinx.coroutines.delay
 
 @Composable
 @OptIn(ExperimentalComposeUiApi::class)
@@ -50,14 +52,14 @@ fun RemindMeSearchBar(
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusRequester = remember { FocusRequester() }
 
-    val topAppBarColor = if (MaterialTheme.colorScheme.isLightColors()) {
+    val searchBarBackgroundColor = if (MaterialTheme.colorScheme.isLightColors()) {
         MaterialTheme.colorScheme.primary
     } else {
         MaterialTheme.colorScheme.surface
     }
 
     Surface(
-        color = topAppBarColor,
+        color = searchBarBackgroundColor,
         modifier = modifier
             .fillMaxWidth()
             .height(64.dp)
@@ -90,6 +92,7 @@ fun RemindMeSearchBar(
     }
 
     LaunchedEffect(Unit) {
+        delay(400.milliseconds)
         focusRequester.requestFocus()
     }
 }
