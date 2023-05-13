@@ -33,7 +33,7 @@ fun RemindMeInputChip(
         leadingIcon = leadingIcon,
         trailingIcon = trailingIcon,
         colors = InputChipDefaults.inputChipColors(
-            leadingIconColor = MaterialTheme.colorScheme.onSurface,
+            leadingIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
             labelColor = MaterialTheme.colorScheme.onSurface,
             trailingIconColor = MaterialTheme.colorScheme.onSurface,
             selectedLeadingIconColor = MaterialTheme.colorScheme.onPrimary,
@@ -42,7 +42,7 @@ fun RemindMeInputChip(
             selectedContainerColor = MaterialTheme.colorScheme.primary
         ),
         border = InputChipDefaults.inputChipBorder(
-            borderWidth = 2.dp,
+            borderWidth = 1.5.dp,
             disabledBorderColor = MaterialTheme.colorScheme.onSurfaceVariant
         ),
         modifier = modifier
