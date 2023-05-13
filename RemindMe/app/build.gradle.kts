@@ -96,7 +96,7 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended:1.4.3")
     implementation("com.google.accompanist:accompanist-permissions:0.30.0")
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.30.0")
-    implementation("io.github.raamcosta.compose-destinations:core:1.8.38-beta")
+    implementation("io.github.raamcosta.compose-destinations:animations-core:1.8.38-beta")
     debugImplementation("androidx.compose.ui:ui-tooling:1.4.3")
     ksp("io.github.raamcosta.compose-destinations:ksp:1.8.38-beta")
 

@@ -125,6 +125,7 @@ fun ReminderDetailsTopBar(
                             )
                         },
                         onClick = {
+                            showOverflowMenu = false
                             onHandleEvent(ReminderAddEditEvent.DeleteReminder(reminder))
                             onNavigateUp()
                         }
@@ -140,6 +141,7 @@ fun ReminderDetailsTopBar(
                                 )
                             },
                             onClick = {
+                                showOverflowMenu = false
                                 onHandleEvent(ReminderAddEditEvent.CompleteReminder(reminder))
                                 onNavigateUp()
                             }

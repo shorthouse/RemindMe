@@ -201,7 +201,10 @@ fun ReminderListTopBar(
                                 style = MaterialTheme.typography.bodyMedium.copy(fontSize = 17.sp)
                             )
                         },
-                        onClick = onNavigateSettings
+                        onClick = {
+                            showOverflowMenu = false
+                            onNavigateSettings()
+                        }
                     )
                 }
             }

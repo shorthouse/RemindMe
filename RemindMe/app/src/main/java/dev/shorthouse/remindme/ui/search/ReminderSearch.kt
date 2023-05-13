@@ -6,7 +6,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -18,6 +20,7 @@ import dev.shorthouse.remindme.ui.component.searchbar.RemindMeSearchBar
 import dev.shorthouse.remindme.ui.destinations.ReminderDetailsScreenDestination
 import dev.shorthouse.remindme.ui.list.ReminderList
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 @Destination
 fun ReminderSearchScreen(
@@ -25,10 +28,14 @@ fun ReminderSearchScreen(
     navigator: DestinationsNavigator
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     ReminderSearchScreen(
         uiState = uiState,
-        onNavigateUp = { navigator.navigateUp() },
+        onNavigateUp = {
+            keyboardController?.hide()
+            navigator.navigateUp()
+        },
         onSearchQueryChange = { viewModel.updateSearchQuery(it) },
         onNavigateDetails = {
             navigator.popBackStack()
@@ -45,7 +52,7 @@ fun ReminderSearchScreen(
     onSearchQueryChange: (String) -> Unit,
     onNavigateDetails: (Reminder) -> Unit,
     onCompleteReminder: (Reminder) -> Unit,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     Scaffold(
         topBar = {
