@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="emptyStateBorder">#FF3F3D56</color>
-    <color name="emptyStateFill">#FF2A60EB</color>
+    <color name="emptyStatePrimary">#FF2A60EB</color>
+    <color name="emptyStateSecondary">#FF2F2E41</color>
+    <color name="emptyStateOutline">#FFE3E3E3</color>
+    <color name="emptyStateSurface">#FFFFFFFF</color>
     <color name="ic_launcher_background">#FF2A60EB</color>
 </resources>

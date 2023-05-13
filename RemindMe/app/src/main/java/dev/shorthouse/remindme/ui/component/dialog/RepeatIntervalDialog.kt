@@ -110,6 +110,8 @@ private fun RepeatIntervalDialogContent(
                 onRepeatUnitChange = onRepeatUnitChange
             )
         }
+
+        Spacer(Modifier.width(16.dp))
     }
 }
 
