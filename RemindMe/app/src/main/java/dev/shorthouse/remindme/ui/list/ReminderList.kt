@@ -3,6 +3,8 @@ package dev.shorthouse.remindme.ui.list
 import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -317,7 +319,12 @@ fun ReminderList(
                         onCompleteReminder = onCompleteReminder,
                         modifier = Modifier
                             .padding(bottom = 8.dp)
-                            .animateItemPlacement()
+                            .animateItemPlacement(
+                                animationSpec = tween(
+                                    durationMillis = 400,
+                                    easing = LinearOutSlowInEasing
+                                )
+                            )
                     )
                 }
             )
