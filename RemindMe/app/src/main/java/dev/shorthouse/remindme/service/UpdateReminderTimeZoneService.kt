@@ -35,7 +35,7 @@ class UpdateReminderTimeZoneService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        val newTimeZone = intent?.getStringExtra(this.getString(R.string.intent_key_timeZone))
+        val newTimeZone = intent?.getStringExtra(this.getString(R.string.key_time_zone))
         if (newTimeZone == null) {
             stopForeground(STOP_FOREGROUND_REMOVE)
             stopSelf()
