@@ -1,6 +1,5 @@
-![RemindMe Main](https://user-images.githubusercontent.com/73708076/207454305-b870d65b-6065-4af2-ae4c-0ae64c1e6adc.png)
+![RemindMe Header Image](https://github.com/shorthouse/RemindMe/assets/73708076/1f8e4a56-eb85-4b9e-bbbb-6fd2e6808ee9)
 
-# RemindMe 🔔
 **RemindMe** is a reminder and task-management app designed to help you stay organised and on top of your to-do list.
 
 The app is built using the latest [Android architecture components](https://developer.android.com/topic/architecture/recommendations) - resulting in a scalable, modularised and testable app.
