@@ -1,4 +1,4 @@
-![RemindMe Header Image](https://github.com/shorthouse/RemindMe/assets/73708076/29ca5da0-bd7e-4c89-abc2-1bc6c61e7250)
+![RemindMe Header Image](https://github.com/shorthouse/RemindMe/assets/73708076/c2cf2335-f40c-4a8c-913a-72573e146897)
 
 **RemindMe** is a reminder and task-management app designed to help you stay organised and on top of your to-do list.
 
