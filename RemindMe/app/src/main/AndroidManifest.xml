@@ -10,7 +10,6 @@
 
     <application
         android:name="dev.shorthouse.remindme.BaseApplication"
-        android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -28,29 +27,20 @@
         <provider
             android:name="androidx.startup.InitializationProvider"
             android:authorities="${applicationId}.androidx-startup"
-            android:exported="false"
-            tools:node="merge">
-            <meta-data
-                android:name="androidx.work.WorkManagerInitializer"
-                android:value="androidx.startup"
-                tools:node="remove" />
+            tools:node="remove">
         </provider>
 
-        <service android:name=".service.RescheduleNotificationsOnRebootService"
-            android:exported="false" />
-
-        <service android:name=".service.UpdateReminderTimeZoneService"
-            android:exported="false" />
-
-        <service android:name=".service.NotificationCompleteReminderService"
+        <receiver
+            android:name=".receiver.DisplayReminderNotificationReceiver"
             android:exported="false" />
 
         <receiver
-            android:name=".receiver.DisplayReminderNotificationReceiver" />
+            android:name=".receiver.NotificationActionDoneReceiver"
+            android:exported="false" />
 
         <receiver
             android:name=".receiver.BootCompletedReceiver"
-            android:exported="true">
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
@@ -58,13 +48,10 @@
 
         <receiver
             android:name=".receiver.TimeZoneChangedReceiver"
-            android:exported="true">
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.TIMEZONE_CHANGED" />
             </intent-filter>
         </receiver>
-
-        <receiver
-            android:name=".receiver.NotificationActionDoneReceiver" />
     </application>
 </manifest>
