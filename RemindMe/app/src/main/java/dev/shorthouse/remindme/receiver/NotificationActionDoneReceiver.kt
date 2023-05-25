@@ -3,27 +3,36 @@ package dev.shorthouse.remindme.receiver
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import dagger.hilt.android.AndroidEntryPoint
 import dev.shorthouse.remindme.R
-import dev.shorthouse.remindme.service.NotificationCompleteReminderService
+import dev.shorthouse.remindme.domain.reminder.CompleteReminderUseCase
+import dev.shorthouse.remindme.domain.reminder.GetReminderUseCase
+import javax.inject.Inject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class NotificationActionDoneReceiver : BroadcastReceiver() {
+
+    @Inject
+    lateinit var getReminderUseCase: GetReminderUseCase
+
+    @Inject
+    lateinit var completeReminderUseCase: CompleteReminderUseCase
+
     override fun onReceive(context: Context?, intent: Intent?) {
         val reminderId = intent?.getLongExtra(
             context?.getString(R.string.intent_key_reminderId),
             -1L
         )
 
-        if (context != null && reminderId != null) {
-            val serviceIntent = Intent(
-                context,
-                NotificationCompleteReminderService::class.java
-            )
-                .putExtra(
-                    context.getString(R.string.intent_key_reminderId),
-                    reminderId
-                )
+        if (reminderId == null || reminderId == -1L) return
 
-            context.startService(serviceIntent)
+        CoroutineScope(SupervisorJob()).launch {
+            val reminder = getReminderUseCase(reminderId)
+
+            completeReminderUseCase(reminder)
         }
     }
 }
