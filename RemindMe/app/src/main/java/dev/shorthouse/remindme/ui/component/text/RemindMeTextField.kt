@@ -59,7 +59,7 @@ fun RemindMeTextField(
     showBackground = true,
     widthDp = 200
 )
-fun RemindMeTextFieldEmptyPreview() {
+private fun RemindMeTextFieldEmptyPreview() {
     AppTheme {
         var text by remember { mutableStateOf("") }
 
@@ -81,7 +81,7 @@ fun RemindMeTextFieldEmptyPreview() {
     showBackground = true,
     widthDp = 200
 )
-fun RemindMeTextFieldPreview() {
+private fun RemindMeTextFieldPreview() {
     AppTheme {
         var text by remember { mutableStateOf("Input") }
 

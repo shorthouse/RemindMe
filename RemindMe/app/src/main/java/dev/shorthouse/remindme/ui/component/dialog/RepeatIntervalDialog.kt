@@ -193,7 +193,7 @@ private fun RepeatUnitInput(
 @Composable
 @Preview(name = "Light Mode")
 @Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
-fun RepeatIntervalDialogPreview() {
+private fun RepeatIntervalDialogPreview() {
     AppTheme {
         RepeatIntervalDialog(
             initialRepeatInterval = null,

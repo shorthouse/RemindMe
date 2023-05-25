@@ -38,8 +38,8 @@ import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.ui.previewprovider.SearchQueryProvider
 import dev.shorthouse.remindme.ui.theme.AppTheme
 import dev.shorthouse.remindme.ui.theme.isLightColors
-import kotlin.time.Duration.Companion.milliseconds
 import kotlinx.coroutines.delay
+import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
 @OptIn(ExperimentalComposeUiApi::class)
@@ -162,7 +162,7 @@ private fun RemindMeSearchBarTextField(
 @Composable
 @Preview(name = "Light Mode", showBackground = true)
 @Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
-fun RemindMeSearchBarPreview(
+private fun RemindMeSearchBarPreview(
     @PreviewParameter(SearchQueryProvider::class) searchQuery: String
 ) {
     AppTheme {

@@ -108,7 +108,7 @@ fun EmptyState(
 @Composable
 @Preview(name = "Light Mode", showBackground = true)
 @Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
-fun EmptyStateUpcomingRemindersPreview() {
+private fun EmptyStateUpcomingRemindersPreview() {
     AppTheme {
         EmptyStateUpcomingReminders()
     }
@@ -117,7 +117,7 @@ fun EmptyStateUpcomingRemindersPreview() {
 @Composable
 @Preview(name = "Light Mode", showBackground = true)
 @Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
-fun EmptyStateOverdueRemindersPreview() {
+private fun EmptyStateOverdueRemindersPreview() {
     AppTheme {
         EmptyStateOverdueReminders()
     }
@@ -126,7 +126,7 @@ fun EmptyStateOverdueRemindersPreview() {
 @Composable
 @Preview(name = "Light Mode", showBackground = true)
 @Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
-fun EmptyStateCompletedRemindersPreview() {
+private fun EmptyStateCompletedRemindersPreview() {
     AppTheme {
         EmptyStateCompletedReminders()
     }
@@ -135,7 +135,7 @@ fun EmptyStateCompletedRemindersPreview() {
 @Composable
 @Preview(name = "Light Mode", showBackground = true)
 @Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
-fun EmptyStateSearchRemindersPreview() {
+private fun EmptyStateSearchRemindersPreview() {
     AppTheme {
         EmptyStateSearchReminders()
     }
