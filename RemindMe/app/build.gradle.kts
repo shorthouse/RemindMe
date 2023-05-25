@@ -99,6 +99,8 @@ dependencies {
     implementation("io.github.raamcosta.compose-destinations:animations-core:1.8.38-beta")
     debugImplementation("androidx.compose.ui:ui-tooling:1.4.3")
     ksp("io.github.raamcosta.compose-destinations:ksp:1.8.38-beta")
+    lintChecks("com.slack.lint.compose:compose-lint-checks:1.0.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5")
 
     // Firebase
     val firebaseBom = platform("com.google.firebase:firebase-bom:31.3.0")

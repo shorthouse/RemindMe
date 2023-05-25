@@ -6,6 +6,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.shorthouse.remindme.domain.reminder.CompleteReminderUseCase
 import dev.shorthouse.remindme.domain.reminder.GetRemindersFlowUseCase
 import dev.shorthouse.remindme.model.Reminder
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
@@ -41,7 +42,7 @@ class ReminderSearchViewModel @Inject constructor(
             }
 
             _uiState.value.copy(
-                searchReminders = searchReminders,
+                searchReminders = searchReminders.toImmutableList(),
                 isLoading = false
             )
         }

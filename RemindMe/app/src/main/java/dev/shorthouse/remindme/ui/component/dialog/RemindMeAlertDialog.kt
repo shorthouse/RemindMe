@@ -19,12 +19,12 @@ import dev.shorthouse.remindme.ui.theme.AppTheme
 fun RemindMeAlertDialog(
     title: String?,
     confirmText: String,
-    isConfirmEnabled: Boolean = true,
     onConfirm: () -> Unit,
     onDismiss: () -> Unit,
     content: @Composable () -> Unit,
-    properties: DialogProperties = DialogProperties(),
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    isConfirmEnabled: Boolean = true,
+    properties: DialogProperties = DialogProperties()
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -79,7 +79,7 @@ fun RemindMeAlertDialog(
 @Composable
 @Preview(name = "Light Mode")
 @Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
-fun RemindMeAlertDialogPreview() {
+private fun RemindMeAlertDialogPreview() {
     AppTheme {
         RemindMeAlertDialog(
             title = "Dialog title",
