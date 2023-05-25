@@ -10,7 +10,7 @@ plugins {
     id("dagger.hilt.android.plugin")
     id("com.google.devtools.ksp") version "1.8.10-1.0.9"
     id("com.google.protobuf") version "0.8.17"
-    id("org.jlleitschuh.gradle.ktlint") version "11.3.1"
+    id("org.jlleitschuh.gradle.ktlint") version "11.3.2"
     id("io.gitlab.arturbosch.detekt") version "1.22.0"
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
@@ -122,6 +122,11 @@ dependencies {
     implementation("androidx.datastore:datastore:1.0.0")
     implementation("com.google.protobuf:protobuf-javalite:3.22.2")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
+
+    // WorkManager
+    implementation("androidx.work:work-runtime-ktx:2.8.1")
+    implementation("androidx.hilt:hilt-work:1.0.0")
+    kapt("androidx.hilt:hilt-compiler:1.0.0")
 
     // GSON
     implementation("com.google.code.gson:gson:2.10.1")

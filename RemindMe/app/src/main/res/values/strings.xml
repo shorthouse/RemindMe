@@ -100,7 +100,7 @@
 
     <!-- Intent Keys -->
     <string name="intent_key_reminderId">reminderId</string>
-    <string name="intent_key_timeZone">"time-zone"</string>
+    <string name="key_time_zone">"time-zone"</string>
 
     <!-- Test tags -->
     <string name="test_tag_text_field_repeat_amount">Test Tag Text Field Repeat Amount</string>

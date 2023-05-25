@@ -26,8 +26,8 @@ abstract class DataSourceModule {
 @Module
 @InstallIn(SingletonComponent::class)
 class RepositoryModule {
-    @Singleton
     @Provides
+    @Singleton
     fun provideReminderRepository(reminderDataSource: ReminderDataSource): ReminderRepository {
         return ReminderRepository(reminderDataSource)
     }
@@ -36,8 +36,8 @@ class RepositoryModule {
 @Module
 @InstallIn(SingletonComponent::class)
 object DatabaseModule {
-    @Singleton
     @Provides
+    @Singleton
     fun provideDatabase(@ApplicationContext context: Context): ReminderDatabase {
         return Room.databaseBuilder(
             context.applicationContext,
