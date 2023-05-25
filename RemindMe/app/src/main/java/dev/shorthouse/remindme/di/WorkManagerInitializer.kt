@@ -24,12 +24,14 @@ object WorkManagerInitializer : Initializer<WorkManager> {
             context,
             WorkManagerInitializerEntryPoint::class.java
         )
+
         val configuration = Configuration
             .Builder()
             .setWorkerFactory(entryPoint.hiltWorkerFactory())
             .build()
 
         WorkManager.initialize(context, configuration)
+
         return WorkManager.getInstance(context)
     }
 
