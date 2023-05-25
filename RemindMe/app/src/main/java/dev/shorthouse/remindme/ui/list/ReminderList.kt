@@ -70,13 +70,14 @@ import dev.shorthouse.remindme.ui.destinations.ReminderSearchScreenDestination
 import dev.shorthouse.remindme.ui.destinations.SettingsScreenDestination
 import dev.shorthouse.remindme.ui.previewprovider.ReminderListProvider
 import dev.shorthouse.remindme.ui.theme.AppTheme
+import kotlinx.collections.immutable.ImmutableList
 
 @Composable
 @RootNavGraph(start = true)
 @Destination
 fun ReminderListScreen(
-    viewModel: ReminderListViewModel = hiltViewModel(),
-    navigator: DestinationsNavigator
+    navigator: DestinationsNavigator,
+    viewModel: ReminderListViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -217,7 +218,7 @@ fun ReminderListTopBar(
 
 @Composable
 private fun ReminderListContent(
-    reminders: List<Reminder>,
+    reminders: ImmutableList<Reminder>,
     reminderFilter: ReminderFilter,
     onApplyFilter: (ReminderFilter) -> Unit,
     onNavigateDetails: (Reminder) -> Unit,
@@ -288,12 +289,12 @@ fun ReminderListFilterChips(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ReminderList(
-    reminders: List<Reminder>,
+    reminders: ImmutableList<Reminder>,
     emptyState: @Composable () -> Unit,
     onReminderCard: (Reminder) -> Unit,
     onCompleteReminder: (Reminder) -> Unit,
-    contentPadding: PaddingValues = PaddingValues(0.dp),
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues(0.dp)
 ) {
     if (reminders.isEmpty()) {
         emptyState()
@@ -335,8 +336,8 @@ fun ReminderList(
 @Composable
 @Preview(name = "Light Mode")
 @Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
-fun ReminderListPreview(
-    @PreviewParameter(ReminderListProvider::class) reminders: List<Reminder>
+private fun ReminderListPreview(
+    @PreviewParameter(ReminderListProvider::class) reminders: ImmutableList<Reminder>
 ) {
     AppTheme {
         ReminderListScreen(

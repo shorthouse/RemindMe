@@ -47,8 +47,8 @@ import dev.shorthouse.remindme.ui.theme.AppTheme
 @Composable
 @Destination
 fun SettingsScreen(
-    viewModel: SettingsViewModel = hiltViewModel(),
-    navigator: DestinationsNavigator
+    navigator: DestinationsNavigator,
+    viewModel: SettingsViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -297,7 +297,7 @@ fun SettingsOption(
 @Composable
 @Preview(name = "Light Mode")
 @Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
-fun SettingsPreview() {
+private fun SettingsPreview() {
     AppTheme {
         SettingsScreen(
             uiState = SettingsUiState(isNotificationDefaultOn = true),

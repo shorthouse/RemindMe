@@ -43,9 +43,9 @@ import dev.shorthouse.remindme.ui.theme.AppTheme
 import dev.shorthouse.remindme.ui.theme.Blue
 import dev.shorthouse.remindme.ui.theme.Green
 import dev.shorthouse.remindme.ui.theme.Red
-import kotlin.time.Duration.Companion.milliseconds
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
 fun ReminderCard(
@@ -177,7 +177,7 @@ fun ReminderCard(
 @Composable
 @Preview(name = "Light Mode", showBackground = true)
 @Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
-fun ReminderCardPreview(
+private fun ReminderCardPreview(
     @PreviewParameter(ReminderCardProvider::class) reminder: Reminder
 ) {
     AppTheme {
