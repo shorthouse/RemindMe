@@ -11,6 +11,8 @@ import dev.shorthouse.remindme.ui.previewprovider.ReminderPreviewData.default
 import dev.shorthouse.remindme.ui.previewprovider.ReminderPreviewData.empty
 import dev.shorthouse.remindme.ui.previewprovider.ReminderPreviewData.overdue
 import dev.shorthouse.remindme.ui.previewprovider.ReminderPreviewData.upcoming
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
 
@@ -26,9 +28,9 @@ class EmptyReminderProvider : PreviewParameterProvider<Reminder> {
     )
 }
 
-class ReminderListProvider : PreviewParameterProvider<List<Reminder>> {
+class ReminderListProvider : PreviewParameterProvider<ImmutableList<Reminder>> {
     override val values = sequenceOf(
-        listOf(
+        persistentListOf(
             upcoming,
             overdue,
             completed,
@@ -36,7 +38,7 @@ class ReminderListProvider : PreviewParameterProvider<List<Reminder>> {
             addRepeatInterval,
             addNotes
         ),
-        emptyList()
+        persistentListOf()
     )
 }
 

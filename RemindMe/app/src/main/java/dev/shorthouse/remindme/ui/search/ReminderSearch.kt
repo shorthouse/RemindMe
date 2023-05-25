@@ -1,7 +1,7 @@
 package dev.shorthouse.remindme.ui.search
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -9,6 +9,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -19,13 +21,15 @@ import dev.shorthouse.remindme.ui.component.emptystate.EmptyStateSearchReminders
 import dev.shorthouse.remindme.ui.component.searchbar.RemindMeSearchBar
 import dev.shorthouse.remindme.ui.destinations.ReminderDetailsScreenDestination
 import dev.shorthouse.remindme.ui.list.ReminderList
+import dev.shorthouse.remindme.ui.previewprovider.ReminderListProvider
+import kotlinx.collections.immutable.ImmutableList
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 @Destination
 fun ReminderSearchScreen(
-    viewModel: ReminderSearchViewModel = hiltViewModel(),
-    navigator: DestinationsNavigator
+    navigator: DestinationsNavigator,
+    viewModel: ReminderSearchViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -69,9 +73,7 @@ fun ReminderSearchScreen(
                     searchQuery = uiState.searchQuery,
                     onNavigateDetails = onNavigateDetails,
                     onCompleteReminder = onCompleteReminder,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(scaffoldPadding)
+                    contentPadding = scaffoldPadding
                 )
             }
         },
@@ -94,22 +96,41 @@ private fun ReminderSearchTopBar(
 
 @Composable
 fun ReminderSearchContent(
-    reminders: List<Reminder>,
+    reminders: ImmutableList<Reminder>,
     searchQuery: String,
     onNavigateDetails: (Reminder) -> Unit,
     onCompleteReminder: (Reminder) -> Unit,
-    modifier: Modifier
+    modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues(0.dp)
 ) {
     ReminderList(
         reminders = reminders,
         emptyState = {
             if (searchQuery.isNotEmpty()) {
-                EmptyStateSearchReminders(modifier = modifier)
+                EmptyStateSearchReminders(modifier = Modifier.padding(contentPadding))
             }
         },
         onReminderCard = onNavigateDetails,
         onCompleteReminder = onCompleteReminder,
         contentPadding = PaddingValues(top = 8.dp, bottom = 8.dp),
-        modifier = modifier
+        modifier = modifier.padding(contentPadding)
+    )
+}
+
+@Composable
+@Preview(name = "Light Mode")
+@Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
+private fun ReminderListPreview(
+    @PreviewParameter(ReminderListProvider::class) reminders: ImmutableList<Reminder>
+) {
+    ReminderSearchScreen(
+        uiState = ReminderSearchUiState(
+            searchReminders = reminders,
+            searchQuery = "Search query"
+        ),
+        onNavigateUp = {},
+        onSearchQueryChange = {},
+        onNavigateDetails = {},
+        onCompleteReminder = {}
     )
 }

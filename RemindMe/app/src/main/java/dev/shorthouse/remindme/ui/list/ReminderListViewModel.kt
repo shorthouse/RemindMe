@@ -11,6 +11,7 @@ import dev.shorthouse.remindme.domain.userpreferences.GetUserPreferencesFlowUseC
 import dev.shorthouse.remindme.domain.userpreferences.UpdateReminderFilterUseCase
 import dev.shorthouse.remindme.domain.userpreferences.UpdateReminderSortOrderUseCase
 import dev.shorthouse.remindme.model.Reminder
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
@@ -73,7 +74,7 @@ class ReminderListViewModel @Inject constructor(
             }
 
             _uiState.value.copy(
-                reminders = sortedReminders,
+                reminders = sortedReminders.toImmutableList(),
                 reminderFilter = userPreferences.reminderFilter,
                 reminderSortOrder = userPreferences.reminderSortOrder,
                 isLoading = false
