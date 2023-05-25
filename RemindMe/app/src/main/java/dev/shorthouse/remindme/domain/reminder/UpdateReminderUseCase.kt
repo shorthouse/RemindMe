@@ -5,9 +5,9 @@ import dev.shorthouse.remindme.di.IoDispatcher
 import dev.shorthouse.remindme.domain.notification.CancelScheduledNotificationUseCase
 import dev.shorthouse.remindme.domain.notification.ScheduleNotificationUseCase
 import dev.shorthouse.remindme.model.Reminder
+import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
 
 class UpdateReminderUseCase @Inject constructor(
     private val reminderRepository: ReminderRepository,
@@ -25,7 +25,7 @@ class UpdateReminderUseCase @Inject constructor(
 
             cancelScheduledNotificationUseCase(reminder)
 
-            if (reminder.isNotificationSent) {
+            if (reminder.isNotificationSent && !reminder.isOverdue && !reminder.isCompleted) {
                 scheduleNotificationUseCase(reminder)
             }
         }
