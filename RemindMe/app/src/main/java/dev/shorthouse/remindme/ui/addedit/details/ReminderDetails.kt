@@ -42,8 +42,8 @@ import dev.shorthouse.remindme.ui.theme.AppTheme
 @Composable
 @Destination(navArgsDelegate = ReminderAddEditScreenNavArgs::class)
 fun ReminderDetailsScreen(
-    viewModel: ReminderAddEditViewModel = hiltViewModel(),
-    navigator: DestinationsNavigator
+    navigator: DestinationsNavigator,
+    viewModel: ReminderAddEditViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 

@@ -288,7 +288,7 @@ fun ReminderAddContentPreview() {
 @Composable
 @Preview(name = "Light Mode", showBackground = true)
 @Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
-fun ReminderEditContentPreview(
+private fun ReminderEditContentPreview(
     @PreviewParameter(DefaultReminderProvider::class) reminder: Reminder
 ) {
     AppTheme {
