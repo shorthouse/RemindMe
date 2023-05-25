@@ -16,8 +16,8 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 @Module
 class DataStoreModule {
-    @Singleton
     @Provides
+    @Singleton
     fun provideProtoDataStore(@ApplicationContext appContext: Context): DataStore<UserPreferences> {
         return DataStoreFactory.create(
             serializer = UserPreferencesSerializer,
