@@ -44,7 +44,7 @@ fun ReminderTimePicker(
 @Composable
 @Preview(name = "Light Mode")
 @Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
-fun TimePickerDialogPreview() {
+private fun TimePickerDialogPreview() {
     AppTheme {
         ReminderTimePicker(
             initialTime = LocalTime.now(),

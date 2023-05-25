@@ -52,7 +52,7 @@ fun RemindMeInputChip(
 @Composable
 @Preview(name = "Light Mode", showBackground = true)
 @Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
-fun RemindMeUnselectedInputChipPreview() {
+private fun RemindMeUnselectedInputChipPreview() {
     RemindMeInputChip(
         selected = false,
         onClick = { },
@@ -70,7 +70,7 @@ fun RemindMeUnselectedInputChipPreview() {
 @Composable
 @Preview(name = "Light Mode", showBackground = true)
 @Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
-fun RemindMeSelectedInputChipPreview() {
+private fun RemindMeSelectedInputChipPreview() {
     AppTheme {
         RemindMeInputChip(
             selected = true,

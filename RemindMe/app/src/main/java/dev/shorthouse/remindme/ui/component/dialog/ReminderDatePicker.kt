@@ -86,7 +86,7 @@ private fun epochMillisToLocalDate(utcMillis: Long): LocalDate {
 @Composable
 @Preview(name = "Light Mode")
 @Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
-fun DatePickerDialogPreview() {
+private fun DatePickerDialogPreview() {
     AppTheme {
         ReminderDatePicker(
             initialDate = LocalDate.now(),

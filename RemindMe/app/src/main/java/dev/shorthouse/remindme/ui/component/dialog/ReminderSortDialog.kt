@@ -92,11 +92,10 @@ private fun ReminderSortDialogContent(
     }
 }
 
-
 @Composable
 @Preview(name = "Light Mode")
 @Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
-fun ReminderSortDialogPreview() {
+private fun ReminderSortDialogPreview() {
     AppTheme {
         ReminderSortDialog(
             initialSort = ReminderSort.BY_EARLIEST_DATE_FIRST,
