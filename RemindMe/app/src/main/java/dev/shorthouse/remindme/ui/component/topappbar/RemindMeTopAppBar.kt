@@ -1,7 +1,6 @@
 package dev.shorthouse.remindme.ui.component.topappbar
 
 import android.content.res.Configuration
-import android.util.Log
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
@@ -60,7 +59,7 @@ fun RemindMeTopAppBar(
 @Composable
 @Preview(name = "Light Mode", showBackground = true)
 @Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
-fun RemindMeTopAppBarPreview() {
+private fun RemindMeTopAppBarPreview() {
     AppTheme {
         RemindMeTopAppBar(
             title = "Top bar title",
