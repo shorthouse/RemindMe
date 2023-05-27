@@ -2,7 +2,6 @@ package dev.shorthouse.remindme.ui.list
 
 import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.scaleIn
@@ -93,7 +92,6 @@ fun ReminderListScreen(
 }
 
 @Composable
-@OptIn(ExperimentalAnimationApi::class)
 fun ReminderListScreen(
     uiState: ReminderListUiState,
     onHandleEvent: (ReminderListEvent) -> Unit,
