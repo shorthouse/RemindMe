@@ -64,7 +64,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.2"
+        kotlinCompilerExtensionVersion = "1.4.7"
     }
     testOptions {
         animationsDisabled = true
@@ -92,13 +92,13 @@ dependencies {
     val composeBom = platform("androidx.compose:compose-bom:2023.04.01")
     implementation(composeBom)
     androidTestImplementation(composeBom)
-    implementation("androidx.compose.material3:material3:1.1.0-rc01")
+    implementation("androidx.compose.material3:material3:1.2.0-alpha01")
     implementation("androidx.compose.material:material-icons-extended:1.4.3")
     implementation("com.google.accompanist:accompanist-permissions:0.30.0")
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.30.0")
-    implementation("io.github.raamcosta.compose-destinations:animations-core:1.8.38-beta")
+    implementation("io.github.raamcosta.compose-destinations:animations-core:1.9.42-beta")
     debugImplementation("androidx.compose.ui:ui-tooling:1.4.3")
-    ksp("io.github.raamcosta.compose-destinations:ksp:1.8.38-beta")
+    ksp("io.github.raamcosta.compose-destinations:ksp:1.9.42-beta")
     lintChecks("com.slack.lint.compose:compose-lint-checks:1.0.0")
     implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5")
 
