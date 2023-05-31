@@ -18,10 +18,12 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.ui.component.emptystate.EmptyStateSearchReminders
+import dev.shorthouse.remindme.ui.component.progressindicator.CenteredCircularProgressIndicator
 import dev.shorthouse.remindme.ui.component.searchbar.RemindMeSearchBar
 import dev.shorthouse.remindme.ui.destinations.ReminderDetailsScreenDestination
 import dev.shorthouse.remindme.ui.list.ReminderList
 import dev.shorthouse.remindme.ui.previewprovider.ReminderListProvider
+import dev.shorthouse.remindme.ui.theme.AppTheme
 import kotlinx.collections.immutable.ImmutableList
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -67,7 +69,9 @@ fun ReminderSearchScreen(
             )
         },
         content = { scaffoldPadding ->
-            if (!uiState.isLoading) {
+            if (uiState.isLoading) {
+                CenteredCircularProgressIndicator()
+            } else {
                 ReminderSearchContent(
                     reminders = uiState.searchReminders,
                     searchQuery = uiState.searchQuery,
@@ -120,17 +124,19 @@ fun ReminderSearchContent(
 @Composable
 @Preview(name = "Light Mode")
 @Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
-private fun ReminderListPreview(
+private fun ReminderSearchPreview(
     @PreviewParameter(ReminderListProvider::class) reminders: ImmutableList<Reminder>
 ) {
-    ReminderSearchScreen(
-        uiState = ReminderSearchUiState(
-            searchReminders = reminders,
-            searchQuery = "Search query"
-        ),
-        onNavigateUp = {},
-        onSearchQueryChange = {},
-        onNavigateDetails = {},
-        onCompleteReminder = {}
-    )
+    AppTheme {
+        ReminderSearchScreen(
+            uiState = ReminderSearchUiState(
+                searchReminders = reminders,
+                searchQuery = "Search query",
+            ),
+            onNavigateUp = {},
+            onSearchQueryChange = {},
+            onNavigateDetails = {},
+            onCompleteReminder = {}
+        )
+    }
 }
