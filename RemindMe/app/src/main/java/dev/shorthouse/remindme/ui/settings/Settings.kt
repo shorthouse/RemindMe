@@ -41,6 +41,7 @@ import dev.shorthouse.remindme.BuildConfig
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.data.protodatastore.ThemeStyle
 import dev.shorthouse.remindme.ui.component.dialog.RemindMeAlertDialog
+import dev.shorthouse.remindme.ui.component.progressindicator.CenteredCircularProgressIndicator
 import dev.shorthouse.remindme.ui.component.topappbar.RemindMeTopAppBar
 import dev.shorthouse.remindme.ui.theme.AppTheme
 
@@ -81,7 +82,9 @@ fun SettingsScreen(
             )
         },
         content = { scaffoldPadding ->
-            if (!uiState.isLoading) {
+            if (uiState.isLoading) {
+                CenteredCircularProgressIndicator()
+            } else {
                 SettingsContent(
                     themeStyle = uiState.themeStyle,
                     onThemeStyleChange = { onHandleEvent(SettingsEvent.Theme(it)) },
