@@ -14,17 +14,17 @@ import dev.shorthouse.remindme.domain.userpreferences.GetUserPreferencesFlowUseC
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.model.RepeatInterval
 import dev.shorthouse.remindme.ui.navArgs
+import java.time.LocalDate
+import java.time.LocalTime
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.time.LocalDate
-import java.time.LocalTime
-import java.time.ZoneId
-import java.time.ZonedDateTime
-import javax.inject.Inject
 
 @HiltViewModel
 class ReminderAddEditViewModel @Inject constructor(
@@ -193,7 +193,7 @@ class ReminderAddEditViewModel @Inject constructor(
 
     private fun isReminderValid(reminder: Reminder): Boolean {
         return reminder.name.isNotBlank() &&
-                reminder.startDateTime.isAfter(ZonedDateTime.now()) &&
-                reminder.validated() != _uiState.value.initialReminder.validated()
+            reminder.startDateTime.isAfter(ZonedDateTime.now()) &&
+            reminder.validated() != _uiState.value.initialReminder.validated()
     }
 }
