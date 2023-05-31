@@ -35,6 +35,7 @@ import dev.shorthouse.remindme.ui.addedit.ReminderAddEditEvent
 import dev.shorthouse.remindme.ui.addedit.ReminderAddEditScreenNavArgs
 import dev.shorthouse.remindme.ui.addedit.ReminderAddEditUiState
 import dev.shorthouse.remindme.ui.addedit.ReminderAddEditViewModel
+import dev.shorthouse.remindme.ui.component.progressindicator.CenteredCircularProgressIndicator
 import dev.shorthouse.remindme.ui.component.topappbar.RemindMeTopAppBar
 import dev.shorthouse.remindme.ui.previewprovider.DefaultReminderProvider
 import dev.shorthouse.remindme.ui.theme.AppTheme
@@ -70,7 +71,9 @@ fun ReminderDetailsScreen(
             )
         },
         content = { scaffoldPadding ->
-            if (!uiState.isLoading) {
+            if (uiState.isLoading) {
+                CenteredCircularProgressIndicator()
+            } else {
                 ReminderAddEditContent(
                     reminder = uiState.reminder,
                     isReminderValid = uiState.isReminderValid,
