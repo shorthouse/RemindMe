@@ -4,6 +4,7 @@ import android.content.res.Configuration
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SelectableDates
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
@@ -28,7 +29,22 @@ fun ReminderDatePicker(
     modifier: Modifier = Modifier
 ) {
     val datePickerState = rememberDatePickerState(
-        initialSelectedDateMillis = localDateToEpochMillis(initialDate)
+        initialSelectedDateMillis = localDateToEpochMillis(initialDate),
+        selectableDates = object : SelectableDates {
+            override fun isSelectableDate(utcTimeMillis: Long): Boolean {
+                val day = Instant.ofEpochMilli(utcTimeMillis)
+                    .atZone(ZoneId.of("UTC"))
+                    .withZoneSameInstant(ZoneId.systemDefault())
+
+                val yesterday = ZonedDateTime.now().minusDays(1)
+
+                return day.isAfter(yesterday)
+            }
+
+            override fun isSelectableYear(year: Int): Boolean {
+                return year >= LocalDate.now().year
+            }
+        }
     )
 
     DatePickerDialog(
@@ -53,15 +69,6 @@ fun ReminderDatePicker(
     ) {
         DatePicker(
             state = datePickerState,
-            dateValidator = { utcMillis ->
-                val day = Instant.ofEpochMilli(utcMillis)
-                    .atZone(ZoneId.of("UTC"))
-                    .withZoneSameInstant(ZoneId.systemDefault())
-
-                val yesterday = ZonedDateTime.now().minusDays(1)
-
-                day.isAfter(yesterday)
-            },
             showModeToggle = false
         )
     }
