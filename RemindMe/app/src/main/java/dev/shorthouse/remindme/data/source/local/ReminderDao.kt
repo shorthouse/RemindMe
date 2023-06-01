@@ -16,7 +16,7 @@ interface ReminderDao {
     fun getReminder(id: Long): Flow<Reminder>
 
     @Query("SELECT * FROM reminder WHERE id = :id")
-    suspend fun getReminderOneShot(id: Long): Reminder
+    suspend fun getReminderOneShot(id: Long): Reminder?
 
     @Query("SELECT * FROM reminder")
     fun getReminders(): Flow<List<Reminder>>
