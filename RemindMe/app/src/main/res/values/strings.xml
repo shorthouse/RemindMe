@@ -105,4 +105,7 @@
     <!-- Test tags -->
     <string name="test_tag_text_field_repeat_amount">Test Tag Text Field Repeat Amount</string>
     <string name="test_tag_reminder_list_lazy_column">test_tag_reminder_list_lazy_column</string>
+    <string name="error_loading_reminders">Error loading reminders</string>
+    <string name="error_loading_reminder_details">Error loading reminder details</string>
+    <string name="error_loading_user_preferences">Error loading user preferences</string>
 </resources>
