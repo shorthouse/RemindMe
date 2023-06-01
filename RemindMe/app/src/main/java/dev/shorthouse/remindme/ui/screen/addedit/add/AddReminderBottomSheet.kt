@@ -1,4 +1,4 @@
-package dev.shorthouse.remindme.ui.addedit.add
+package dev.shorthouse.remindme.ui.screen.addedit.add
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.imePadding
@@ -16,11 +16,11 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.shorthouse.remindme.model.Reminder
-import dev.shorthouse.remindme.ui.addedit.ReminderAddEditContent
-import dev.shorthouse.remindme.ui.addedit.ReminderAddEditEvent
-import dev.shorthouse.remindme.ui.addedit.ReminderAddEditUiState
-import dev.shorthouse.remindme.ui.addedit.ReminderAddEditViewModel
 import dev.shorthouse.remindme.ui.previewprovider.EmptyReminderProvider
+import dev.shorthouse.remindme.ui.screen.addedit.ReminderAddEditContent
+import dev.shorthouse.remindme.ui.screen.addedit.ReminderAddEditEvent
+import dev.shorthouse.remindme.ui.screen.addedit.ReminderAddEditUiState
+import dev.shorthouse.remindme.ui.screen.addedit.ReminderAddEditViewModel
 import dev.shorthouse.remindme.ui.theme.AppTheme
 import dev.shorthouse.remindme.util.disableBottomSheetSwipe
 

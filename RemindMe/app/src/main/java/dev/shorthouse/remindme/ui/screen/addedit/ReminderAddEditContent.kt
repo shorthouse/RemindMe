@@ -1,4 +1,4 @@
-package dev.shorthouse.remindme.ui.addedit
+package dev.shorthouse.remindme.ui.screen.addedit
 
 import android.content.res.Configuration
 import androidx.compose.foundation.clickable

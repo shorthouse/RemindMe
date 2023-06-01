@@ -1,4 +1,4 @@
-package dev.shorthouse.remindme.ui.list
+package dev.shorthouse.remindme.ui.screen.list
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
@@ -43,9 +43,9 @@ import dev.shorthouse.remindme.ui.theme.AppTheme
 import dev.shorthouse.remindme.ui.theme.Blue
 import dev.shorthouse.remindme.ui.theme.Green
 import dev.shorthouse.remindme.ui.theme.Red
+import kotlin.time.Duration.Companion.milliseconds
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
 fun ReminderCard(

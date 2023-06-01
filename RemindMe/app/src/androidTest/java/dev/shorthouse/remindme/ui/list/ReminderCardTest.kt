@@ -9,13 +9,14 @@ import dagger.hilt.android.testing.HiltAndroidTest
 import dev.shorthouse.remindme.HiltTestActivity
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.model.RepeatInterval
+import dev.shorthouse.remindme.ui.screen.list.ReminderCard
 import dev.shorthouse.remindme.ui.theme.AppTheme
 import dev.shorthouse.remindme.util.ReminderTestUtil
+import java.time.ZonedDateTime
+import java.time.temporal.ChronoUnit
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import java.time.ZonedDateTime
-import java.time.temporal.ChronoUnit
 
 @HiltAndroidTest
 class ReminderCardTest {
