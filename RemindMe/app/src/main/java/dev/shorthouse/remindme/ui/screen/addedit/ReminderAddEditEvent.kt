@@ -1,4 +1,4 @@
-package dev.shorthouse.remindme.ui.addedit
+package dev.shorthouse.remindme.ui.screen.addedit
 
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.model.RepeatInterval
@@ -16,4 +16,5 @@ sealed interface ReminderAddEditEvent {
     data class UpdateNotification(val isNotificationSent: Boolean) : ReminderAddEditEvent
     data class UpdateRepeatInterval(val repeatInterval: RepeatInterval?) : ReminderAddEditEvent
     data class UpdateNotes(val notes: String) : ReminderAddEditEvent
+    object RemoveSnackbarMessage : ReminderAddEditEvent
 }
