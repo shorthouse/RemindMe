@@ -1,4 +1,4 @@
-package dev.shorthouse.remindme.ui.list
+package dev.shorthouse.remindme.ui.screen.list
 
 import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibility
@@ -57,17 +57,18 @@ import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.data.protodatastore.ReminderFilter
 import dev.shorthouse.remindme.data.protodatastore.ReminderSort
 import dev.shorthouse.remindme.model.Reminder
-import dev.shorthouse.remindme.ui.addedit.add.ReminderAddBottomSheet
 import dev.shorthouse.remindme.ui.component.dialog.NotificationPermissionRequester
 import dev.shorthouse.remindme.ui.component.dialog.ReminderSortDialog
 import dev.shorthouse.remindme.ui.component.emptystate.EmptyStateCompletedReminders
 import dev.shorthouse.remindme.ui.component.emptystate.EmptyStateOverdueReminders
 import dev.shorthouse.remindme.ui.component.emptystate.EmptyStateUpcomingReminders
+import dev.shorthouse.remindme.ui.component.progressindicator.CenteredCircularProgressIndicator
 import dev.shorthouse.remindme.ui.component.topappbar.RemindMeTopAppBar
-import dev.shorthouse.remindme.ui.destinations.ReminderDetailsScreenDestination
-import dev.shorthouse.remindme.ui.destinations.ReminderSearchScreenDestination
-import dev.shorthouse.remindme.ui.destinations.SettingsScreenDestination
 import dev.shorthouse.remindme.ui.previewprovider.ReminderListProvider
+import dev.shorthouse.remindme.ui.screen.addedit.add.ReminderAddBottomSheet
+import dev.shorthouse.remindme.ui.screen.destinations.ReminderDetailsScreenDestination
+import dev.shorthouse.remindme.ui.screen.destinations.ReminderSearchScreenDestination
+import dev.shorthouse.remindme.ui.screen.destinations.SettingsScreenDestination
 import dev.shorthouse.remindme.ui.theme.AppTheme
 import kotlinx.collections.immutable.ImmutableList
 
@@ -110,7 +111,9 @@ fun ReminderListScreen(
             )
         },
         content = { scaffoldPadding ->
-            if (!uiState.isLoading) {
+            if (uiState.isLoading) {
+                CenteredCircularProgressIndicator()
+            } else {
                 ReminderListContent(
                     reminders = uiState.reminders,
                     reminderFilter = uiState.reminderFilter,
@@ -129,7 +132,7 @@ fun ReminderListScreen(
         },
         floatingActionButton = {
             AnimatedVisibility(
-                visible = !uiState.isAddReminderSheetShown,
+                visible = !uiState.isAddReminderSheetShown && !uiState.isLoading,
                 enter = scaleIn(),
                 exit = scaleOut()
             ) {
