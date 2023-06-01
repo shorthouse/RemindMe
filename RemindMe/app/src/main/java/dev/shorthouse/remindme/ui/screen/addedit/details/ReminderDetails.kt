@@ -1,4 +1,4 @@
-package dev.shorthouse.remindme.ui.addedit.details
+package dev.shorthouse.remindme.ui.screen.addedit.details
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Box
@@ -13,8 +13,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -30,14 +34,15 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.model.Reminder
-import dev.shorthouse.remindme.ui.addedit.ReminderAddEditContent
-import dev.shorthouse.remindme.ui.addedit.ReminderAddEditEvent
-import dev.shorthouse.remindme.ui.addedit.ReminderAddEditScreenNavArgs
-import dev.shorthouse.remindme.ui.addedit.ReminderAddEditUiState
-import dev.shorthouse.remindme.ui.addedit.ReminderAddEditViewModel
 import dev.shorthouse.remindme.ui.component.progressindicator.CenteredCircularProgressIndicator
+import dev.shorthouse.remindme.ui.component.snackbar.RemindMeSnackbar
 import dev.shorthouse.remindme.ui.component.topappbar.RemindMeTopAppBar
 import dev.shorthouse.remindme.ui.previewprovider.DefaultReminderProvider
+import dev.shorthouse.remindme.ui.screen.addedit.ReminderAddEditContent
+import dev.shorthouse.remindme.ui.screen.addedit.ReminderAddEditEvent
+import dev.shorthouse.remindme.ui.screen.addedit.ReminderAddEditScreenNavArgs
+import dev.shorthouse.remindme.ui.screen.addedit.ReminderAddEditUiState
+import dev.shorthouse.remindme.ui.screen.addedit.ReminderAddEditViewModel
 import dev.shorthouse.remindme.ui.theme.AppTheme
 
 @Composable
@@ -62,7 +67,14 @@ fun ReminderDetailsScreen(
     onNavigateUp: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val snackbarHostState = remember { SnackbarHostState() }
+
     Scaffold(
+        snackbarHost = {
+            SnackbarHost(snackbarHostState) { snackbarData ->
+                RemindMeSnackbar(snackbarData = snackbarData)
+            }
+        },
         topBar = {
             ReminderDetailsTopBar(
                 reminder = uiState.reminder,
@@ -87,6 +99,19 @@ fun ReminderDetailsScreen(
         },
         modifier = modifier
     )
+
+    uiState.snackbarMessage?.let { message ->
+        val snackbarText = stringResource(message.messageId)
+
+        LaunchedEffect(snackbarHostState, snackbarText) {
+            snackbarHostState.showSnackbar(
+                message = snackbarText,
+                duration = SnackbarDuration.Short
+            )
+
+            onHandleEvent(ReminderAddEditEvent.RemoveSnackbarMessage)
+        }
+    }
 }
 
 @Composable
