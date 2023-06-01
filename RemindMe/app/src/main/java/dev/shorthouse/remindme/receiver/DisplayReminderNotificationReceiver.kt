@@ -15,6 +15,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import dagger.hilt.android.AndroidEntryPoint
 import dev.shorthouse.remindme.R
+import dev.shorthouse.remindme.data.Result
 import dev.shorthouse.remindme.data.source.local.ReminderRepository
 import dev.shorthouse.remindme.di.IoDispatcher
 import dev.shorthouse.remindme.model.Reminder
@@ -56,14 +57,19 @@ class DisplayReminderNotificationReceiver : BroadcastReceiver() {
         if (reminderId == -1L) return
 
         CoroutineScope(ioDispatcher).launch {
-            val reminder = reminderRepository.getReminderOneShot(reminderId)
+            val result = reminderRepository.getReminderOneShot(reminderId)
 
-            val reminderNotification = createReminderNotification(reminder, context)
+            if (result is Result.Success) {
+                val reminderNotification = createReminderNotification(result.data, context)
 
-            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS)
-                == PackageManager.PERMISSION_GRANTED
-            ) {
-                notificationManager.notify(reminderId.toInt(), reminderNotification)
+                if (ActivityCompat.checkSelfPermission(
+                        context,
+                        Manifest.permission.POST_NOTIFICATIONS
+                    )
+                    == PackageManager.PERMISSION_GRANTED
+                ) {
+                    notificationManager.notify(reminderId.toInt(), reminderNotification)
+                }
             }
         }
     }
