@@ -3,9 +3,11 @@ package dev.shorthouse.remindme.ui.screen.search
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.domain.reminder.CompleteReminderUseCase
 import dev.shorthouse.remindme.domain.reminder.GetRemindersFlowUseCase
 import dev.shorthouse.remindme.model.Reminder
+import dev.shorthouse.remindme.util.SnackbarMessage
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -59,5 +61,17 @@ class ReminderSearchViewModel @Inject constructor(
         viewModelScope.launch {
             completeReminderUseCase(reminder)
         }
+
+        _uiState.update {
+            it.copy(
+                snackbarMessage = SnackbarMessage(
+                    messageId = R.string.completed_reminder
+                )
+            )
+        }
+    }
+
+    fun handleRemoveSnackbarMessage() {
+        _uiState.update { it.copy(snackbarMessage = null) }
     }
 }
