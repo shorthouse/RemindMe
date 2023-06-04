@@ -1,4 +1,4 @@
-package dev.shorthouse.remindme.ui.list
+package dev.shorthouse.remindme.ui.screen.list
 
 import dev.shorthouse.remindme.data.protodatastore.ReminderFilter
 import dev.shorthouse.remindme.data.protodatastore.ReminderSort
