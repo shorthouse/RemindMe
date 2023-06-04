@@ -8,10 +8,10 @@ import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.data.Result
 import dev.shorthouse.remindme.domain.reminder.CompleteReminderUseCase
 import dev.shorthouse.remindme.domain.reminder.GetReminderUseCase
-import javax.inject.Inject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class NotificationActionDoneReceiver : BroadcastReceiver() {
