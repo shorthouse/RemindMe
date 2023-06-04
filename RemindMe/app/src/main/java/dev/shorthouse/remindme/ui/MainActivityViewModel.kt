@@ -3,9 +3,7 @@ package dev.shorthouse.remindme.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.shorthouse.remindme.di.IoDispatcher
 import dev.shorthouse.remindme.domain.userpreferences.GetUserPreferencesFlowUseCase
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -15,8 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
-    private val getUserPreferencesFlowUseCase: GetUserPreferencesFlowUseCase,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+    private val getUserPreferencesFlowUseCase: GetUserPreferencesFlowUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(MainActivityUiState())
 
