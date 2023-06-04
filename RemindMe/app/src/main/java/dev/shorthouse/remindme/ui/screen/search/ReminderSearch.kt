@@ -1,4 +1,4 @@
-package dev.shorthouse.remindme.ui.search
+package dev.shorthouse.remindme.ui.screen.search
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.PaddingValues
@@ -20,9 +20,9 @@ import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.ui.component.emptystate.EmptyStateSearchReminders
 import dev.shorthouse.remindme.ui.component.progressindicator.CenteredCircularProgressIndicator
 import dev.shorthouse.remindme.ui.component.searchbar.RemindMeSearchBar
-import dev.shorthouse.remindme.ui.destinations.ReminderDetailsScreenDestination
-import dev.shorthouse.remindme.ui.list.ReminderList
 import dev.shorthouse.remindme.ui.previewprovider.ReminderListProvider
+import dev.shorthouse.remindme.ui.screen.destinations.ReminderDetailsScreenDestination
+import dev.shorthouse.remindme.ui.screen.list.ReminderList
 import dev.shorthouse.remindme.ui.theme.AppTheme
 import kotlinx.collections.immutable.ImmutableList
 
@@ -131,7 +131,7 @@ private fun ReminderSearchPreview(
         ReminderSearchScreen(
             uiState = ReminderSearchUiState(
                 searchReminders = reminders,
-                searchQuery = "Search query",
+                searchQuery = "Search query"
             ),
             onNavigateUp = {},
             onSearchQueryChange = {},

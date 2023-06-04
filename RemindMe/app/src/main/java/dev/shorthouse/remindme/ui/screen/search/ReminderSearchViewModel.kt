@@ -1,4 +1,4 @@
-package dev.shorthouse.remindme.ui.search
+package dev.shorthouse.remindme.ui.screen.search
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
