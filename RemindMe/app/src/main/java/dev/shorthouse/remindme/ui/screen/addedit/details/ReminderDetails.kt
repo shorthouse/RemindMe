@@ -70,11 +70,6 @@ fun ReminderDetailsScreen(
     val snackbarHostState = remember { SnackbarHostState() }
 
     Scaffold(
-        snackbarHost = {
-            SnackbarHost(snackbarHostState) { snackbarData ->
-                RemindMeSnackbar(snackbarData = snackbarData)
-            }
-        },
         topBar = {
             ReminderDetailsTopBar(
                 reminder = uiState.reminder,
@@ -95,6 +90,11 @@ fun ReminderDetailsScreen(
                         .fillMaxSize()
                         .padding(scaffoldPadding)
                 )
+            }
+        },
+        snackbarHost = {
+            SnackbarHost(snackbarHostState) { snackbarData ->
+                RemindMeSnackbar(snackbarData = snackbarData)
             }
         },
         modifier = modifier
