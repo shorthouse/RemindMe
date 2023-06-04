@@ -117,7 +117,7 @@ class ReminderAddEditViewModel @Inject constructor(
                     is Result.Error -> {
                         it.copy(
                             snackbarMessage = SnackbarMessage(
-                                R.string.error_loading_reminder_details
+                                messageId = R.string.error_loading_reminder_details
                             ),
                             isLoading = true
                         )
