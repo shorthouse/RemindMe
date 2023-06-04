@@ -10,4 +10,5 @@ sealed interface ReminderListEvent {
     data class CompleteReminder(val reminder: Reminder) : ReminderListEvent
     object ShowAddReminderSheet : ReminderListEvent
     object HideAddReminderSheet : ReminderListEvent
+    object RemoveSnackbarMessage : ReminderListEvent
 }

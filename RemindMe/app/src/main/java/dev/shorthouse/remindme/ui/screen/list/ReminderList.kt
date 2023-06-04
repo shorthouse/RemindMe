@@ -35,8 +35,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -51,6 +55,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.data.protodatastore.ReminderFilter
@@ -62,6 +67,7 @@ import dev.shorthouse.remindme.ui.component.emptystate.EmptyStateCompletedRemind
 import dev.shorthouse.remindme.ui.component.emptystate.EmptyStateOverdueReminders
 import dev.shorthouse.remindme.ui.component.emptystate.EmptyStateUpcomingReminders
 import dev.shorthouse.remindme.ui.component.progressindicator.CenteredCircularProgressIndicator
+import dev.shorthouse.remindme.ui.component.snackbar.RemindMeSnackbar
 import dev.shorthouse.remindme.ui.component.topappbar.RemindMeTopAppBar
 import dev.shorthouse.remindme.ui.previewprovider.ReminderListProvider
 import dev.shorthouse.remindme.ui.screen.addedit.add.ReminderAddBottomSheet
@@ -100,6 +106,8 @@ fun ReminderListScreen(
     onNavigateDetails: (Reminder) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val snackbarHostState = remember { SnackbarHostState() }
+
     Scaffold(
         topBar = {
             ReminderListTopBar(
@@ -148,8 +156,26 @@ fun ReminderListScreen(
                 }
             }
         },
+        snackbarHost = {
+            SnackbarHost(snackbarHostState) { snackbarData ->
+                RemindMeSnackbar(snackbarData = snackbarData)
+            }
+        },
         modifier = modifier
     )
+
+    uiState.snackbarMessage?.let { message ->
+        val snackbarText = stringResource(message.messageId)
+
+        LaunchedEffect(snackbarHostState, snackbarText) {
+            snackbarHostState.showSnackbar(
+                message = snackbarText,
+                duration = SnackbarDuration.Short
+            )
+
+            onHandleEvent(ReminderListEvent.RemoveSnackbarMessage)
+        }
+    }
 }
 
 @Composable

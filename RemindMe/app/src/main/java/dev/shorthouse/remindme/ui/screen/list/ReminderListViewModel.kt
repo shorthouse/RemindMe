@@ -3,6 +3,7 @@ package dev.shorthouse.remindme.ui.screen.list
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.data.protodatastore.ReminderFilter
 import dev.shorthouse.remindme.data.protodatastore.ReminderSort
 import dev.shorthouse.remindme.domain.reminder.CompleteReminderUseCase
@@ -11,6 +12,7 @@ import dev.shorthouse.remindme.domain.userpreferences.GetUserPreferencesFlowUseC
 import dev.shorthouse.remindme.domain.userpreferences.UpdateReminderFilterUseCase
 import dev.shorthouse.remindme.domain.userpreferences.UpdateReminderSortOrderUseCase
 import dev.shorthouse.remindme.model.Reminder
+import dev.shorthouse.remindme.util.SnackbarMessage
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -91,6 +93,7 @@ class ReminderListViewModel @Inject constructor(
             is ReminderListEvent.CompleteReminder -> handleCompleteReminder(event.reminder)
             is ReminderListEvent.ShowAddReminderSheet -> handleShowAddReminderSheet()
             is ReminderListEvent.HideAddReminderSheet -> handleHideAddReminderSheet()
+            ReminderListEvent.RemoveSnackbarMessage -> handleRemoveSnackbarMessage()
         }
     }
 
@@ -110,6 +113,14 @@ class ReminderListViewModel @Inject constructor(
         viewModelScope.launch {
             completeReminderUseCase(reminder)
         }
+
+        _uiState.update {
+            it.copy(
+                snackbarMessage = SnackbarMessage(
+                    messageId = R.string.completed_reminder
+                )
+            )
+        }
     }
 
     private fun handleShowAddReminderSheet() {
@@ -118,5 +129,9 @@ class ReminderListViewModel @Inject constructor(
 
     private fun handleHideAddReminderSheet() {
         _uiState.update { it.copy(isAddReminderSheetShown = false) }
+    }
+
+    private fun handleRemoveSnackbarMessage() {
+        _uiState.update { it.copy(snackbarMessage = null) }
     }
 }
