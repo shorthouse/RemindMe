@@ -17,17 +17,17 @@ import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.model.RepeatInterval
 import dev.shorthouse.remindme.ui.screen.navArgs
 import dev.shorthouse.remindme.util.SnackbarMessage
-import java.time.LocalDate
-import java.time.LocalTime
-import java.time.ZoneId
-import java.time.ZonedDateTime
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.LocalTime
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import javax.inject.Inject
 
 @HiltViewModel
 class ReminderAddEditViewModel @Inject constructor(
@@ -54,7 +54,7 @@ class ReminderAddEditViewModel @Inject constructor(
         if (navArgs.reminderId == null) {
             setAddReminder()
         } else {
-            setEditReminder(10000L)
+            setEditReminder(navArgs.reminderId)
         }
     }
 
@@ -102,24 +102,24 @@ class ReminderAddEditViewModel @Inject constructor(
         _uiState.update { it.copy(isLoading = true) }
 
         viewModelScope.launch {
-            when (val result = getReminderUseCase(reminderId = reminderId)) {
-                is Result.Success -> {
-                    _uiState.update {
+            val result = getReminderUseCase(reminderId = reminderId)
+
+            _uiState.update {
+                when (result) {
+                    is Result.Success -> {
                         it.copy(
                             reminder = result.data,
                             initialReminder = result.data,
                             isLoading = false
                         )
                     }
-                }
 
-                is Result.Error -> {
-                    _uiState.update {
+                    is Result.Error -> {
                         it.copy(
                             snackbarMessage = SnackbarMessage(
                                 R.string.error_loading_reminder_details
                             ),
-                            isLoading = false
+                            isLoading = true
                         )
                     }
                 }
@@ -214,7 +214,7 @@ class ReminderAddEditViewModel @Inject constructor(
 
     private fun isReminderValid(reminder: Reminder): Boolean {
         return reminder.name.isNotBlank() &&
-            reminder.startDateTime.isAfter(ZonedDateTime.now()) &&
-            reminder.validated() != _uiState.value.initialReminder.validated()
+                reminder.startDateTime.isAfter(ZonedDateTime.now()) &&
+                reminder.validated() != _uiState.value.initialReminder.validated()
     }
 }
