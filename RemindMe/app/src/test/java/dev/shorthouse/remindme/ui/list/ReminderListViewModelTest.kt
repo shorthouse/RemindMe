@@ -16,6 +16,7 @@ import dev.shorthouse.remindme.domain.reminder.CompleteRepeatReminderOccurrenceU
 import dev.shorthouse.remindme.domain.reminder.CompleteRepeatReminderSeriesUseCase
 import dev.shorthouse.remindme.domain.reminder.DeleteReminderUseCase
 import dev.shorthouse.remindme.model.Reminder
+import dev.shorthouse.remindme.ui.screen.list.ReminderListViewModel
 import dev.shorthouse.remindme.ui.util.enums.ReminderAction
 import dev.shorthouse.remindme.util.ReminderTestUtil
 import io.mockk.mockk

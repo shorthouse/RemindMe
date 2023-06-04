@@ -5,15 +5,21 @@ import android.content.Context
 import android.content.Intent
 import dagger.hilt.android.AndroidEntryPoint
 import dev.shorthouse.remindme.R
+import dev.shorthouse.remindme.data.Result
+import dev.shorthouse.remindme.di.IoDispatcher
 import dev.shorthouse.remindme.domain.reminder.CompleteReminderUseCase
 import dev.shorthouse.remindme.domain.reminder.GetReminderUseCase
-import javax.inject.Inject
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class NotificationActionDoneReceiver : BroadcastReceiver() {
+
+    @Inject
+    @IoDispatcher
+    lateinit var ioDispatcher: CoroutineDispatcher
 
     @Inject
     lateinit var getReminderUseCase: GetReminderUseCase
@@ -29,10 +35,12 @@ class NotificationActionDoneReceiver : BroadcastReceiver() {
 
         if (reminderId == null || reminderId == -1L) return
 
-        CoroutineScope(SupervisorJob()).launch {
-            val reminder = getReminderUseCase(reminderId)
+        CoroutineScope(ioDispatcher).launch {
+            val result = getReminderUseCase(reminderId)
 
-            completeReminderUseCase(reminder)
+            if (result is Result.Success) {
+                completeReminderUseCase(result.data)
+            }
         }
     }
 }

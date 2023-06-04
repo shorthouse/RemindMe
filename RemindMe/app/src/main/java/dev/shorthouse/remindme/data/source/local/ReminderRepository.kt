@@ -1,11 +1,12 @@
 package dev.shorthouse.remindme.data.source.local
 
 import dev.shorthouse.remindme.data.ReminderDataSource
+import dev.shorthouse.remindme.data.Result
 import dev.shorthouse.remindme.model.Reminder
+import kotlinx.coroutines.flow.Flow
 import java.time.ZonedDateTime
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlinx.coroutines.flow.Flow
 
 @Singleton
 class ReminderRepository @Inject constructor(
@@ -15,8 +16,14 @@ class ReminderRepository @Inject constructor(
         return reminderLocalDataSource.getReminder(id)
     }
 
-    suspend fun getReminderOneShot(id: Long): Reminder {
-        return reminderLocalDataSource.getReminderOneShot(id)
+    suspend fun getReminderOneShot(id: Long): Result<Reminder> {
+        val reminder = reminderLocalDataSource.getReminderOneShot(id)
+
+        return if (reminder == null) {
+            Result.Error
+        } else {
+            Result.Success(reminder)
+        }
     }
 
     fun getReminders(): Flow<List<Reminder>> {

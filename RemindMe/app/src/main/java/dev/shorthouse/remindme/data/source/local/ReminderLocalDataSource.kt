@@ -13,7 +13,7 @@ class ReminderLocalDataSource @Inject constructor(
         return reminderDao.getReminder(id)
     }
 
-    override suspend fun getReminderOneShot(id: Long): Reminder {
+    override suspend fun getReminderOneShot(id: Long): Reminder? {
         return reminderDao.getReminderOneShot(id)
     }
 
