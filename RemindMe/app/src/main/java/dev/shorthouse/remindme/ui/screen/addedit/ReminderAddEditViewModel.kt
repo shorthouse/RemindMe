@@ -150,7 +150,7 @@ class ReminderAddEditViewModel @Inject constructor(
     }
 
     private fun resetState() {
-        this.onCleared()
+        _uiState.update { ReminderAddEditUiState() }
     }
 
     private fun updateReminder(updatedReminder: Reminder) {
