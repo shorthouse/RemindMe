@@ -14,7 +14,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,7 +34,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import dev.shorthouse.remindme.R
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.ui.component.progressindicator.CenteredCircularProgressIndicator
-import dev.shorthouse.remindme.ui.component.snackbar.RemindMeSnackbar
+import dev.shorthouse.remindme.ui.component.snackbar.RemindMeSnackbarHost
 import dev.shorthouse.remindme.ui.component.topappbar.RemindMeTopAppBar
 import dev.shorthouse.remindme.ui.previewprovider.DefaultReminderProvider
 import dev.shorthouse.remindme.ui.screen.addedit.ReminderAddEditContent
@@ -93,9 +92,7 @@ fun ReminderDetailsScreen(
             }
         },
         snackbarHost = {
-            SnackbarHost(snackbarHostState) { snackbarData ->
-                RemindMeSnackbar(snackbarData = snackbarData)
-            }
+            RemindMeSnackbarHost(snackbarHostState = snackbarHostState)
         },
         modifier = modifier
     )
