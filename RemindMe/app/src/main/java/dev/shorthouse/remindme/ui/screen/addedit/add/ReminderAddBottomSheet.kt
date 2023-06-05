@@ -15,7 +15,6 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.ramcosta.composedestinations.annotation.Destination
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.ui.previewprovider.EmptyReminderProvider
 import dev.shorthouse.remindme.ui.screen.addedit.ReminderAddEditContent
