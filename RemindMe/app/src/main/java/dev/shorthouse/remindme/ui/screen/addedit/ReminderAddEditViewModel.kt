@@ -1,5 +1,6 @@
 package dev.shorthouse.remindme.ui.screen.addedit
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -53,10 +54,8 @@ class ReminderAddEditViewModel @Inject constructor(
 
         val navArgs = savedStateHandle.navArgs<ReminderAddEditScreenNavArgs>()
 
-        if (navArgs.reminderId == null) {
-            setAddReminder()
-        } else {
-            setEditReminder(navArgs.reminderId)
+        navArgs.reminderId?.let {
+            setEditReminder(it)
         }
     }
 
@@ -79,7 +78,7 @@ class ReminderAddEditViewModel @Inject constructor(
         }
     }
 
-    private fun setAddReminder() {
+    fun setAddReminder() {
         getUserPreferencesFlowUseCase()
             .onEach { userPreferences ->
                 val initialReminder = _uiState.value.initialReminder.copy(

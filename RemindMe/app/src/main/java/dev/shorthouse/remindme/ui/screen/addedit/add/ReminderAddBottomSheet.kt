@@ -8,6 +8,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -35,10 +36,14 @@ fun ReminderAddBottomSheet(
         uiState = uiState,
         onHandleEvent = { viewModel.handleEvent(it) },
         onDismissRequest = {
-            viewModel.handleEvent(ReminderAddEditEvent.ResetState)
             onDismissSheet()
         }
     )
+
+    DisposableEffect(Unit) {
+        viewModel.setAddReminder()
+        onDispose { viewModel.handleEvent(ReminderAddEditEvent.ResetState) }
+    }
 }
 
 @Composable
