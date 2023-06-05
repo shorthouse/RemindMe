@@ -7,13 +7,13 @@ import dev.shorthouse.remindme.data.protodatastore.ThemeStyle
 import dev.shorthouse.remindme.domain.userpreferences.GetUserPreferencesFlowUseCase
 import dev.shorthouse.remindme.domain.userpreferences.UpdateNotificationDefaultUseCase
 import dev.shorthouse.remindme.domain.userpreferences.UpdateThemeStyleUseCase
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
@@ -41,24 +41,23 @@ class SettingsViewModel @Inject constructor(
                         isLoading = false
                     )
                 }
-            }
-            .launchIn(viewModelScope)
+            }.launchIn(viewModelScope)
     }
 
     fun handleEvent(event: SettingsEvent) {
         when (event) {
-            is SettingsEvent.Theme -> handleAppTheme(event.theme)
-            is SettingsEvent.NotificationDefault -> handleNotificationDefault(event.isDefaultOn)
+            is SettingsEvent.Theme -> updateAppTheme(event.theme)
+            is SettingsEvent.NotificationDefault -> updateNotificationDefault(event.isDefaultOn)
         }
     }
 
-    private fun handleAppTheme(themeStyle: ThemeStyle) {
+    private fun updateAppTheme(themeStyle: ThemeStyle) {
         viewModelScope.launch {
             updateThemeStyleUseCase(themeStyle = themeStyle)
         }
     }
 
-    private fun handleNotificationDefault(isDefaultOn: Boolean) {
+    private fun updateNotificationDefault(isDefaultOn: Boolean) {
         viewModelScope.launch {
             updateNotificationDefaultUseCase(isDefaultOn = isDefaultOn)
         }
