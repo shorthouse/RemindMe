@@ -51,9 +51,17 @@ class ReminderListViewModel @Inject constructor(
 
             val filteredReminders = reminders.filter {
                 when (userPreferences.reminderFilter) {
-                    ReminderFilter.UPCOMING -> !it.startDateTime.isBefore(now) && !it.isCompleted
-                    ReminderFilter.OVERDUE -> it.startDateTime.isBefore(now) && !it.isCompleted
-                    ReminderFilter.COMPLETED -> it.isCompleted
+                    ReminderFilter.UPCOMING -> {
+                        !it.startDateTime.isBefore(now) && !it.isCompleted
+                    }
+
+                    ReminderFilter.OVERDUE -> {
+                        it.startDateTime.isBefore(now) && !it.isCompleted
+                    }
+
+                    ReminderFilter.COMPLETED -> {
+                        it.isCompleted
+                    }
                 }
             }
 
@@ -88,22 +96,22 @@ class ReminderListViewModel @Inject constructor(
 
     fun handleEvent(event: ReminderListEvent) {
         when (event) {
-            is ReminderListEvent.Filter -> handleFilter(event.filter)
-            is ReminderListEvent.Sort -> handleSort(event.sortOrder)
+            is ReminderListEvent.UpdateFilter -> updateFilter(event.filter)
+            is ReminderListEvent.UpdateSortOrder -> updateSortOrder(event.sortOrder)
             is ReminderListEvent.CompleteReminder -> handleCompleteReminder(event.reminder)
             is ReminderListEvent.ShowAddReminderSheet -> handleShowAddReminderSheet()
             is ReminderListEvent.HideAddReminderSheet -> handleHideAddReminderSheet()
-            ReminderListEvent.RemoveSnackbarMessage -> handleRemoveSnackbarMessage()
+            is ReminderListEvent.RemoveSnackbarMessage -> handleRemoveSnackbarMessage()
         }
     }
 
-    private fun handleFilter(filter: ReminderFilter) {
+    private fun updateFilter(filter: ReminderFilter) {
         viewModelScope.launch {
             updateReminderFilterUseCase(filter = filter)
         }
     }
 
-    private fun handleSort(sortOrder: ReminderSort) {
+    private fun updateSortOrder(sortOrder: ReminderSort) {
         viewModelScope.launch {
             updateReminderSortOrderUseCase(sortOrder = sortOrder)
         }

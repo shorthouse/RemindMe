@@ -12,7 +12,6 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -34,25 +33,35 @@ class ReminderSearchViewModel @Inject constructor(
     }
 
     private fun initialiseUiState() {
+        _uiState.update { it.copy(isLoading = true) }
+
         val remindersFlow = getRemindersFlowUseCase()
         val searchQueryFlow = _searchQuery.asStateFlow()
 
-        combine(remindersFlow, searchQueryFlow) { reminders, searchQuery ->
-            val searchReminders = when {
-                searchQuery.isEmpty() -> emptyList()
-                else -> reminders.filter { it.name.contains(searchQuery, ignoreCase = true) }
-            }
+        viewModelScope.launch {
+            combine(remindersFlow, searchQueryFlow) { reminders, searchQuery ->
+                val searchReminders = when {
+                    searchQuery.isEmpty() -> emptyList()
+                    else -> reminders.filter { it.name.contains(searchQuery, ignoreCase = true) }
+                }
 
-            _uiState.value.copy(
-                searchReminders = searchReminders.toImmutableList(),
-                isLoading = false
-            )
+                _uiState.value.copy(
+                    searchReminders = searchReminders.toImmutableList(),
+                    isLoading = false
+                )
+            }
+                .onEach { _uiState.value = it }
         }
-            .onEach { _uiState.value = it }
-            .launchIn(viewModelScope)
     }
 
-    fun updateSearchQuery(query: String) {
+    fun handleEvent(event: ReminderSearchEvent) {
+        when (event) {
+            is ReminderSearchEvent.UpdateSearchQuery -> updateSearchQuery(event.query)
+            is ReminderSearchEvent.RemoveSnackbarMessage -> removeSnackbarMessage()
+        }
+    }
+
+    private fun updateSearchQuery(query: String) {
         _uiState.update { it.copy(searchQuery = query) }
         _searchQuery.value = query
     }
@@ -71,7 +80,7 @@ class ReminderSearchViewModel @Inject constructor(
         }
     }
 
-    fun handleRemoveSnackbarMessage() {
+    private fun removeSnackbarMessage() {
         _uiState.update { it.copy(snackbarMessage = null) }
     }
 }

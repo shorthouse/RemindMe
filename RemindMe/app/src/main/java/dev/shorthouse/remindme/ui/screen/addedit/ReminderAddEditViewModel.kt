@@ -1,5 +1,6 @@
 package dev.shorthouse.remindme.ui.screen.addedit
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -49,38 +50,35 @@ class ReminderAddEditViewModel @Inject constructor(
     }
 
     private fun initialiseUiState() {
+        _uiState.update { it.copy(isLoading = true) }
+
         val navArgs = savedStateHandle.navArgs<ReminderAddEditScreenNavArgs>()
 
-        if (navArgs.reminderId == null) {
-            setAddReminder()
-        } else {
-            setEditReminder(navArgs.reminderId)
+        navArgs.reminderId?.let {
+            setEditReminder(it)
         }
     }
 
     fun handleEvent(event: ReminderAddEditEvent) {
         when (event) {
-            is ReminderAddEditEvent.CompleteReminder -> handleCompleteReminder(event.reminder)
-            is ReminderAddEditEvent.DeleteReminder -> handleDeleteReminder(event.reminder)
-            is ReminderAddEditEvent.SaveReminder -> handleSaveReminder(event.reminder)
-            is ReminderAddEditEvent.ClearReminder -> handleClearReminder()
-            is ReminderAddEditEvent.UpdateName -> handleUpdateName(event.name)
-            is ReminderAddEditEvent.UpdateDate -> handleUpdateDate(event.date)
-            is ReminderAddEditEvent.UpdateTime -> handleUpdateTime(event.time)
-            is ReminderAddEditEvent.UpdateNotification ->
-                handleUpdateNotification(event.isNotificationSent)
+            is ReminderAddEditEvent.CompleteReminder -> completeReminder(event.reminder)
+            is ReminderAddEditEvent.DeleteReminder -> deleteReminder(event.reminder)
+            is ReminderAddEditEvent.SaveReminder -> saveReminder(event.reminder)
+            is ReminderAddEditEvent.ResetState -> resetState()
+            is ReminderAddEditEvent.UpdateName -> updateName(event.name)
+            is ReminderAddEditEvent.UpdateDate -> updateDate(event.date)
+            is ReminderAddEditEvent.UpdateTime -> updateTime(event.time)
+            is ReminderAddEditEvent.UpdateNotes -> updateNotes(event.notes)
+            is ReminderAddEditEvent.UpdateNotification -> updateNotification(event.notification)
+            is ReminderAddEditEvent.UpdateRepeatInterval -> updateRepeatInterval(
+                event.repeatInterval
+            )
 
-            is ReminderAddEditEvent.UpdateRepeatInterval ->
-                handleUpdateRepeatInterval(event.repeatInterval)
-
-            is ReminderAddEditEvent.UpdateNotes -> handleUpdateNotes(event.notes)
-            ReminderAddEditEvent.RemoveSnackbarMessage -> handleRemoveSnackbarMessage()
+            is ReminderAddEditEvent.RemoveSnackbarMessage -> removeSnackbarMessage()
         }
     }
 
-    private fun setAddReminder() {
-        _uiState.update { it.copy(isLoading = true) }
-
+    fun setAddReminder() {
         getUserPreferencesFlowUseCase()
             .onEach { userPreferences ->
                 val initialReminder = _uiState.value.initialReminder.copy(
@@ -94,13 +92,10 @@ class ReminderAddEditViewModel @Inject constructor(
                         isLoading = false
                     )
                 }
-            }
-            .launchIn(viewModelScope)
+            }.launchIn(viewModelScope)
     }
 
     private fun setEditReminder(reminderId: Long) {
-        _uiState.update { it.copy(isLoading = true) }
-
         viewModelScope.launch {
             val result = getReminderUseCase(reminderId = reminderId)
 
@@ -127,7 +122,7 @@ class ReminderAddEditViewModel @Inject constructor(
         }
     }
 
-    private fun handleCompleteReminder(reminder: Reminder) {
+    private fun completeReminder(reminder: Reminder) {
         viewModelScope.launch {
             if (reminder.isRepeatReminder) {
                 completeRepeatReminderSeriesUseCase(reminder)
@@ -137,13 +132,13 @@ class ReminderAddEditViewModel @Inject constructor(
         }
     }
 
-    private fun handleDeleteReminder(reminder: Reminder) {
+    private fun deleteReminder(reminder: Reminder) {
         viewModelScope.launch {
             deleteReminderUseCase(reminder)
         }
     }
 
-    private fun handleSaveReminder(reminder: Reminder) {
+    private fun saveReminder(reminder: Reminder) {
         viewModelScope.launch {
             if (reminder.id == 0L) {
                 addReminderUseCase(reminder.validated())
@@ -153,8 +148,8 @@ class ReminderAddEditViewModel @Inject constructor(
         }
     }
 
-    private fun handleClearReminder() {
-        _uiState.update { it.copy(reminder = Reminder()) }
+    private fun resetState() {
+        _uiState.update { ReminderAddEditUiState() }
     }
 
     private fun updateReminder(updatedReminder: Reminder) {
@@ -166,14 +161,14 @@ class ReminderAddEditViewModel @Inject constructor(
         }
     }
 
-    private fun handleUpdateName(name: String) {
+    private fun updateName(name: String) {
         if (name.length > 200) return
 
         val updatedReminder = _uiState.value.reminder.copy(name = name)
         updateReminder(updatedReminder)
     }
 
-    private fun handleUpdateDate(date: LocalDate) {
+    private fun updateDate(date: LocalDate) {
         val updatedStartDateTime = date
             .atTime(_uiState.value.reminder.copy().startDateTime.toLocalTime())
             .atZone(ZoneId.systemDefault())
@@ -182,7 +177,7 @@ class ReminderAddEditViewModel @Inject constructor(
         updateReminder(updatedReminder)
     }
 
-    private fun handleUpdateTime(time: LocalTime) {
+    private fun updateTime(time: LocalTime) {
         val updatedStartDateTime = time
             .atDate(_uiState.value.reminder.copy().startDateTime.toLocalDate())
             .atZone(ZoneId.systemDefault())
@@ -191,24 +186,24 @@ class ReminderAddEditViewModel @Inject constructor(
         updateReminder(updatedReminder)
     }
 
-    private fun handleUpdateNotification(isNotificationSent: Boolean) {
+    private fun updateNotification(isNotificationSent: Boolean) {
         val updatedReminder = _uiState.value.reminder.copy(isNotificationSent = isNotificationSent)
         updateReminder(updatedReminder)
     }
 
-    private fun handleUpdateRepeatInterval(repeatInterval: RepeatInterval?) {
+    private fun updateRepeatInterval(repeatInterval: RepeatInterval?) {
         val updatedReminder = _uiState.value.reminder.copy(repeatInterval = repeatInterval)
         updateReminder(updatedReminder)
     }
 
-    private fun handleUpdateNotes(notes: String) {
+    private fun updateNotes(notes: String) {
         if (notes.length > 2000) return
 
         val updatedReminder = _uiState.value.reminder.copy(notes = notes)
         updateReminder(updatedReminder)
     }
 
-    private fun handleRemoveSnackbarMessage() {
+    private fun removeSnackbarMessage() {
         _uiState.update { it.copy(snackbarMessage = null) }
     }
 
