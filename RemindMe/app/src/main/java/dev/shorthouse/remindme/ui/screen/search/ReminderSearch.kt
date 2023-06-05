@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -26,7 +25,7 @@ import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.ui.component.emptystate.EmptyStateSearchReminders
 import dev.shorthouse.remindme.ui.component.progressindicator.CenteredCircularProgressIndicator
 import dev.shorthouse.remindme.ui.component.searchbar.RemindMeSearchBar
-import dev.shorthouse.remindme.ui.component.snackbar.RemindMeSnackbar
+import dev.shorthouse.remindme.ui.component.snackbar.RemindMeSnackbarHost
 import dev.shorthouse.remindme.ui.previewprovider.ReminderListProvider
 import dev.shorthouse.remindme.ui.screen.destinations.ReminderDetailsScreenDestination
 import dev.shorthouse.remindme.ui.screen.list.ReminderList
@@ -45,12 +44,11 @@ fun ReminderSearchScreen(
 
     ReminderSearchScreen(
         uiState = uiState,
+        onHandleEvent = { viewModel.handleEvent(it) },
         onNavigateUp = {
             keyboardController?.hide()
             navigator.navigateUp()
         },
-        onSearchQueryChange = { viewModel.updateSearchQuery(it) },
-        onRemoveSnackbarMessage = { viewModel.handleRemoveSnackbarMessage() },
         onNavigateDetails = {
             navigator.popBackStack()
             navigator.navigate(ReminderDetailsScreenDestination(it.id))
@@ -62,9 +60,8 @@ fun ReminderSearchScreen(
 @Composable
 fun ReminderSearchScreen(
     uiState: ReminderSearchUiState,
+    onHandleEvent: (ReminderSearchEvent) -> Unit,
     onNavigateUp: () -> Unit,
-    onSearchQueryChange: (String) -> Unit,
-    onRemoveSnackbarMessage: () -> Unit,
     onNavigateDetails: (Reminder) -> Unit,
     onCompleteReminder: (Reminder) -> Unit,
     modifier: Modifier = Modifier
@@ -75,7 +72,7 @@ fun ReminderSearchScreen(
         topBar = {
             ReminderSearchTopBar(
                 searchQuery = uiState.searchQuery,
-                onSearchQueryChange = onSearchQueryChange,
+                onSearchQueryChange = { onHandleEvent(ReminderSearchEvent.UpdateSearchQuery(it)) },
                 onNavigateUp = onNavigateUp
             )
         },
@@ -93,9 +90,7 @@ fun ReminderSearchScreen(
             }
         },
         snackbarHost = {
-            SnackbarHost(snackbarHostState) { snackbarData ->
-                RemindMeSnackbar(snackbarData = snackbarData)
-            }
+            RemindMeSnackbarHost(snackbarHostState = snackbarHostState)
         },
         modifier = modifier
     )
@@ -109,7 +104,7 @@ fun ReminderSearchScreen(
                 duration = SnackbarDuration.Short
             )
 
-            onRemoveSnackbarMessage()
+            onHandleEvent(ReminderSearchEvent.RemoveSnackbarMessage)
         }
     }
 }
@@ -162,9 +157,8 @@ private fun ReminderSearchPreview(
                 searchReminders = reminders,
                 searchQuery = "Search query"
             ),
+            onHandleEvent = {},
             onNavigateUp = {},
-            onSearchQueryChange = {},
-            onRemoveSnackbarMessage = {},
             onNavigateDetails = {},
             onCompleteReminder = {}
         )
