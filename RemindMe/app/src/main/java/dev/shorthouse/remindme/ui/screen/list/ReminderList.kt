@@ -36,7 +36,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -67,7 +66,7 @@ import dev.shorthouse.remindme.ui.component.emptystate.EmptyStateCompletedRemind
 import dev.shorthouse.remindme.ui.component.emptystate.EmptyStateOverdueReminders
 import dev.shorthouse.remindme.ui.component.emptystate.EmptyStateUpcomingReminders
 import dev.shorthouse.remindme.ui.component.progressindicator.CenteredCircularProgressIndicator
-import dev.shorthouse.remindme.ui.component.snackbar.RemindMeSnackbar
+import dev.shorthouse.remindme.ui.component.snackbar.RemindMeSnackbarHost
 import dev.shorthouse.remindme.ui.component.topappbar.RemindMeTopAppBar
 import dev.shorthouse.remindme.ui.previewprovider.ReminderListProvider
 import dev.shorthouse.remindme.ui.screen.addedit.add.ReminderAddBottomSheet
@@ -112,7 +111,7 @@ fun ReminderListScreen(
         topBar = {
             ReminderListTopBar(
                 reminderSortOrder = uiState.reminderSortOrder,
-                onApplySort = { onHandleEvent(ReminderListEvent.Sort(it)) },
+                onApplySort = { onHandleEvent(ReminderListEvent.UpdateSortOrder(it)) },
                 onNavigateSearch = onNavigateSearch,
                 onNavigateSettings = onNavigateSettings
             )
@@ -124,7 +123,7 @@ fun ReminderListScreen(
                 ReminderListContent(
                     reminders = uiState.reminders,
                     reminderFilter = uiState.reminderFilter,
-                    onApplyFilter = { onHandleEvent(ReminderListEvent.Filter(it)) },
+                    onApplyFilter = { onHandleEvent(ReminderListEvent.UpdateFilter(it)) },
                     onNavigateDetails = onNavigateDetails,
                     onCompleteReminder = { onHandleEvent(ReminderListEvent.CompleteReminder(it)) },
                     modifier = Modifier.padding(scaffoldPadding)
@@ -157,9 +156,7 @@ fun ReminderListScreen(
             }
         },
         snackbarHost = {
-            SnackbarHost(snackbarHostState) { snackbarData ->
-                RemindMeSnackbar(snackbarData = snackbarData)
-            }
+            RemindMeSnackbarHost(snackbarHostState = snackbarHostState)
         },
         modifier = modifier
     )
