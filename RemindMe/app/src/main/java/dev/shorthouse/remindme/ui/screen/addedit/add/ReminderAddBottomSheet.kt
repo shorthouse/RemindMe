@@ -1,6 +1,8 @@
 package dev.shorthouse.remindme.ui.screen.addedit.add
 
 import android.content.res.Configuration
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -35,9 +37,7 @@ fun ReminderAddBottomSheet(
     ReminderAddBottomSheet(
         uiState = uiState,
         onHandleEvent = { viewModel.handleEvent(it) },
-        onDismissRequest = {
-            onDismissSheet()
-        }
+        onDismissRequest = onDismissSheet
     )
 
     DisposableEffect(Unit) {
@@ -73,9 +73,7 @@ private fun ReminderAddBottomSheet(
                 onHandleEvent = onHandleEvent,
                 onNavigateUp = onDismissRequest,
                 isReminderValid = uiState.isReminderValid,
-                modifier = Modifier
-                    .imePadding()
-                    .disableBottomSheetSwipe()
+                modifier = Modifier.disableBottomSheetSwipe()
             )
         }
     }
