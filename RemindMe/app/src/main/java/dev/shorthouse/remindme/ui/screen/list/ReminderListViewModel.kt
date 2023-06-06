@@ -13,6 +13,8 @@ import dev.shorthouse.remindme.domain.userpreferences.UpdateReminderFilterUseCas
 import dev.shorthouse.remindme.domain.userpreferences.UpdateReminderSortOrderUseCase
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.util.SnackbarMessage
+import java.time.ZonedDateTime
+import javax.inject.Inject
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -21,8 +23,6 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.time.ZonedDateTime
-import javax.inject.Inject
 
 @HiltViewModel
 class ReminderListViewModel @Inject constructor(
@@ -98,10 +98,10 @@ class ReminderListViewModel @Inject constructor(
         when (event) {
             is ReminderListEvent.UpdateFilter -> updateFilter(event.filter)
             is ReminderListEvent.UpdateSortOrder -> updateSortOrder(event.sortOrder)
-            is ReminderListEvent.CompleteReminder -> handleCompleteReminder(event.reminder)
-            is ReminderListEvent.ShowAddReminderSheet -> handleShowAddReminderSheet()
-            is ReminderListEvent.HideAddReminderSheet -> handleHideAddReminderSheet()
-            is ReminderListEvent.RemoveSnackbarMessage -> handleRemoveSnackbarMessage()
+            is ReminderListEvent.CompleteReminder -> completeReminder(event.reminder)
+            is ReminderListEvent.ShowAddReminderSheet -> showAddReminderSheet()
+            is ReminderListEvent.HideAddReminderSheet -> hideAddReminderSheet()
+            is ReminderListEvent.RemoveSnackbarMessage -> removeSnackbarMessage()
         }
     }
 
@@ -117,7 +117,7 @@ class ReminderListViewModel @Inject constructor(
         }
     }
 
-    private fun handleCompleteReminder(reminder: Reminder) {
+    private fun completeReminder(reminder: Reminder) {
         viewModelScope.launch {
             completeReminderUseCase(reminder)
         }
@@ -131,15 +131,15 @@ class ReminderListViewModel @Inject constructor(
         }
     }
 
-    private fun handleShowAddReminderSheet() {
+    private fun showAddReminderSheet() {
         _uiState.update { it.copy(isAddReminderSheetShown = true) }
     }
 
-    private fun handleHideAddReminderSheet() {
+    private fun hideAddReminderSheet() {
         _uiState.update { it.copy(isAddReminderSheetShown = false) }
     }
 
-    private fun handleRemoveSnackbarMessage() {
+    private fun removeSnackbarMessage() {
         _uiState.update { it.copy(snackbarMessage = null) }
     }
 }
