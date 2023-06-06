@@ -29,7 +29,7 @@ android {
         minSdk = 26
         targetSdk = 33
         versionCode = 17
-        versionName = "2.1.4"
+        versionName = "2.1.6"
         testInstrumentationRunner = "dev.shorthouse.remindme.runner.CustomTestRunner"
     }
 
@@ -92,7 +92,7 @@ dependencies {
     val composeBom = platform("androidx.compose:compose-bom:2023.04.01")
     implementation(composeBom)
     androidTestImplementation(composeBom)
-    implementation("androidx.compose.material3:material3:1.2.0-alpha01")
+    implementation("androidx.compose.material3:material3:1.2.0-alpha02")
     implementation("androidx.compose.material:material-icons-extended:1.4.3")
     implementation("com.google.accompanist:accompanist-permissions:0.30.0")
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.30.0")

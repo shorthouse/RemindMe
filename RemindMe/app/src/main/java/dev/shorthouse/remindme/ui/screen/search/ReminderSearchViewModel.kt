@@ -8,14 +8,15 @@ import dev.shorthouse.remindme.domain.reminder.CompleteReminderUseCase
 import dev.shorthouse.remindme.domain.reminder.GetRemindersFlowUseCase
 import dev.shorthouse.remindme.model.Reminder
 import dev.shorthouse.remindme.util.SnackbarMessage
+import javax.inject.Inject
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltViewModel
 class ReminderSearchViewModel @Inject constructor(
@@ -38,20 +39,21 @@ class ReminderSearchViewModel @Inject constructor(
         val remindersFlow = getRemindersFlowUseCase()
         val searchQueryFlow = _searchQuery.asStateFlow()
 
-        viewModelScope.launch {
-            combine(remindersFlow, searchQueryFlow) { reminders, searchQuery ->
-                val searchReminders = when {
-                    searchQuery.isEmpty() -> emptyList()
-                    else -> reminders.filter { it.name.contains(searchQuery, ignoreCase = true) }
+        combine(remindersFlow, searchQueryFlow) { reminders, searchQuery ->
+            val searchReminders = when {
+                searchQuery.isEmpty() -> emptyList()
+                else -> reminders.filter {
+                    it.name.contains(searchQuery, ignoreCase = true)
                 }
-
-                _uiState.value.copy(
-                    searchReminders = searchReminders.toImmutableList(),
-                    isLoading = false
-                )
             }
-                .onEach { _uiState.value = it }
+
+            _uiState.value.copy(
+                searchReminders = searchReminders.toImmutableList(),
+                isLoading = false
+            )
         }
+            .onEach { _uiState.value = it }
+            .launchIn(viewModelScope)
     }
 
     fun handleEvent(event: ReminderSearchEvent) {
